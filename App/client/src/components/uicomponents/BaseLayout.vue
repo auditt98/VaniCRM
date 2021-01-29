@@ -2,22 +2,25 @@
     <div>
     <!-- <VuePerfectScrollbar class="scroll-area" v-once :settings="settings"> -->
         <BaseAppBar/>
-        <v-navigation-drawer permanent app>
+        <v-navigation-drawer permanent absolute>
         <v-list-item two-line>
-                <v-list-item-avatar height="2.25rem" width="2.25rem">
-                    <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+                <v-list-item-avatar height="50px" width="50px" style="border: 0.5px solid rgba(0,0,0,0.25)">
+                    <v-img src="../../assets/logo_3.png"></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content>
                     <!-- <v-list-item-icon><v-icon>mdi-web</v-icon></v-list-item-icon> -->
-                    <v-list-item-title class="title">
-                        Trịnh Việt Anh         
-
-                    </v-list-item-title>
-                    <!-- <v-spacer></v-spacer> -->
-                    <v-list-item-subtitle>Quản trị viên
+                    <div>
+                        <v-list-item-title class="d-inline mr-4">
+                            Trịnh Việt Anh
+                        </v-list-item-title>
                         <v-btn icon text> 
-                            <v-icon >mdi-dots-vertical</v-icon> 
+                            <v-icon dense>mdi-tune-vertical-variant</v-icon> 
                         </v-btn>
+                    </div>
+
+                    <!-- <v-spacer></v-spacer> -->
+                    <v-list-item-subtitle class="ml-50">Quản trị viên
+
                     </v-list-item-subtitle>
 
                 </v-list-item-content>
