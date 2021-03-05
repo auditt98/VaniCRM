@@ -1,0 +1,23 @@
+Lead
+
+A Lead is someone who might have interest in your product or service or might not even have interest. Lead Status in Vtiger helps identify the level of interest a Lead has shown. Leads are generated from Content Marketing, Webinars, Tradeshows, Advertising, and other Marketing campaigns.
+
+Leads are nurtured via webinars, email campaigns, monthly news letters, telemarketing. When a Lead shows deeper interest in your product and has a budget, Lead is converted to an Opportunity and transferred to Sales team. We’ll cover more on Lead conversion a bit later.
+
+If your prospects are already qualified, you can directly create an Opportunity and skip Lead creation. For example, if a person calls your office and requests a quote, you would directly create an Opportunity instead of a Lead.
+
+Opportunity
+
+Opportunity represents a sales opportunity. An Opportunity is created after a Lead is qualified. Sales Stage field in the Opportunity is used to identify the progress of the Sale towards completion. Amount and Expected Close Date fields in an Opportunity drive the Sales Pipeline reports.
+
+Opportunity is linked to a Contact if the customer is an individual (B2C), or to an Organization and Contact if the customer is a Business (B2B).
+
+Organization
+
+Organization represents a company / institution / organization that you are doing business with . Information pertaining to the Persons working for this Organization is stored in Contact records.
+
+Type field in Organization distinguishes Prospects from Customers, Partners, etc.
+
+Contact
+
+Contact represents a Person, either in individual capacity or representing a Business. If Contact is representing a Business, the Organization Name field in Contact identified the Business. Besides the Personal Details and contact information, Contact record can capture additional information that is relevant for your business.
