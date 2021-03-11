@@ -3375,7 +3375,7 @@ go
 
 set identity_insert [dbo].[USER] on
 go
-INSERT INTO [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (1, 'Benedikta', 'Moscone', 'admin', 'bmoscone0@arstechnica.com', '7613479281', 'admin', '2017-06-14 17:56:22', NULL, 3);
+INSERT INTO [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID, Hash) values (1, 'Benedikta', 'Moscone', 'admin', 'admin@gmail.com', '7613479281', 'admin', '2017-06-14 17:56:22', NULL, 3, '$2a$11$gxT.wkGj89nWAfK2HXRF9OhTBR8.1Jw11JM7wo6XwZ/fzVOkf2K4K');
 insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (2, 'Erhart', 'Bruckental', 'ebruckental0', 'ebruckental0@hostgator.com', '4077448208', 'ebruckental0', '2020-11-16 13:57:36', 1, 2);
 insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (3, 'Dominic', 'O''Finan', 'dofinan1', 'dofinan1@businessweek.com', '4937077475', 'dofinan1', '2020-11-30 03:03:04', 1, 2);
 insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (4, 'Deana', 'Fernanando', 'dfernanando2', 'dfernanando2@so-net.ne.jp', '1063218544', 'dfernanando2', '2020-11-05 17:59:15', 1, 1);
@@ -9420,4 +9420,6 @@ insert into [DEAL] (ID, Name, ClosingDate, DealOwner, Amount, ACCOUNT_ID, Descri
 insert into [DEAL] (ID, Name, ClosingDate, DealOwner, Amount, ACCOUNT_ID, Description, CreatedBy, PRIORITY_ID, CreatedAt) values (1000, 'Deal 1000', '2020-10-19 08:24:26', 308, 62598, 41, 'Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.', 256, 1, '2020-11-17 19:02:50');
 
 set identity_insert [dbo].[DEAL] off;
+go
+update [USER] set Hash = '$2y$12$k6u7JrmmG6ZLrwl9k9NncOU1Uyd5uhr1HYh7Ss3gGcnugbCj3vhLy ' where ID != 1
 go

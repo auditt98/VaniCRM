@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Backend
 {
@@ -13,10 +14,11 @@ namespace Backend
 
             // Web API routes
             config.MapHttpAttributeRoutes();
-
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors();
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
         }

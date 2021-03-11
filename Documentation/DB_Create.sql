@@ -49,7 +49,10 @@ BEGIN
 		CreatedBy int,
 		ModifiedAt datetime,
 		ModifiedBy int,
-		PRIORITY_ID int
+		PRIORITY_ID int,
+		Country nvarchar(100),
+		City nvarchar(100),
+		AddressDetail nvarchar(200)
     )
 END
 GO
@@ -386,7 +389,10 @@ BEGIN
 		CreatedBy int,
 		ConvertFrom int,
 		ModifiedBy int,
-		ModifiedAt datetime
+		ModifiedAt datetime,
+		Country nvarchar(100),
+		City nvarchar(100),
+		AddressDetail nvarchar(200)
     )
 END
 GO
@@ -414,7 +420,10 @@ BEGIN
 		ModifiedBy int,
 		ModifiedAt datetime,
 		PRIORITY_ID int,
-		ACCOUNT_ID int
+		ACCOUNT_ID int,
+		Country nvarchar(100),
+		City nvarchar(100),
+		AddressDetail nvarchar(200)
     )
 END
 GO

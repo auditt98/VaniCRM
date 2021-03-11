@@ -37,5 +37,14 @@ Có thể cài yarn bằng: ```npm install -g yarn```
 ```npm run build```
 
 #### SQL
+```cd Documentation```
+Chạy script ```DB_Create.sql``` và ```DB_Data.sql``` trong SQL Express
 
 #### Backend
+```cd App/Backend```
+Chạy ```Backend.sln```
+Restore Nuget Package
+Build và Run
+
+#### Swagger
+Navigate tới ```/swagger``` để xem API documentation
