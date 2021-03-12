@@ -512,6 +512,40 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='NOTIFICATION' and xtype='U')
+BEGIN
+    CREATE TABLE [NOTIFICATION] (
+        ID int primary key identity(1,1),
+		NotificationTitle nvarchar(50),
+		NotificationContent nvarchar(100),
+		CreatedAt datetime,
+		Module nvarchar(20),
+		ModuleObjectID int,
+		Submodule nvarchar(20),
+		SubmoduleObjectID int
+    )
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='USER_NOTIFICATION' and xtype='U')
+BEGIN
+    CREATE TABLE [USER_NOTIFICATION] (
+		USER_ID int,
+		NOTIFICATION_ID int,
+		IsRead bit default 0
+		PRIMARY KEY(USER_ID, NOTIFICATION_ID)
+    )
+END
+GO
+
+
+ALTER TABLE [USER_NOTIFICATION]
+ADD FOREIGN KEY (NOTIFICATION_ID) REFERENCES [NOTIFICATION](ID) ON DELETE CASCADE
+
+ALTER TABLE [USER_NOTIFICATION]
+ADD FOREIGN KEY (USER_ID) REFERENCES [USER](ID) ON DELETE CASCADE;
+GO
+
 --- USER ---
 ALTER TABLE [USER]
 ADD FOREIGN KEY (CreatedBy) REFERENCES [USER](ID);
