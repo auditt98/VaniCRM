@@ -36,6 +36,9 @@ namespace Backend.Domain
         [StringLength(15)]
         public string Phone { get; set; }
 
+        [StringLength(32)]
+        public string Skype { get; set; }
+
         [StringLength(15)]
         public string Mobile { get; set; }
 
@@ -69,8 +72,14 @@ namespace Backend.Domain
 
         public int? ACCOUNT_ID { get; set; }
 
-        [StringLength(32)]
-        public string Skype { get; set; }
+        [StringLength(100)]
+        public string Country { get; set; }
+
+        [StringLength(100)]
+        public string City { get; set; }
+
+        [StringLength(200)]
+        public string AddressDetail { get; set; }
 
         public virtual ACCOUNT ACCOUNT { get; set; }
 
@@ -80,13 +89,13 @@ namespace Backend.Domain
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CAMPAIGN_TARGET> CAMPAIGN_TARGET { get; set; }
 
-        public virtual USER USER { get; set; }
+        public virtual USER Owner { get; set; }
 
-        public virtual USER USER1 { get; set; }
+        public virtual USER Collaborator { get; set; }
 
-        public virtual USER USER2 { get; set; }
+        public virtual USER CreatedUser { get; set; }
 
-        public virtual USER USER3 { get; set; }
+        public virtual USER ModifiedUser { get; set; }
 
         public virtual PRIORITY PRIORITY { get; set; }
 

@@ -43,7 +43,7 @@ namespace Backend.Domain
 
         public virtual ACCOUNT ACCOUNT { get; set; }
 
-        public virtual USER USER { get; set; }
+        public virtual USER Owner { get; set; }
 
         public virtual CALL_REASON CALL_REASON { get; set; }
 

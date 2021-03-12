@@ -74,6 +74,15 @@ namespace Backend.Domain
 
         public int? PRIORITY_ID { get; set; }
 
+        [StringLength(100)]
+        public string Country { get; set; }
+
+        [StringLength(100)]
+        public string City { get; set; }
+
+        [StringLength(200)]
+        public string AddressDetail { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ACCOUNT> ACCOUNTs { get; set; }
 
@@ -85,11 +94,13 @@ namespace Backend.Domain
 
         public virtual INDUSTRY INDUSTRY { get; set; }
 
-        public virtual USER USER { get; set; }
+        public virtual USER CreatedUser { get; set; }
 
-        public virtual USER USER1 { get; set; }
+        public virtual USER Owner { get; set; }
 
         public virtual LEAD_SOURCE LEAD_SOURCE { get; set; }
+
+        public virtual USER ModifiedUser { get; set; }
 
         public virtual PRIORITY PRIORITY { get; set; }
 

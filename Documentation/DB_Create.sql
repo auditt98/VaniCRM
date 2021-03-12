@@ -568,7 +568,11 @@ ADD FOREIGN KEY (LeadOwner) REFERENCES [USER](ID);
 GO
 
 ALTER TABLE [LEAD]
-ADD FOREIGN KEY (LeadOwner) REFERENCES [USER](ID);
+ADD FOREIGN KEY (ModifiedBy) REFERENCES [USER](ID);
+GO
+
+ALTER TABLE [LEAD]
+ADD FOREIGN KEY (CreatedBy) REFERENCES [USER](ID);
 GO
 
 ALTER TABLE [LEAD]
@@ -1212,9 +1216,9 @@ CREATE PROCEDURE PROC_GETBYID_CAMPAIGN @ID int as begin select * from [CAMPAIGN]
 go
 CREATE PROCEDURE PROC_GETALL_CAMPAIGN as begin select * from [CAMPAIGN] end;
 go
-CREATE PROCEDURE PROC_INSERT_CONTACT @ACCOUNT_ID int, @AssistantName nvarchar(100), @AssitantPhone varchar(15), @Birthday date, @ContactCollaborator int, @ContactOwner int, @ConvertFrom int, @CreatedAt datetime, @CreatedBy int, @DepartmentName nvarchar(100), @Email nvarchar(320), @Mobile varchar(15), @ModifiedAt datetime, @ModifiedBy int, @Name nvarchar(100), @NoCall bit, @NoEmail bit, @Phone varchar(15), @PRIORITY_ID int as begin INSERT INTO [CONTACT](ACCOUNT_ID, AssistantName, AssitantPhone, Birthday, ContactCollaborator, ContactOwner, ConvertFrom, CreatedAt, CreatedBy, DepartmentName, Email, Mobile, ModifiedAt, ModifiedBy, Name, NoCall, NoEmail, Phone, PRIORITY_ID) values (@ACCOUNT_ID, @AssistantName, @AssitantPhone, @Birthday, @ContactCollaborator, @ContactOwner, @ConvertFrom, @CreatedAt, @CreatedBy, @DepartmentName, @Email, @Mobile, @ModifiedAt, @ModifiedBy, @Name, @NoCall, @NoEmail, @Phone, @PRIORITY_ID) end;
+CREATE PROCEDURE PROC_INSERT_CONTACT @ACCOUNT_ID int, @AssistantName nvarchar(100), @AssistantPhone varchar(15), @Birthday date, @ContactCollaborator int, @ContactOwner int, @ConvertFrom int, @CreatedAt datetime, @CreatedBy int, @DepartmentName nvarchar(100), @Email nvarchar(320), @Mobile varchar(15), @ModifiedAt datetime, @ModifiedBy int, @Name nvarchar(100), @NoCall bit, @NoEmail bit, @Phone varchar(15), @PRIORITY_ID int as begin INSERT INTO [CONTACT](ACCOUNT_ID, AssistantName, AssistantPhone, Birthday, ContactCollaborator, ContactOwner, ConvertFrom, CreatedAt, CreatedBy, DepartmentName, Email, Mobile, ModifiedAt, ModifiedBy, Name, NoCall, NoEmail, Phone, PRIORITY_ID) values (@ACCOUNT_ID, @AssistantName, @AssistantPhone, @Birthday, @ContactCollaborator, @ContactOwner, @ConvertFrom, @CreatedAt, @CreatedBy, @DepartmentName, @Email, @Mobile, @ModifiedAt, @ModifiedBy, @Name, @NoCall, @NoEmail, @Phone, @PRIORITY_ID) end;
 go
-CREATE PROCEDURE PROC_UPDATE_CONTACT @ACCOUNT_ID int, @AssistantName nvarchar(100), @AssitantPhone varchar(15), @Birthday date, @ContactCollaborator int, @ContactOwner int, @ConvertFrom int, @CreatedAt datetime, @CreatedBy int, @DepartmentName nvarchar(100), @Email nvarchar(320), @ID int, @Mobile varchar(15), @ModifiedAt datetime, @ModifiedBy int, @Name nvarchar(100), @NoCall bit, @NoEmail bit, @Phone varchar(15), @PRIORITY_ID int as begin UPDATE [CONTACT] set ACCOUNT_ID = @ACCOUNT_ID, AssistantName = @AssistantName, AssitantPhone = @AssitantPhone, Birthday = @Birthday, ContactCollaborator = @ContactCollaborator, ContactOwner = @ContactOwner, ConvertFrom = @ConvertFrom, CreatedAt = @CreatedAt, CreatedBy = @CreatedBy, DepartmentName = @DepartmentName, Email = @Email, Mobile = @Mobile, ModifiedAt = @ModifiedAt, ModifiedBy = @ModifiedBy, Name = @Name, NoCall = @NoCall, NoEmail = @NoEmail, Phone = @Phone, PRIORITY_ID = @PRIORITY_ID where ID = @ID end;
+CREATE PROCEDURE PROC_UPDATE_CONTACT @ACCOUNT_ID int, @AssistantName nvarchar(100), @AssitantPhone varchar(15), @Birthday date, @ContactCollaborator int, @ContactOwner int, @ConvertFrom int, @CreatedAt datetime, @CreatedBy int, @DepartmentName nvarchar(100), @Email nvarchar(320), @ID int, @Mobile varchar(15), @ModifiedAt datetime, @ModifiedBy int, @Name nvarchar(100), @NoCall bit, @NoEmail bit, @Phone varchar(15), @PRIORITY_ID int as begin UPDATE [CONTACT] set ACCOUNT_ID = @ACCOUNT_ID, AssistantName = @AssistantName, AssistantPhone = @AssitantPhone, Birthday = @Birthday, ContactCollaborator = @ContactCollaborator, ContactOwner = @ContactOwner, ConvertFrom = @ConvertFrom, CreatedAt = @CreatedAt, CreatedBy = @CreatedBy, DepartmentName = @DepartmentName, Email = @Email, Mobile = @Mobile, ModifiedAt = @ModifiedAt, ModifiedBy = @ModifiedBy, Name = @Name, NoCall = @NoCall, NoEmail = @NoEmail, Phone = @Phone, PRIORITY_ID = @PRIORITY_ID where ID = @ID end;
 go
 CREATE PROCEDURE PROC_DELETE_CONTACT @ID int as begin delete from [CONTACT] where ID = @ID end;
 go

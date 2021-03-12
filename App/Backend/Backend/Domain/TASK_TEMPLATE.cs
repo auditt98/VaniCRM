@@ -62,8 +62,8 @@ namespace Backend.Domain
 
         public virtual TASK_STATUS TASK_STATUS { get; set; }
 
-        public virtual USER USER { get; set; }
+        public virtual USER CreatedUser { get; set; }
 
-        public virtual USER USER1 { get; set; }
+        public virtual USER ModifiedUser { get; set; }
     }
 }

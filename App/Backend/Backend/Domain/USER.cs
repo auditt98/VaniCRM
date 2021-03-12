@@ -12,31 +12,33 @@ namespace Backend.Domain
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public USER()
         {
-            ACCOUNTs = new HashSet<ACCOUNT>();
-            ACCOUNTs1 = new HashSet<ACCOUNT>();
-            ACCOUNTs2 = new HashSet<ACCOUNT>();
-            ACCOUNTs3 = new HashSet<ACCOUNT>();
-            CALLs = new HashSet<CALL>();
-            CAMPAIGNs = new HashSet<CAMPAIGN>();
-            CAMPAIGNs1 = new HashSet<CAMPAIGN>();
-            CAMPAIGNs2 = new HashSet<CAMPAIGN>();
-            CONTACTs = new HashSet<CONTACT>();
-            CONTACTs1 = new HashSet<CONTACT>();
-            CONTACTs2 = new HashSet<CONTACT>();
-            CONTACTs3 = new HashSet<CONTACT>();
-            DEALs = new HashSet<DEAL>();
-            DEALs1 = new HashSet<DEAL>();
-            DEALs2 = new HashSet<DEAL>();
-            LEADs = new HashSet<LEAD>();
-            LEADs1 = new HashSet<LEAD>();
-            MEETINGs = new HashSet<MEETING>();
+            AccountsAsOwner = new HashSet<ACCOUNT>();
+            AccountsAsCollaborator = new HashSet<ACCOUNT>();
+            AccountsCreated = new HashSet<ACCOUNT>();
+            AccountsModified = new HashSet<ACCOUNT>();
+            CallsAsOwner = new HashSet<CALL>();
+            CampaignsAsOwner = new HashSet<CAMPAIGN>();
+            CampaignsCreated = new HashSet<CAMPAIGN>();
+            CampaignsModified = new HashSet<CAMPAIGN>();
+            ContactsAsOwner = new HashSet<CONTACT>();
+            ContactsAsCollaborator = new HashSet<CONTACT>();
+            ContactsCreated = new HashSet<CONTACT>();
+            ContactsModified = new HashSet<CONTACT>();
+            DealsCreated = new HashSet<DEAL>();
+            DealsAsOwner = new HashSet<DEAL>();
+            DealsModified = new HashSet<DEAL>();
+            LeadsCreated = new HashSet<LEAD>();
+            LeadsAsOwner = new HashSet<LEAD>();
+            LeadsModified = new HashSet<LEAD>();
+            MeetingsAsHost = new HashSet<MEETING>();
             MEETING_PARTICIPANT = new HashSet<MEETING_PARTICIPANT>();
             NOTEs = new HashSet<NOTE>();
             STAGE_HISTORY = new HashSet<STAGE_HISTORY>();
             TASKs = new HashSet<TASK>();
-            TASK_TEMPLATE = new HashSet<TASK_TEMPLATE>();
-            TASK_TEMPLATE1 = new HashSet<TASK_TEMPLATE>();
-            USER1 = new HashSet<USER>();
+            TaskTemplateCreated = new HashSet<TASK_TEMPLATE>();
+            TaskTemplateModified = new HashSet<TASK_TEMPLATE>();
+            UsersCreated = new HashSet<USER>();
+            USER_NOTIFICATION = new HashSet<USER_NOTIFICATION>();
         }
 
         public int ID { get; set; }
@@ -79,60 +81,63 @@ namespace Backend.Domain
         public int? GROUP_ID { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ACCOUNT> ACCOUNTs { get; set; }
+        public virtual ICollection<ACCOUNT> AccountsAsOwner { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ACCOUNT> ACCOUNTs1 { get; set; }
+        public virtual ICollection<ACCOUNT> AccountsAsCollaborator { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ACCOUNT> ACCOUNTs2 { get; set; }
+        public virtual ICollection<ACCOUNT> AccountsCreated { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ACCOUNT> ACCOUNTs3 { get; set; }
+        public virtual ICollection<ACCOUNT> AccountsModified { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CALL> CALLs { get; set; }
+        public virtual ICollection<CALL> CallsAsOwner { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CAMPAIGN> CAMPAIGNs { get; set; }
+        public virtual ICollection<CAMPAIGN> CampaignsAsOwner { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CAMPAIGN> CAMPAIGNs1 { get; set; }
+        public virtual ICollection<CAMPAIGN> CampaignsCreated { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CAMPAIGN> CAMPAIGNs2 { get; set; }
+        public virtual ICollection<CAMPAIGN> CampaignsModified { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CONTACT> CONTACTs { get; set; }
+        public virtual ICollection<CONTACT> ContactsAsOwner { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CONTACT> CONTACTs1 { get; set; }
+        public virtual ICollection<CONTACT> ContactsAsCollaborator { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CONTACT> CONTACTs2 { get; set; }
+        public virtual ICollection<CONTACT> ContactsCreated { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CONTACT> CONTACTs3 { get; set; }
+        public virtual ICollection<CONTACT> ContactsModified { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DEAL> DEALs { get; set; }
+        public virtual ICollection<DEAL> DealsCreated { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DEAL> DEALs1 { get; set; }
+        public virtual ICollection<DEAL> DealsAsOwner { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DEAL> DEALs2 { get; set; }
+        public virtual ICollection<DEAL> DealsModified { get; set; }
 
         public virtual GROUP GROUP { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LEAD> LEADs { get; set; }
+        public virtual ICollection<LEAD> LeadsCreated { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LEAD> LEADs1 { get; set; }
+        public virtual ICollection<LEAD> LeadsAsOwner { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MEETING> MEETINGs { get; set; }
+        public virtual ICollection<LEAD> LeadsModified { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MEETING> MeetingsAsHost { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MEETING_PARTICIPANT> MEETING_PARTICIPANT { get; set; }
@@ -147,14 +152,17 @@ namespace Backend.Domain
         public virtual ICollection<TASK> TASKs { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TASK_TEMPLATE> TASK_TEMPLATE { get; set; }
+        public virtual ICollection<TASK_TEMPLATE> TaskTemplateCreated { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TASK_TEMPLATE> TASK_TEMPLATE1 { get; set; }
+        public virtual ICollection<TASK_TEMPLATE> TaskTemplateModified { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<USER> USER1 { get; set; }
+        public virtual ICollection<USER> UsersCreated { get; set; }
 
-        public virtual USER USER2 { get; set; }
+        public virtual USER CreatedUser { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<USER_NOTIFICATION> USER_NOTIFICATION { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Newtonsoft.Json;
+using Backend.Models.SwaggerModel;
 using Backend.Models;
 using BCrypt.Net;
 using Backend.Domain;
@@ -34,7 +35,7 @@ namespace Backend.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("login")]
-        [ResponseType(typeof(ResponseFormat))]
+        [ResponseType(typeof(SwaggerLoginReponse))]
         public HttpResponseMessage Login([FromBody]LoginApiModel apiModel)
         {
             HttpResponseMessage response = new HttpResponseMessage();
@@ -92,8 +93,8 @@ namespace Backend.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("refresh_token")]
-        [ResponseType(typeof(ResponseFormat))]
-        public HttpResponseMessage Refresh([FromBody] LoginApiModel apiModel)
+        [ResponseType(typeof(SwaggerLoginReponse))]
+        public HttpResponseMessage Refresh()
         {
             string c_refreshToken = "";
             string c_series = "";

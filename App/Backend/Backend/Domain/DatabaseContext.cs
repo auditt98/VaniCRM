@@ -36,6 +36,7 @@ namespace Backend.Domain
         public virtual DbSet<MEETING> MEETINGs { get; set; }
         public virtual DbSet<MEETING_PARTICIPANT> MEETING_PARTICIPANT { get; set; }
         public virtual DbSet<NOTE> NOTEs { get; set; }
+        public virtual DbSet<NOTIFICATION> NOTIFICATIONs { get; set; }
         public virtual DbSet<PERMISSION> PERMISSIONs { get; set; }
         public virtual DbSet<PERMISSION_ORDER> PERMISSION_ORDER { get; set; }
         public virtual DbSet<PRIORITY> PRIORITies { get; set; }
@@ -47,6 +48,7 @@ namespace Backend.Domain
         public virtual DbSet<TASK_STATUS> TASK_STATUS { get; set; }
         public virtual DbSet<TASK_TEMPLATE> TASK_TEMPLATE { get; set; }
         public virtual DbSet<USER> USERs { get; set; }
+        public virtual DbSet<USER_NOTIFICATION> USER_NOTIFICATION { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -350,6 +352,11 @@ namespace Backend.Domain
                 .HasForeignKey(e => e.NOTE_ID)
                 .WillCascadeOnDelete();
 
+            modelBuilder.Entity<NOTIFICATION>()
+                .HasMany(e => e.USER_NOTIFICATION)
+                .WithRequired(e => e.NOTIFICATION)
+                .HasForeignKey(e => e.NOTIFICATION_ID);
+
             modelBuilder.Entity<PERMISSION_ORDER>()
                 .HasMany(e => e.PERMISSIONs)
                 .WithOptional(e => e.PERMISSION_ORDER)
@@ -434,93 +441,98 @@ namespace Backend.Domain
                 .IsUnicode(false);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.ACCOUNTs)
-                .WithOptional(e => e.USER)
+                .HasMany(e => e.AccountsAsOwner)
+                .WithOptional(e => e.Owner)
                 .HasForeignKey(e => e.AccountOwner);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.ACCOUNTs1)
-                .WithOptional(e => e.USER1)
+                .HasMany(e => e.AccountsAsCollaborator)
+                .WithOptional(e => e.Collaborator)
                 .HasForeignKey(e => e.AccountCollaborator);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.ACCOUNTs2)
-                .WithOptional(e => e.USER2)
+                .HasMany(e => e.AccountsCreated)
+                .WithOptional(e => e.CreatedUser)
                 .HasForeignKey(e => e.CreatedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.ACCOUNTs3)
-                .WithOptional(e => e.USER3)
+                .HasMany(e => e.AccountsModified)
+                .WithOptional(e => e.ModifiedUser)
                 .HasForeignKey(e => e.ModifiedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.CALLs)
-                .WithOptional(e => e.USER)
+                .HasMany(e => e.CallsAsOwner)
+                .WithOptional(e => e.Owner)
                 .HasForeignKey(e => e.CallOwner);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.CAMPAIGNs)
-                .WithOptional(e => e.USER)
+                .HasMany(e => e.CampaignsAsOwner)
+                .WithOptional(e => e.Owner)
                 .HasForeignKey(e => e.CampaignOwner);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.CAMPAIGNs1)
-                .WithOptional(e => e.USER1)
+                .HasMany(e => e.CampaignsCreated)
+                .WithOptional(e => e.CreatedUser)
                 .HasForeignKey(e => e.CreatedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.CAMPAIGNs2)
-                .WithOptional(e => e.USER2)
+                .HasMany(e => e.CampaignsModified)
+                .WithOptional(e => e.ModifiedUser)
                 .HasForeignKey(e => e.ModifiedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.CONTACTs)
-                .WithOptional(e => e.USER)
+                .HasMany(e => e.ContactsAsOwner)
+                .WithOptional(e => e.Owner)
                 .HasForeignKey(e => e.ContactOwner);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.CONTACTs1)
-                .WithOptional(e => e.USER1)
+                .HasMany(e => e.ContactsAsCollaborator)
+                .WithOptional(e => e.Collaborator)
                 .HasForeignKey(e => e.ContactCollaborator);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.CONTACTs2)
-                .WithOptional(e => e.USER2)
+                .HasMany(e => e.ContactsCreated)
+                .WithOptional(e => e.CreatedUser)
                 .HasForeignKey(e => e.CreatedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.CONTACTs3)
-                .WithOptional(e => e.USER3)
+                .HasMany(e => e.ContactsModified)
+                .WithOptional(e => e.ModifiedUser)
                 .HasForeignKey(e => e.ModifiedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.DEALs)
-                .WithOptional(e => e.USER)
+                .HasMany(e => e.DealsCreated)
+                .WithOptional(e => e.CreatedUser)
                 .HasForeignKey(e => e.CreatedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.DEALs1)
-                .WithOptional(e => e.USER1)
+                .HasMany(e => e.DealsAsOwner)
+                .WithOptional(e => e.Owner)
                 .HasForeignKey(e => e.DealOwner);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.DEALs2)
-                .WithOptional(e => e.USER2)
+                .HasMany(e => e.DealsModified)
+                .WithOptional(e => e.ModifiedUser)
                 .HasForeignKey(e => e.ModifiedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.LEADs)
-                .WithOptional(e => e.USER)
+                .HasMany(e => e.LeadsCreated)
+                .WithOptional(e => e.CreatedUser)
+                .HasForeignKey(e => e.CreatedBy);
+
+            modelBuilder.Entity<USER>()
+                .HasMany(e => e.LeadsAsOwner)
+                .WithOptional(e => e.Owner)
                 .HasForeignKey(e => e.LeadOwner);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.LEADs1)
-                .WithOptional(e => e.USER1)
-                .HasForeignKey(e => e.LeadOwner);
+                .HasMany(e => e.LeadsModified)
+                .WithOptional(e => e.ModifiedUser)
+                .HasForeignKey(e => e.ModifiedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.MEETINGs)
-                .WithOptional(e => e.USER)
+                .HasMany(e => e.MeetingsAsHost)
+                .WithOptional(e => e.HostUser)
                 .HasForeignKey(e => e.Host);
 
             modelBuilder.Entity<USER>()
@@ -546,19 +558,24 @@ namespace Backend.Domain
                 .HasForeignKey(e => e.TaskOwner);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.TASK_TEMPLATE)
-                .WithOptional(e => e.USER)
+                .HasMany(e => e.TaskTemplateCreated)
+                .WithOptional(e => e.CreatedUser)
                 .HasForeignKey(e => e.CreatedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.TASK_TEMPLATE1)
-                .WithOptional(e => e.USER1)
+                .HasMany(e => e.TaskTemplateModified)
+                .WithOptional(e => e.ModifiedUser)
                 .HasForeignKey(e => e.ModifiedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.USER1)
-                .WithOptional(e => e.USER2)
+                .HasMany(e => e.UsersCreated)
+                .WithOptional(e => e.CreatedUser)
                 .HasForeignKey(e => e.CreatedBy);
+
+            modelBuilder.Entity<USER>()
+                .HasMany(e => e.USER_NOTIFICATION)
+                .WithRequired(e => e.USER)
+                .HasForeignKey(e => e.USER_ID);
         }
     }
 }

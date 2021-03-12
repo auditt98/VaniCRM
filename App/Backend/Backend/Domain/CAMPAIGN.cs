@@ -63,15 +63,15 @@ namespace Backend.Domain
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CAMPAIGN_TARGET> CAMPAIGN_TARGET { get; set; }
 
-        public virtual CAMPAIGN_STATUS CAMPAIGN_STATUS { get; set; }
-
-        public virtual USER USER { get; set; }
+        public virtual USER Owner { get; set; }
 
         public virtual CAMPAIGN_TYPE CAMPAIGN_TYPE { get; set; }
 
-        public virtual USER USER1 { get; set; }
+        public virtual CAMPAIGN_STATUS CAMPAIGN_STATUS { get; set; }
 
-        public virtual USER USER2 { get; set; }
+        public virtual USER CreatedUser { get; set; }
+
+        public virtual USER ModifiedUser { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DEAL> DEALs { get; set; }

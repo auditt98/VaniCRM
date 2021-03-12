@@ -33,7 +33,7 @@ namespace Backend.Domain
 
         public bool? IsRemindParticipant { get; set; }
 
-        public virtual USER USER { get; set; }
+        public virtual USER HostUser { get; set; }
 
         public virtual TASK_TEMPLATE TASK_TEMPLATE { get; set; }
 

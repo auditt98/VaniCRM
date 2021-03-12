@@ -1,3 +1,6 @@
+USE CRM;
+GO
+
 set identity_insert [dbo].[GROUP] on;
 go
 insert into [GROUP] (ID, Name) values (1, N'Marketing Team');

@@ -74,19 +74,28 @@ namespace Backend.Domain
 
         public DateTime? ModifiedAt { get; set; }
 
-        public virtual USER USER { get; set; }
+        [StringLength(100)]
+        public string Country { get; set; }
 
-        public virtual USER USER1 { get; set; }
+        [StringLength(100)]
+        public string City { get; set; }
+
+        [StringLength(200)]
+        public string AddressDetail { get; set; }
+
+        public virtual USER Owner { get; set; }
+
+        public virtual USER Collaborator { get; set; }
 
         public virtual ACCOUNT_TYPE ACCOUNT_TYPE { get; set; }
 
         public virtual LEAD LEAD { get; set; }
 
-        public virtual USER USER2 { get; set; }
+        public virtual USER CreatedUser { get; set; }
 
         public virtual INDUSTRY INDUSTRY { get; set; }
 
-        public virtual USER USER3 { get; set; }
+        public virtual USER ModifiedUser { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CALL> CALLs { get; set; }

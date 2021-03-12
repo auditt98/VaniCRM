@@ -66,13 +66,13 @@ namespace Backend.Domain
 
         public virtual CONTACT CONTACT { get; set; }
 
-        public virtual USER USER { get; set; }
+        public virtual USER CreatedUser { get; set; }
 
-        public virtual USER USER1 { get; set; }
+        public virtual USER Owner { get; set; }
 
         public virtual LOST_REASON LOST_REASON { get; set; }
 
-        public virtual USER USER2 { get; set; }
+        public virtual USER ModifiedUser { get; set; }
 
         public virtual PRIORITY PRIORITY { get; set; }
 
