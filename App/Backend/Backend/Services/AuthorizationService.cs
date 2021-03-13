@@ -12,9 +12,15 @@ namespace Backend.Services
         UserService _userService = new UserService();
         public List<int> permissions { get; set; }
 
+        public AuthorizationService()
+        {
+            this.permissions = new List<int>();
+        }
+
         public AuthorizationService SetPerm(params int[] p)
         {
-            permissions.AddRange(p.ToList());
+            var permList = p.ToList();
+            permissions.AddRange(permList);
             return this;
         }
         //public static List<int> Perms(params int[] p)

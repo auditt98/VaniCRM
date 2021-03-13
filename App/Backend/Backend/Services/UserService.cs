@@ -48,7 +48,7 @@ namespace Backend.Services
             {
                 if (currentPage == 0 && pageSize == 0)
                 {
-                    Pager p = new Pager(db.USERs.Count());
+                    Pager p = new Pager(db.USERs.Count(), 1, db.USERs.Count());
                     return (db.USERs.OrderBy(c => c.ID).ToList(), p);
                 }
                 else

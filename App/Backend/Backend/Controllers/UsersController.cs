@@ -62,8 +62,8 @@ namespace Backend.Controllers
 
                     responseData.data = new
                     {
-                        users = userList,
-                        pageInfo = p
+                        users = userList.Select(c => new { id = c.ID, firstName = c.FirstName, lastName = c.LastName, phone = c.Phone, email = c.Email, skype = c.Skype }),
+                        pageInfo = new { totalPage = p.TotalPages, pageSize = p.PageSize, startIndex = p.StartIndex, endIndex = p.EndIndex, currentPage = p.CurrentPage}
                     };
                 }
                 else
