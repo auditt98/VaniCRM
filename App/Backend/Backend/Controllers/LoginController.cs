@@ -28,7 +28,7 @@ namespace Backend.Controllers
         private UserService _userService = new UserService();
         /// <summary>
         /// Login người dùng vào hệ thống, param bắt buộc: email, password
-        /// Trả về 
+        /// 
         /// </summary>
         /// <param name="email">Email người dùng</param>
         /// <param name="password">Mật khẩu người dùng</param>
@@ -75,10 +75,11 @@ namespace Backend.Controllers
                         jwt = JwtToken
                     }
                 };
-
+                response.StatusCode = HttpStatusCode.OK;
             }
             else
             {
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = validate.Item2;
             }
@@ -102,6 +103,7 @@ namespace Backend.Controllers
             ResponseFormat responseData;
 
             CookieHeaderValue cookie = Request.Headers.GetCookies("refreshTokenData").FirstOrDefault();
+            cookie.Expires = DateTimeOffset.Now.AddMonths(1);
             if(cookie != null)
             {
                 CookieState cookieState = cookie["refreshTokenData"];
@@ -133,12 +135,14 @@ namespace Backend.Controllers
                         {
                             user = new
                             {
+                                id = user.ID,
                                 username = user.Username,
                                 firstName = user.FirstName,
                                 lastName = user.LastName,
                                 jwt = JwtToken
                             }
                         };
+                        response.StatusCode = HttpStatusCode.OK;
                     }
                     else
                     {
@@ -148,12 +152,14 @@ namespace Backend.Controllers
                 }
                 else
                 {
+                    response.StatusCode = HttpStatusCode.NotFound;
                     responseData = ResponseFormat.Fail;
-                    responseData.message = "No valid user found";
+                    responseData.message = "Not a valid user";
                 }
             }
             else
             {
+                response.StatusCode = HttpStatusCode.Forbidden;
                 responseData = ResponseFormat.Fail;
                 responseData.message = "No cookie found";
             }

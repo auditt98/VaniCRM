@@ -21,10 +21,14 @@ namespace Backend.Controllers
 {
     public class ApiResponseDemoController : ApiController
     {
+        DatabaseContext db = new DatabaseContext();
+        UserService _userService = new UserService();
         /// <summary>
         /// Format response trả về cho các request được thực hiện thành công, data chứa trong key [data].
         /// </summary>
         /// <returns>ResponseFormat</returns>
+        /// 
+
         [HttpGet]
         [Route("api/demo/success")]
         [ResponseType(typeof(ResponseFormat))]
@@ -76,6 +80,26 @@ namespace Backend.Controllers
             responseData.message = "Unhandled Exception: .....";
 
             var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpPost]
+        [Route("email")]
+        public HttpResponseMessage Email(EmailApiModel email)
+        {
+
+            //var emailManager = new Email(email.title, email.content, email.recipients);
+            //emailManager.SendEmail();
+            HttpResponseMessage response = new HttpResponseMessage();
+            ResponseFormat responseData;
+            responseData = ResponseFormat.Success;
+            var json = JsonConvert.SerializeObject(responseData);
+            var u = _userService.GetOneByEmail("admin@gmail.com");
+            u.FirstName = "Lalala";
+            db.SaveChanges();
+
+
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
         }

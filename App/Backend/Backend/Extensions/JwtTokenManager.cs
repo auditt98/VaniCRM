@@ -11,7 +11,9 @@ using JWT.Serializers;
 using JWT.Builder;
 using JWT.Exceptions;
 using System.Security.Cryptography;
-
+using static Backend.Extensions.Enum;
+using System.Resources;
+using Backend.Resources;
 
 namespace Backend.Extensions
 {
@@ -35,6 +37,12 @@ namespace Backend.Extensions
             return token;
         }
 
+
+        /// <summary>
+        /// Validate and decode JWT token
+        /// </summary>
+        /// <param name="token">Jwt token</param>
+        /// <returns>Dictionary(string, object), access with varname["claimName"], check for error with varname["error"]</returns>
         public static IDictionary<string, object> ValidateJwtToken(string token)
         {
             try
@@ -49,13 +57,13 @@ namespace Backend.Extensions
             catch (TokenExpiredException)
             {
                 var json = new Dictionary<string, object>();
-                json.Add("error", "Token expired");
+                json.Add("error", ErrorMessages.TOKEN_EXPIRED);
                 return json;
             }
             catch (SignatureVerificationException)
             {
                 var json = new Dictionary<string, object>();
-                json.Add("error", "Signature is invalid");
+                json.Add("error", ErrorMessages.TOKEN_INVALID);
                 return json;
             }
 

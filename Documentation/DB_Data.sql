@@ -26,6 +26,7 @@ insert into [PERMISSION_ORDER] (ID, Name) values (11, N'Report');
 set identity_insert [dbo].[PERMISSION_ORDER] off;
 go
 
+
 set identity_insert [dbo].[PERMISSION] on;
 go
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (1, N'USER_CREATE', 'Permission to create an user', 1);
@@ -36,7 +37,7 @@ insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (5,
 
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (6, N'TASK_CREATE', 'Permission to create a task (Meetings, Calls, Tasks)', 2);
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (7, N'TASK_MODIFY', 'Permission to modify a task (Meetings, Calls, Tasks)', 2);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (8, N'TASK_DELETE', 'Permission to delete a task (Meetings, Calls, Tasks)', 2);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (8, N'TASK_DELETE', 'Permission to delete self task (Meetings, Calls, Tasks)', 2);
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (9, N'TASK_VIEW', 'Permission to view a task (Meetings, Calls, Tasks)', 2);
 
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (10, N'TAG_CREATE', 'Permission to create a tag', 3);
@@ -51,7 +52,7 @@ insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (17
 
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (18, N'NOTE_CREATE', 'Permission to create a note', 5);
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (19, N'NOTE_DELETE', 'Permission to delete self note', 5);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (20, N'NOTE_DELETE_ALL', 'Permission to delete any note', 5);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (20, N'NOTE_DELETE_ANY', 'Permission to delete any note', 5);
 
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (21, N'LEAD_CREATE', 'Permission to create a lead', 6);
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (22, N'LEAD_DELETE', 'Permission to delete a lead', 6);
@@ -63,31 +64,37 @@ insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (26
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (27, N'DEAL_CREATE', 'Permission to create a deal', 7);
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (28, N'DEAL_MODIFY', 'Permission to modify a deal', 7);
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (29, N'DEAL_DELETE', 'Permission to delete a deal', 7);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (30, N'DEAL_MODIFY', 'Permission to modify a deal', 7);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (31, N'DEAL_CHANGE_STAGE', 'Permission to change the stage of a deal', 7);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (32, N'DEAL_VIEW', 'Permission to view a deal', 7);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (33, N'DEAL_VIEW_LIST', 'Permission to view all deals', 7);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (30, N'DEAL_CHANGE_STAGE', 'Permission to change the stage of a deal', 7);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (31, N'DEAL_VIEW', 'Permission to view a deal', 7);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (32, N'DEAL_VIEW_LIST', 'Permission to view all deals', 7);
 
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (34, N'ACCOUNT_CREATE', 'Permission to create an account', 8);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (35, N'ACCOUNT_MODIFY', 'Permission to modify an account', 8);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (36, N'ACCOUNT_DELETE', 'Permission to delete an account', 8);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (37, N'ACCOUNT_VIEW', 'Permission to view an account', 8);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (38, N'ACCOUNT_VIEW_LIST', 'Permission to view all accounts', 8);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (33, N'ACCOUNT_CREATE', 'Permission to create an account', 8);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (34, N'ACCOUNT_MODIFY', 'Permission to modify an account', 8);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (35, N'ACCOUNT_DELETE', 'Permission to delete an account', 8);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (36, N'ACCOUNT_VIEW', 'Permission to view an account', 8);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (37, N'ACCOUNT_VIEW_LIST', 'Permission to view all accounts', 8);
 
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (39, N'CONTACT_CREATE', 'Permission to create a contact', 9);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (40, N'CONTACT_MODIFY', 'Permission to modify a contact', 9);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (41, N'CONTACT_DELETE', 'Permission to delete a contact', 9);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (42, N'CONTACT_VIEW', 'Permission to view a contact', 9);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (43, N'CONTACT_VIEW_LIST', 'Permission to view all contacts', 9);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (38, N'CONTACT_CREATE', 'Permission to create a contact', 9);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (39, N'CONTACT_MODIFY', 'Permission to modify a contact', 9);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (40, N'CONTACT_DELETE', 'Permission to delete a contact', 9);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (41, N'CONTACT_VIEW', 'Permission to view a contact', 9);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (42, N'CONTACT_VIEW_LIST', 'Permission to view all contacts', 9);
 
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (44, N'CAMPAIGN_CREATE', 'Permission to create a campaign', 10);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (45, N'CAMPAIGN_MODIFY', 'Permission to modify a campaign', 10);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (46, N'CAMPAIGN_DELETE', 'Permission to delete a campaign', 10);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (47, N'CAMPAIGN_VIEW', 'Permission to view a campaign', 10);
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (48, N'CAMPAIGN_VIEW_LIST', 'Permission to view all campaigns', 10);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (43, N'CAMPAIGN_CREATE', 'Permission to create a campaign', 10);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (44, N'CAMPAIGN_MODIFY', 'Permission to modify a campaign', 10);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (45, N'CAMPAIGN_DELETE', 'Permission to delete a campaign', 10);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (46, N'CAMPAIGN_VIEW', 'Permission to view a campaign', 10);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (47, N'CAMPAIGN_VIEW_LIST', 'Permission to view all campaigns', 10);
 
-insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (49, N'REPORT_VIEW_ALL', 'Permission to view all reports', 11);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (48, N'REPORT_VIEW_ALL', 'Permission to view all reports', 11);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (49, N'TASK_DELETE_ANY', 'Permission to delete any task', 2);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (50, N'TASK_MODIFY_ANY', 'Permission to modify any task', 2);
 set identity_insert [dbo].[PERMISSION] off;
+set identity_insert [dbo].[PERMISSION] off;
+
+set identity_insert [dbo].[PERMISSION] off;
+
+
 go
 
 set identity_insert [dbo].[LOST_REASON] on;
@@ -131,6 +138,7 @@ go
 set identity_insert [dbo].[GROUP_PERMISSION] on;
 go
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 5);
+
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 6);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 7);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 8);
@@ -140,22 +148,18 @@ insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 11);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 18);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 19);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 21);
-insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 22);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 23);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 24);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 25);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 26);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 33);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 34);
-insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 35);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 36);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 37);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 38);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 39);
-insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 40);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 41);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 42);
-insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 43);
-insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 48);
 
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 5);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 6);
@@ -169,19 +173,69 @@ insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 19);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 26);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 27);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 28);
-insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 29);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 30);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 31);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 32);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 33);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 34);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 37);
+
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 38);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 39);
-insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 40);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 41);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 42);
-insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 43);
-insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 49);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 47);
+
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 1);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 2);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 3);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 4);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 5);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 6);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 7);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 8);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 9);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 10);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 11);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 12);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 13);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 14);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 15);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 16);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 17);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 18);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 19);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 20);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 21);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 22);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 23);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 24);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 25);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 26);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 27);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 28);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 29);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 30);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 31);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 32);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 33);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 34);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 35);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 36);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 37);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 38);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 39);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 40);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 41);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 42);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 43);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 44);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 45);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 46);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 47);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 48);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 49);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 50);
 set identity_insert [dbo].[GROUP_PERMISSION] off;
 go
 
@@ -3404,7 +3458,56 @@ insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, Crea
 insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (24, 'Beverie', 'Alecock', 'balecockm', 'balecockm@home.pl', '6262407450', 'balecockm', '2020-10-04 16:08:28', 1, 2);
 insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (25, 'Ave', 'Jouanot', 'ajouanotn', 'ajouanotn@ycombinator.com', '3499234892', 'ajouanotn', '2020-07-13 06:23:31', 1, 1);
 insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (26, 'Kim', 'Whimper', 'kwhimpero', 'kwhimpero@dot.gov', '5969758554', 'kwhimpero', '2020-06-07 07:22:57', 1, 2);
-insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (27, 'Nannette', 'Yakovitch', 'nyakovitchp', 'nyakovitchp@ovh.net', '1232284809', 'nyakovitchp', '2020-11-16 06:41:11', 1, 1);
+insert into [USER] (ID, FirstName, LastName, UsernameUSER_CREATE = 1,
+USER_MODIFY = 2,
+USER_DELETE = 3,
+USER_VIEW = 4,
+USER_MODIFY_SELF = 5,
+TASK_CREATE = 6,
+TASK_MODIFY = 7,
+TASK_DELETE = 8,
+TASK_VIEW = 9,
+TAG_CREATE = 10,
+TAG_DELETE_ITEM = 11,
+TAG_DELETE = 12,
+GROUP_CREATE = 13,
+GROUP_DELETE = 14,
+GROUP_MODIFY = 15,
+GROUP_ASSIGN_PERMISSION = 16,
+GROUP_VIEW = 17,
+NOTE_CREATE = 18,
+NOTE_DELETE = 19,
+NOTE_DELETE_ALL = 20,
+LEAD_CREATE = 21,
+LEAD_DELETE = 22,
+LEAD_MODIFY = 23,
+LEAD_CONVERT = 24,
+LEAD_VIEW = 25,
+LEAD_VIEW_LIST = 26,
+DEAL_CREATE = 27,
+DEAL_MODIFY = 28,
+DEAL_DELETE = 29,
+DEAL_MODIFY = 30,
+DEAL_CHANGE_STAGE = 31,
+DEAL_VIEW = 32,
+DEAL_VIEW_LIST = 33,
+ACCOUNT_CREATE = 34,
+ACCOUNT_MODIFY = 35,
+ACCOUNT_DELETE = 36,
+ACCOUNT_VIEW = 37,
+ACCOUNT_VIEW_LIST = 38,
+CONTACT_CREATE = 39,
+CONTACT_MODIFY = 40,
+CONTACT_DELETE = 41,
+CONTACT_VIEW = 42,
+CONTACT_VIEW_LIST = 43,
+CAMPAIGN_CREATE = 44,
+CAMPAIGN_MODIFY = 45,
+CAMPAIGN_DELETE = 46,
+CAMPAIGN_VIEW = 47,
+CAMPAIGN_VIEW_LIST = 48,
+REPORT_VIEW_ALL = 49,
+,, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (27, 'Nannette', 'Yakovitch', 'nyakovitchp', 'nyakovitchp@ovh.net', '1232284809', 'nyakovitchp', '2020-11-16 06:41:11', 1, 1);
 insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (28, 'Anabelle', 'Pablo', 'apabloq', 'apabloq@fotki.com', '5264845082', 'apabloq', '2020-12-04 06:25:22', 1, 1);
 insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (29, 'Griswold', 'Dubs', 'gdubsr', 'gdubsr@usnews.com', '6382569667', 'gdubsr', '2021-02-28 05:06:57', 1, 1);
 insert into [USER] (ID, FirstName, LastName, Username, Email, Phone, Skype, CreatedAt, CreatedBy, GROUP_ID) values (30, 'Hayley', 'Feander', 'hfeanders', 'hfeanders@foxnews.com', '4938536498', 'hfeanders', '2020-05-28 01:18:11', 1, 2);
