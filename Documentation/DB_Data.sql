@@ -89,12 +89,8 @@ insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (47
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (48, N'REPORT_VIEW_ALL', 'Permission to view all reports', 11);
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (49, N'TASK_DELETE_ANY', 'Permission to delete any task', 2);
 insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (50, N'TASK_MODIFY_ANY', 'Permission to modify any task', 2);
+insert into [PERMISSION] (ID, Name, Description, PERMISSION_ORDER_ID) values (51, N'USER_VIEW_LIST', 'Permission to view a list of users', 1);
 set identity_insert [dbo].[PERMISSION] off;
-set identity_insert [dbo].[PERMISSION] off;
-
-set identity_insert [dbo].[PERMISSION] off;
-
-
 go
 
 set identity_insert [dbo].[LOST_REASON] on;
@@ -138,7 +134,7 @@ go
 set identity_insert [dbo].[GROUP_PERMISSION] on;
 go
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 5);
-
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 51);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 6);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 7);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (1, 8);
@@ -185,6 +181,7 @@ insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 39);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 41);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 42);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 47);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (2, 51);
 
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 1);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 2);
@@ -236,6 +233,7 @@ insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 47);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 48);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 49);
 insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 50);
+insert into [GROUP_PERMISSION] (GROUP_ID, PERMISSION_ID) values (3, 51);
 set identity_insert [dbo].[GROUP_PERMISSION] off;
 go
 
