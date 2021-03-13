@@ -1,5 +1,7 @@
-﻿using Backend.Extensions;
+﻿using Backend.Domain;
+using Backend.Extensions;
 using Backend.Resources;
+using Backend.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,15 +16,19 @@ namespace Backend.Controllers
 {
     public class UsersController : ApiController
     {
+        public DatabaseContext db = new DatabaseContext();
+        public UserService _userService = new UserService();
+
         [HttpGet]
         [Route("users")]
-        public HttpResponseMessage GetAll()
+        //[Perms((int)EnumPermissions.USER_VIEW)]
+        public HttpResponseMessage GetAll([FromUri] int currentPage = 0, [FromUri] int pageSize = 0)
         {
-            //read jwt
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
+            AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW);
 
-
+            //read jwt
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             string jwt = headerValues.FirstOrDefault();
             //validate jwt
@@ -43,16 +49,30 @@ namespace Backend.Controllers
                     responseData.message = ErrorMessages.TOKEN_INVALID;
                 }
             }
-
-
-            //ResponseFormat responseData = ResponseFormat.Success;
-            Console.WriteLine(payload["id"]);
-
-           
-            responseData.data = new
+            else
             {
-                jwtToken = jwt
-            };
+                var userId = payload["id"];
+                
+                var isAuthorized = _authorizationService.Authorize(Convert.ToInt32(userId));
+                if (isAuthorized)
+                {
+                    response.StatusCode = HttpStatusCode.OK;
+                    responseData = ResponseFormat.Success;
+                    (List<USER> userList, Pager p) = _userService.GetAll(currentPage, pageSize);
+
+                    responseData.data = new
+                    {
+                        users = userList,
+                        pageInfo = p
+                    };
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.Forbidden;
+                    responseData = ResponseFormat.Fail;
+                    responseData.message = ErrorMessages.UNAUTHORIZED;
+                }
+            }           
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;

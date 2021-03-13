@@ -61,6 +61,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing request body..
+        /// </summary>
+        internal static string INVALID_BODY {
+            get {
+                return ResourceManager.GetString("INVALID_BODY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The token has expired..
         /// </summary>
         internal static string TOKEN_EXPIRED {

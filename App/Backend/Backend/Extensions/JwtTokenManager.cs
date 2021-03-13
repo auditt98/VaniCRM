@@ -57,13 +57,13 @@ namespace Backend.Extensions
             catch (TokenExpiredException)
             {
                 var json = new Dictionary<string, object>();
-                json.Add("error", ErrorMessages.TOKEN_EXPIRED);
+                json.Add("error", ErrorMessages.TOKEN_EXPIRED.ToString());
                 return json;
             }
             catch (SignatureVerificationException)
             {
                 var json = new Dictionary<string, object>();
-                json.Add("error", ErrorMessages.TOKEN_INVALID);
+                json.Add("error", ErrorMessages.TOKEN_INVALID.ToString());
                 return json;
             }
 

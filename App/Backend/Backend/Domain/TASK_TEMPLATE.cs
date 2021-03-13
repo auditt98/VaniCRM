@@ -64,6 +64,6 @@ namespace Backend.Domain
 
         public virtual USER CreatedUser { get; set; }
 
-        public virtual USER ModifiedUser { get; set; }
+        public virtual USER ModifiedUSer { get; set; }
     }
 }

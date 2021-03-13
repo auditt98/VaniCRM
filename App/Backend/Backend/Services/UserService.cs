@@ -8,6 +8,7 @@ using Backend.Validators;
 using FluentValidation.Results;
 using Backend.Extensions;
 using Backend.Domain;
+using Backend.Resources;
 
 namespace Backend.Services
 {
@@ -41,6 +42,32 @@ namespace Backend.Services
             }
         }
 
+        public (List<USER>, Pager) GetAll(int currentPage = 0, int pageSize = 0)
+        {
+            try
+            {
+                if (currentPage == 0 && pageSize == 0)
+                {
+                    Pager p = new Pager(db.USERs.Count());
+                    return (db.USERs.OrderBy(c => c.ID).ToList(), p);
+                }
+                else
+                {
+                    Pager p = new Pager(db.USERs.Count(), currentPage, pageSize);
+                    return (db.USERs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(), p);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            
+        }
+
+        public Pager GetPagerInfo(int currentPage = 0, int pageSize = 10)
+        {
+            return new Pager(db.USERs.Count(), currentPage, pageSize);
+        }
 
         public ValidationResult Validate(User u)
         {
@@ -60,7 +87,7 @@ namespace Backend.Services
                         return (true, "", user);
                     }
                 }
-                return (false, "Email/Password is incorrect", null);
+                return (false, ErrorMessages.WRONG_PASSWORD, null);
             }
             catch
             {

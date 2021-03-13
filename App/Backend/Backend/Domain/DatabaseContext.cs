@@ -40,6 +40,7 @@ namespace Backend.Domain
         public virtual DbSet<PERMISSION> PERMISSIONs { get; set; }
         public virtual DbSet<PERMISSION_ORDER> PERMISSION_ORDER { get; set; }
         public virtual DbSet<PRIORITY> PRIORITies { get; set; }
+        public virtual DbSet<REFRESH_TOKEN> REFRESH_TOKEN { get; set; }
         public virtual DbSet<STAGE> STAGEs { get; set; }
         public virtual DbSet<STAGE_HISTORY> STAGE_HISTORY { get; set; }
         public virtual DbSet<TAG> TAGs { get; set; }
@@ -382,6 +383,10 @@ namespace Backend.Domain
                 .WithOptional(e => e.PRIORITY)
                 .HasForeignKey(e => e.PRIORITY_ID);
 
+            modelBuilder.Entity<REFRESH_TOKEN>()
+                .Property(e => e.Token)
+                .IsUnicode(false);
+
             modelBuilder.Entity<STAGE>()
                 .HasMany(e => e.STAGE_HISTORY)
                 .WithRequired(e => e.STAGE)
@@ -461,7 +466,7 @@ namespace Backend.Domain
                 .HasForeignKey(e => e.ModifiedBy);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.CallsAsOwner)
+                .HasMany(e => e.CALLs)
                 .WithOptional(e => e.Owner)
                 .HasForeignKey(e => e.CallOwner);
 
@@ -526,7 +531,7 @@ namespace Backend.Domain
                 .HasForeignKey(e => e.LeadOwner);
 
             modelBuilder.Entity<USER>()
-                .HasMany(e => e.LeadsModified)
+                .HasMany(e => e.ModifiedLeads)
                 .WithOptional(e => e.ModifiedUser)
                 .HasForeignKey(e => e.ModifiedBy);
 
@@ -547,6 +552,12 @@ namespace Backend.Domain
                 .HasForeignKey(e => e.CreatedBy);
 
             modelBuilder.Entity<USER>()
+                .HasMany(e => e.REFRESH_TOKEN)
+                .WithOptional(e => e.USER)
+                .HasForeignKey(e => e.USER_ID)
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<USER>()
                 .HasMany(e => e.STAGE_HISTORY)
                 .WithOptional(e => e.USER)
                 .HasForeignKey(e => e.ModifiedBy)
@@ -564,7 +575,7 @@ namespace Backend.Domain
 
             modelBuilder.Entity<USER>()
                 .HasMany(e => e.TaskTemplateModified)
-                .WithOptional(e => e.ModifiedUser)
+                .WithOptional(e => e.ModifiedUSer)
                 .HasForeignKey(e => e.ModifiedBy);
 
             modelBuilder.Entity<USER>()
