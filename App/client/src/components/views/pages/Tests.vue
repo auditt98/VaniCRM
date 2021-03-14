@@ -3,10 +3,9 @@
     <!-- <VuePerfectScrollbar class="scroll-area" v-once :settings="settings"> -->
         <BaseAppBar/>
         
-        <v-main fill-height style="background-color: rgb(243,244,247)">
-
-        <!-- Nested route -->
-            <!-- <router-view></router-view> -->
+        <v-main fill-height style="background-color: rgb(243,244,247); padding: 0;">
+        <v-file-input chips multiple label="File input w/ chips"></v-file-input>
+        <v-file-input small-chips multiple label="File input w/ small chips"></v-file-input>
         </v-main>
         <!-- </VuePerfectScrollbar> -->
     </div>
@@ -30,10 +29,5 @@ export default {
 </script>
 
 <style>
-.scroll-area {
-  position: relative;
-  margin: auto;
-  width: 400px;
-  height: 300px;
-}
+
 </style>

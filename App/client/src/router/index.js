@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import {route} from "../utils/routes.js"
 import BaseLayout from "../components/uicomponents/BaseLayout.vue"
+import Tests from "../components/views/pages/Tests.vue"
 // import login from '../components/views/'
 
 Vue.use(VueRouter)
@@ -18,6 +19,11 @@ const routes = [
     children: [
 
     ]
+  },
+  {
+    path: "/tests",
+    name: "DevTests",
+    component: Tests
   }
 ]
 

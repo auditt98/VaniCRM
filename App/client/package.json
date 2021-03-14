@@ -18,6 +18,7 @@
     "vue-multiselect": "^2.1.6",
     "vue-perfect-scrollbar": "^0.2.1",
     "vue-router": "^3.2.0",
+    "vue-upload-component": "^2.8.22",
     "vue2-dropzone": "^3.6.0",
     "vue2-editor": "^2.10.2",
     "vuedraggable": "^2.24.3",

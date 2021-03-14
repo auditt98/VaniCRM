@@ -61,7 +61,7 @@ namespace Backend.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing request body..
+        ///   Looks up a localized string similar to Invalid request body..
         /// </summary>
         internal static string INVALID_BODY {
             get {

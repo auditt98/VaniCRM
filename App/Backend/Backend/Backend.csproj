@@ -325,7 +325,10 @@
     <Compile Include="Models\PermissionOrder.cs" />
     <Compile Include="Models\Stage.cs" />
     <Compile Include="Models\StageHistory.cs" />
-    <Compile Include="Models\SwaggerModel\LoginReponse.cs" />
+    <Compile Include="Models\SwaggerModel\Auth\LoginReponse.cs" />
+    <Compile Include="Models\SwaggerModel\PagerResponseModel.cs" />
+    <Compile Include="Models\SwaggerModel\ResponseModel.cs" />
+    <Compile Include="Models\SwaggerModel\Users\Swagger_User_List.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\TagItem.cs" />
     <Compile Include="Models\Task.cs" />

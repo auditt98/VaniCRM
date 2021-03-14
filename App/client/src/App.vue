@@ -1,6 +1,6 @@
 <template>
   <v-app class="">
-    <v-main style="background-color: 	rgb(243,244,247)">
+    <v-main style="background-color: rgb(243,244,247)">
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -21,4 +21,10 @@ export default {
 </script>
 
 <style>
+  @font-face{
+    font-family: "Fira Sans";
+    src: local("Fira Sans"),
+    url(./assets/fonts/Fira_Sans/FiraSans-Regular.ttf) format("truetype");
+  }
+
 </style>

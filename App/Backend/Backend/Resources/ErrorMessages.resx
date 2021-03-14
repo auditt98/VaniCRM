@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="INVALID_BODY" xml:space="preserve">
-    <value>Missing request body.</value>
+    <value>Invalid request body.</value>
   </data>
   <data name="TOKEN_EXPIRED" xml:space="preserve">
     <value>The token has expired.</value>

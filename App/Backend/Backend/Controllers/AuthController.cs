@@ -117,9 +117,9 @@ namespace Backend.Controllers
             ResponseFormat responseData;
 
             CookieHeaderValue cookie = Request.Headers.GetCookies("refreshTokenData").FirstOrDefault();
-            cookie.Expires = DateTimeOffset.Now.AddMonths(1);
             if(cookie != null)
             {
+                cookie.Expires = DateTimeOffset.Now.AddMonths(1);
                 CookieState cookieState = cookie["refreshTokenData"];
                 c_refreshToken = cookieState["refreshToken"];
                 c_series = cookieState["seriesIdentifier"];
