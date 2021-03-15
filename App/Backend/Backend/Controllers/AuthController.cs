@@ -92,7 +92,8 @@ namespace Backend.Controllers
                             username = validate.Item3.Username,
                             firstName = validate.Item3.FirstName,
                             lastName = validate.Item3.LastName,
-                            jwt = JwtToken
+                            jwt = JwtToken,
+                            group = dbUser.GROUP.ID
                         }
                     };
                     response.StatusCode = HttpStatusCode.OK;
@@ -171,7 +172,8 @@ namespace Backend.Controllers
                                     username = user.Username,
                                     firstName = user.FirstName,
                                     lastName = user.LastName,
-                                    jwt = JwtToken
+                                    jwt = JwtToken,
+                                    group = dbUser.GROUP.ID
                                 }
                             };
                             response.StatusCode = HttpStatusCode.OK;

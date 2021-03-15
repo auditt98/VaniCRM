@@ -19,6 +19,7 @@ namespace Backend.Models.SwaggerModel
                 public string lastName { get; set; }
                 public string firstName { get; set; }
                 public string jwt { get; set; }
+                public int group { get; set; }
             }
             public T user { get; set; }
         }
