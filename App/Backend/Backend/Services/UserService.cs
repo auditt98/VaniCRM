@@ -95,7 +95,7 @@ namespace Backend.Services
             }
         }
         /// <summary>
-        /// Creates a new user
+        /// Create a new user
         /// </summary>
         /// <param name="user">Api model object</param>
         /// <param name="userCreated">ID of current user</param>
