@@ -4,7 +4,7 @@
         <BaseAppBar/>
         
         <v-main fill-height style="background-color: rgb(243,244,247)">
-
+            
         <!-- Nested route -->
             <!-- <router-view></router-view> -->
         </v-main>
