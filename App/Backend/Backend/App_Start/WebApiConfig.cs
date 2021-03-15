@@ -13,9 +13,9 @@ namespace Backend
             // Web API configuration and services
 
             // Web API routes
-            config.MapHttpAttributeRoutes();
             var cors = new EnableCorsAttribute("*", "*", "*");
-            config.EnableCors();
+            config.EnableCors(cors);
+            config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "{controller}/{id}",

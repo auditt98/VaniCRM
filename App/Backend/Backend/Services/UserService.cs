@@ -16,7 +16,7 @@ namespace Backend.Services
     {
         UserRepository _userRepository = new UserRepository();
         UserValidator _validator = new UserValidator();
-        Hashing hashValidator = new Hashing();
+        HashManager _hashManager = new HashManager();
         DatabaseContext db = new DatabaseContext();
         public USER GetOne(int id)
         {
@@ -82,7 +82,7 @@ namespace Backend.Services
                 var user = AutoMapper.Mapper.Map<User>(dbuser);
                 if(dbuser != null)
                 {
-                    if(hashValidator.VerifyHash(password, dbuser.Hash))
+                    if(_hashManager.VerifyHash(password, dbuser.Hash))
                     {
                         return (true, "", user);
                     }
@@ -93,6 +93,33 @@ namespace Backend.Services
             {
                 throw;
             }
+        }
+        /// <summary>
+        /// Create a new user
+        /// </summary>
+        /// <param name="user">Api model object</param>
+        /// <param name="userCreated">ID of current user</param>
+        /// <returns></returns>
+        public USER Create(User user, int userCreated = 0)
+        {
+            var newDbUser = new USER();
+            newDbUser.FirstName = user.FirstName;
+            newDbUser.LastName = user.LastName;
+            newDbUser.GROUP_ID = user.GROUP_ID;
+            newDbUser.Phone = user.Phone;
+            newDbUser.Skype = user.Skype;
+            newDbUser.Email = user.Email;
+            newDbUser.Username = user.Username;
+            if(userCreated != 0)
+            {
+                newDbUser.CreatedBy = userCreated;
+            }
+            newDbUser.CreatedAt = DateTime.Now;
+            //hash the user password
+            newDbUser.Hash = _hashManager.Hash(user.Password);
+            db.USERs.Add(newDbUser);
+            db.SaveChanges();
+            return newDbUser;
         }
     }
 }

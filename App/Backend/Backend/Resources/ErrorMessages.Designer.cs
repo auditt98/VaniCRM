@@ -61,7 +61,7 @@ namespace Backend.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Missing request body..
+        ///   Looks up a localized string similar to Invalid request body..
         /// </summary>
         internal static string INVALID_BODY {
             get {
@@ -102,6 +102,15 @@ namespace Backend.Resources {
         internal static string UNAUTHORIZED {
             get {
                 return ResourceManager.GetString("UNAUTHORIZED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User not found..
+        /// </summary>
+        internal static string USER_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
             }
         }
         

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Backend.Extensions
 {
-    public class Hashing
+    public class HashManager
     {
         public string Hash(string text)
         {

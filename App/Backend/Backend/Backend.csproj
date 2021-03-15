@@ -298,7 +298,7 @@
     <Compile Include="Domain\USER_NOTIFICATION.cs" />
     <Compile Include="Extensions\AutoMapperConfig.cs" />
     <Compile Include="Extensions\Enum.cs" />
-    <Compile Include="Extensions\Hashing.cs" />
+    <Compile Include="Extensions\HashManager.cs" />
     <Compile Include="Extensions\JwtTokenManager.cs" />
     <Compile Include="Extensions\PermsAttribute.cs" />
     <Compile Include="Extensions\ResponseFormat.cs" />
@@ -323,7 +323,10 @@
     <Compile Include="Models\PermissionOrder.cs" />
     <Compile Include="Models\Stage.cs" />
     <Compile Include="Models\StageHistory.cs" />
-    <Compile Include="Models\SwaggerModel\LoginReponse.cs" />
+    <Compile Include="Models\SwaggerModel\Auth\LoginReponse.cs" />
+    <Compile Include="Models\SwaggerModel\PagerResponseModel.cs" />
+    <Compile Include="Models\SwaggerModel\ResponseModel.cs" />
+    <Compile Include="Models\SwaggerModel\Users\Swagger_User_List.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\TagItem.cs" />
     <Compile Include="Models\Task.cs" />
@@ -336,6 +339,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\SuccessMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SuccessMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\ValidationErrorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ValidationErrorMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\AuthorizationService.cs" />
     <Compile Include="Services\DealService.cs" />
@@ -395,7 +408,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ApiModel\" />
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -430,6 +443,14 @@
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SuccessMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SuccessMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ValidationErrorMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ValidationErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

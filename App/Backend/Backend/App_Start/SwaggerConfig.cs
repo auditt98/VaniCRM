@@ -16,6 +16,7 @@ namespace Backend
             GlobalConfiguration.Configuration
                               .EnableSwagger(c =>
                               {
+                                  c.UseFullTypeNameInSchemaIds();
                                   c.SingleApiVersion("v1", "SwaggerDemoApi");
                                   c.IncludeXmlComments(string.Format(@"{0}\bin\SwaggerApiDoc.xml",
                                                        System.AppDomain.CurrentDomain.BaseDirectory));

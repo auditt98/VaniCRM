@@ -5,23 +5,23 @@ using System.Web;
 
 namespace Backend.Models.SwaggerModel
 {
-    public class SwaggerLoginReponse
+    public class SwaggerLoginReponse : ResponseModel
     {
-        public class SwaggerDataFormat
+        public string status { get; set; }
+        public new LoginSwaggerModel data { get; set; }
+        public string message { get; set; }
+
+        public class LoginSwaggerModel
         {
-            public class SwaggerUserLoginModel
+            public class T
             {
                 public string username { get; set; }
                 public string lastName { get; set; }
                 public string firstName { get; set; }
                 public string jwt { get; set; }
             }
-
-            public SwaggerUserLoginModel user { get; set; }
+            public T user { get; set; }
         }
-        public string status { get; set; }
-        public SwaggerDataFormat data { get; set; }
-        public string message { get; set; }
 
     }
 }

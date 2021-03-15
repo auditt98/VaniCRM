@@ -1,4 +1,11 @@
+
+
 .v-main__wrap{
     background-color: rgb(243,244,247);
+}
 
+.app-bar-text{
+    font-family: "Fira Sans";
+    font-size: 15px;
+    font-weight: normal;
 }
