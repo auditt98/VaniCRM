@@ -22,14 +22,14 @@ namespace Backend.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ErrorMessages {
+    internal class SuccessMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ErrorMessages() {
+        internal SuccessMessages() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Backend.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backend.Resources.ErrorMessages", typeof(ErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backend.Resources.SuccessMessages", typeof(SuccessMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,65 +61,20 @@ namespace Backend.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid request body..
+        ///   Looks up a localized string similar to User successfully created..
         /// </summary>
-        internal static string INVALID_BODY {
+        internal static string USER_CREATED {
             get {
-                return ResourceManager.GetString("INVALID_BODY", resourceCulture);
+                return ResourceManager.GetString("USER_CREATED", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The token has expired..
+        ///   Looks up a localized string similar to User successfully deleted..
         /// </summary>
-        internal static string TOKEN_EXPIRED {
+        internal static string USER_DELETED {
             get {
-                return ResourceManager.GetString("TOKEN_EXPIRED", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid token.
-        /// </summary>
-        internal static string TOKEN_INVALID {
-            get {
-                return ResourceManager.GetString("TOKEN_INVALID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You are not authenticated, please try again..
-        /// </summary>
-        internal static string UNAUTHENTICATED {
-            get {
-                return ResourceManager.GetString("UNAUTHENTICATED", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You are not authorized to access this resource..
-        /// </summary>
-        internal static string UNAUTHORIZED {
-            get {
-                return ResourceManager.GetString("UNAUTHORIZED", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User not found..
-        /// </summary>
-        internal static string USER_NOT_FOUND {
-            get {
-                return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Email/Password is incorrect..
-        /// </summary>
-        internal static string WRONG_PASSWORD {
-            get {
-                return ResourceManager.GetString("WRONG_PASSWORD", resourceCulture);
+                return ResourceManager.GetString("USER_DELETED", resourceCulture);
             }
         }
     }

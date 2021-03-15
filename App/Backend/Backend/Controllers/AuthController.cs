@@ -18,10 +18,11 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Web.Http.Description;
 using Backend.Resources;
+using System.Web.Http.Cors;
 
 namespace Backend.Controllers
 {
-
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class AuthController : ApiController
     {
         DatabaseContext db = new DatabaseContext();
@@ -37,9 +38,16 @@ namespace Backend.Controllers
         [HttpPost]
         [Route("login")]
         [ResponseType(typeof(SwaggerLoginReponse))]
+        //[EnableCors(origins: "*", headers: "*", methods: "*")]
         public HttpResponseMessage Login([FromBody]LoginApiModel apiModel)
         {
             HttpResponseMessage response = new HttpResponseMessage();
+            //response.Headers.Add("Access-Control-Allow-Origin", "*");
+            //response.Headers.Add("Access-Control-Allow-Headers", "*");
+            //response.Headers.Add("Access-Control-Allow-Methods", "*");
+            //response.Headers.Add("Access-Control-Allow-Credentials", "true");
+            //response.Headers.Add("Access-Control-Allow-Origin: *", "true");
+
             ResponseFormat responseData;
             if(apiModel == null)
             {

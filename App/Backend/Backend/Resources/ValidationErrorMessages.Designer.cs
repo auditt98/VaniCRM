@@ -22,14 +22,14 @@ namespace Backend.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ErrorMessages {
+    internal class ValidationErrorMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ErrorMessages() {
+        internal ValidationErrorMessages() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Backend.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backend.Resources.ErrorMessages", typeof(ErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backend.Resources.ValidationErrorMessages", typeof(ValidationErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,65 +61,74 @@ namespace Backend.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid request body..
+        ///   Looks up a localized string similar to Email must not be empty..
         /// </summary>
-        internal static string INVALID_BODY {
+        internal static string EMAIL_EMPTY {
             get {
-                return ResourceManager.GetString("INVALID_BODY", resourceCulture);
+                return ResourceManager.GetString("EMAIL_EMPTY", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The token has expired..
+        ///   Looks up a localized string similar to Email address is already occupied. Please try again with another email address..
         /// </summary>
-        internal static string TOKEN_EXPIRED {
+        internal static string EMAIL_OCCUPIED {
             get {
-                return ResourceManager.GetString("TOKEN_EXPIRED", resourceCulture);
+                return ResourceManager.GetString("EMAIL_OCCUPIED", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid token.
+        ///   Looks up a localized string similar to Wrong email format..
         /// </summary>
-        internal static string TOKEN_INVALID {
+        internal static string EMAIL_WRONG_FORMAT {
             get {
-                return ResourceManager.GetString("TOKEN_INVALID", resourceCulture);
+                return ResourceManager.GetString("EMAIL_WRONG_FORMAT", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are not authenticated, please try again..
+        ///   Looks up a localized string similar to First name must not be empty..
         /// </summary>
-        internal static string UNAUTHENTICATED {
+        internal static string FIRSTNAME_EMPTY {
             get {
-                return ResourceManager.GetString("UNAUTHENTICATED", resourceCulture);
+                return ResourceManager.GetString("FIRSTNAME_EMPTY", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are not authorized to access this resource..
+        ///   Looks up a localized string similar to Last name must not be empty..
         /// </summary>
-        internal static string UNAUTHORIZED {
+        internal static string LASTNAME_EMPTY {
             get {
-                return ResourceManager.GetString("UNAUTHORIZED", resourceCulture);
+                return ResourceManager.GetString("LASTNAME_EMPTY", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User not found..
+        ///   Looks up a localized string similar to Password must be at least 6 characters long..
         /// </summary>
-        internal static string USER_NOT_FOUND {
+        internal static string PASSWORD_EMPTY {
             get {
-                return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
+                return ResourceManager.GetString("PASSWORD_EMPTY", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email/Password is incorrect..
+        ///   Looks up a localized string similar to Password must be at lease 6 characters long..
         /// </summary>
-        internal static string WRONG_PASSWORD {
+        internal static string PASSWORD_LENGTH_NOT_VALID {
             get {
-                return ResourceManager.GetString("WRONG_PASSWORD", resourceCulture);
+                return ResourceManager.GetString("PASSWORD_LENGTH_NOT_VALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username must not be empty..
+        /// </summary>
+        internal static string USERNAME_EMPTY {
+            get {
+                return ResourceManager.GetString("USERNAME_EMPTY", resourceCulture);
             }
         }
     }
