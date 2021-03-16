@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Http.Description;
 using static Backend.Extensions.Enum;
 
 namespace Backend.Controllers
@@ -23,7 +24,8 @@ namespace Backend.Controllers
         public UserService _userService = new UserService();
 
         [HttpGet]
-        [Route("dashboard")]
+        [Route("sale_dashboard")]
+        [ResponseType(typeof(DashboardApiModel))]
         public HttpResponseMessage ViewSaleDashboard()
         {
             var response = new HttpResponseMessage();
