@@ -22,14 +22,14 @@ namespace Backend.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SuccessMessages {
+    internal class StaticStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SuccessMessages() {
+        internal StaticStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Backend.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backend.Resources.SuccessMessages", typeof(SuccessMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backend.Resources.StaticStrings", typeof(StaticStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,29 @@ namespace Backend.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password has been reset..
+        ///   Looks up a localized string similar to http://localhost:8080/.
         /// </summary>
-        internal static string PASSWORD_RESET {
+        internal static string ClientHost {
             get {
-                return ResourceManager.GetString("PASSWORD_RESET", resourceCulture);
+                return ResourceManager.GetString("ClientHost", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User successfully created..
+        ///   Looks up a localized string similar to Password reset for VaniCRM.
         /// </summary>
-        internal static string USER_CREATED {
+        internal static string RESET_PASSWORD_TITLE {
             get {
-                return ResourceManager.GetString("USER_CREATED", resourceCulture);
+                return ResourceManager.GetString("RESET_PASSWORD_TITLE", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User successfully deleted..
+        ///   Looks up a localized string similar to https://localhost:44375/.
         /// </summary>
-        internal static string USER_DELETED {
+        internal static string ServerHost {
             get {
-                return ResourceManager.GetString("USER_DELETED", resourceCulture);
+                return ResourceManager.GetString("ServerHost", resourceCulture);
             }
         }
     }

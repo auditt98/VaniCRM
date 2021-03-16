@@ -28,6 +28,8 @@ namespace Backend.Controllers
         DatabaseContext db = new DatabaseContext();
         private UserRepository _userRepository = new UserRepository();
         private UserService _userService = new UserService();
+        private EmailManager _emailManager = new EmailManager();
+        private HashManager _hashManager = new HashManager();
         /// <summary>
         /// Login an user, required parameters: email, password
         /// 
@@ -42,11 +44,6 @@ namespace Backend.Controllers
         public HttpResponseMessage Login([FromBody]LoginApiModel apiModel)
         {
             HttpResponseMessage response = new HttpResponseMessage();
-            //response.Headers.Add("Access-Control-Allow-Origin", "*");
-            //response.Headers.Add("Access-Control-Allow-Headers", "*");
-            //response.Headers.Add("Access-Control-Allow-Methods", "*");
-            //response.Headers.Add("Access-Control-Allow-Credentials", "true");
-            //response.Headers.Add("Access-Control-Allow-Origin: *", "true");
 
             ResponseFormat responseData;
             if(apiModel == null)
@@ -238,6 +235,134 @@ namespace Backend.Controllers
                 response.StatusCode = HttpStatusCode.Forbidden;
                 responseData = ResponseFormat.Fail;
                 responseData.message = "No cookie found";
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpGet]
+        [Route("forgot_password")]
+        public HttpResponseMessage ResetPassword([FromUri] string email)
+        {
+            //_emailManager = new EmailManager()
+            HttpResponseMessage response = new HttpResponseMessage();
+
+            ResponseFormat responseData;
+
+            var dbUser = db.USERs.Where(c => c.Email == email).FirstOrDefault();
+            if (dbUser != null)
+            {
+                Random r = new Random();
+                string validationCode = r.Next(10000, 1000000).ToString("D6");
+                var jwtManager = JwtTokenManager.GenerateJwtForPasswordReset(validationCode, email);
+
+                _emailManager = new EmailManager();
+                _emailManager.Title = StaticStrings.RESET_PASSWORD_TITLE;
+                _emailManager.Content = $"<a style='-webkit-appearance:button; -moz-appearance:button; appearance:button; text-decoration:none; background-color: #D93915; color: white; padding: 1em 1.5em; text-transform: uppercase;' href='{StaticStrings.ClientHost}reset_password?key={jwtManager}'>Reset password</a><p style='font-style: italic;'>This link will expire after 30 minutes.</p>";
+                _emailManager.Recipients = new List<string>() { email };
+                _emailManager.SendEmail();
+                if (_emailManager.isSent)
+                {
+                    dbUser.RememberMeToken = validationCode;
+                    db.SaveChanges();
+                    response.StatusCode = HttpStatusCode.OK;
+                    responseData = ResponseFormat.Success;
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.InternalServerError;
+                    responseData = ResponseFormat.Fail;
+                    responseData.message = ErrorMessages.EMAIL_SEND_FAILED;
+
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.NotFound;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.USER_NOT_FOUND;
+
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpPost]
+        [Route("reset_password")]
+        public HttpResponseMessage ValidateCode([FromBody] ResetPasswordApiModel apiModel)
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+
+            if (apiModel == null)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.INVALID_KEY;
+            }
+            else
+            {
+                //validate the key sent
+                if (string.IsNullOrEmpty(apiModel.key) || string.IsNullOrEmpty(apiModel.newPassword))
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    responseData = ResponseFormat.Fail;
+                    responseData.message = ErrorMessages.INVALID_KEY;
+                }
+                else
+                {
+                    var payload = JwtTokenManager.ValidateJwtToken(apiModel.key);
+                    if (payload.ContainsKey("error"))
+                    {
+                        if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                        {
+                            response.StatusCode = HttpStatusCode.Forbidden;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                        }
+                        if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                        {
+                            response.StatusCode = HttpStatusCode.Forbidden;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.TOKEN_INVALID;
+                        }
+                    }
+                    else
+                    {
+                        //decode key for field "validationCode" and "email"
+                        var userEmail = Convert.ToString(payload["email"]);
+                        var userCode = Convert.ToString(payload["validationCode"]);
+                        //find user with email, if validation code is the same, hash password and save it to db
+                        var dbUser = db.USERs.Where(c => c.Email == userEmail).FirstOrDefault();
+                        if (dbUser != null)
+                        {
+                            if (dbUser.RememberMeToken == userCode)
+                            {
+                                //hash user password
+                                dbUser.Hash = _hashManager.Hash(apiModel.newPassword);
+                                db.SaveChanges();
+                                response.StatusCode = HttpStatusCode.OK;
+                                responseData = ResponseFormat.Success;
+                                responseData.message = SuccessMessages.PASSWORD_RESET;
+                            }
+                            else
+                            {
+                                response.StatusCode = HttpStatusCode.Forbidden;
+                                responseData = ResponseFormat.Fail;
+                                responseData.message = ErrorMessages.INVALID_KEY;
+                            }
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.NotFound;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.USER_NOT_FOUND;
+                        }
+
+                    }
+                }
             }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");

@@ -37,6 +37,17 @@ namespace Backend.Extensions
             return token;
         }
 
+        public static string GenerateJwtForPasswordReset(string code,string email)
+        {
+            var token = JwtBuilder.Create()
+                                  .WithAlgorithm(new HMACSHA256Algorithm())
+                                  .WithSecret(Secret)
+                                  .AddClaim("validationCode", code)
+                                  .AddClaim("email", email)
+                                  .ExpirationTime(DateTime.Now.AddMinutes(30))
+                                  .Encode();
+            return token;
+        }
 
         /// <summary>
         /// Validate and decode JWT token
