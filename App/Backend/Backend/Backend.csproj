@@ -258,6 +258,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\ApiResponseDemoController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Domain\ACCOUNT.cs" />
     <Compile Include="Domain\ACCOUNT_TYPE.cs" />
@@ -310,6 +311,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\ApiModel\DashboardApiModel.cs" />
     <Compile Include="Models\ApiModel\LoginApiModel.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Models\Contact.cs" />

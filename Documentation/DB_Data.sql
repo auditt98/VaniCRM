@@ -9527,3 +9527,23 @@ set identity_insert [dbo].[DEAL] off;
 go
 update [USER] set Hash = '$2y$12$k6u7JrmmG6ZLrwl9k9NncOU1Uyd5uhr1HYh7Ss3gGcnugbCj3vhLy ' where ID != 1
 go
+------update-----
+use CRM
+go;
+insert into STAGE_HISTORY (STAGE_ID, DEAL_ID, ModifiedBy, ModifiedAt) values (1, 1, 1, '2019-12-13 03:43:10');
+insert into STAGE_HISTORY (STAGE_ID, DEAL_ID, ModifiedBy, ModifiedAt) values (2, 1, 1, '2019-12-25 10:58:57');
+insert into STAGE_HISTORY (STAGE_ID, DEAL_ID, ModifiedBy, ModifiedAt) values (4, 1, 1, '2020-01-21 02:27:34');
+insert into STAGE_HISTORY (STAGE_ID, DEAL_ID, ModifiedBy, ModifiedAt) values (3, 1, 1, '2020-01-28 20:26:30');
+insert into STAGE_HISTORY (STAGE_ID, DEAL_ID, ModifiedBy, ModifiedAt) values (7, 1, 1, '2020-02-13 17:37:18');
+go
+
+set identity_insert [dbo].[TAG_ITEM] on;
+go
+insert into [TAG_ITEM] (ID, TAG_ID, DEAL_ID) values (1, 1, 1)
+insert into [TAG_ITEM] (ID, TAG_ID, DEAL_ID) values (2, 2, 1)
+insert into [TAG_ITEM] (ID, TAG_ID, DEAL_ID) values (4, 4, 1)
+insert into [TAG_ITEM] (ID, TAG_ID, DEAL_ID) values (3, 2, 2)
+insert into [TAG_ITEM] (ID, TAG_ID, DEAL_ID) values (5, 4, 2)
+
+set identity_insert [dbo].[TAG_ITEM] off;
+go

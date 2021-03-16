@@ -61,5 +61,16 @@ namespace Backend.Extensions
             TASK_MODIFY_ANY = 50
         }
 
+        public enum EnumStage
+        {
+            QUALIFIED = 1,
+            VALUE_PROPOSITION = 2,
+            FIND_KEY_CONTACTS = 3,
+            SEND_PROPOSAL = 4,
+            REVIEW = 5,
+            NEGOTIATE = 6,
+            WON = 7,
+            LOST = 8
+        }
     }
 }
