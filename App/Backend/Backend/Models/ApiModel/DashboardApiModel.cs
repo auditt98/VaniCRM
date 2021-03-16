@@ -7,25 +7,18 @@ namespace Backend.Models.ApiModel
 {
     public class DashboardApiModel
     {
-        public S qualified { get; set; }
-        public S valueProposition { get; set; }
-        public S findKeyContacts { get; set; }
-        public S sendProposal { get; set; }
-        public S review { get; set; }
-        public S negotiate { get; set; }
-        public S won { get; set; }
-        public S lost { get; set; }
-
+        public List<S> stages { get; set; }
         public DashboardApiModel()
         {
-            qualified = new S();
-            valueProposition = new S();
-            findKeyContacts = new S();
-            sendProposal = new S();
-            review = new S();
-            negotiate = new S();
-            won = new S();
-            lost = new S();
+            stages = new List<S>();
+            //qualified = new S();
+            //valueProposition = new S();
+            //findKeyContacts = new S();
+            //sendProposal = new S();
+            //review = new S();
+            //negotiate = new S();
+            //won = new S();
+            //lost = new S();
         }
 
 
