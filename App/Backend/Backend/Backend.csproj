@@ -299,6 +299,7 @@
     <Compile Include="Domain\USER.cs" />
     <Compile Include="Domain\USER_NOTIFICATION.cs" />
     <Compile Include="Extensions\AutoMapperConfig.cs" />
+    <Compile Include="Extensions\EmailManager.cs" />
     <Compile Include="Extensions\Enum.cs" />
     <Compile Include="Extensions\HashManager.cs" />
     <Compile Include="Extensions\JwtTokenManager.cs" />
@@ -309,12 +310,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account.cs" />
-    <Compile Include="Models\ApiModel\EmailApiModel.cs" />
     <Compile Include="Models\ApiModel\LoginApiModel.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\Deal.cs" />
-    <Compile Include="Models\Email.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Industry.cs" />
@@ -341,6 +340,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\StaticStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StaticStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\SuccessMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -445,6 +449,10 @@
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\StaticStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StaticStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SuccessMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>

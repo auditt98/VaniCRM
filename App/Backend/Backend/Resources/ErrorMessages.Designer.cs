@@ -61,11 +61,38 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred with our email service. Please try again later..
+        /// </summary>
+        internal static string EMAIL_SEND_FAILED {
+            get {
+                return ResourceManager.GetString("EMAIL_SEND_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid request body..
         /// </summary>
         internal static string INVALID_BODY {
             get {
                 return ResourceManager.GetString("INVALID_BODY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid validation key..
+        /// </summary>
+        internal static string INVALID_KEY {
+            get {
+                return ResourceManager.GetString("INVALID_KEY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid request..
+        /// </summary>
+        internal static string INVALID_REQUEST {
+            get {
+                return ResourceManager.GetString("INVALID_REQUEST", resourceCulture);
             }
         }
         

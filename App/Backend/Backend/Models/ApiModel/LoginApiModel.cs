@@ -13,4 +13,10 @@ namespace Backend.Models.ApiModel
         public string jwtToken { get; set; }
         public string seriesIdentifier { get; set; }
     }
+
+    public class ResetPasswordApiModel
+    {
+        public string key { get; set; }
+        public string newPassword { get; set; }
+    }
 }

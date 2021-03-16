@@ -84,25 +84,6 @@ namespace Backend.Controllers
             return response;
         }
 
-        [HttpPost]
-        [Route("email")]
-        public HttpResponseMessage Email(EmailApiModel email)
-        {
-
-            //var emailManager = new Email(email.title, email.content, email.recipients);
-            //emailManager.SendEmail();
-            HttpResponseMessage response = new HttpResponseMessage();
-            ResponseFormat responseData;
-            responseData = ResponseFormat.Success;
-            var json = JsonConvert.SerializeObject(responseData);
-            var u = _userService.GetOneByEmail("admin@gmail.com");
-            u.FirstName = "Lalala";
-            db.SaveChanges();
-
-
-            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
-            return response;
-        }
 
     }
 }
