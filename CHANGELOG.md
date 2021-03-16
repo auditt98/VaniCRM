@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/auditt98/VaniCRM/compare/v1.1.4...v1.2.0) (2021-03-16)
+
+
+### Features
+
+* **Backend - Auth:** Reset password ([91d284c](https://github.com/auditt98/VaniCRM/commit/91d284c7d4d6faaa563e6b167aff45a894f5ed43))
+
 ### [1.1.4](https://github.com/auditt98/VaniCRM/compare/v1.1.3...v1.1.4) (2021-03-15)
 
 ### [1.1.3](https://github.com/auditt98/VaniCRM/compare/v1.1.2...v1.1.3) (2021-03-15)
