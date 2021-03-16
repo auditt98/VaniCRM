@@ -14,11 +14,13 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using static Backend.Extensions.Enum;
 
 namespace Backend.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class UsersController : ApiController
     {
         public DatabaseContext db = new DatabaseContext();
