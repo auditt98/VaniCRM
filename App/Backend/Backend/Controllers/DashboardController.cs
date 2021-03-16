@@ -71,7 +71,17 @@ namespace Backend.Controllers
                         var deals = db.DEALs.ToList();
                         
                         DashboardApiModel apiModel = new DashboardApiModel();
-                        apiModel.qualified = new DashboardApiModel.S();
+                        apiModel.stages = new List<DashboardApiModel.S>();
+
+                        var qualified = new DashboardApiModel.S();
+                        var valueProposition = new DashboardApiModel.S();
+                        var findKeyContacts = new DashboardApiModel.S();
+                        var sendProposal = new DashboardApiModel.S();
+                        var review = new DashboardApiModel.S();
+                        var negotiate = new DashboardApiModel.S();
+                        var won = new DashboardApiModel.S();
+                        var lost = new DashboardApiModel.S();
+
 
                         var qualifiedStage = db.STAGEs.Find((int)EnumStage.QUALIFIED);
                         var valuePropositionStage = db.STAGEs.Find((int)EnumStage.VALUE_PROPOSITION);
@@ -83,37 +93,37 @@ namespace Backend.Controllers
                         var lostStage = db.STAGEs.Find((int)EnumStage.LOST);
                         #region stages
                         //qualified
-                        apiModel.qualified.stageID = qualifiedStage.ID;
-                        apiModel.qualified.stageName = qualifiedStage.Name;
-                        apiModel.qualified.probability = qualifiedStage.Probability.Value;
+                        qualified.stageID = qualifiedStage.ID;
+                        qualified.stageName = qualifiedStage.Name;
+                        qualified.probability = qualifiedStage.Probability.Value;
                         //value proposition
-                        apiModel.valueProposition.stageID = valuePropositionStage.ID;
-                        apiModel.valueProposition.stageName = valuePropositionStage.Name;
-                        apiModel.valueProposition.probability = valuePropositionStage.Probability.Value;
+                        valueProposition.stageID = valuePropositionStage.ID;
+                        valueProposition.stageName = valuePropositionStage.Name;
+                        valueProposition.probability = valuePropositionStage.Probability.Value;
                         //find key contacts
-                        apiModel.findKeyContacts.stageID = findKeyContactsStage.ID;
-                        apiModel.findKeyContacts.stageName = findKeyContactsStage.Name;
-                        apiModel.findKeyContacts.probability = findKeyContactsStage.Probability.Value;
+                        findKeyContacts.stageID = findKeyContactsStage.ID;
+                        findKeyContacts.stageName = findKeyContactsStage.Name;
+                        findKeyContacts.probability = findKeyContactsStage.Probability.Value;
                         //send proposal
-                        apiModel.sendProposal.stageID = sendProposalStage.ID;
-                        apiModel.sendProposal.stageName = sendProposalStage.Name;
-                        apiModel.sendProposal.probability = sendProposalStage.Probability.Value;
+                        sendProposal.stageID = sendProposalStage.ID;
+                        sendProposal.stageName = sendProposalStage.Name;
+                        sendProposal.probability = sendProposalStage.Probability.Value;
                         //review 
-                        apiModel.review.stageID = reviewStage.ID;
-                        apiModel.review.stageName = reviewStage.Name;
-                        apiModel.review.probability = reviewStage.Probability.Value;
+                        review.stageID = reviewStage.ID;
+                        review.stageName = reviewStage.Name;
+                        review.probability = reviewStage.Probability.Value;
                         //negotiate
-                        apiModel.negotiate.stageID = negotiateStage.ID;
-                        apiModel.negotiate.stageName = negotiateStage.Name;
-                        apiModel.negotiate.probability = negotiateStage.Probability.Value;
+                        negotiate.stageID = negotiateStage.ID;
+                        negotiate.stageName = negotiateStage.Name;
+                        negotiate.probability = negotiateStage.Probability.Value;
                         //won
-                        apiModel.won.stageID = wonStage.ID;
-                        apiModel.won.stageName = wonStage.Name;
-                        apiModel.won.probability = wonStage.Probability.Value;
+                        won.stageID = wonStage.ID;
+                        won.stageName = wonStage.Name;
+                        won.probability = wonStage.Probability.Value;
                         //lost
-                        apiModel.lost.stageID = lostStage.ID;
-                        apiModel.lost.stageName = lostStage.Name;
-                        apiModel.lost.probability = lostStage.Probability.Value;
+                        lost.stageID = lostStage.ID;
+                        lost.stageName = lostStage.Name;
+                        lost.probability = lostStage.Probability.Value;
                         #endregion
 
                         foreach(var deal in deals)
@@ -138,40 +148,41 @@ namespace Backend.Controllers
                                 var stage = history.Select(c => c.STAGE_ID).First();
                                 if(stage == (int)EnumStage.QUALIFIED)
                                 {
-                                    apiModel.qualified.deals.Add(d);
+                                    qualified.deals.Add(d);
                                 }
                                 if (stage == (int)EnumStage.VALUE_PROPOSITION)
                                 {
-                                    apiModel.valueProposition.deals.Add(d);
+                                    valueProposition.deals.Add(d);
                                 }
                                 if (stage == (int)EnumStage.FIND_KEY_CONTACTS)
                                 {
-                                    apiModel.findKeyContacts.deals.Add(d);
+                                    findKeyContacts.deals.Add(d);
                                 }
                                 if (stage == (int)EnumStage.SEND_PROPOSAL)
                                 {
-                                    apiModel.sendProposal.deals.Add(d);
+                                    sendProposal.deals.Add(d);
                                 }
                                 if (stage == (int)EnumStage.REVIEW)
                                 {
-                                    apiModel.review.deals.Add(d);
+                                    review.deals.Add(d);
                                 }
                                 if (stage == (int)EnumStage.NEGOTIATE)
                                 {
-                                    apiModel.negotiate.deals.Add(d);
+                                    negotiate.deals.Add(d);
                                 }
                                 if (stage == (int)EnumStage.WON)
                                 {
-                                    apiModel.won.deals.Add(d);
+                                    won.deals.Add(d);
                                 }
                                 if (stage == (int)EnumStage.LOST)
                                 {
-                                    apiModel.lost.deals.Add(d);
+                                    lost.deals.Add(d);
                                 }
                             }
 
                         }
 
+                        apiModel.stages.AddRange(new List<DashboardApiModel.S>() { qualified, valueProposition, findKeyContacts, sendProposal, review, negotiate, won, lost });
                         responseData.data = apiModel;
                     }
                     else
