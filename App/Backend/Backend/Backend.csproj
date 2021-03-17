@@ -311,8 +311,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\ApiModel\AccountApiModel.cs" />
+    <Compile Include="Models\ApiModel\ContactApiModel.cs" />
+    <Compile Include="Models\ApiModel\TaskTemplateApiModel.cs" />
     <Compile Include="Models\ApiModel\DashboardApiModel.cs" />
+    <Compile Include="Models\ApiModel\LeadApiModel.cs" />
     <Compile Include="Models\ApiModel\LoginApiModel.cs" />
+    <Compile Include="Models\ApiModel\UserApiModel.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\Deal.cs" />
@@ -417,6 +422,7 @@
   <ItemGroup>
     <Folder Include="ApiModel\" />
     <Folder Include="App_Data\uploads\" />
+    <Folder Include="Uploads\Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -2,23 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http.Cors;
 
 namespace Backend.Models.ApiModel
 {
+
     public class DashboardApiModel
     {
         public List<S> stages { get; set; }
         public DashboardApiModel()
         {
             stages = new List<S>();
-            //qualified = new S();
-            //valueProposition = new S();
-            //findKeyContacts = new S();
-            //sendProposal = new S();
-            //review = new S();
-            //negotiate = new S();
-            //won = new S();
-            //lost = new S();
         }
 
 
