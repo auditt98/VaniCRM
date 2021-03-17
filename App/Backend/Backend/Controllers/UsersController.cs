@@ -252,6 +252,7 @@ namespace Backend.Controllers
 
         [HttpPost]
         [Route("users/{id}/change_password")]
+        [ResponseType(typeof(ResponseModel))]
         public HttpResponseMessage ChangePassword([FromUri] int id, [FromBody] ChangePasswordApiModel changePasswordModel)
         {
             var response = new HttpResponseMessage();
