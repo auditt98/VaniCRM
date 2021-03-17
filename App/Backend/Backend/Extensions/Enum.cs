@@ -58,7 +58,8 @@ namespace Backend.Extensions
             CAMPAIGN_VIEW_LIST = 47,
             REPORT_VIEW_ALL = 48,
             TASK_DELETE_ANY = 49,
-            TASK_MODIFY_ANY = 50
+            TASK_MODIFY_ANY = 50,
+            USER_VIEW_LIST = 51
         }
 
         public enum EnumStage

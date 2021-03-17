@@ -16,9 +16,13 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Collections.Specialized;
 using System.Web.Http.Description;
+using System.Web;
+using System.Web.Http.Cors;
+using System.IO;
 
 namespace Backend.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ApiResponseDemoController : ApiController
     {
         DatabaseContext db = new DatabaseContext();
@@ -28,6 +32,21 @@ namespace Backend.Controllers
         /// </summary>
         /// <returns>ResponseFormat</returns>
         /// 
+
+        [HttpPost]
+        [Route("test")]
+        public HttpResponseMessage Test()
+        {
+            string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads/Images");
+            if(HttpContext.Current.Request.Files.Count > 0)
+            {
+                var file = HttpContext.Current.Request.Files["file"];
+                var fileName = file.FileName;
+                string targetPath = Path.Combine(targetFolder, fileName);
+                file.SaveAs(targetPath);
+            }
+            return new HttpResponseMessage();
+        }
 
         [HttpGet]
         [Route("api/demo/success")]

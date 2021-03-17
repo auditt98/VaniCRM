@@ -61,6 +61,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password successfully changed..
+        /// </summary>
+        internal static string PASSWORD_CHANGED {
+            get {
+                return ResourceManager.GetString("PASSWORD_CHANGED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password has been reset..
         /// </summary>
         internal static string PASSWORD_RESET {
@@ -84,6 +93,15 @@ namespace Backend.Resources {
         internal static string USER_DELETED {
             get {
                 return ResourceManager.GetString("USER_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User successfully updated..
+        /// </summary>
+        internal static string USER_MODIFIED {
+            get {
+                return ResourceManager.GetString("USER_MODIFIED", resourceCulture);
             }
         }
     }

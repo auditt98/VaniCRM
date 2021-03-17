@@ -1,6 +1,7 @@
 ﻿using Backend.Domain;
 using Backend.Extensions;
 using Backend.Models;
+using Backend.Models.ApiModel;
 using Backend.Models.SwaggerModel;
 using Backend.Models.SwaggerModel.Users;
 using Backend.Resources;
@@ -35,7 +36,7 @@ namespace Backend.Controllers
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
-            AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW);
+            AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW_LIST);
             //read jwt
             IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
             if (headerValues == null)
@@ -170,7 +171,6 @@ namespace Backend.Controllers
             return response;
         }
 
-
         [HttpPost]
         [Route("users")]
         [ResponseType(typeof(ResponseModel))]
@@ -249,6 +249,124 @@ namespace Backend.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Route("users/{id}/change_password")]
+        [ResponseType(typeof(ResponseModel))]
+        public HttpResponseMessage ChangePassword([FromUri] int id, [FromBody] ChangePasswordApiModel changePasswordModel)
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            //AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF);
+            //read jwt
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+            if (headerValues == null)
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            else
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    if(userId == id)
+                    {
+                        var isAuthorized = new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF).Authorize(userId);
+                        if (isAuthorized)
+                        {
+                            //require old and new password
+                            //verify oldPassword agaisnt the database
+                            var dbUser = db.USERs.Find(id);
+                            if (dbUser != null)
+                            {
+                                var validate = _userService.ValidatePassword(dbUser.Email, changePasswordModel.oldPassword);
+                                if(validate.Item1 == true)
+                                {
+                                    //set new password
+                                    dbUser.Hash = _hashManager.Hash(changePasswordModel.newPassword);
+                                    db.SaveChanges();
+                                    response.StatusCode = HttpStatusCode.OK;
+                                    responseData = ResponseFormat.Success;
+                                    responseData.message = SuccessMessages.PASSWORD_CHANGED;
+                                }
+                                else 
+                                {
+                                    response.StatusCode = HttpStatusCode.Unauthorized;
+                                    responseData = ResponseFormat.Fail;
+                                    responseData.message = validate.Item2;
+                                }
+                            }
+                            else
+                            {
+                                response.StatusCode = HttpStatusCode.BadRequest;
+                                responseData = ResponseFormat.Fail;
+                                responseData.message = ErrorMessages.USER_NOT_FOUND;
+                            }
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.Forbidden;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.UNAUTHORIZED;
+                        }
+                    }
+                    else
+                    {
+                        var isAuthorized = new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY).Authorize(userId);
+                        if (isAuthorized)
+                        {
+                            //require new password
+                            var dbUser = db.USERs.Find(id);
+                            if (dbUser != null)
+                            {
+                                dbUser.Hash = _hashManager.Hash(changePasswordModel.newPassword);
+                                db.SaveChanges();
+                                response.StatusCode = HttpStatusCode.OK;
+                                responseData = ResponseFormat.Success;
+                                responseData.message = SuccessMessages.PASSWORD_CHANGED;
+                            }
+                            else
+                            {
+                                response.StatusCode = HttpStatusCode.BadRequest;
+                                responseData = ResponseFormat.Fail;
+                                responseData.message = ErrorMessages.USER_NOT_FOUND;
+                            }
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.Forbidden;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.UNAUTHORIZED;
+                        }
+                    }
+                }
+            }
+
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
         [HttpGet]
         [Route("users/{id}")]
         public HttpResponseMessage Detail([FromUri] int id)
@@ -289,25 +407,120 @@ namespace Backend.Controllers
                 else
                 {
                     var userId = payload["id"];
-                    //2 routes for permissions (case: user view his own account detail, case: admin/whoever has permission to view others account detail)
-                    //case for admin (view self will have USER_MODIFY_SELF)
-                    if (new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW).Authorize(Convert.ToInt32(userId)))
+                    var userIdInt = Convert.ToInt32(userId);
+                    if (id == userIdInt && new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF).Authorize(userIdInt)) //if viewing own profile
                     {
+                        //get user
+                        var dbUser = _userService.GetOne(id);
+                        //dbUser.
 
-                    } else if (new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF).Authorize(Convert.ToInt32(userId)))
+                    }
+                    else if (id != userIdInt && new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW).Authorize(userIdInt))
                     {
-                        //check if user is viewing his own profile
 
                     }
                     else
                     {
-
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
                     }
-
                     
                 }
             }
 
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpPost]
+        [Route("users/{id}")]
+        public HttpResponseMessage Update([FromUri] int id, [FromBody] User user)
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
+
+            if (headerValues == null)
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            else
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    if (userId == id)
+                    {
+                        var isAuthorized = new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF).Authorize(userId);
+                        if (isAuthorized)
+                        {
+                            var dbUser = db.USERs.Find(id);
+                            dbUser.FirstName = user.FirstName;
+                            dbUser.LastName = user.LastName;
+                            dbUser.Username = user.Username;
+                            dbUser.Phone = user.Phone;
+                            dbUser.Skype = user.Skype;
+                            db.SaveChanges();
+                            response.StatusCode = HttpStatusCode.OK;
+                            responseData = ResponseFormat.Success;
+                            responseData.message = SuccessMessages.USER_MODIFIED;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.Forbidden;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.UNAUTHORIZED;
+                        }
+                    }
+                    else
+                    {
+                        var isAuthorized = new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY).Authorize(userId);
+                        if (isAuthorized)
+                        {
+                            var dbUser = db.USERs.Find(id);
+                            dbUser.FirstName = user.FirstName;
+                            dbUser.LastName = user.LastName;
+                            dbUser.Username = user.Username;
+                            dbUser.Phone = user.Phone;
+                            dbUser.Skype = user.Skype;
+                            dbUser.GROUP_ID = user.GROUP_ID;
+                            db.SaveChanges();
+                            response.StatusCode = HttpStatusCode.OK;
+                            responseData = ResponseFormat.Success;
+                            responseData.message = SuccessMessages.USER_MODIFIED;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.Forbidden;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.UNAUTHORIZED;
+                        }
+                    }
+                }
+            }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
