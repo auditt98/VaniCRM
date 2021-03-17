@@ -95,5 +95,14 @@ namespace Backend.Resources {
                 return ResourceManager.GetString("USER_DELETED", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User successfully updated..
+        /// </summary>
+        internal static string USER_MODIFIED {
+            get {
+                return ResourceManager.GetString("USER_MODIFIED", resourceCulture);
+            }
+        }
     }
 }
