@@ -31,14 +31,9 @@ namespace Backend.Controllers
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
             AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.DEAL_VIEW_LIST);
-            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
-            if (headerValues == null)
-            {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                responseData = ResponseFormat.Fail;
-                responseData.message = ErrorMessages.UNAUTHORIZED;
-            }
-            else
+
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
             {
                 string jwt = headerValues.FirstOrDefault();
                 //validate jwt
@@ -69,7 +64,7 @@ namespace Backend.Controllers
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
                         var deals = db.DEALs.ToList();
-                        
+
                         DashboardApiModel apiModel = new DashboardApiModel();
                         apiModel.stages = new List<DashboardApiModel.S>();
 
@@ -126,7 +121,7 @@ namespace Backend.Controllers
                         lost.probability = lostStage.Probability.Value;
                         #endregion
 
-                        foreach(var deal in deals)
+                        foreach (var deal in deals)
                         {
                             var d = new DashboardApiModel.D();
                             d.dealID = deal.ID;
@@ -135,7 +130,7 @@ namespace Backend.Controllers
                             d.ownerUsername = deal.Owner.Username;
                             d.accountID = deal.ACCOUNT.ID;
                             d.accountName = deal.ACCOUNT.Name;
-                            foreach(var tag in deal.TAG_ITEM)
+                            foreach (var tag in deal.TAG_ITEM)
                             {
                                 var t = new DashboardApiModel.T();
                                 t.tagID = tag.TAG.ID;
@@ -143,10 +138,10 @@ namespace Backend.Controllers
                                 d.tags.Add(t);
                             }
                             var history = deal.STAGE_HISTORY.OrderByDescending(sh => sh.ModifiedAt).Take(1);
-                            if(history.Count() != 0)
+                            if (history.Count() != 0)
                             {
                                 var stage = history.Select(c => c.STAGE_ID).First();
-                                if(stage == (int)EnumStage.QUALIFIED)
+                                if (stage == (int)EnumStage.QUALIFIED)
                                 {
                                     qualified.deals.Add(d);
                                 }
@@ -193,7 +188,12 @@ namespace Backend.Controllers
                     }
                 }
             }
-
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;

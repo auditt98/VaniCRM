@@ -40,14 +40,8 @@ namespace Backend.Controllers
             ResponseFormat responseData = new ResponseFormat();
             AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW_LIST);
             //read jwt
-            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
-            if (headerValues == null)
-            {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                responseData = ResponseFormat.Fail;
-                responseData.message = ErrorMessages.UNAUTHORIZED;
-            }
-            else
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
             {
                 string jwt = headerValues.FirstOrDefault();
                 //validate jwt
@@ -93,7 +87,12 @@ namespace Backend.Controllers
                     }
                 }
             }
-
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
@@ -108,14 +107,9 @@ namespace Backend.Controllers
             ResponseFormat responseData = new ResponseFormat();
             AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.USER_DELETE);
             //read jwt
-            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
-            if (headerValues == null)
-            {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                responseData = ResponseFormat.Fail;
-                responseData.message = ErrorMessages.UNAUTHORIZED;
-            }
-            else
+
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
             {
                 string jwt = headerValues.FirstOrDefault();
                 //validate jwt
@@ -167,7 +161,12 @@ namespace Backend.Controllers
                     }
                 }
             }
-
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
@@ -183,14 +182,8 @@ namespace Backend.Controllers
             ResponseFormat responseData = new ResponseFormat();
             AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.USER_CREATE);
 
-            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
-            if (headerValues == null)
-            {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                responseData = ResponseFormat.Fail;
-                responseData.message = ErrorMessages.UNAUTHORIZED;
-            }
-            else
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
             {
                 string jwt = headerValues.FirstOrDefault();
                 //validate jwt
@@ -245,7 +238,12 @@ namespace Backend.Controllers
                     }
                 }
             }
-
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
@@ -260,14 +258,8 @@ namespace Backend.Controllers
             ResponseFormat responseData = new ResponseFormat();
             //AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF);
             //read jwt
-            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
-            if (headerValues == null)
-            {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                responseData = ResponseFormat.Fail;
-                responseData.message = ErrorMessages.UNAUTHORIZED;
-            }
-            else
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
             {
                 string jwt = headerValues.FirstOrDefault();
                 //validate jwt
@@ -363,7 +355,12 @@ namespace Backend.Controllers
                     }
                 }
             }
-
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
@@ -453,15 +450,9 @@ namespace Backend.Controllers
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
-            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
 
-            if (headerValues == null)
-            {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                responseData = ResponseFormat.Fail;
-                responseData.message = ErrorMessages.UNAUTHORIZED;
-            }
-            else
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
             {
                 string jwt = headerValues.FirstOrDefault();
                 //validate jwt
@@ -534,6 +525,12 @@ namespace Backend.Controllers
                     }
                 }
             }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
@@ -548,14 +545,8 @@ namespace Backend.Controllers
             ResponseFormat responseData = new ResponseFormat();
             //AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF);
             //read jwt
-            IEnumerable<string> headerValues = Request.Headers.GetValues("Authorization");
-            if (headerValues == null)
-            {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                responseData = ResponseFormat.Fail;
-                responseData.message = ErrorMessages.UNAUTHORIZED;
-            }
-            else
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
             {
                 string jwt = headerValues.FirstOrDefault();
                 //validate jwt
@@ -630,7 +621,7 @@ namespace Backend.Controllers
                         var isAuthorized = new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY).Authorize(userId);
                         if (isAuthorized)
                         {
-                            
+
                             var dbUser = db.USERs.Find(id);
                             if (dbUser != null)
                             {
@@ -675,7 +666,12 @@ namespace Backend.Controllers
                     }
                 }
             }
-
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
