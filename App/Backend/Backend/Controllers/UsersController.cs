@@ -682,6 +682,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}/accounts")]
+        [ResponseType(typeof(UserDetailApiModel.A))]
         public HttpResponseMessage GetAccounts([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri]string query = "")
         {
             var response = new HttpResponseMessage();
@@ -767,6 +768,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}/contacts")]
+        [ResponseType(typeof(UserDetailApiModel.C))]
         public HttpResponseMessage GetContacts([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
             var response = new HttpResponseMessage();
@@ -852,6 +854,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}/leads")]
+        [ResponseType(typeof(UserDetailApiModel.L))]
         public HttpResponseMessage GetLeads([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
             var response = new HttpResponseMessage();
