@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/auditt98/VaniCRM/compare/v1.5.0...v1.6.0) (2021-03-19)
+
+
+### Features
+
+* **API - User:** User detail page. ([2307f85](https://github.com/auditt98/VaniCRM/commit/2307f854efb1b085131c38825383114c7c784002))
+
 ## [1.5.0](https://github.com/auditt98/VaniCRM/compare/v1.4.0...v1.5.0) (2021-03-17)
 
 
