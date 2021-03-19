@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://github.com/auditt98/VaniCRM/compare/v1.6.0...v1.6.1) (2021-03-19)
+
+
+### Bug Fixes
+
+* api now returns correct response when client forgot to set authorization header instead of returning an exception ([c5651ca](https://github.com/auditt98/VaniCRM/commit/c5651ca6329c1289e92f474ccf6927c8a884bfdc))
+
 ## [1.6.0](https://github.com/auditt98/VaniCRM/compare/v1.5.0...v1.6.0) (2021-03-19)
 
 
