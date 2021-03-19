@@ -33,6 +33,7 @@ namespace Backend.Controllers
         public AccountService _accountService = new AccountService();
         public ContactService _contactService = new ContactService();
         public LeadService _leadService = new LeadService();
+        public TaskTemplateService _taskTemplateService = new TaskTemplateService();
 
         [HttpGet]
         [Route("users")]
@@ -940,9 +941,124 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}/tasks")]
-        public HttpResponseMessage GetTasks([FromUri] int id)
+        public HttpResponseMessage GetTasks([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
-            return new HttpResponseMessage();
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    if ((id == userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF).Authorize(userId)) || (id != userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW).Authorize(userId)))
+                    {
+                        var dbUser = db.USERs.Find(id);
+                        if (dbUser != null)
+                        {
+                            var taskTemplates = _taskTemplateService.GetUserTaskTemplate(dbUser.ID, query, currentPage, pageSize);
+                            var tasks = new List<UserDetailApiModel.T>();
+                            foreach(var task in taskTemplates)
+                            {
+                                var t = new UserDetailApiModel.T();
+                                t.title = task.Title;
+                                t.status = task.TASK_STATUS.Name;
+                                t.priotity = task.PRIORITY.Name;
+                                if (task.DueDate.HasValue)
+                                {
+                                    t.endDate = task.DueDate.Value;
+                                }
+                                if(task.CALLs.Count > 0)
+                                {
+                                    t.type = "calls";
+                                    var call = task.CALLs.FirstOrDefault();
+                                    t.id = call.ID;
+                                    if (call.StartTime.HasValue)
+                                    {
+                                        t.startDate = call.StartTime.Value;
+                                    }
+                                } else if(task.MEETINGs.Count > 0)
+                                {
+                                    t.type = "meetings";
+                                    var meeting = task.MEETINGs.FirstOrDefault();
+                                    t.id = meeting.ID;
+                                    if (meeting.FromDate.HasValue)
+                                    {
+                                        t.startDate = meeting.FromDate.Value;
+                                    }
+                                } else if(task.TASKs.Count > 0)
+                                {
+                                    t.type = "tasks";
+                                    var taskT = task.TASKs.FirstOrDefault();
+                                    t.id = taskT.ID;
+                                }
+                                tasks.Add(t);
+                            }
+                            Pager pageInfo;
+                            responseData = ResponseFormat.Success;
+
+                            if (tasks.Count() > 0)
+                            {
+                                if (pageSize == 0)
+                                {
+                                    pageInfo = new Pager(tasks.Count(), currentPage, tasks.Count());
+                                }
+                                else
+                                {
+                                    pageInfo = new Pager(tasks.Count(), currentPage, pageSize);
+                                }
+                                responseData.data = new
+                                {
+                                    tasks,
+                                    pageInfo
+                                };
+                            }
+                            response.StatusCode = HttpStatusCode.OK;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.Gone;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.USER_NOT_FOUND;
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
         }
 
     }

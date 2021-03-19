@@ -36,6 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\SwaggerApiDoc.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -349,7 +350,7 @@
     <Compile Include="Repository\AccountRepository.cs" />
     <Compile Include="Repository\ContactRepository.cs" />
     <Compile Include="Repository\LeadRepository.cs" />
-    <Compile Include="Repository\TaskRepository.cs" />
+    <Compile Include="Repository\TaskTemplateRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -377,6 +378,7 @@
     <Compile Include="Services\DealService.cs" />
     <Compile Include="Services\LeadService.cs" />
     <Compile Include="Services\TaskService.cs" />
+    <Compile Include="Services\TaskTemplateService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Validators\UserValidator.cs" />
   </ItemGroup>

@@ -83,6 +83,17 @@ namespace Backend.Models.ApiModel
             public string skype { get; set; }
         }
 
+        public class T
+        {
+            public int id { get; set; }
+            public string title { get; set; }
+            public string type { get; set; }
+            public string status { get; set; }
+            public DateTime startDate { get; set; }
+            public DateTime endDate { get; set; }
+            public string priotity { get; set; }
+        }
+
     }
 
 }
