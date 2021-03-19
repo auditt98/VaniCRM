@@ -33,19 +33,23 @@ namespace Backend.Controllers
         /// <returns>ResponseFormat</returns>
         /// 
 
-        [HttpPost]
-        [Route("test")]
-        public HttpResponseMessage Test()
+        [HttpGet]
+        [Route("test/{id}")]
+        public HttpResponseMessage Test([FromUri]int id)
         {
-            string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads/Images");
-            if(HttpContext.Current.Request.Files.Count > 0)
-            {
-                var file = HttpContext.Current.Request.Files["file"];
-                var fileName = file.FileName;
-                string targetPath = Path.Combine(targetFolder, fileName);
-                file.SaveAs(targetPath);
-            }
-            return new HttpResponseMessage();
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+
+            string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
+            var dbUser = db.USERs.Find(id);
+            var a = MimeMapping.MimeUtility.GetMimeMapping(dbUser.Avatar);
+            //var avatar = System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar));
+            var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar)));
+            response.StatusCode = HttpStatusCode.OK;
+            responseData.data = $"data:{a};base64,{img}";
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
         }
 
         [HttpGet]

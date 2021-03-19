@@ -90,6 +90,9 @@
     <Reference Include="MimeKit, Version=2.10.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
       <HintPath>..\packages\MimeKit.2.10.1\lib\net47\MimeKit.dll</HintPath>
     </Reference>
+    <Reference Include="MimeMapping, Version=1.0.1.37, Culture=neutral, PublicKeyToken=680e2d5f226b327b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeMapping.1.0.1.37\lib\netstandard2.0\MimeMapping.dll</HintPath>
+    </Reference>
     <Reference Include="Pipelines.Sockets.Unofficial, Version=1.0.0.0, Culture=neutral, PublicKeyToken=42ea0a778e13fbe2, processorArchitecture=MSIL">
       <HintPath>..\packages\Pipelines.Sockets.Unofficial.2.2.0\lib\net472\Pipelines.Sockets.Unofficial.dll</HintPath>
     </Reference>
@@ -302,6 +305,7 @@
     <Compile Include="Extensions\AutoMapperConfig.cs" />
     <Compile Include="Extensions\EmailManager.cs" />
     <Compile Include="Extensions\Enum.cs" />
+    <Compile Include="Extensions\FileManager.cs" />
     <Compile Include="Extensions\HashManager.cs" />
     <Compile Include="Extensions\JwtTokenManager.cs" />
     <Compile Include="Extensions\PermsAttribute.cs" />

@@ -129,6 +129,9 @@
   <data name="INVALID_REQUEST" xml:space="preserve">
     <value>Invalid request.</value>
   </data>
+  <data name="NOT_IMAGE" xml:space="preserve">
+    <value>Only images in these formats are allowed: ".jpeg", ".jpg", "png", ".tif", ".tiff"</value>
+  </data>
   <data name="TOKEN_EXPIRED" xml:space="preserve">
     <value>The token has expired.</value>
   </data>

@@ -97,6 +97,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only images in these formats are allowed: &quot;.jpeg&quot;, &quot;.jpg&quot;, &quot;png&quot;, &quot;.tif&quot;, &quot;.tiff&quot;.
+        /// </summary>
+        internal static string NOT_IMAGE {
+            get {
+                return ResourceManager.GetString("NOT_IMAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The token has expired..
         /// </summary>
         internal static string TOKEN_EXPIRED {

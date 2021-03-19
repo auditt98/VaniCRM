@@ -5,6 +5,7 @@
 
 # User-specific folders
 Uploads/**
+Uploads
 
 # User-specific files
 *.rsuser

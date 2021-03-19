@@ -61,6 +61,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Avatar successfully changed..
+        /// </summary>
+        internal static string AVATAR_CHANGED {
+            get {
+                return ResourceManager.GetString("AVATAR_CHANGED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password successfully changed..
         /// </summary>
         internal static string PASSWORD_CHANGED {
