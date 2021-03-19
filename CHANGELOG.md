@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/auditt98/VaniCRM/compare/v1.6.1...v1.7.0) (2021-03-19)
+
+
+### Features
+
+* **API - User:** api for getting user's owned accounts, contacts, leads ([4918306](https://github.com/auditt98/VaniCRM/commit/4918306531cfab19aa17647f42e7cb64f7cb1874))
+
 ### [1.6.1](https://github.com/auditt98/VaniCRM/compare/v1.6.0...v1.6.1) (2021-03-19)
 
 
