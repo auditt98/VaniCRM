@@ -30,6 +30,9 @@ namespace Backend.Controllers
         public UserService _userService = new UserService();
         public UserValidator _userValidator = new UserValidator();
         public HashManager _hashManager = new HashManager();
+        public AccountService _accountService = new AccountService();
+        public ContactService _contactService = new ContactService();
+        public LeadService _leadService = new LeadService();
 
         [HttpGet]
         [Route("users")]
@@ -368,7 +371,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}")]
-        [ResponseType(typeof(UserApiModel))]
+        [ResponseType(typeof(UserDetailApiModel))]
         public HttpResponseMessage Detail([FromUri] int id)
         {
             var response = new HttpResponseMessage();
@@ -420,7 +423,7 @@ namespace Backend.Controllers
                         apiModel.email = dbUser.Email;
                         apiModel.skype = dbUser.Skype;
                         apiModel.phone = dbUser.Phone;
-                        apiModel.groups = db.GROUPs.Select(c => new UserDetailApiModel.G { groupId = c.ID, groupName = c.Name, selected = dbUser.GROUP_ID == c.ID }).ToList();
+                        apiModel.groups = db.GROUPs.Select(c => new UserDetailApiModel.G { id = c.ID, name = c.Name, selected = dbUser.GROUP_ID == c.ID }).ToList();
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
                         responseData.data = apiModel;
@@ -675,6 +678,268 @@ namespace Backend.Controllers
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
+        }
+
+        [HttpGet]
+        [Route("users/{id}/accounts")]
+        public HttpResponseMessage GetAccounts([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri]string query = "")
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    if ((id == userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF).Authorize(userId)) || (id != userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW).Authorize(userId)))
+                    {
+                        var dbUser = db.USERs.Find(id);
+                        if(dbUser != null)
+                        {
+                            var accounts = _accountService.GetUserAccounts(dbUser.ID, query, currentPage, pageSize).Select(c => new UserDetailApiModel.A { id = c.ID, name = c.Name, email = c.Email, phone = c.Phone, website = c.Website, taxCode = c.TaxCode, isOwner = c.Owner.ID == dbUser.ID, isCollaborator = c.Collaborator.ID == dbUser.ID });
+                            Pager pageInfo;
+                            responseData = ResponseFormat.Success;
+
+                            if (accounts.Count() > 0)
+                            {
+                                if (pageSize == 0)
+                                {
+                                    pageInfo = new Pager(accounts.Count(), currentPage, accounts.Count());
+                                }
+                                else
+                                {
+                                    pageInfo = new Pager(accounts.Count(), currentPage, pageSize);
+                                }
+                                responseData.data = new
+                                {
+                                    accounts,
+                                    pageInfo
+                                };
+                            }
+                            response.StatusCode = HttpStatusCode.OK;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.Gone;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.USER_NOT_FOUND;
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpGet]
+        [Route("users/{id}/contacts")]
+        public HttpResponseMessage GetContacts([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    if ((id == userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF).Authorize(userId)) || (id != userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW).Authorize(userId)))
+                    {
+                        var dbUser = db.USERs.Find(id);
+                        if (dbUser != null)
+                        {
+                            var contacts = _contactService.GetUserContacts(dbUser.ID, query, currentPage, pageSize).Select(c => new UserDetailApiModel.C { id = c.ID, name = c.Name, email = c.Email, phone = c.Phone, mobile = c.Mobile, skype = c.Skype, isOwner = c.Owner.ID == dbUser.ID, isCollaborator = c.Collaborator.ID == dbUser.ID });
+                            Pager pageInfo;
+                            responseData = ResponseFormat.Success;
+
+                            if (contacts.Count() > 0)
+                            {
+                                if (pageSize == 0)
+                                {
+                                    pageInfo = new Pager(contacts.Count(), currentPage, contacts.Count());
+                                }
+                                else
+                                {
+                                    pageInfo = new Pager(contacts.Count(), currentPage, pageSize);
+                                }
+                                responseData.data = new
+                                {
+                                    contacts,
+                                    pageInfo
+                                };
+                            }
+                            response.StatusCode = HttpStatusCode.OK;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.Gone;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.USER_NOT_FOUND;
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpGet]
+        [Route("users/{id}/leads")]
+        public HttpResponseMessage GetLeads([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    if ((id == userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF).Authorize(userId)) || (id != userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW).Authorize(userId)))
+                    {
+                        var dbUser = db.USERs.Find(id);
+                        if (dbUser != null)
+                        {
+                            var leads = _leadService.GetUserLeads(dbUser.ID, query, currentPage, pageSize).Select(c => new UserDetailApiModel.L { id = c.ID, name = c.Name, email = c.Email, phone = c.Phone, skype = c.Skype, website = c.Website});
+                            Pager pageInfo;
+                            responseData = ResponseFormat.Success;
+
+                            if (leads.Count() > 0)
+                            {
+                                if (pageSize == 0)
+                                {
+                                    pageInfo = new Pager(leads.Count(), currentPage, leads.Count());
+                                }
+                                else
+                                {
+                                    pageInfo = new Pager(leads.Count(), currentPage, pageSize);
+                                }
+                                responseData.data = new
+                                {
+                                    leads,
+                                    pageInfo
+                                };
+                            }
+                            response.StatusCode = HttpStatusCode.OK;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.Gone;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.USER_NOT_FOUND;
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpGet]
+        [Route("users/{id}/tasks")]
+        public HttpResponseMessage GetTasks([FromUri] int id)
+        {
+            return new HttpResponseMessage();
         }
 
     }

@@ -14,7 +14,7 @@ namespace Backend.Repository
             return db.USERs.ToList();
         }
 
-        public IEnumerable<USER> Search(string query, int pageSize = 1, int currentPage = 1)
+        public IEnumerable<USER> Search(string query = "", int pageSize = 0, int currentPage = 1)
         {
             //var pager = new Pager(db.USERs.Count(), currentPage, pageSize);
             var q = query.ToLower();
