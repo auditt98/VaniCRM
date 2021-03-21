@@ -25,5 +25,15 @@ namespace Backend.Repository
             return groups;
         } 
 
+        public GROUP GetOne(int id)
+        {
+            return db.GROUPs.Find(id);
+        }
+
+        public List<PERMISSION_ORDER> GetAllPermissionOrder()
+        {
+            return db.PERMISSION_ORDER.ToList();
+        }
+
     }
 }
