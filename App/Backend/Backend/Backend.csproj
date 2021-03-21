@@ -263,6 +263,8 @@
     <Compile Include="Controllers\ApiResponseDemoController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\LeadsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Domain\ACCOUNT.cs" />
     <Compile Include="Domain\ACCOUNT_TYPE.cs" />
@@ -318,6 +320,7 @@
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\ApiModel\AccountApiModel.cs" />
     <Compile Include="Models\ApiModel\ContactApiModel.cs" />
+    <Compile Include="Models\ApiModel\GroupApiModel.cs" />
     <Compile Include="Models\ApiModel\TaskTemplateApiModel.cs" />
     <Compile Include="Models\ApiModel\DashboardApiModel.cs" />
     <Compile Include="Models\ApiModel\LeadApiModel.cs" />
@@ -349,6 +352,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AccountRepository.cs" />
     <Compile Include="Repository\ContactRepository.cs" />
+    <Compile Include="Repository\GroupRepository.cs" />
     <Compile Include="Repository\LeadRepository.cs" />
     <Compile Include="Repository\TaskTemplateRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
@@ -376,6 +380,7 @@
     <Compile Include="Services\AuthorizationService.cs" />
     <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\DealService.cs" />
+    <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\LeadService.cs" />
     <Compile Include="Services\TaskService.cs" />
     <Compile Include="Services\TaskTemplateService.cs" />
@@ -434,7 +439,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ApiModel\" />
     <Folder Include="App_Data\uploads\" />
     <Folder Include="Uploads\Images\" />
   </ItemGroup>

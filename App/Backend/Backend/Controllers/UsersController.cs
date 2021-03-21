@@ -38,7 +38,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("users")]
         [ResponseType(typeof(Swagger_User_List))]
-        public HttpResponseMessage Get([FromUri] int currentPage = 0, [FromUri] int pageSize = 0)
+        public HttpResponseMessage Get([FromUri] int currentPage = 0, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -683,7 +683,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}/accounts")]
-        [ResponseType(typeof(UserDetailApiModel.A))]
+        [ResponseType(typeof(UserAccountApiModel))]
         public HttpResponseMessage GetAccounts([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri]string query = "")
         {
             var response = new HttpResponseMessage();
@@ -769,7 +769,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}/contacts")]
-        [ResponseType(typeof(UserDetailApiModel.C))]
+        [ResponseType(typeof(UserContactApiModel))]
         public HttpResponseMessage GetContacts([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
             var response = new HttpResponseMessage();
@@ -855,7 +855,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}/leads")]
-        [ResponseType(typeof(UserDetailApiModel.L))]
+        [ResponseType(typeof(UserLeadApiModel))]
         public HttpResponseMessage GetLeads([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
             var response = new HttpResponseMessage();
@@ -941,6 +941,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}/tasks")]
+        [ResponseType(typeof(UserTaskApiModel))]
         public HttpResponseMessage GetTasks([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
             var response = new HttpResponseMessage();

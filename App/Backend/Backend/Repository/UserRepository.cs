@@ -21,10 +21,10 @@ namespace Backend.Repository
             
             if (String.IsNullOrEmpty(q))
             {
-                return db.USERs.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                return db.USERs.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             }
             var result = db.USERs.Where(c => c.Username.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.ToLower().Contains(q) || c.Skype.ToLower().Contains(q) || c.FirstName.ToLower().Contains(q) || c.LastName.ToLower().Contains(q));
-            return result.Skip((currentPage - 1) * pageSize).Take(pageSize);
+            return result.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
         }
 
         public USER GetById(int id = 0)

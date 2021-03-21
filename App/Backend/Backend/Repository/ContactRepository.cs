@@ -23,9 +23,9 @@ namespace Backend.Repository
 
             if (String.IsNullOrEmpty(q))
             {
-                return contacts.Skip((currentPage - 1) * pageSize).Take(pageSize);
+                return contacts.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             }
-            var result = contacts.Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.Mobile.Contains(q) || c.Skype.ToLower().Contains(q.ToLower()));
+            var result = contacts.Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.Mobile.Contains(q) || c.Skype.ToLower().Contains(q.ToLower())).OrderBy(c => c.ID).ToList();
 
 
             return result;

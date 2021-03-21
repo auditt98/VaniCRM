@@ -28,9 +28,9 @@ namespace Backend.Repository
 
             if (String.IsNullOrEmpty(q))
             {
-                return templates.Skip((currentPage - 1) * pageSize).Take(pageSize);
+                return templates.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
             }
-            var result = templates.Where(c => c.Title.ToLower().Contains(q.ToLower()));
+            var result = templates.Where(c => c.Title.ToLower().Contains(q.ToLower())).OrderBy(c => c.ID).ToList();
             return result;
         }
 

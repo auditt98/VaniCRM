@@ -24,9 +24,9 @@ namespace Backend.Repository
 
             if (String.IsNullOrEmpty(q))
             {
-                return accounts.Skip((currentPage - 1) * pageSize).Take(pageSize);
+                return accounts.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
             }
-            var result = accounts.Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.TaxCode.ToLower().Contains(q.ToLower()));
+            var result = accounts.OrderBy(c=>c.ID).Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.TaxCode.ToLower().Contains(q.ToLower()));
 
             return result;
         }
