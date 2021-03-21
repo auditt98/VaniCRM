@@ -9,9 +9,6 @@ namespace Backend.Models.ApiModel
     {
         public string email { get; set; }
         public string password { get; set; }
-        public string refreshToken { get; set; }
-        public string jwtToken { get; set; }
-        public string seriesIdentifier { get; set; }
     }
 
     public class ResetPasswordApiModel

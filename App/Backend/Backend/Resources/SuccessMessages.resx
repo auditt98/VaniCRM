@@ -120,6 +120,15 @@
   <data name="AVATAR_CHANGED" xml:space="preserve">
     <value>Avatar successfully changed.</value>
   </data>
+  <data name="GROUP_CREATED" xml:space="preserve">
+    <value>Group successfully created.</value>
+  </data>
+  <data name="GROUP_DELETED" xml:space="preserve">
+    <value>Group successfully deleted.</value>
+  </data>
+  <data name="GROUP_MODIFIED" xml:space="preserve">
+    <value>Group successfully updated.</value>
+  </data>
   <data name="PASSWORD_CHANGED" xml:space="preserve">
     <value>Password successfully changed.</value>
   </data>

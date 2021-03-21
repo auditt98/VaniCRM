@@ -46,4 +46,34 @@ namespace Backend.Models.ApiModel
             public Permission() { }
         }
     }
+
+    public class GroupBlankApiModel
+    {
+        public List<PermissionGroup> perms { get; set; }
+        public GroupBlankApiModel() { perms = new List<PermissionGroup>(); }
+
+        public class PermissionGroup
+        {
+            public int permissionGroupId { get; set; }
+            public string permissionGroupName { get; set; }
+            public List<Permission> permissions { get; set; }
+            public PermissionGroup() { permissions = new List<Permission>(); }
+        }
+
+        public class Permission
+        {
+            public int id { get; set; }
+            public string name { get; set; }
+            public string description { get; set; }
+            public bool isChecked { get; set; }
+            public Permission() { }
+        }
+    }
+
+    public class GroupCreateApiModel
+    {
+        public string name { get; set; }
+        public List<int> permissions { get; set; }
+    }
+
 }

@@ -120,6 +120,9 @@
   <data name="EMAIL_SEND_FAILED" xml:space="preserve">
     <value>An error occurred with our email service. Please try again later.</value>
   </data>
+  <data name="GROUP_NOT_FOUND" xml:space="preserve">
+    <value>Group not found.</value>
+  </data>
   <data name="INVALID_BODY" xml:space="preserve">
     <value>Invalid request body.</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="INVALID_REQUEST" xml:space="preserve">
     <value>Invalid request.</value>
+  </data>
+  <data name="NAME_EMPTY" xml:space="preserve">
+    <value>Name must not be empty.</value>
   </data>
   <data name="NOT_IMAGE" xml:space="preserve">
     <value>Only images in these formats are allowed: ".jpeg", ".jpg", "png", ".tif", ".tiff"</value>

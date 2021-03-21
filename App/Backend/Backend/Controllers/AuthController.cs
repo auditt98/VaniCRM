@@ -31,7 +31,7 @@ namespace Backend.Controllers
         private EmailManager _emailManager = new EmailManager();
         private HashManager _hashManager = new HashManager();
         /// <summary>
-        /// Login an user, required parameters: email, password
+        /// Login an user
         /// 
         /// </summary>
         /// <param name="email"></param>
