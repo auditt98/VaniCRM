@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/auditt98/VaniCRM/compare/v1.8.0...v1.9.0) (2021-03-21)
+
+
+### Features
+
+* **API - Group:** Add api for group details ([01657ac](https://github.com/auditt98/VaniCRM/commit/01657ac21d0af6ecf61400d066840d0e213d21b0))
+
 ## [1.8.0](https://github.com/auditt98/VaniCRM/compare/v1.7.3...v1.8.0) (2021-03-21)
 
 
