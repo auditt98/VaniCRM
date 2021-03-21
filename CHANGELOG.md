@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/auditt98/VaniCRM/compare/v1.9.0...v1.10.0) (2021-03-21)
+
+
+### Features
+
+* **API - Group:** add CRUD for Group ([3b1f37e](https://github.com/auditt98/VaniCRM/commit/3b1f37e07c7750f746c08c6991421a1dc0aaa5ee))
+
 ## [1.9.0](https://github.com/auditt98/VaniCRM/compare/v1.8.0...v1.9.0) (2021-03-21)
 
 
