@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.1](https://github.com/auditt98/VaniCRM/compare/v1.10.0...v1.10.1) (2021-03-22)
+
+
+### Bug Fixes
+
+* **API - User:** Exception thrown when querying user with no avatar. ([7d241e8](https://github.com/auditt98/VaniCRM/commit/7d241e8426298fa27fee0c81d15cfebea4d615fc))
+
 ## [1.10.0](https://github.com/auditt98/VaniCRM/compare/v1.9.0...v1.10.0) (2021-03-21)
 
 
