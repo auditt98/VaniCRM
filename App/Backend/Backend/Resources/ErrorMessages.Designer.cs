@@ -70,6 +70,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Group not found..
+        /// </summary>
+        internal static string GROUP_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("GROUP_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid request body..
         /// </summary>
         internal static string INVALID_BODY {
@@ -93,6 +102,24 @@ namespace Backend.Resources {
         internal static string INVALID_REQUEST {
             get {
                 return ResourceManager.GetString("INVALID_REQUEST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name must not be empty..
+        /// </summary>
+        internal static string NAME_EMPTY {
+            get {
+                return ResourceManager.GetString("NAME_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only images in these formats are allowed: &quot;.jpeg&quot;, &quot;.jpg&quot;, &quot;png&quot;, &quot;.tif&quot;, &quot;.tiff&quot;.
+        /// </summary>
+        internal static string NOT_IMAGE {
+            get {
+                return ResourceManager.GetString("NOT_IMAGE", resourceCulture);
             }
         }
         

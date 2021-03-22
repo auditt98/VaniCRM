@@ -19,6 +19,8 @@ using System.Web.Http.Description;
 using System.Web;
 using System.Web.Http.Cors;
 using System.IO;
+using Backend.Resources;
+using static Backend.Extensions.Enum;
 
 namespace Backend.Controllers
 {
@@ -33,31 +35,86 @@ namespace Backend.Controllers
         /// <returns>ResponseFormat</returns>
         /// 
 
-        [HttpPost]
-        [Route("test")]
-        public HttpResponseMessage Test()
+        [HttpGet]
+        [Route("test/{id}")]
+        public HttpResponseMessage Test([FromUri]int id)
         {
-            string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads/Images");
-            if(HttpContext.Current.Request.Files.Count > 0)
-            {
-                var file = HttpContext.Current.Request.Files["file"];
-                var fileName = file.FileName;
-                string targetPath = Path.Combine(targetFolder, fileName);
-                file.SaveAs(targetPath);
-            }
-            return new HttpResponseMessage();
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+
+            string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
+            var dbUser = db.USERs.Find(id);
+            var a = MimeMapping.MimeUtility.GetMimeMapping(dbUser.Avatar);
+            //var avatar = System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar));
+            var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar)));
+            response.StatusCode = HttpStatusCode.OK;
+            responseData.data = $"data:{a};base64,{img}";
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
         }
 
         [HttpGet]
         [Route("api/demo/success")]
         [ResponseType(typeof(ResponseFormat))]
-        public HttpResponseMessage SuccessedResponse()
+        public HttpResponseMessage SuccessedResponse(int id)
         {
-            HttpResponseMessage response = new HttpResponseMessage();
-            ResponseFormat responseData;
-            responseData = ResponseFormat.Success;
-            responseData.data = new { a = 1 };
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
 
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    if ((id == userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_MODIFY_SELF).Authorize(userId)) || (id != userId && new AuthorizationService().SetPerm((int)EnumPermissions.USER_VIEW).Authorize(userId)))
+                    {
+                        var dbUser = db.USERs.Find(id);
+                        if (dbUser != null)
+                        {
+
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.Gone;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.USER_NOT_FOUND;
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;

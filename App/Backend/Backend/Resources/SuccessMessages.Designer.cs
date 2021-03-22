@@ -61,6 +61,42 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Avatar successfully changed..
+        /// </summary>
+        internal static string AVATAR_CHANGED {
+            get {
+                return ResourceManager.GetString("AVATAR_CHANGED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group successfully created..
+        /// </summary>
+        internal static string GROUP_CREATED {
+            get {
+                return ResourceManager.GetString("GROUP_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group successfully deleted..
+        /// </summary>
+        internal static string GROUP_DELETED {
+            get {
+                return ResourceManager.GetString("GROUP_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group successfully updated..
+        /// </summary>
+        internal static string GROUP_MODIFIED {
+            get {
+                return ResourceManager.GetString("GROUP_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password successfully changed..
         /// </summary>
         internal static string PASSWORD_CHANGED {

@@ -36,6 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\SwaggerApiDoc.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +93,9 @@
     </Reference>
     <Reference Include="MimeKit, Version=2.10.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
       <HintPath>..\packages\MimeKit.2.10.1\lib\net47\MimeKit.dll</HintPath>
+    </Reference>
+    <Reference Include="MimeMapping, Version=1.0.1.37, Culture=neutral, PublicKeyToken=680e2d5f226b327b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeMapping.1.0.1.37\lib\netstandard2.0\MimeMapping.dll</HintPath>
     </Reference>
     <Reference Include="Pipelines.Sockets.Unofficial, Version=1.0.0.0, Culture=neutral, PublicKeyToken=42ea0a778e13fbe2, processorArchitecture=MSIL">
       <HintPath>..\packages\Pipelines.Sockets.Unofficial.2.2.0\lib\net472\Pipelines.Sockets.Unofficial.dll</HintPath>
@@ -257,6 +261,8 @@
     <Compile Include="Controllers\ApiResponseDemoController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\LeadsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Domain\ACCOUNT.cs" />
     <Compile Include="Domain\ACCOUNT_TYPE.cs" />
@@ -300,6 +306,7 @@
     <Compile Include="Extensions\AutoMapperConfig.cs" />
     <Compile Include="Extensions\EmailManager.cs" />
     <Compile Include="Extensions\Enum.cs" />
+    <Compile Include="Extensions\FileManager.cs" />
     <Compile Include="Extensions\HashManager.cs" />
     <Compile Include="Extensions\JwtTokenManager.cs" />
     <Compile Include="Extensions\PermsAttribute.cs" />
@@ -308,38 +315,25 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\ApiModel\AccountApiModel.cs" />
     <Compile Include="Models\ApiModel\ContactApiModel.cs" />
+    <Compile Include="Models\ApiModel\GroupApiModel.cs" />
     <Compile Include="Models\ApiModel\TaskTemplateApiModel.cs" />
     <Compile Include="Models\ApiModel\DashboardApiModel.cs" />
     <Compile Include="Models\ApiModel\LeadApiModel.cs" />
     <Compile Include="Models\ApiModel\LoginApiModel.cs" />
     <Compile Include="Models\ApiModel\UserApiModel.cs" />
-    <Compile Include="Models\Call.cs" />
-    <Compile Include="Models\Contact.cs" />
-    <Compile Include="Models\Deal.cs" />
-    <Compile Include="Models\File.cs" />
-    <Compile Include="Models\Group.cs" />
-    <Compile Include="Models\Industry.cs" />
-    <Compile Include="Models\Lead.cs" />
-    <Compile Include="Models\Meeting.cs" />
-    <Compile Include="Models\Note.cs" />
-    <Compile Include="Models\Permission.cs" />
-    <Compile Include="Models\PermissionOrder.cs" />
-    <Compile Include="Models\Stage.cs" />
-    <Compile Include="Models\StageHistory.cs" />
     <Compile Include="Models\SwaggerModel\Auth\LoginReponse.cs" />
     <Compile Include="Models\SwaggerModel\PagerResponseModel.cs" />
     <Compile Include="Models\SwaggerModel\ResponseModel.cs" />
     <Compile Include="Models\SwaggerModel\Users\Swagger_User_List.cs" />
-    <Compile Include="Models\Tag.cs" />
-    <Compile Include="Models\TagItem.cs" />
-    <Compile Include="Models\Task.cs" />
-    <Compile Include="Models\TaskStatus.cs" />
-    <Compile Include="Models\TaskTemplate.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\AccountRepository.cs" />
+    <Compile Include="Repository\ContactRepository.cs" />
+    <Compile Include="Repository\GroupRepository.cs" />
+    <Compile Include="Repository\LeadRepository.cs" />
+    <Compile Include="Repository\TaskTemplateRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -361,9 +355,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ValidationErrorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\AuthorizationService.cs" />
+    <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\DealService.cs" />
+    <Compile Include="Services\GroupService.cs" />
+    <Compile Include="Services\LeadService.cs" />
+    <Compile Include="Services\TaskService.cs" />
+    <Compile Include="Services\TaskTemplateService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Validators\GroupValidator.cs" />
     <Compile Include="Validators\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -396,6 +397,9 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -418,7 +422,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ApiModel\" />
     <Folder Include="App_Data\uploads\" />
     <Folder Include="Uploads\Images\" />
   </ItemGroup>
