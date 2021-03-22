@@ -417,6 +417,7 @@ namespace Backend.Controllers
                             var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar)));
                             apiModel.avatar = $"data:{mime};base64,{img}";
                         }
+                        apiModel.id = dbUser.ID;
                         apiModel.username = dbUser.Username;
                         apiModel.lastName = dbUser.LastName;
                         apiModel.firstName = dbUser.FirstName;
