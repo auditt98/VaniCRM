@@ -30,7 +30,7 @@ namespace Backend.Repository
             {
                 return templates.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
             }
-            var result = templates.Where(c => c.Title.ToLower().Contains(q.ToLower())).OrderBy(c => c.ID).ToList();
+            var result = templates.Where(c => c.Title.ToLower().Contains(q.ToLower())).OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             return result;
         }
 

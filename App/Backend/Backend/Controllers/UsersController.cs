@@ -410,11 +410,13 @@ namespace Backend.Controllers
                         var dbUser = db.USERs.Find(id);
                         //get avatar
                         string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
-                        var mime = MimeMapping.MimeUtility.GetMimeMapping(dbUser.Avatar);
-                        var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar)));
-
                         UserDetailApiModel apiModel = new UserDetailApiModel();
-                        apiModel.avatar = $"data:{mime};base64,{img}";
+                        if(dbUser.Avatar != null)
+                        {
+                            var mime = MimeMapping.MimeUtility.GetMimeMapping(dbUser.Avatar);
+                            var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar)));
+                            apiModel.avatar = $"data:{mime};base64,{img}";
+                        }
                         apiModel.username = dbUser.Username;
                         apiModel.lastName = dbUser.LastName;
                         apiModel.firstName = dbUser.FirstName;

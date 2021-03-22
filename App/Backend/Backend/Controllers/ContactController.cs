@@ -15,18 +15,18 @@ using static Backend.Extensions.Enum;
 
 namespace Backend.Controllers
 {
-    public class LeadsController : ApiController
+    public class ContactController : ApiController
     {
-        private LeadService _leadService = new LeadService();
+        ContactService _contactService = new ContactService();
 
         [HttpGet]
-        [Route("leads")]
-        [ResponseType(typeof(LeadListApiModel))]
+        [Route("contacts")]
+        [ResponseType(typeof(ContactListApiModel))]
         public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
-            AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.LEAD_VIEW_LIST);
+            AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.CONTACT_VIEW_LIST);
 
             IEnumerable<string> headerValues;
             if (Request.Headers.TryGetValues("Authorization", out headerValues))
@@ -58,21 +58,21 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        var leads = _leadService.GetLeadList(query, pageSize, currentPage);
+                        var contacts = _contactService.GetContactList(query, pageSize, currentPage);
                         Pager pageInfo;
-                        if (leads.Count > 0)
+                        if (contacts.Count > 0)
                         {
                             if (pageSize == 0)
                             {
-                                pageInfo = new Pager(leads.Count(), currentPage, leads.Count());
+                                pageInfo = new Pager(contacts.Count(), currentPage, contacts.Count());
                             }
                             else
                             {
-                                pageInfo = new Pager(leads.Count(), currentPage, pageSize);
+                                pageInfo = new Pager(contacts.Count(), currentPage, pageSize);
                             }
-                            responseData.data = new LeadListApiModel()
+                            responseData.data = new ContactListApiModel()
                             {
-                                leads = leads,
+                                contacts = contacts,
                                 pageInfo = pageInfo
                             };
                         }
@@ -95,6 +95,5 @@ namespace Backend.Controllers
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
         }
-
     }
 }

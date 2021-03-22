@@ -22,7 +22,7 @@ namespace Backend.Repository
             {
                 return db.GROUPs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             }
-            var groups = db.GROUPs.Where(c => c.Name.Contains(q)).OrderBy(c => c.ID).ToList();
+            var groups = db.GROUPs.Where(c => c.Name.Contains(q)).OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             return groups;
         } 
 
