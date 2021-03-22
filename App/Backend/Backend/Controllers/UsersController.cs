@@ -421,8 +421,11 @@ namespace Backend.Controllers
                         apiModel.lastName = dbUser.LastName;
                         apiModel.firstName = dbUser.FirstName;
                         apiModel.createdAt = dbUser.CreatedAt.GetValueOrDefault();
-                        apiModel.createdById = dbUser.CreatedBy.GetValueOrDefault();
-                        apiModel.createdByName = dbUser.CreatedUser.Username;
+                        if(dbUser.CreatedBy != null)
+                        {
+                            apiModel.createdById = dbUser.CreatedBy.GetValueOrDefault();
+                            apiModel.createdByName = dbUser.CreatedUser.Username;
+                        }
                         apiModel.email = dbUser.Email;
                         apiModel.skype = dbUser.Skype;
                         apiModel.phone = dbUser.Phone;
