@@ -263,6 +263,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiResponseDemoController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CampaignController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
@@ -320,6 +321,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ApiModel\AccountApiModel.cs" />
+    <Compile Include="Models\ApiModel\CampaignApiModel.cs" />
     <Compile Include="Models\ApiModel\ContactApiModel.cs" />
     <Compile Include="Models\ApiModel\GroupApiModel.cs" />
     <Compile Include="Models\ApiModel\TaskTemplateApiModel.cs" />
@@ -334,6 +336,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AccountRepository.cs" />
+    <Compile Include="Repository\CampaignRepository.cs" />
     <Compile Include="Repository\ContactRepository.cs" />
     <Compile Include="Repository\GroupRepository.cs" />
     <Compile Include="Repository\LeadRepository.cs" />
@@ -361,6 +364,7 @@
     </Compile>
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\AuthorizationService.cs" />
+    <Compile Include="Services\CampaignService.cs" />
     <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\DealService.cs" />
     <Compile Include="Services\GroupService.cs" />
