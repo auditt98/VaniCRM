@@ -209,5 +209,28 @@ namespace Backend.Repository
                 return false;
             }
         }
+
+        public bool RemoveTag(int id, int tagId)
+        {
+            var dbLead = db.LEADs.Find(id);
+            if(dbLead != null)
+            {
+                var tagItem = dbLead.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
+                if (tagItem != null)
+                {
+                    db.TAG_ITEM.Remove(tagItem);
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

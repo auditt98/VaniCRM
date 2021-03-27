@@ -730,5 +730,77 @@ namespace Backend.Controllers
             return response;
         }
     
+        [HttpDelete]
+        [Route("leads/{id}/tags/{tagId}")]
+        [ResponseType(typeof(ResponseFormat))]
+        public HttpResponseMessage DeleteTag([FromUri] int id, [FromUri] int tagId)
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            //AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.LEAD_MODIFY);
+            //read jwt
+
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    var owner = _leadService.FindOwnerId(id);
+                    if ((userId == owner) || (new AuthorizationService().SetPerm((int)EnumPermissions.LEAD_DELETE).Authorize(userId)))
+                    {
+                        
+                        var isRemoved = _leadService.RemoveTag(id, tagId);
+                        if (isRemoved)
+                        {
+                            response.StatusCode = HttpStatusCode.OK;
+                            responseData = ResponseFormat.Success;
+                            responseData.message = SuccessMessages.TAG_REMOVED;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.InternalServerError;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.SOMETHING_WRONG;
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
     }
 }

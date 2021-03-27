@@ -169,6 +169,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tag successfully removed from this item..
+        /// </summary>
+        internal static string TAG_REMOVED {
+            get {
+                return ResourceManager.GetString("TAG_REMOVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User successfully created..
         /// </summary>
         internal static string USER_CREATED {

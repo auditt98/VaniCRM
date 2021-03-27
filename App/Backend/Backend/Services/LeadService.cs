@@ -160,5 +160,10 @@ namespace Backend.Services
         {
             return _leadRepository.AddTag(id, tagName);
         }
+
+        public bool RemoveTag(int id, int tagId)
+        {
+            return _leadRepository.RemoveTag(id, tagId);
+        }
     }
 }
