@@ -9,6 +9,7 @@ using FluentValidation.Results;
 using Backend.Extensions;
 using Backend.Domain;
 using Backend.Resources;
+using Backend.Models.ApiModel;
 
 namespace Backend.Services
 {
@@ -120,6 +121,12 @@ namespace Backend.Services
             db.USERs.Add(newDbUser);
             db.SaveChanges();
             return newDbUser;
+        }
+
+        public List<UserSelectionApiModel> GetUsersForSelection()
+        {
+            var users = _userRepository.GetAll().Select(c => new UserSelectionApiModel() { id = c.ID, username = c.Username, selected = false }).ToList();
+            return users;
         }
     }
 }

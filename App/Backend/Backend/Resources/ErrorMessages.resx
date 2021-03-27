@@ -117,8 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ADDRESS_LENGTH_TOO_LONG" xml:space="preserve">
+    <value>Address length is too long.</value>
+  </data>
+  <data name="CITY_NAME_TOO_LONG" xml:space="preserve">
+    <value>City name is too long.</value>
+  </data>
+  <data name="COMPANY_NAME_TOO_LONG" xml:space="preserve">
+    <value>Company name is too long.</value>
+  </data>
+  <data name="COUNTRY_NAME_TOO_LONG" xml:space="preserve">
+    <value>Country name is too long.</value>
+  </data>
+  <data name="EMAIL_EMPTY" xml:space="preserve">
+    <value>Email must not be empty.</value>
+  </data>
   <data name="EMAIL_SEND_FAILED" xml:space="preserve">
     <value>An error occurred with our email service. Please try again later.</value>
+  </data>
+  <data name="FAX_LENGTH_TOO_LONG" xml:space="preserve">
+    <value>Fax length is too long.</value>
   </data>
   <data name="GROUP_NOT_FOUND" xml:space="preserve">
     <value>Group not found.</value>
@@ -132,11 +150,29 @@
   <data name="INVALID_REQUEST" xml:space="preserve">
     <value>Invalid request.</value>
   </data>
+  <data name="LEAD_NAME_INVALID" xml:space="preserve">
+    <value>Invalid/missing lead name.</value>
+  </data>
   <data name="NAME_EMPTY" xml:space="preserve">
     <value>Name must not be empty.</value>
   </data>
+  <data name="NOTE_EMPTY" xml:space="preserve">
+    <value>Note's body is empty.</value>
+  </data>
   <data name="NOT_IMAGE" xml:space="preserve">
     <value>Only images in these formats are allowed: ".jpeg", ".jpg", "png", ".tif", ".tiff"</value>
+  </data>
+  <data name="NO_FILES_FOUND" xml:space="preserve">
+    <value>No files received.</value>
+  </data>
+  <data name="PHONE_LENGTH_TOO_LONG" xml:space="preserve">
+    <value>Phone length is too long.</value>
+  </data>
+  <data name="SKYPE_TOO_LONG" xml:space="preserve">
+    <value>Skype name is too long.</value>
+  </data>
+  <data name="SOMETHING_WRONG" xml:space="preserve">
+    <value>Something bad happened.</value>
   </data>
   <data name="TOKEN_EXPIRED" xml:space="preserve">
     <value>The token has expired.</value>
@@ -152,6 +188,9 @@
   </data>
   <data name="USER_NOT_FOUND" xml:space="preserve">
     <value>User not found.</value>
+  </data>
+  <data name="WEBSITE_TOO_LONG" xml:space="preserve">
+    <value>Website name is too long.</value>
   </data>
   <data name="WRONG_PASSWORD" xml:space="preserve">
     <value>Email/Password is incorrect.</value>

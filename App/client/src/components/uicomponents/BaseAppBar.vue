@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar app color="white" light elevation="0" class="bottom-border">
+    <v-app-bar app color="white" light class="bottom-border shadow">
       <div class="d-flex align-center">
           <router-link to="/dashboard" tag="span" style="cursor: pointer" class="app-bar-text ml-6 mr-8">
             <h4 class="app-bar-text">Dashboard</h4>
@@ -66,4 +66,8 @@ export default {
   .bottom-border{
     border-bottom: 0.5px solid gray !important;
   }
+  .shadow{
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+  
 </style>

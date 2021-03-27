@@ -54,6 +54,59 @@ namespace Backend.Controllers
             return response;
         }
 
+        [HttpPost]
+        [Route("test/multiple_files_upload")]
+        public HttpResponseMessage MultipleFilesUpload()
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+
+            string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
+            string content = HttpContext.Current.Request.Form["content"];
+            
+            if (HttpContext.Current.Request.Files.Count > 0)
+            {
+                var allFiles = HttpContext.Current.Request.Files;
+                responseData = ResponseFormat.Success;
+                responseData.message = content;
+                foreach(string fileName in allFiles)
+                {
+                    HttpPostedFile uploadedFile = allFiles[fileName];
+                    responseData.message += " " + uploadedFile.FileName;
+                    FileManager.File file = new FileManager.File(uploadedFile);
+                    file.Rename();
+                    file.Save(HttpContext.Current.Server.MapPath("~/Uploads"));
+                }
+            }
+            response.StatusCode = HttpStatusCode.OK;
+            //responseData.data = $"data:{a};base64,{img}";
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpGet]
+        [Route("test/file_download")]
+        public HttpResponseMessage FileDownload()
+        {
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
+            byte[] content = null;
+            using (FileStream fs = File.Open(Path.Combine(targetFolder, "test.docx"), FileMode.Open))
+            {
+                content = new byte[fs.Length];
+                fs.Read(content, 0, (int)fs.Length);
+            }
+            response.Content = new ByteArrayContent(content);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = "test.docx"
+            };
+            return response;
+        }
+
+
         [HttpGet]
         [Route("api/demo/success")]
         [ResponseType(typeof(ResponseFormat))]

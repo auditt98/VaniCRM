@@ -97,6 +97,51 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lead successfully created..
+        /// </summary>
+        internal static string LEAD_CREATED {
+            get {
+                return ResourceManager.GetString("LEAD_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lead successfully deleted..
+        /// </summary>
+        internal static string LEAD_DELETED {
+            get {
+                return ResourceManager.GetString("LEAD_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lead successfully updated..
+        /// </summary>
+        internal static string LEAD_MODIFIED {
+            get {
+                return ResourceManager.GetString("LEAD_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note added..
+        /// </summary>
+        internal static string NOTE_ADDED {
+            get {
+                return ResourceManager.GetString("NOTE_ADDED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note successfully deleted..
+        /// </summary>
+        internal static string NOTE_DELETED {
+            get {
+                return ResourceManager.GetString("NOTE_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password successfully changed..
         /// </summary>
         internal static string PASSWORD_CHANGED {
@@ -111,6 +156,15 @@ namespace Backend.Resources {
         internal static string PASSWORD_RESET {
             get {
                 return ResourceManager.GetString("PASSWORD_RESET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tag successfully added..
+        /// </summary>
+        internal static string TAG_ADDED {
+            get {
+                return ResourceManager.GetString("TAG_ADDED", resourceCulture);
             }
         }
         

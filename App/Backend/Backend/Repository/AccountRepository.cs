@@ -42,7 +42,7 @@ namespace Backend.Repository
             {
                 return db.ACCOUNTs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
             }
-            var accounts = db.ACCOUNTs.Where(c => c.Name.ToLower().Contains(q) || c.Website.ToLower().Contains(q) || c.Phone.Contains(q) || (c.Owner.FirstName + " " + c.Owner.LastName).ToLower().Contains(q)).OrderBy(c=>c.ID);
+            var accounts = db.ACCOUNTs.Where(c => c.Name.ToLower().Contains(q) || c.Phone.Contains(q)).OrderBy(c=>c.ID);
             return accounts;
         }
 

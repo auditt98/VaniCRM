@@ -74,6 +74,8 @@ namespace Backend.Domain
 
         public int? PRIORITY_ID { get; set; }
 
+        public int? LeadStatus { get; set; }
+
         [StringLength(100)]
         public string Country { get; set; }
 
@@ -103,6 +105,8 @@ namespace Backend.Domain
         public virtual USER ModifiedUser { get; set; }
 
         public virtual PRIORITY PRIORITY { get; set; }
+
+        public virtual LEAD_STATUS Status { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MEETING_PARTICIPANT> MEETING_PARTICIPANT { get; set; }

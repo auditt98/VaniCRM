@@ -1,0 +1,9 @@
+use CRM;
+go
+ALTER TABLE [LEAD]
+ADD LeadStatus int;
+go
+
+ALTER TABLE [LEAD]
+ADD FOREIGN KEY (LeadStatus) REFERENCES [LEAD_STATUS](ID);
+GO

@@ -330,6 +330,11 @@ namespace Backend.Domain
                 .WithOptional(e => e.LEAD_SOURCE)
                 .HasForeignKey(e => e.LeadSource);
 
+            modelBuilder.Entity<LEAD_STATUS>()
+                .HasMany(e => e.LEADs)
+                .WithOptional(e => e.Status)
+                .HasForeignKey(e => e.LeadStatus);
+
             modelBuilder.Entity<LOST_REASON>()
                 .HasMany(e => e.DEALs)
                 .WithOptional(e => e.LOST_REASON)
