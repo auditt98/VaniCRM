@@ -61,11 +61,65 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address length is too long..
+        /// </summary>
+        internal static string ADDRESS_LENGTH_TOO_LONG {
+            get {
+                return ResourceManager.GetString("ADDRESS_LENGTH_TOO_LONG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to City name is too long..
+        /// </summary>
+        internal static string CITY_NAME_TOO_LONG {
+            get {
+                return ResourceManager.GetString("CITY_NAME_TOO_LONG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company name is too long..
+        /// </summary>
+        internal static string COMPANY_NAME_TOO_LONG {
+            get {
+                return ResourceManager.GetString("COMPANY_NAME_TOO_LONG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country name is too long..
+        /// </summary>
+        internal static string COUNTRY_NAME_TOO_LONG {
+            get {
+                return ResourceManager.GetString("COUNTRY_NAME_TOO_LONG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email must not be empty..
+        /// </summary>
+        internal static string EMAIL_EMPTY {
+            get {
+                return ResourceManager.GetString("EMAIL_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred with our email service. Please try again later..
         /// </summary>
         internal static string EMAIL_SEND_FAILED {
             get {
                 return ResourceManager.GetString("EMAIL_SEND_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fax length is too long..
+        /// </summary>
+        internal static string FAX_LENGTH_TOO_LONG {
+            get {
+                return ResourceManager.GetString("FAX_LENGTH_TOO_LONG", resourceCulture);
             }
         }
         
@@ -106,6 +160,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid/missing lead name..
+        /// </summary>
+        internal static string LEAD_NAME_INVALID {
+            get {
+                return ResourceManager.GetString("LEAD_NAME_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name must not be empty..
         /// </summary>
         internal static string NAME_EMPTY {
@@ -115,11 +178,56 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No files received..
+        /// </summary>
+        internal static string NO_FILES_FOUND {
+            get {
+                return ResourceManager.GetString("NO_FILES_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only images in these formats are allowed: &quot;.jpeg&quot;, &quot;.jpg&quot;, &quot;png&quot;, &quot;.tif&quot;, &quot;.tiff&quot;.
         /// </summary>
         internal static string NOT_IMAGE {
             get {
                 return ResourceManager.GetString("NOT_IMAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note&apos;s body is empty..
+        /// </summary>
+        internal static string NOTE_EMPTY {
+            get {
+                return ResourceManager.GetString("NOTE_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone length is too long..
+        /// </summary>
+        internal static string PHONE_LENGTH_TOO_LONG {
+            get {
+                return ResourceManager.GetString("PHONE_LENGTH_TOO_LONG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skype name is too long..
+        /// </summary>
+        internal static string SKYPE_TOO_LONG {
+            get {
+                return ResourceManager.GetString("SKYPE_TOO_LONG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something bad happened..
+        /// </summary>
+        internal static string SOMETHING_WRONG {
+            get {
+                return ResourceManager.GetString("SOMETHING_WRONG", resourceCulture);
             }
         }
         
@@ -165,6 +273,15 @@ namespace Backend.Resources {
         internal static string USER_NOT_FOUND {
             get {
                 return ResourceManager.GetString("USER_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website name is too long..
+        /// </summary>
+        internal static string WEBSITE_TOO_LONG {
+            get {
+                return ResourceManager.GetString("WEBSITE_TOO_LONG", resourceCulture);
             }
         }
         

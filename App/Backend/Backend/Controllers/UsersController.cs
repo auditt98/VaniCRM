@@ -611,6 +611,12 @@ namespace Backend.Controllers
                                         responseData.message = ErrorMessages.NOT_IMAGE;
                                     }
                                 }
+                                else
+                                {
+                                    response.StatusCode = HttpStatusCode.BadRequest;
+                                    responseData = ResponseFormat.Fail;
+                                    responseData.message = ErrorMessages.NO_FILES_FOUND;
+                                }
                             }
                             else
                             {

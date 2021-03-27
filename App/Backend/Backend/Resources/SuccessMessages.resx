@@ -129,11 +129,32 @@
   <data name="GROUP_MODIFIED" xml:space="preserve">
     <value>Group successfully updated.</value>
   </data>
+  <data name="LEAD_CREATED" xml:space="preserve">
+    <value>Lead successfully created.</value>
+  </data>
+  <data name="LEAD_DELETED" xml:space="preserve">
+    <value>Lead successfully deleted.</value>
+  </data>
+  <data name="LEAD_MODIFIED" xml:space="preserve">
+    <value>Lead successfully updated.</value>
+  </data>
+  <data name="NOTE_ADDED" xml:space="preserve">
+    <value>Note added.</value>
+  </data>
+  <data name="NOTE_DELETED" xml:space="preserve">
+    <value>Note successfully deleted.</value>
+  </data>
   <data name="PASSWORD_CHANGED" xml:space="preserve">
     <value>Password successfully changed.</value>
   </data>
   <data name="PASSWORD_RESET" xml:space="preserve">
     <value>Password has been reset.</value>
+  </data>
+  <data name="TAG_ADDED" xml:space="preserve">
+    <value>Tag successfully added.</value>
+  </data>
+  <data name="TAG_REMOVED" xml:space="preserve">
+    <value>Tag successfully removed from this item.</value>
   </data>
   <data name="USER_CREATED" xml:space="preserve">
     <value>User successfully created.</value>

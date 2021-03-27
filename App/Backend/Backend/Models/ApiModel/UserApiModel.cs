@@ -169,4 +169,16 @@ namespace Backend.Models.ApiModel
 
     }
 
+    public class UserLinkApiModel
+    {
+        public int? id { get; set; }
+        public string username { get; set; }
+    }
+
+    public class UserSelectionApiModel
+    {
+        public int id { get; set; }
+        public string username { get; set; }
+        public bool selected { get; set; }
+    }
 }

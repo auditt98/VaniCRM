@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/auditt98/VaniCRM/compare/v1.11.0...v1.12.0) (2021-03-27)
+
+
+### Features
+
+* Delete a tag from lead. ([f795f88](https://github.com/auditt98/VaniCRM/commit/f795f881b0f68d165004a041e6be98e34f780ec6))
+
+## [1.11.0](https://github.com/auditt98/VaniCRM/compare/v1.10.1...v1.11.0) (2021-03-27)
+
+
+### Features
+
+* API for lead, tag, file ([9b857d0](https://github.com/auditt98/VaniCRM/commit/9b857d010a6b9077d8c15e5ad8e5ee2291a4816c))
+
 ### [1.10.1](https://github.com/auditt98/VaniCRM/compare/v1.10.0...v1.10.1) (2021-03-22)
 
 
