@@ -1,30 +1,16 @@
 <template>
-  <v-app class="">
-    <v-main style="background-color: rgb(243,244,247)">
-      <router-view></router-view>
-    </v-main>
-  </v-app>
+  <div id="app">
+<!--    <div id="nav">-->
+<!--      <router-link to="/">Home</router-link> |-->
+<!--      <router-link to="/about">About</router-link>-->
+<!--    </div>-->
+    <router-view/>
+  </div>
 </template>
 
-<script>
-
-export default {
-  name: 'App',
-
-  components: {
-  },
-
-  data: () => ({
-    //
-  }),
-};
-</script>
-
 <style>
-  @font-face{
-    font-family: "Fira Sans";
-    src: local("Fira Sans"),
-    url(./assets/fonts/Fira_Sans/FiraSans-Regular.ttf) format("truetype");
-  }
-
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 </style>
