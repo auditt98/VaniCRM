@@ -128,5 +128,15 @@ namespace Backend.Services
             var users = _userRepository.GetAll().Select(c => new UserSelectionApiModel() { id = c.ID, username = c.Username, selected = false }).ToList();
             return users;
         }
+
+        public UserListApiModel GetUserList(string query = "", int pageSize = 0, int currentPage = 1)
+        {
+            var dbUsers = _userRepository.GetAllUsers(query, pageSize, currentPage);
+            var apiModel = new UserListApiModel();
+
+            apiModel.users = dbUsers.users.Select(c => new UserListApiModel.UserInfo() { id = c.ID, username = c.Username, firstName = c.FirstName, lastName = c.LastName, email = c.Email, phone = c.Phone, skype = c.Skype }).ToList();
+            apiModel.pageInfo = dbUsers.p;
+            return apiModel;
+        }
     }
 }

@@ -1,6 +1,6 @@
 <template>
 
-<nav class="navbar navbar-light navbar-expand-lg header">
+<nav class="navbar navbar-light navbar-expand-lg header sticky-top">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="color: black;">
     <span class="navbar-toggler-icon"></span>
     </button>

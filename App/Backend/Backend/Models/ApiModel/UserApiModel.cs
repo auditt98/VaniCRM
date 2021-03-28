@@ -181,4 +181,21 @@ namespace Backend.Models.ApiModel
         public string username { get; set; }
         public bool selected { get; set; }
     }
+
+    public class UserListApiModel
+    {
+        public List<UserInfo> users { get; set; }
+        public Pager pageInfo { get; set; }
+
+        public class UserInfo
+        {
+            public int id { get; set; }
+            public string username { get; set; }
+            public string firstName { get; set; }
+            public string lastName { get; set; }
+            public string phone { get; set; }
+            public string email { get; set; }
+            public string skype { get; set; }
+        }
+    }
 }

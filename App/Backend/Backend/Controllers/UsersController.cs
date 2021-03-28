@@ -37,8 +37,8 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users")]
-        [ResponseType(typeof(Swagger_User_List))]
-        public HttpResponseMessage Get([FromUri] int currentPage = 0, [FromUri] int pageSize = 0, [FromUri] string query = "")
+        [ResponseType(typeof(UserListApiModel))]
+        public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -75,13 +75,8 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        (List<USER> userList, Pager p) = _userService.GetAll(currentPage, pageSize);
-
-                        responseData.data = new
-                        {
-                            users = userList.Select(c => new { id = c.ID, firstName = c.FirstName, lastName = c.LastName, phone = c.Phone, email = c.Email, skype = c.Skype }),
-                            pageInfo = new { totalPage = p.TotalPages, pageSize = p.PageSize, startIndex = p.StartIndex, endIndex = p.EndIndex, currentPage = p.CurrentPage }
-                        };
+                        var users = _userService.GetUserList(query, pageSize, currentPage);
+                        responseData.data = users;
                     }
                     else
                     {
