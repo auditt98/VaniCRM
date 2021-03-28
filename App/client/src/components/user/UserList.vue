@@ -1,4 +1,5 @@
 <template>
+    
   <div class="background-main">
     <Header/>
     <div class="col-sm-9 mx-auto mt-5">
@@ -47,6 +48,7 @@ import VButton from "@/components/common/VButton";
 export default {
   name: "UserList",
   components: {VButton, TableInList, Header},
+  // components: {VButton, TableInList},
   methods: {
     goToPage(page) {
       this.currentPage = page;
@@ -92,7 +94,7 @@ export default {
 
   created() {
     this.currentPage = 1;
-    this.pageSize = 5;
+    this.pageSize = 10;
     this.loadUsers(null);
   },
   data: function () {

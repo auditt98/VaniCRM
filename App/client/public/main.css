@@ -1,3 +1,7 @@
+body, html{
+    background: #FBFAFA;
+}
+
 .under-line {
     background: #D93915;
     height: 1px;
