@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="background-main">
 <!--    <div id="nav">-->
 <!--      <router-link to="/">Home</router-link> |-->
 <!--      <router-link to="/about">About</router-link>-->
@@ -14,3 +14,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 </style>
+
+<script>
+
+</script>

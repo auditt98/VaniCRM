@@ -14,6 +14,33 @@ namespace Backend.Repository
             return db.USERs.ToList();
         }
 
+        public (IEnumerable<USER> users, Pager p) GetAllUsers(string query = "", int pageSize = 0, int currentPage = 1)
+        {
+            var q = query.ToLower();
+
+            if (pageSize == 0)
+            {
+                pageSize = 10;
+            }
+
+            if (String.IsNullOrEmpty(q))
+            {
+                Pager pager = new Pager(db.USERs.Count(), currentPage, pageSize, 9999);
+                return (db.USERs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+            }
+            var users = db.USERs.Where(c => c.Username.ToLower().Contains(q) || c.FirstName.ToLower().Contains(q) || c.LastName.ToLower().Contains(q) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q) || c.Skype.ToLower().Contains(q)).OrderBy(c => c.ID);
+            if (users.Count() > 0)
+            {
+                Pager p = new Pager(users.Count(), currentPage, pageSize, 9999);
+
+                return (users.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+            }
+            else
+            {
+                return (users, null);
+            }
+        }
+
         public IEnumerable<USER> Search(string query = "", int pageSize = 0, int currentPage = 1)
         {
             //var pager = new Pager(db.USERs.Count(), currentPage, pageSize);

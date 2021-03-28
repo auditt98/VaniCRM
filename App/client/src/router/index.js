@@ -42,7 +42,7 @@ const routes = [
         component: () => import('../components/deal/DealDetail.vue')
     },
     {
-        path: '/users',
+        path: '/user-list',
         name: 'users',
         component: () => import('../components/user/UserList.vue')
     },
@@ -67,7 +67,7 @@ const routes = [
         component: () => import('../components/lead/LeadDetail.vue')
     },
     {
-        path: '/leadList',
+        path: '/lead-list',
         name: 'LeadList',
         component: () => import('../components/lead/LeadList.vue')
     },
