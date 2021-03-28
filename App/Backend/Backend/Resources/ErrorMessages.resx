@@ -129,6 +129,9 @@
   <data name="COUNTRY_NAME_TOO_LONG" xml:space="preserve">
     <value>Country name is too long.</value>
   </data>
+  <data name="DATE_START_LESS_THAN_END" xml:space="preserve">
+    <value>Start date must be before end date.</value>
+  </data>
   <data name="EMAIL_EMPTY" xml:space="preserve">
     <value>Email must not be empty.</value>
   </data>
