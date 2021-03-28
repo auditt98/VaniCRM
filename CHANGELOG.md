@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/auditt98/VaniCRM/compare/v1.12.1...v1.13.0) (2021-03-28)
+
+
+### Features
+
+* API for campaigns ([a9b58b2](https://github.com/auditt98/VaniCRM/commit/a9b58b2420351a3b83cc4532139f434a502ba76b))
+
 ### [1.12.1](https://github.com/auditt98/VaniCRM/compare/v1.12.0...v1.12.1) (2021-03-28)
 
 
