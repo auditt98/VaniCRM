@@ -96,4 +96,10 @@ namespace Backend.Models.ApiModel
     {
         public int id { get; set; }
     }
+
+    public class CampaignLinkApiModel
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
 }

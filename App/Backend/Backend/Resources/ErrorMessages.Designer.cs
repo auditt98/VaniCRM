@@ -241,6 +241,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Title must not be empty..
+        /// </summary>
+        internal static string TITLE_EMPTY {
+            get {
+                return ResourceManager.GetString("TITLE_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The token has expired..
         /// </summary>
         internal static string TOKEN_EXPIRED {

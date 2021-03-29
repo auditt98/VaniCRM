@@ -177,6 +177,9 @@
   <data name="SOMETHING_WRONG" xml:space="preserve">
     <value>Something bad happened.</value>
   </data>
+  <data name="TITLE_EMPTY" xml:space="preserve">
+    <value>Title must not be empty.</value>
+  </data>
   <data name="TOKEN_EXPIRED" xml:space="preserve">
     <value>The token has expired.</value>
   </data>

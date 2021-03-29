@@ -120,6 +120,15 @@
   <data name="AVATAR_CHANGED" xml:space="preserve">
     <value>Avatar successfully changed.</value>
   </data>
+  <data name="CALL_CREATED" xml:space="preserve">
+    <value>Call successfully created.</value>
+  </data>
+  <data name="CALL_DELETED" xml:space="preserve">
+    <value>Call successfully deleted.</value>
+  </data>
+  <data name="CALL_MODIFIED" xml:space="preserve">
+    <value>Call successfully updated.</value>
+  </data>
   <data name="CAMPAIGN_CREATED" xml:space="preserve">
     <value>Campaign successfully created.</value>
   </data>

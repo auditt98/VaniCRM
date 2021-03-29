@@ -70,6 +70,33 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Call successfully created..
+        /// </summary>
+        internal static string CALL_CREATED {
+            get {
+                return ResourceManager.GetString("CALL_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Call successfully deleted..
+        /// </summary>
+        internal static string CALL_DELETED {
+            get {
+                return ResourceManager.GetString("CALL_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Call successfully updated..
+        /// </summary>
+        internal static string CALL_MODIFIED {
+            get {
+                return ResourceManager.GetString("CALL_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Campaign successfully created..
         /// </summary>
         internal static string CAMPAIGN_CREATED {

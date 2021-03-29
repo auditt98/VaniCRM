@@ -22,4 +22,10 @@ namespace Backend.Models.ApiModel
             public string owner { get; set; }
         }
     }
+
+    public class DealLinkApiModel
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
 }

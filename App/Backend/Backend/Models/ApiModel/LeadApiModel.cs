@@ -38,6 +38,12 @@ namespace Backend.Models.ApiModel
         }
     }
 
+    public class LeadLinkApiModel
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
+
     public class LeadDetailApiModel
     {
         public int id { get; set; }

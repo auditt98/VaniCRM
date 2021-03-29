@@ -283,6 +283,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiResponseDemoController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CallController.cs" />
     <Compile Include="Controllers\CampaignController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />

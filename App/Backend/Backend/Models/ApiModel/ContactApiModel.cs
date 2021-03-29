@@ -19,6 +19,11 @@ namespace Backend.Models.ApiModel
             public string phone { get; set; }
             public string owner { get; set; }
         }
+    }
 
+    public class ContactLinkApiModel
+    {
+        public int id { get; set; }
+        public string name { get; set; }
     }
 }
