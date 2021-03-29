@@ -97,6 +97,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start date must be before end date..
+        /// </summary>
+        internal static string DATE_START_LESS_THAN_END {
+            get {
+                return ResourceManager.GetString("DATE_START_LESS_THAN_END", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email must not be empty..
         /// </summary>
         internal static string EMAIL_EMPTY {
@@ -228,6 +237,15 @@ namespace Backend.Resources {
         internal static string SOMETHING_WRONG {
             get {
                 return ResourceManager.GetString("SOMETHING_WRONG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title must not be empty..
+        /// </summary>
+        internal static string TITLE_EMPTY {
+            get {
+                return ResourceManager.GetString("TITLE_EMPTY", resourceCulture);
             }
         }
         

@@ -18,5 +18,13 @@ namespace Backend.Models.ApiModel
             public string website { get; set; }
             public string owner { get; set; }
         }
+
+        
+    }
+
+    public class AccountLinkApiModel
+    {
+        public int id { get; set; }
+        public string name { get; set; }
     }
 }

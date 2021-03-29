@@ -70,6 +70,78 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Call successfully created..
+        /// </summary>
+        internal static string CALL_CREATED {
+            get {
+                return ResourceManager.GetString("CALL_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Call successfully deleted..
+        /// </summary>
+        internal static string CALL_DELETED {
+            get {
+                return ResourceManager.GetString("CALL_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Call successfully updated..
+        /// </summary>
+        internal static string CALL_MODIFIED {
+            get {
+                return ResourceManager.GetString("CALL_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign successfully created..
+        /// </summary>
+        internal static string CAMPAIGN_CREATED {
+            get {
+                return ResourceManager.GetString("CAMPAIGN_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign successfully deleted..
+        /// </summary>
+        internal static string CAMPAIGN_DELETED {
+            get {
+                return ResourceManager.GetString("CAMPAIGN_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign successfully updated..
+        /// </summary>
+        internal static string CAMPAIGN_MODIFIED {
+            get {
+                return ResourceManager.GetString("CAMPAIGN_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact successfully added..
+        /// </summary>
+        internal static string CONTACT_ADDED {
+            get {
+                return ResourceManager.GetString("CONTACT_ADDED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact successfully removed..
+        /// </summary>
+        internal static string CONTACT_REMOVED {
+            get {
+                return ResourceManager.GetString("CONTACT_REMOVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Group successfully created..
         /// </summary>
         internal static string GROUP_CREATED {
@@ -97,6 +169,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lead successfully added..
+        /// </summary>
+        internal static string LEAD_ADDED {
+            get {
+                return ResourceManager.GetString("LEAD_ADDED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lead successfully created..
         /// </summary>
         internal static string LEAD_CREATED {
@@ -120,6 +201,15 @@ namespace Backend.Resources {
         internal static string LEAD_MODIFIED {
             get {
                 return ResourceManager.GetString("LEAD_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lead successfully removed..
+        /// </summary>
+        internal static string LEAD_REMOVED {
+            get {
+                return ResourceManager.GetString("LEAD_REMOVED", resourceCulture);
             }
         }
         

@@ -281,6 +281,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiResponseDemoController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CallController.cs" />
     <Compile Include="Controllers\CampaignController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
@@ -408,6 +409,7 @@
     <Compile Include="Services\TaskService.cs" />
     <Compile Include="Services\TaskTemplateService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Validators\CampaignValidator.cs" />
     <Compile Include="Validators\GroupValidator.cs" />
     <Compile Include="Validators\LeadValidator.cs" />
     <Compile Include="Validators\UserValidator.cs" />
