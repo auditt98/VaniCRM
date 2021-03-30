@@ -118,9 +118,9 @@ namespace Backend.Services
                 //avatar
                 if (dbLead.Avatar != null)
                 {
-                    var mime = MimeMapping.MimeUtility.GetMimeMapping(dbLead.Avatar);
-                    var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbLead.Avatar)));
-                    apiModel.avatar = $"data:{mime};base64,{img}";
+                    //var mime = MimeMapping.MimeUtility.GetMimeMapping(dbLead.Avatar);
+                    //var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbLead.Avatar)));
+                    apiModel.avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbLead.Avatar}";
                 }
 
                 apiModel.city = dbLead.City;
@@ -140,7 +140,7 @@ namespace Backend.Services
                 apiModel.noCall = dbLead.NoCall.Value;
                 apiModel.noEmail = dbLead.NoEmail.Value;
                 //notes
-                apiModel.notes = dbLead.NOTEs.Select(c => new NoteApiModel() { id = c.ID, body = c.NoteBody, createdAt = c.CreatedAt.Value, createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username}, files = c.FILEs.Select( f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID}).ToList()}).ToList();
+                apiModel.notes = dbLead.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbLead.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.Value, createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username}, files = c.FILEs.Select( f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID}).ToList()}).ToList();
                 apiModel.phone = dbLead.Phone;
                 apiModel.priority = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = dbLead.PRIORITY.ID == c.ID }).ToList();
                 apiModel.skype = dbLead.Skype;

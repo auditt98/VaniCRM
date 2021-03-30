@@ -107,4 +107,18 @@ namespace Backend.Models.ApiModel
         public List<CallResult> results { get; set; }
     }
 
+    public class MeetingCreateApiModel
+    {
+        public int host { get; set; }
+        public string title { get; set; }
+        public string location { get; set; }
+        public DateTime from { get; set; }
+        public DateTime to { get; set; }
+        public bool isAllDay { get; set; }
+        public bool isRepeat { get; set; }
+        public string rrule { get; set; }
+        public string description { get; set; }
+
+    }
+
 }

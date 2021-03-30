@@ -408,9 +408,10 @@ namespace Backend.Controllers
                         UserDetailApiModel apiModel = new UserDetailApiModel();
                         if(dbUser.Avatar != null)
                         {
-                            var mime = MimeMapping.MimeUtility.GetMimeMapping(dbUser.Avatar);
-                            var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar)));
-                            apiModel.avatar = $"data:{mime};base64,{img}";
+                            //var mime = MimeMapping.MimeUtility.GetMimeMapping(dbUser.Avatar);
+                            //var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar)));
+                            //apiModel.avatar = $"data:{mime};base64,{img}";
+                            apiModel.avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbUser.Avatar}";
                         }
                         apiModel.id = dbUser.ID;
                         apiModel.username = dbUser.Username;

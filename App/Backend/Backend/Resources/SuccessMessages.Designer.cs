@@ -214,6 +214,24 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Meeting successfully created..
+        /// </summary>
+        internal static string MEETING_CREATED {
+            get {
+                return ResourceManager.GetString("MEETING_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meeting successfully deleted..
+        /// </summary>
+        internal static string MEETING_DELETED {
+            get {
+                return ResourceManager.GetString("MEETING_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Note added..
         /// </summary>
         internal static string NOTE_ADDED {

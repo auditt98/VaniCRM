@@ -49,5 +49,45 @@ namespace Backend.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("avatar")]
+        public HttpResponseMessage GetAvatar([FromUri] string fileName)
+        {
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            if (!String.IsNullOrEmpty(fileName))
+            {
+                var results = _fileService.GetAvatar(fileName);
+                if (results.file != null)
+                {
+                    response.StatusCode = HttpStatusCode.OK;
+                    response.Content = results.file;
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue(results.mimeType);
+                    response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = results.fileName
+                    };
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.Gone;
+                    ResponseFormat responseData = ResponseFormat.Fail;
+                    responseData.message = ErrorMessages.SOMETHING_WRONG;
+                    var json = JsonConvert.SerializeObject(responseData);
+                    response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                }
+
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                ResponseFormat responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.INVALID_BODY;
+                var json = JsonConvert.SerializeObject(responseData);
+                response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+            return response;
+        }
     }
 }

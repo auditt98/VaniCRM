@@ -89,7 +89,7 @@ namespace Backend.Services
                 apiModel.createdBy = new UserLinkApiModel() { id = dbCall.TASK_TEMPLATE.CreatedUser.ID, username = dbCall.TASK_TEMPLATE.CreatedUser.Username };
                 apiModel.modifiedBy = new UserLinkApiModel() { id = dbCall.TASK_TEMPLATE.ID, username = dbCall.TASK_TEMPLATE.ModifiedUSer.Username };
                 apiModel.tags = dbCall.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
-                apiModel.notes = dbCall.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, body = c.NoteBody, createdAt = c.CreatedAt.Value, createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
+                apiModel.notes = dbCall.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbCall.Owner.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.Value, createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
                 return apiModel;
             }
             else
@@ -118,5 +118,27 @@ namespace Backend.Services
             return _taskTemplateRepository.RemoveTagFromCall(id, tagId);
         }
 
+
+        //meeting
+
+        public int GetMeetingTemplateId(int id)
+        {
+            return _taskTemplateRepository.GetMeetingTemplateId(id);
+        }
+
+        public int GetMeetingOwner(int id)
+        {
+            return _taskTemplateRepository.GetMeetingOwner(id);
+        }
+
+        public bool AddTagToMeeting(int id, string tagName)
+        {
+            return _taskTemplateRepository.AddTagToMeeting(id, tagName);
+        }
+
+        public bool RemoveTagFromMeeting(int id, int tagId)
+        {
+            return _taskTemplateRepository.RemoveTagFromMeeting(id, tagId);
+        }
     }
 }

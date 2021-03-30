@@ -1,4 +1,5 @@
-﻿using Backend.Repository;
+﻿using Backend.Extensions;
+using Backend.Repository;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,5 +33,36 @@ namespace Backend.Services
             }
         }
 
+        public (ByteArrayContent file, string mimeType, string fileName) GetAvatar(string avatarFileName)
+        {
+            string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
+            var f = new FileManager.File();
+            f.FileName = Path.GetFileNameWithoutExtension(avatarFileName);
+            f.Extension = Path.GetExtension(avatarFileName);
+            var isImage = f.FilterExtension(new List<string>() { ".jpeg", ".jpg", "png", ".tif", ".tiff" });
+            if (isImage)
+            {
+                var isExist = File.Exists(Path.Combine(targetFolder, avatarFileName));
+                byte[] content = null;
+                if (isExist)
+                {
+                    using (FileStream fs = File.Open(Path.Combine(targetFolder, avatarFileName), FileMode.Open))
+                    {
+                        content = new byte[fs.Length];
+                        fs.Read(content, 0, (int)fs.Length);
+                    }
+                    var mimeType = MimeMapping.MimeUtility.GetMimeMapping(avatarFileName);
+                    return (new ByteArrayContent(content), mimeType, avatarFileName);
+                }
+                else
+                {
+                    return (null, null, null);
+                }
+            }
+            else
+            {
+                return (null, null, null);
+            }
+        }
     }
 }

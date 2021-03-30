@@ -261,5 +261,93 @@ namespace Backend.Repository
         {
             return db.CALLs.Find(id);
         }
+
+        //meeting
+        public int GetMeetingTemplateId(int id)
+        {
+            var dbMeeting = db.MEETINGs.Find(id);
+
+            if (dbMeeting != null)
+            {
+                return dbMeeting.TASK_TEMPLATE.ID;
+            }
+            else { return 0; }
+        }
+
+        public int GetMeetingOwner(int id)
+        {
+            var dbMeeting = db.MEETINGs.Find(id);
+            if (dbMeeting != null)
+            {
+                return dbMeeting.HostUser.ID;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public bool AddTagToMeeting(int id, string tagName)
+        {
+            var dbMeeting = db.MEETINGs.Find(id);
+            var dbTag = _tagRepository.GetOneByName(tagName);
+            if (dbMeeting != null)
+            {
+                if (dbTag != null)
+                {
+                    var tagItem = dbMeeting.TAG_ITEM.Where(c => c.TAG_ID == dbTag.ID).FirstOrDefault();
+                    if (tagItem != null)
+                    {
+                        var newTagItem = new TAG_ITEM();
+                        newTagItem.TAG_ID = dbTag.ID;
+                        newTagItem.MEETING_ID = dbMeeting.ID;
+                        db.TAG_ITEM.Add(newTagItem);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    var newTag = _tagRepository.Create(tagName);
+                    var tagItem = new TAG_ITEM();
+                    tagItem.TAG_ID = newTag.ID;
+                    tagItem.MEETING_ID = dbMeeting.ID;
+                    db.TAG_ITEM.Add(tagItem);
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool RemoveTagFromMeeting(int id, int tagId)
+        {
+            var dbMeeting = db.MEETINGs.Find(id);
+            if (dbMeeting != null)
+            {
+                var tagItem = dbMeeting.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
+                if (tagItem != null)
+                {
+                    db.TAG_ITEM.Remove(tagItem);
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

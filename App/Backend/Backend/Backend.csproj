@@ -291,6 +291,7 @@
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\LeadsController.cs" />
+    <Compile Include="Controllers\MeetingController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Domain\ACCOUNT.cs" />
@@ -411,6 +412,7 @@
     <Compile Include="Services\TaskService.cs" />
     <Compile Include="Services\TaskTemplateService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Validators\CallValidator.cs" />
     <Compile Include="Validators\CampaignValidator.cs" />
     <Compile Include="Validators\GroupValidator.cs" />
     <Compile Include="Validators\LeadValidator.cs" />
