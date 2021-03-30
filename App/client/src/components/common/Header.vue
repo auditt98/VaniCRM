@@ -32,7 +32,7 @@
               </div>
     </div>
     <div class="nav-item mx-auto order-last" >
-      <!-- <img class="m-auto header-avatar" src="https://localhost:44375/avatar?fileName=Mojave_Day-ce5b52f8d97a4817a4e26510f7a3548f.jpg"> -->
+      <img class="m-auto header-avatar" src="https://localhost:44375/avatar?fileName=Mojave_Day-ce5b52f8d97a4817a4e26510f7a3548f.jpg">
     </div>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
