@@ -10,6 +10,7 @@ namespace Backend.Models.ApiModel
         public int id { get; set; }
         public UserLinkApiModel createdBy { get; set; }
         public DateTime createdAt { get; set; }
+        public string avatar { get; set; }
         public string body { get; set; }
         public int account { get; set; }
         public int contact { get; set; }

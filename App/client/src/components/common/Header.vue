@@ -32,9 +32,7 @@
               </div>
     </div>
     <div class="nav-item mx-auto order-last" >
-      <div class="header-avatar m-auto">
-        <div></div>
-      </div>
+      <!-- <img class="m-auto header-avatar" src="https://localhost:44375/avatar?fileName=Mojave_Day-ce5b52f8d97a4817a4e26510f7a3548f.jpg"> -->
     </div>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
@@ -169,12 +167,19 @@ export default {
   text-align: center;
   text-align: -webkit-center;
 }
-.header-avatar div {
+/* .header-avatar div {
   width: 44px;
   height: 44px;
   border: 1.5px solid #DFE0EB;
   background: url("../../assets/avatar-header.jpeg");
+} */
+
+.header-avatar {
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid #DFE0EB;
 }
+
 .header-avatar-icon {
 display:inline-block;
     font-size: 18px;

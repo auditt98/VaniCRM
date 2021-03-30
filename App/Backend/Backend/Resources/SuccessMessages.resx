@@ -168,6 +168,12 @@
   <data name="LEAD_REMOVED" xml:space="preserve">
     <value>Lead successfully removed.</value>
   </data>
+  <data name="MEETING_CREATED" xml:space="preserve">
+    <value>Meeting successfully created.</value>
+  </data>
+  <data name="MEETING_DELETED" xml:space="preserve">
+    <value>Meeting successfully deleted.</value>
+  </data>
   <data name="NOTE_ADDED" xml:space="preserve">
     <value>Note added.</value>
   </data>
