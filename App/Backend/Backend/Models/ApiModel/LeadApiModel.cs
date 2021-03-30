@@ -60,6 +60,7 @@ namespace Backend.Models.ApiModel
         public DateTime ModifiedAt { get; set; }
         public UserLinkApiModel CreatedBy { get; set; }
         public UserLinkApiModel ModifiedBy { get; set; }
+        public UserLinkApiModel owner { get; set; }
         public List<PrioritySelectionApiModel> priority { get; set; }
         public List<LeadStatus> status { get; set; }
         public List<IndustrySelectionApiModel> industry { get; set; }

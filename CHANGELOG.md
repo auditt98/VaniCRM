@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.1](https://github.com/auditt98/VaniCRM/compare/v1.15.0...v1.15.1) (2021-03-30)
+
+
+### Bug Fixes
+
+* Nullable values on reference fields returns a non-nullable value and throw exception. ([b85c9b0](https://github.com/auditt98/VaniCRM/commit/b85c9b09071010fe97c172d2261fe7f7dba90fd8))
+
 ## [1.15.0](https://github.com/auditt98/VaniCRM/compare/v1.14.0...v1.15.0) (2021-03-30)
 
 

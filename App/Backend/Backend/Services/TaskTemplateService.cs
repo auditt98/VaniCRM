@@ -84,12 +84,12 @@ namespace Backend.Services
                 apiModel.description = dbCall.TASK_TEMPLATE.Description;
 
                 apiModel.owner = new UserLinkApiModel() { id = dbCall.Owner.ID, username = dbCall.Owner.Username };
-                apiModel.createdAt = dbCall.TASK_TEMPLATE.CreatedAt.Value;
-                apiModel.modifiedAt = dbCall.TASK_TEMPLATE.ModifiedAt.Value;
+                apiModel.createdAt = dbCall.TASK_TEMPLATE.CreatedAt.GetValueOrDefault();
+                apiModel.modifiedAt = dbCall.TASK_TEMPLATE.ModifiedAt.GetValueOrDefault();
                 apiModel.createdBy = new UserLinkApiModel() { id = dbCall.TASK_TEMPLATE.CreatedUser.ID, username = dbCall.TASK_TEMPLATE.CreatedUser.Username };
                 apiModel.modifiedBy = new UserLinkApiModel() { id = dbCall.TASK_TEMPLATE.ID, username = dbCall.TASK_TEMPLATE.ModifiedUSer.Username };
                 apiModel.tags = dbCall.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
-                apiModel.notes = dbCall.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbCall.Owner.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.Value, createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
+                apiModel.notes = dbCall.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbCall.Owner.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
                 return apiModel;
             }
             else

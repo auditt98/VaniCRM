@@ -102,24 +102,24 @@ namespace Backend.Services
             if (dbCampaign != null)
             {
                 var apiModel = new CampaignDetailApiModel();
-                apiModel.actualCost = dbCampaign.ActualCost.Value;
-                apiModel.budgetedCost = dbCampaign.BudgetedCost.Value;
+                apiModel.actualCost = dbCampaign.ActualCost.GetValueOrDefault();
+                apiModel.budgetedCost = dbCampaign.BudgetedCost.GetValueOrDefault();
                 apiModel.campaignName = dbCampaign.Name;
-                apiModel.createdAt = dbCampaign.CreatedAt.Value;
-                apiModel.modifiedAt = dbCampaign.ModifiedAt.Value;
+                apiModel.createdAt = dbCampaign.CreatedAt.GetValueOrDefault();
+                apiModel.modifiedAt = dbCampaign.ModifiedAt.GetValueOrDefault();
                 apiModel.createdBy = new UserLinkApiModel() { id = dbCampaign.CreatedUser.ID, username = dbCampaign.CreatedUser.Username };
                 apiModel.modifiedBy = new UserLinkApiModel() { id = dbCampaign.ModifiedUser.ID, username = dbCampaign.ModifiedUser.Username };
                 apiModel.id = dbCampaign.ID;
                 apiModel.description = dbCampaign.Description;
-                apiModel.startDate = dbCampaign.StartDate.Value;
-                apiModel.endDate = dbCampaign.EndDate.Value;
-                apiModel.expectedResponse = dbCampaign.ExpectedResponse.Value;
-                apiModel.numberSent = dbCampaign.NumberSent.Value;
+                apiModel.startDate = dbCampaign.StartDate.GetValueOrDefault();
+                apiModel.endDate = dbCampaign.EndDate.GetValueOrDefault();
+                apiModel.expectedResponse = dbCampaign.ExpectedResponse.GetValueOrDefault();
+                apiModel.numberSent = dbCampaign.NumberSent.GetValueOrDefault();
                 apiModel.types = _campaignRepository.GetAllCampaignTypes().Select(c => new CampaignType() { id = c.ID, name = c.Name, selected = c.ID == dbCampaign.CAMPAIGN_TYPE.ID }).ToList();
                 apiModel.statuses = _campaignRepository.GetAllCampaignStatuses().Select(c => new CampaignStatus() { id = c.ID, name = c.Name, selected = c.ID == dbCampaign.CAMPAIGN_STATUS.ID }).ToList();
                 apiModel.owner = new UserLinkApiModel() { id = dbCampaign.Owner.ID, username = dbCampaign.Owner.Username };
                 apiModel.tags = dbCampaign.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
-                apiModel.notes = dbCampaign.NOTEs.Select(c => new NoteApiModel() { id = c.ID, body = c.NoteBody, createdAt = c.CreatedAt.Value, createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
+                apiModel.notes = dbCampaign.NOTEs.Select(c => new NoteApiModel() { id = c.ID, body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
 
                 return apiModel;
             }
