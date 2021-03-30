@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/auditt98/VaniCRM/compare/v1.14.0...v1.15.0) (2021-03-30)
+
+
+### Features
+
+* API for avatars ([2765346](https://github.com/auditt98/VaniCRM/commit/2765346ebcacf4b027b2942be7477c89234be5be))
+
 ## [1.14.0](https://github.com/auditt98/VaniCRM/compare/v1.13.0...v1.14.0) (2021-03-29)
 
 
