@@ -61,23 +61,7 @@ namespace Backend.Controllers
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
                         var campaigns = _campaignService.GetCampaignList(query, pageSize, currentPage);
-                        Pager pageInfo;
-                        if (campaigns.Count > 0)
-                        {
-                            if (pageSize == 0)
-                            {
-                                pageInfo = new Pager(campaigns.Count(), currentPage, campaigns.Count());
-                            }
-                            else
-                            {
-                                pageInfo = new Pager(campaigns.Count(), currentPage, pageSize);
-                            }
-                            responseData.data = new CampaignListApiModel()
-                            {
-                                campaigns = campaigns,
-                                pageInfo = pageInfo
-                            };
-                        }
+                        responseData.data = campaigns;
                     }
                     else
                     {

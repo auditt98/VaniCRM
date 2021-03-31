@@ -68,16 +68,16 @@ namespace Backend.Services
                 var apiModel = new CallDetailApiModel();
                 if(dbCall.CONTACT != null)
                 {
-                    apiModel.contact = new ContactLinkApiModel() { id = dbCall.CONTACT.ID, name = dbCall.CONTACT.Name };
+                    apiModel.contact = new ContactLinkApiModel() { id = dbCall.CONTACT.ID, name = dbCall.CONTACT.Name, email = dbCall.CONTACT.Email };
                 }
                 if(dbCall.LEAD != null)
                 {
-                    apiModel.lead = new LeadLinkApiModel() { id = dbCall.LEAD.ID, name = dbCall.LEAD.Name };
+                    apiModel.lead = new LeadLinkApiModel() { id = dbCall.LEAD.ID, name = dbCall.LEAD.Name, email = dbCall.LEAD.Email };
 
                 }
                 if(dbCall.ACCOUNT != null)
                 {
-                    apiModel.relatedAccount = new AccountLinkApiModel() { id = dbCall.ACCOUNT.ID, name = dbCall.ACCOUNT.Name };
+                    apiModel.relatedAccount = new AccountLinkApiModel() { id = dbCall.ACCOUNT.ID, name = dbCall.ACCOUNT.Name, email = dbCall.ACCOUNT.Email };
                 }
                 if(dbCall.DEAL != null)
                 {
@@ -89,10 +89,10 @@ namespace Backend.Services
                 }
 
 
-                apiModel.purposes = _taskTemplateRepository.GetAllCallReasons().Select(c => new CallPurpose() { id = c.ID, name = c.Name, selected = c.ID == dbCall.CALL_REASON.ID }).ToList();
-                apiModel.types = _taskTemplateRepository.GetAllCallTypes().Select(c => new CallType() { id = c.ID, name = c.Name, selected = c.ID == dbCall.CALL_TYPE.ID }).ToList();
-                apiModel.statuses = _taskTemplateRepository.GetAllTaskStatuses().Select(c => new TaskStatus() { id = c.ID, name = c.Name, selected = c.ID == dbCall.TASK_TEMPLATE.TASK_STATUS.ID }).ToList();
-                apiModel.results = _taskTemplateRepository.GetAllCallResults().Select(c => new CallResult() { id = c.ID, name = c.Name, selected = c.ID == dbCall.CALL_RESULT.ID }).ToList();
+                apiModel.purposes = _taskTemplateRepository.GetAllCallReasons().Select(c => new CallPurpose() { id = c.ID, name = c.Name, selected = dbCall.CALL_REASON != null ? c.ID == dbCall.CALL_REASON.ID : false }).ToList();
+                apiModel.types = _taskTemplateRepository.GetAllCallTypes().Select(c => new CallType() { id = c.ID, name = c.Name, selected = dbCall.CALL_TYPE != null ? c.ID == dbCall.CALL_TYPE.ID : false }).ToList();
+                apiModel.statuses = _taskTemplateRepository.GetAllTaskStatuses().Select(c => new TaskStatus() { id = c.ID, name = c.Name, selected = dbCall.TASK_TEMPLATE.TASK_STATUS != null ? c.ID == dbCall.TASK_TEMPLATE.TASK_STATUS.ID : false }).ToList();
+                apiModel.results = _taskTemplateRepository.GetAllCallResults().Select(c => new CallResult() { id = c.ID, name = c.Name, selected = dbCall.CALL_RESULT != null ? c.ID == dbCall.CALL_RESULT.ID : false}).ToList();
 
                 apiModel.title = dbCall.TASK_TEMPLATE.Title;
                 apiModel.duration = dbCall.Length.GetValueOrDefault();
@@ -103,18 +103,18 @@ namespace Backend.Services
 
                 if(dbCall.Owner != null)
                 {
-                    apiModel.owner = new UserLinkApiModel() { id = dbCall.Owner.ID, username = dbCall.Owner.Username };
+                    apiModel.owner = new UserLinkApiModel() { id = dbCall.Owner.ID, username = dbCall.Owner.Username, email = dbCall.Owner.Email };
                 }
                 apiModel.createdAt = dbCall.TASK_TEMPLATE.CreatedAt.GetValueOrDefault();
                 apiModel.modifiedAt = dbCall.TASK_TEMPLATE.ModifiedAt.GetValueOrDefault();
-                apiModel.createdBy = new UserLinkApiModel() { id = dbCall.TASK_TEMPLATE.CreatedUser.ID, username = dbCall.TASK_TEMPLATE.CreatedUser.Username };
+                apiModel.createdBy = new UserLinkApiModel() { id = dbCall.TASK_TEMPLATE.CreatedUser.ID, username = dbCall.TASK_TEMPLATE.CreatedUser.Username, email = dbCall.TASK_TEMPLATE.CreatedUser.Email };
                 if(dbCall.TASK_TEMPLATE.ModifiedUSer != null)
                 {
-                    apiModel.modifiedBy = new UserLinkApiModel() { id = dbCall.TASK_TEMPLATE.ModifiedUSer.ID, username = dbCall.TASK_TEMPLATE.ModifiedUSer.Username };
+                    apiModel.modifiedBy = new UserLinkApiModel() { id = dbCall.TASK_TEMPLATE.ModifiedUSer.ID, username = dbCall.TASK_TEMPLATE.ModifiedUSer.Username, email = dbCall.TASK_TEMPLATE.ModifiedUSer.Email };
 
                 }
                 apiModel.tags = dbCall.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
-                apiModel.notes = dbCall.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbCall.Owner.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
+                apiModel.notes = dbCall.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbCall.Owner.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
                 return apiModel;
             }
             else

@@ -127,25 +127,25 @@ namespace Backend.Services
                 apiModel.companyName = dbLead.CompanyName;
                 apiModel.country = dbLead.Country;
                 apiModel.CreatedAt = dbLead.CreatedAt.GetValueOrDefault();
-                apiModel.CreatedBy = new UserLinkApiModel() { id = dbLead.CreatedUser.ID, username = dbLead.CreatedUser.Username };
+                apiModel.CreatedBy = new UserLinkApiModel() { id = dbLead.CreatedUser.ID, username = dbLead.CreatedUser.Username, email = dbLead.CreatedUser.Email };
                 apiModel.description = dbLead.Description;
                 apiModel.email = dbLead.Email;
                 apiModel.fax = dbLead.Fax;
                 apiModel.id = dbLead.ID;
                 apiModel.industry = _industryRepository.GetAllIndustries().Select(c => new IndustrySelectionApiModel() { id = c.ID, name = c.Name, selected = dbLead.INDUSTRY.ID == c.ID }).ToList();
-                apiModel.leadSource = _leadRepository.GetAllLeadSources().Select(c => new LeadSource() { id = c.ID, name = c.Name, selected = dbLead.LEAD_SOURCE.ID == c.ID }).ToList();
+                apiModel.leadSource = _leadRepository.GetAllLeadSources().Select(c => new LeadSource() { id = c.ID, name = c.Name, selected = dbLead.LEAD_SOURCE != null ? dbLead.LEAD_SOURCE.ID == c.ID : false}).ToList();
                 apiModel.ModifiedAt = dbLead.ModifiedAt.GetValueOrDefault();
-                apiModel.ModifiedBy = new UserLinkApiModel() { id = dbLead.ModifiedUser?.ID, username = dbLead.ModifiedUser?.Username };
+                apiModel.ModifiedBy = new UserLinkApiModel() { id = dbLead.ModifiedUser?.ID, username = dbLead.ModifiedUser?.Username, email = dbLead.ModifiedUser?.Email };
                 apiModel.name = dbLead.Name;
                 apiModel.noCall = dbLead.NoCall.GetValueOrDefault();
                 apiModel.noEmail = dbLead.NoEmail.GetValueOrDefault();
-                apiModel.owner = new UserLinkApiModel() { id = dbLead.Owner?.ID, username = dbLead.Owner?.Username };
+                apiModel.owner = new UserLinkApiModel() { id = dbLead.Owner?.ID, username = dbLead.Owner?.Username, email = dbLead.Owner?.Email };
                 //notes
-                apiModel.notes = dbLead.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbLead.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username}, files = c.FILEs.Select( f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID}).ToList()}).ToList();
+                apiModel.notes = dbLead.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbLead.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email}, files = c.FILEs.Select( f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID}).ToList()}).ToList();
                 apiModel.phone = dbLead.Phone;
-                apiModel.priority = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = dbLead.PRIORITY.ID == c.ID }).ToList();
+                apiModel.priority = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = dbLead.PRIORITY != null ? dbLead.PRIORITY.ID == c.ID : false }).ToList();
                 apiModel.skype = dbLead.Skype;
-                apiModel.status = _leadRepository.GetAllLeadStatuses().Select(c => new LeadStatus() { id = c.ID, name = c.Name, selected = c.ID == dbLead.Status.ID }).ToList();
+                apiModel.status = _leadRepository.GetAllLeadStatuses().Select(c => new LeadStatus() { id = c.ID, name = c.Name, selected = dbLead.Status != null ? c.ID == dbLead.Status.ID : false}).ToList();
                 //tags
                 apiModel.tags = dbLead.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
                 apiModel.website = dbLead.Website;
