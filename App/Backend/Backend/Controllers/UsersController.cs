@@ -589,7 +589,7 @@ namespace Backend.Controllers
                                     var uploadedFile = HttpContext.Current.Request.Files[0];
                                     //file.
                                     FileManager.File file = new FileManager.File(uploadedFile);
-                                    var isImage = file.FilterExtension(new List<string>() { ".jpeg", ".jpg", "png", ".tif", ".tiff" });
+                                    var isImage = file.FilterExtension(new List<string>() { ".jpeg", ".jpg", ".png", ".tif", ".tiff" });
                                     if (isImage)
                                     {
                                         file.Rename();
@@ -642,7 +642,7 @@ namespace Backend.Controllers
                                     var uploadedFile = HttpContext.Current.Request.Files[0];
                                     //file.
                                     FileManager.File file = new FileManager.File(uploadedFile);
-                                    var isImage = file.FilterExtension(new List<string>() { ".jpeg", ".jpg", "png", ".tif", ".tiff" });
+                                    var isImage = file.FilterExtension(new List<string>() { ".jpeg", ".jpg", ".png", ".tif", ".tiff" });
                                     if (isImage)
                                     {
                                         file.Rename()
