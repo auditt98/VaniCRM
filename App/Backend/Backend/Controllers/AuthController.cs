@@ -208,6 +208,7 @@ namespace Backend.Controllers
     
         [HttpGet]
         [Route("logout")]
+        [ResponseType(typeof(ResponseFormat))]
         public HttpResponseMessage Logout()
         {
             CookieHeaderValue cookie = Request.Headers.GetCookies("refreshTokenData").FirstOrDefault();

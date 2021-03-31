@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.2](https://github.com/auditt98/VaniCRM/compare/v1.15.1...v1.15.2) (2021-03-31)
+
+
+### Bug Fixes
+
+* Can't get lead detail ([39dc32e](https://github.com/auditt98/VaniCRM/commit/39dc32ee5827a3150a5b82bfb3867c0f34b41191))
+
 ### [1.15.1](https://github.com/auditt98/VaniCRM/compare/v1.15.0...v1.15.1) (2021-03-30)
 
 

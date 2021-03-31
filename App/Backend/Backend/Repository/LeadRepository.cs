@@ -102,6 +102,7 @@ namespace Backend.Repository
             newLead.INDUSTRY_ID = apiModel.industry;
             newLead.LeadOwner = apiModel.owner;
             newLead.LeadSource = apiModel.leadSource;
+            newLead.LeadStatus = apiModel.leadStatus;
             newLead.Name = apiModel.name;
             newLead.NoCall = apiModel.noCall;
             newLead.NoEmail = apiModel.noEmail;
@@ -144,6 +145,7 @@ namespace Backend.Repository
                 dbLead.Phone = apiModel.phone;
                 dbLead.PRIORITY_ID = apiModel.priority;
                 dbLead.Skype = apiModel.skype;
+                dbLead.LeadStatus = apiModel.leadStatus;
                 dbLead.Website = apiModel.website;
                 dbLead.LeadOwner = apiModel.owner;
                 db.SaveChanges();
