@@ -13,20 +13,48 @@ namespace Backend.Repository
         DatabaseContext db = new DatabaseContext();
         TagRepository _tagRepository = new TagRepository();
 
-        public IEnumerable<CAMPAIGN> GetAllCampaigns(string query = "", int pageSize = 0, int currentPage = 1)
+
+        public (IEnumerable<CAMPAIGN> campaigns, Pager p) GetAllCampaigns(string query = "", int pageSize = 0, int currentPage = 1)
         {
             var q = query.ToLower();
+
             if (pageSize == 0)
             {
-                pageSize = db.CAMPAIGNs.Count();
+                pageSize = 10;
             }
+
             if (String.IsNullOrEmpty(q))
             {
-                return db.CAMPAIGNs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
+                Pager pager = new Pager(db.CAMPAIGNs.Count(), currentPage, pageSize, 9999);
+                return (db.CAMPAIGNs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
             var campaigns = db.CAMPAIGNs.Where(c => c.Name.ToLower().Contains(q) || c.CAMPAIGN_TYPE.Name.ToLower().Contains(q)).OrderBy(c => c.ID);
-            return campaigns;
+            if (campaigns.Count() > 0)
+            {
+                Pager p = new Pager(campaigns.Count(), currentPage, pageSize, 9999);
+
+                return (campaigns.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+            }
+            else
+            {
+                return (campaigns, null);
+            }
         }
+
+        //public IEnumerable<CAMPAIGN> GetAllCampaigns(string query = "", int pageSize = 0, int currentPage = 1)
+        //{
+        //    var q = query.ToLower();
+        //    if (pageSize == 0)
+        //    {
+        //        pageSize = db.CAMPAIGNs.Count();
+        //    }
+        //    if (String.IsNullOrEmpty(q))
+        //    {
+        //        return db.CAMPAIGNs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
+        //    }
+        //    var campaigns = db.CAMPAIGNs.Where(c => c.Name.ToLower().Contains(q) || c.CAMPAIGN_TYPE.Name.ToLower().Contains(q)).OrderBy(c => c.ID);
+        //    return campaigns;
+        //}
 
         public IEnumerable<CAMPAIGN_STATUS> GetAllCampaignStatuses()
         {

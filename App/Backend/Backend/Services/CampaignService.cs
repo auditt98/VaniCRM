@@ -14,10 +14,14 @@ namespace Backend.Services
         CampaignRepository _campaignRepository = new CampaignRepository();
         CampaignValidator _campaignValidator = new CampaignValidator();
 
-        public List<CampaignListApiModel.CampaignInfo> GetCampaignList(string query = "", int pageSize = 0, int currentPage = 1)
+        public CampaignListApiModel GetCampaignList(string query = "", int pageSize = 0, int currentPage = 1)
         {
             var dbCampaigns = _campaignRepository.GetAllCampaigns(query, pageSize, currentPage);
-            return dbCampaigns.Select(c => new CampaignListApiModel.CampaignInfo() { id = c.ID, name = c.Name, startDate = c.StartDate.GetValueOrDefault(), endDate = c.EndDate.GetValueOrDefault(), status = c.CAMPAIGN_STATUS.Name, owner = c.Owner.FirstName + " " + c.Owner.LastName, type = c.CAMPAIGN_TYPE.Name }).ToList();
+            var apiModel = new CampaignListApiModel();
+
+            apiModel.campaigns = dbCampaigns.campaigns.Select(c => new CampaignListApiModel.CampaignInfo() { id = c.ID, name = c.Name, type = c.CAMPAIGN_TYPE != null ? c.CAMPAIGN_TYPE.Name : null, endDate = c.EndDate.GetValueOrDefault(), startDate = c.StartDate.GetValueOrDefault(), status = c.CAMPAIGN_STATUS != null ? c.CAMPAIGN_STATUS.Name : null, owner = c.Owner.Username }).ToList();
+            apiModel.pageInfo = dbCampaigns.p;
+            return apiModel;
         }
 
         public CampaignBlankApiModel PrepareNewCampaign()
