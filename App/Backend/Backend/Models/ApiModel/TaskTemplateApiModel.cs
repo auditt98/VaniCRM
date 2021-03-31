@@ -91,6 +91,7 @@ namespace Backend.Models.ApiModel
         public List<TaskStatus> statuses { get; set; }
         public List<CallResult> results { get; set; }
 
+        public int id { get; set; }
         public string title { get; set; }
         public int duration { get; set; }
         public DateTime startTime { get; set; }

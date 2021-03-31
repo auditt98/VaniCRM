@@ -66,6 +66,7 @@ namespace Backend.Services
             if(dbCall != null)
             {
                 var apiModel = new CallDetailApiModel();
+                apiModel.id = dbCall.ID;
                 if(dbCall.CONTACT != null)
                 {
                     apiModel.contact = new ContactLinkApiModel() { id = dbCall.CONTACT.ID, name = dbCall.CONTACT.Name, email = dbCall.CONTACT.Email };
@@ -190,6 +191,11 @@ namespace Backend.Services
         public bool DeleteMeeting(int id)
         {
             return _taskTemplateRepository.DeleteMeeting(id);
+        }
+
+        public bool AddParticipantToMeeting(int id, MeetingParticipantCreateModel apiModel)
+        {
+            return _taskTemplateRepository.AddParticipantToMeeting(id, apiModel);
         }
 
         public MeetingDetailApiModel GetMeeting(int id)
