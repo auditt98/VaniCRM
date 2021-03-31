@@ -39,7 +39,7 @@ namespace Backend.Services
             var f = new FileManager.File();
             f.FileName = Path.GetFileNameWithoutExtension(avatarFileName);
             f.Extension = Path.GetExtension(avatarFileName);
-            var isImage = f.FilterExtension(new List<string>() { ".jpeg", ".jpg", "png", ".tif", ".tiff" });
+            var isImage = f.FilterExtension(new List<string>() { ".jpeg", ".jpg", ".png", ".tif", ".tiff" });
             if (isImage)
             {
                 var isExist = File.Exists(Path.Combine(targetFolder, avatarFileName));
