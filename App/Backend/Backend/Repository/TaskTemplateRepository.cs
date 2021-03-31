@@ -427,6 +427,12 @@ namespace Backend.Repository
         {
             return db.MEETINGs.Find(id);
         }
-    
+
+        public bool AddParticipantToMeeting(int id, MeetingParticipantCreateModel apiModel)
+        {
+            return true;
+        }
+
+
     }
 }

@@ -13,7 +13,7 @@ namespace Backend.Validators
         public CampaignValidator()
         {
             RuleFor(c => c.campaignName).NotEmpty().WithMessage(ErrorMessages.NAME_EMPTY);
-            RuleFor(c => c.startDate).LessThan(c => c.endDate).WithMessage(ErrorMessages.DATE_START_LESS_THAN_END);
+            RuleFor(c => c.startDate).LessThanOrEqualTo(c => c.endDate).WithMessage(ErrorMessages.DATE_START_LESS_THAN_END);
         }
     }
 }
