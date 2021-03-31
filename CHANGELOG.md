@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.3](https://github.com/auditt98/VaniCRM/compare/v1.15.2...v1.15.3) (2021-03-31)
+
+
+### Bug Fixes
+
+* .png files can't be recognized by the server ([9740d3d](https://github.com/auditt98/VaniCRM/commit/9740d3d107ce758c1e502db11de60033c99804ea))
+
 ### [1.15.2](https://github.com/auditt98/VaniCRM/compare/v1.15.1...v1.15.2) (2021-03-31)
 
 
