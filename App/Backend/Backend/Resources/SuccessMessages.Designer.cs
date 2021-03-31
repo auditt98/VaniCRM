@@ -232,6 +232,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Meeting successfully updated..
+        /// </summary>
+        internal static string MEETING_MODIFIED {
+            get {
+                return ResourceManager.GetString("MEETING_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Note added..
         /// </summary>
         internal static string NOTE_ADDED {
