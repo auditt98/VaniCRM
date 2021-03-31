@@ -416,6 +416,7 @@
     <Compile Include="Validators\CampaignValidator.cs" />
     <Compile Include="Validators\GroupValidator.cs" />
     <Compile Include="Validators\LeadValidator.cs" />
+    <Compile Include="Validators\MeetingValidator.cs" />
     <Compile Include="Validators\UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>

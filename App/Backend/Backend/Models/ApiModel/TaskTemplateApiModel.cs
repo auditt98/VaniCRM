@@ -94,7 +94,7 @@ namespace Backend.Models.ApiModel
         public string title { get; set; }
         public int duration { get; set; }
         public DateTime startTime { get; set; }
-        public bool isReminder { get; set; }
+        public bool isRepeat { get; set; }
         public string rrule { get; set; }
         public string description { get; set; }
     }
