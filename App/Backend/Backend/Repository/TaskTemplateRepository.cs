@@ -76,13 +76,29 @@ namespace Backend.Repository
             newTemplate.IsRepeat = apiModel.isReminder;
             newTemplate.RRule = apiModel.rrule;
             newTemplate.Title = apiModel.title;
+            newTemplate.TASK_STATUS_ID = apiModel.status;
             db.TASK_TEMPLATE.Add(newTemplate);
             //create call
             var newCall = new CALL();
             newCall.TASK_TEMPLATE = newTemplate;
+            if(apiModel.type != 0)
+            {
+                newCall.CALLTYPE_ID = apiModel.type;
+            }
+            
             newCall.CallOwner = apiModel.owner != 0 ? apiModel.owner : createdUser;
-            newCall.CALLREASON_ID = apiModel.purpose;
-            newCall.CALLRESULT_ID = apiModel.result;
+
+            if (apiModel.purpose != 0)
+            {
+                newCall.CALLREASON_ID = apiModel.purpose;
+
+            }
+
+            if(apiModel.result != 0)
+            {
+                newCall.CALLRESULT_ID = apiModel.result;
+
+            }
             newCall.Length = apiModel.duration;
 
             if(apiModel.relatedAccount != 0)
@@ -198,6 +214,7 @@ namespace Backend.Repository
                 dbCall.TASK_TEMPLATE.Title = apiModel.title;
                 dbCall.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
                 dbCall.TASK_TEMPLATE.ModifiedBy = modifiedUser;
+                dbCall.TASK_TEMPLATE.TASK_STATUS_ID = apiModel.status;
 
                 if(apiModel.owner != 0) { dbCall.CallOwner = apiModel.owner; }
                 dbCall.CALLREASON_ID = apiModel.purpose;
@@ -430,7 +447,28 @@ namespace Backend.Repository
 
         public bool AddParticipantToMeeting(int id, MeetingParticipantCreateModel apiModel)
         {
-            return true;
+            var dbMeeting = db.MEETINGs.Find(id);
+            if (dbMeeting != null)
+            {
+                if (apiModel.contactId != 0)
+                {
+                    //dbMeeting.me
+                }
+                if(apiModel.leadId != 0)
+                {
+
+                }
+                if(apiModel.userId != 0)
+                {
+
+                }
+                //db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 
