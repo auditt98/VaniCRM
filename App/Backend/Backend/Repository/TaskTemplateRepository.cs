@@ -389,8 +389,9 @@ namespace Backend.Repository
                 dbMeeting.TASK_TEMPLATE.IsRepeat = apiModel.isRepeat;
                 dbMeeting.TASK_TEMPLATE.RRule = apiModel.rrule;
                 dbMeeting.TASK_TEMPLATE.Title = apiModel.title;
-                
-                if(apiModel.host != 0) { dbMeeting.Host = apiModel.host; };
+                dbMeeting.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
+                dbMeeting.TASK_TEMPLATE.ModifiedBy = modifiedUser;
+                if (apiModel.host != 0) { dbMeeting.Host = apiModel.host; };
                 dbMeeting.IsAllDay = apiModel.isAllDay;
                 dbMeeting.IsRemindParticipant = true;
                 dbMeeting.Location = apiModel.location;
@@ -420,6 +421,11 @@ namespace Backend.Repository
             {
                 return false;
             }
+        }
+
+        public MEETING GetMeeting(int id)
+        {
+            return db.MEETINGs.Find(id);
         }
     
     }

@@ -118,7 +118,40 @@ namespace Backend.Models.ApiModel
         public bool isRepeat { get; set; }
         public string rrule { get; set; }
         public string description { get; set; }
-
     }
 
+    public class MeetingParticipantCreateModel
+    {
+        public int leadId { get; set; }
+        public int userId { get; set; }
+        public int contactId { get; set; }
+    }
+
+    public class MeetingDetailApiModel
+    {
+        public class MeetingParticipant
+        {
+            public List<ContactLinkApiModel> contacts { get; set; }
+            public List<UserLinkApiModel> users { get; set; }
+            public List<LeadLinkApiModel> leads { get; set; }
+        }
+
+        public List<TagApiModel> tags { get; set; }
+        public List<NoteApiModel> notes { get; set; }
+        public DateTime createdAt { get; set; }
+        public DateTime modifiedAt { get; set; }
+        public UserLinkApiModel createdBy { get; set; }
+        public UserLinkApiModel modifiedBy { get; set; }
+        public UserLinkApiModel host { get; set; }
+
+        public MeetingParticipant participants { get; set; }
+        public string title { get; set; }
+        public DateTime fromDate { get; set; }
+        public DateTime toDate { get; set; }
+        public string location { get; set; }
+        public bool isAllDay { get; set; }
+        public bool isReminder { get; set; }
+        public string rrule { get; set; }
+        public string description { get; set; }
+    }
 }
