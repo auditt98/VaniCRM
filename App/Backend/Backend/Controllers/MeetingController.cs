@@ -370,7 +370,7 @@ namespace Backend.Controllers
                     var isAuthorized = _authorizationService.Authorize(Convert.ToInt32(userId));
                     if (isAuthorized)
                     {
-                        var isCreated = true;
+                        var isCreated = _taskTemplateService.CreateMeeting(apiModel, Convert.ToInt32(userId)); ;
                         if (isCreated)
                         {
                             response.StatusCode = HttpStatusCode.OK;

@@ -79,7 +79,7 @@ namespace Backend.Services
         public bool ChangeAvatar(int id, HttpPostedFile uploadedFile)
         {
             FileManager.File file = new FileManager.File(uploadedFile);
-            var isImage = file.FilterExtension(new List<string>() { ".jpeg", ".jpg", "png", ".tif", ".tiff" });
+            var isImage = file.FilterExtension(new List<string>() { ".jpeg", ".jpg", ".png", ".tif", ".tiff" });
             if (isImage)
             {
                 file.Rename();

@@ -349,5 +349,78 @@ namespace Backend.Repository
                 return false;
             }
         }
+
+        public bool CreateMeeting(MeetingCreateApiModel apiModel, int createdUser)
+        {
+            var newTemplate = new TASK_TEMPLATE();
+            newTemplate.CreatedAt = DateTime.Now;
+            newTemplate.CreatedBy = createdUser;
+            newTemplate.Description = apiModel.description;
+            newTemplate.IsRepeat = apiModel.isRepeat;
+            newTemplate.RRule = apiModel.rrule;
+            newTemplate.Title = apiModel.title;
+            db.TASK_TEMPLATE.Add(newTemplate);
+            var newMeeting = new MEETING();
+            newMeeting.FromDate = apiModel.from;
+            if(apiModel.host != 0)
+            {
+                newMeeting.Host = apiModel.host;
+            }
+            else
+            {
+                newMeeting.Host = createdUser;
+            }
+            newMeeting.IsAllDay = apiModel.isAllDay;
+            newMeeting.IsRemindParticipant = true;
+            newMeeting.Location = apiModel.location;
+            newMeeting.ToDate = apiModel.to;
+            newMeeting.TASK_TEMPLATE = newTemplate;
+            db.MEETINGs.Add(newMeeting);
+            db.SaveChanges();
+            return true;
+        }
+    
+        public bool UpdateMeeting(int meetingId, MeetingCreateApiModel apiModel, int modifiedUser)
+        {
+            var dbMeeting = db.MEETINGs.Find(meetingId);
+            if(dbMeeting != null)
+            {
+                dbMeeting.TASK_TEMPLATE.Description = apiModel.description;
+                dbMeeting.TASK_TEMPLATE.IsRepeat = apiModel.isRepeat;
+                dbMeeting.TASK_TEMPLATE.RRule = apiModel.rrule;
+                dbMeeting.TASK_TEMPLATE.Title = apiModel.title;
+                
+                if(apiModel.host != 0) { dbMeeting.Host = apiModel.host; };
+                dbMeeting.IsAllDay = apiModel.isAllDay;
+                dbMeeting.IsRemindParticipant = true;
+                dbMeeting.Location = apiModel.location;
+                dbMeeting.ToDate = apiModel.to;
+                db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteMeeting(int id)
+        {
+            var dbMeeting = db.MEETINGs.Find(id);
+            if (dbMeeting != null)
+            {
+                var template = dbMeeting.TASK_TEMPLATE;
+                db.MEETINGs.Remove(dbMeeting);
+                db.SaveChanges();
+                db.TASK_TEMPLATE.Remove(template);
+                db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    
     }
 }

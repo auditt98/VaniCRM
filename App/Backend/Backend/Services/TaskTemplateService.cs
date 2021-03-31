@@ -14,6 +14,7 @@ namespace Backend.Services
     {
         TaskTemplateRepository _taskTemplateRepository = new TaskTemplateRepository();
         CallValidator _callValidator = new CallValidator();
+        MeetingValidator _meetingValidator = new MeetingValidator();
 
         public List<TASK_TEMPLATE> GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0)
         {
@@ -79,7 +80,7 @@ namespace Backend.Services
                 apiModel.title = dbCall.TASK_TEMPLATE.Title;
                 apiModel.duration = dbCall.Length.GetValueOrDefault();
                 apiModel.startTime = dbCall.StartTime.GetValueOrDefault();
-                apiModel.isReminder = dbCall.TASK_TEMPLATE.IsRepeat.GetValueOrDefault();
+                apiModel.isRepeat = dbCall.TASK_TEMPLATE.IsRepeat.GetValueOrDefault();
                 apiModel.rrule = dbCall.TASK_TEMPLATE.RRule;
                 apiModel.description = dbCall.TASK_TEMPLATE.Description;
 
@@ -139,6 +140,16 @@ namespace Backend.Services
         public bool RemoveTagFromMeeting(int id, int tagId)
         {
             return _taskTemplateRepository.RemoveTagFromMeeting(id, tagId);
+        }
+
+        public bool CreateMeeting(MeetingCreateApiModel apiModel, int createdUser)
+        {
+            var validator = _meetingValidator.Validate(apiModel);
+            if (validator.IsValid)
+            {
+                return _taskTemplateRepository.CreateMeeting(apiModel, createdUser);
+            }
+            return false;
         }
     }
 }
