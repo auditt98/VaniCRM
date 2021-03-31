@@ -187,6 +187,12 @@ namespace Backend.Controllers
                             responseData = ResponseFormat.Success;
                             responseData.message = SuccessMessages.CAMPAIGN_CREATED;
                         }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.InternalServerError;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.SOMETHING_WRONG;
+                        }
                     }
                     else
                     {

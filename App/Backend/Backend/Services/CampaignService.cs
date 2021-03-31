@@ -113,12 +113,12 @@ namespace Backend.Services
                 apiModel.modifiedAt = dbCampaign.ModifiedAt.GetValueOrDefault();
                 if(dbCampaign.CreatedUser != null)
                 {
-                    apiModel.createdBy = new UserLinkApiModel() { id = dbCampaign.CreatedUser.ID, username = dbCampaign.CreatedUser.Username };
+                    apiModel.createdBy = new UserLinkApiModel() { id = dbCampaign.CreatedUser.ID, username = dbCampaign.CreatedUser.Username, email = dbCampaign.CreatedUser.Email };
                 }
                 if(dbCampaign.ModifiedUser != null)
                 {
 
-                    apiModel.modifiedBy = new UserLinkApiModel() { id = dbCampaign.ModifiedUser.ID, username = dbCampaign.ModifiedUser.Username };
+                    apiModel.modifiedBy = new UserLinkApiModel() { id = dbCampaign.ModifiedUser.ID, username = dbCampaign.ModifiedUser.Username, email = dbCampaign.ModifiedUser.Email };
                 }
                 apiModel.id = dbCampaign.ID;
                 apiModel.description = dbCampaign.Description;
