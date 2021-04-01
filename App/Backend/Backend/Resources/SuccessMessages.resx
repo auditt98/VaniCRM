@@ -183,6 +183,12 @@
   <data name="NOTE_DELETED" xml:space="preserve">
     <value>Note successfully deleted.</value>
   </data>
+  <data name="PARTICIPANT_ADDED" xml:space="preserve">
+    <value>Participant successfully added.</value>
+  </data>
+  <data name="PARTICIPANT_REMOVED" xml:space="preserve">
+    <value>Participant successfully removed.</value>
+  </data>
   <data name="PASSWORD_CHANGED" xml:space="preserve">
     <value>Password successfully changed.</value>
   </data>

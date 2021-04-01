@@ -259,6 +259,24 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Participant successfully added..
+        /// </summary>
+        internal static string PARTICIPANT_ADDED {
+            get {
+                return ResourceManager.GetString("PARTICIPANT_ADDED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participant successfully removed..
+        /// </summary>
+        internal static string PARTICIPANT_REMOVED {
+            get {
+                return ResourceManager.GetString("PARTICIPANT_REMOVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password successfully changed..
         /// </summary>
         internal static string PASSWORD_CHANGED {

@@ -198,6 +198,11 @@ namespace Backend.Services
             return _taskTemplateRepository.AddParticipantToMeeting(id, apiModel);
         }
 
+        public bool RemoveParticipantFromMeeting(int id, MeetingParticipantCreateModel apiModel)
+        {
+            return _taskTemplateRepository.RemoveParticipantFromMeeting(id, apiModel);
+        }
+
         public MeetingDetailApiModel GetMeeting(int id)
         {
             var dbMeeting = _taskTemplateRepository.GetMeeting(id);
@@ -207,24 +212,23 @@ namespace Backend.Services
 
                 if(dbMeeting.HostUser != null)
                 {
-                    apiModel.host = new UserLinkApiModel() { id = dbMeeting.HostUser.ID, username = dbMeeting.HostUser.Username };
-
+                    apiModel.host = new UserLinkApiModel() { id = dbMeeting.HostUser.ID, username = dbMeeting.HostUser.Username, email = dbMeeting.HostUser.Email};
                 }
                 apiModel.createdAt = dbMeeting.TASK_TEMPLATE.CreatedAt.GetValueOrDefault();
                 apiModel.modifiedAt = dbMeeting.TASK_TEMPLATE.ModifiedAt.GetValueOrDefault();
                 if(dbMeeting.TASK_TEMPLATE.CreatedUser != null)
                 {
-                    apiModel.createdBy = new UserLinkApiModel() { id = dbMeeting.TASK_TEMPLATE.CreatedUser.ID, username = dbMeeting.TASK_TEMPLATE.CreatedUser?.Username };
+                    apiModel.createdBy = new UserLinkApiModel() { id = dbMeeting.TASK_TEMPLATE.CreatedUser.ID, username = dbMeeting.TASK_TEMPLATE.CreatedUser?.Username, email = dbMeeting.TASK_TEMPLATE.CreatedUser.Email };
                 }
 
                 if(dbMeeting.TASK_TEMPLATE.ModifiedUSer != null)
                 {
-                    apiModel.modifiedBy = new UserLinkApiModel() { id = dbMeeting.TASK_TEMPLATE.ModifiedUSer.ID, username = dbMeeting.TASK_TEMPLATE.ModifiedUSer?.Username };
+                    apiModel.modifiedBy = new UserLinkApiModel() { id = dbMeeting.TASK_TEMPLATE.ModifiedUSer.ID, username = dbMeeting.TASK_TEMPLATE.ModifiedUSer?.Username, email = dbMeeting.TASK_TEMPLATE.ModifiedUSer.Email};
                 }
                 
                 
                 apiModel.tags = dbMeeting.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
-                apiModel.notes = dbMeeting.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbMeeting.HostUser.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
+                apiModel.notes = dbMeeting.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbMeeting.HostUser.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
 
                 apiModel.description = dbMeeting.TASK_TEMPLATE.Description;
                 apiModel.fromDate = dbMeeting.FromDate.GetValueOrDefault();

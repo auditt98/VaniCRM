@@ -135,6 +135,18 @@ namespace Backend.Models.ApiModel
             public List<ContactLinkApiModel> contacts { get; set; }
             public List<UserLinkApiModel> users { get; set; }
             public List<LeadLinkApiModel> leads { get; set; }
+
+            public MeetingParticipant()
+            {
+                contacts = new List<ContactLinkApiModel>();
+                users = new List<UserLinkApiModel>();
+                leads = new List<LeadLinkApiModel>();
+            }
+        }
+
+        public MeetingDetailApiModel()
+        {
+            participants = new MeetingParticipant();
         }
 
         public List<TagApiModel> tags { get; set; }

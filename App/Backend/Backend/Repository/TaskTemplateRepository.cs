@@ -4,6 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Google.Apis.Auth.OAuth2;
+using System.Threading;
+using Google.Apis.Util.Store;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Services;
+using System.Security.Cryptography.X509Certificates;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Backend.Repository
 {
@@ -124,6 +132,7 @@ namespace Backend.Repository
             newCall.StartTime = apiModel.startTime;
             db.CALLs.Add(newCall);
             db.SaveChanges();
+            
             return true;
         }
 
@@ -452,17 +461,28 @@ namespace Backend.Repository
             {
                 if (apiModel.contactId != 0)
                 {
-                    //dbMeeting.me
+                    var participant = new MEETING_PARTICIPANT();
+                    participant.CONTACT_ID = apiModel.contactId;
+                    participant.MEETING_ID = dbMeeting.ID;
+                    db.MEETING_PARTICIPANT.Add(participant);
+                    db.SaveChanges();
                 }
                 if(apiModel.leadId != 0)
                 {
-
+                    var participant = new MEETING_PARTICIPANT();
+                    participant.LEAD_ID = apiModel.leadId;
+                    participant.MEETING_ID = dbMeeting.ID;
+                    db.MEETING_PARTICIPANT.Add(participant);
+                    db.SaveChanges();
                 }
                 if(apiModel.userId != 0)
                 {
-
+                    var participant = new MEETING_PARTICIPANT();
+                    participant.USER_ID = apiModel.userId;
+                    participant.MEETING_ID = dbMeeting.ID;
+                    db.MEETING_PARTICIPANT.Add(participant);
+                    db.SaveChanges();
                 }
-                //db.SaveChanges();
                 return true;
             }
             else
@@ -471,6 +491,56 @@ namespace Backend.Repository
             }
         }
 
-
+        public bool RemoveParticipantFromMeeting(int id, MeetingParticipantCreateModel apiModel)
+        {
+            var dbMeeting = db.MEETINGs.Find(id);
+            if (dbMeeting != null)
+            {
+                if (apiModel.contactId != 0)
+                {
+                    var participant = db.MEETING_PARTICIPANT.Where(c => c.CONTACT.ID == apiModel.contactId && c.MEETING.ID == dbMeeting.ID).FirstOrDefault();
+                    if (participant != null)
+                    {
+                        db.MEETING_PARTICIPANT.Remove(participant);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (apiModel.leadId != 0)
+                {
+                    var participant = db.MEETING_PARTICIPANT.Where(c => c.LEAD.ID == apiModel.leadId && c.MEETING.ID == dbMeeting.ID).FirstOrDefault();
+                    if (participant != null)
+                    {
+                        db.MEETING_PARTICIPANT.Remove(participant);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (apiModel.userId != 0)
+                {
+                    var participant = db.MEETING_PARTICIPANT.Where(c => c.USER.ID == apiModel.userId && c.MEETING.ID == dbMeeting.ID).FirstOrDefault();
+                    if (participant != null)
+                    {
+                        db.MEETING_PARTICIPANT.Remove(participant);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
