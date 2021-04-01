@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/auditt98/VaniCRM/compare/v1.15.4...v1.16.0) (2021-04-01)
+
+
+### Features
+
+* Api for meeting ([3af0156](https://github.com/auditt98/VaniCRM/commit/3af01565a9ca530091dd4f2226a5e732f816cdca))
+
+
+### Bug Fixes
+
+* .png ([927617b](https://github.com/auditt98/VaniCRM/commit/927617b9cfb72ae9e3317f818bbba68bf73eec9a))
+* call detail throw error on null object ([468c0ee](https://github.com/auditt98/VaniCRM/commit/468c0eeb306954d9792dd42bb2d11259aca30ae8))
+* call, pageInfo on campaign ([305ec42](https://github.com/auditt98/VaniCRM/commit/305ec42622ab4da178ce5300476681e2516319be))
+
 ### [1.15.4](https://github.com/auditt98/VaniCRM/compare/v1.15.3...v1.15.4) (2021-03-31)
 
 
