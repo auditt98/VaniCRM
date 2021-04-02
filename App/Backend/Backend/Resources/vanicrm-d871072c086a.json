@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "vanicrm",
+  "private_key_id": "d871072c086acdca41e357d9e10393816e8d9723",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDBEpSaS3wuvM+4\nAkCrznYmdNQgsZenuenXxxB34vkIFedC3RoaliajeT27/2ehX2nAOWLOzJl7iYl0\n20BIlFNlDgIHilKjs0Pq7FjSc6tl7yQ+CCPC+0suGqURiZ3+NvvK7evvzyon6gD0\npN1NSXrwIKafPrOX3xejh3wz8u8l/aKPr55kE24E79t/7DBaejOtEK4J0sgmIEE/\nVgfJYZyrb6MnAP8A0jSRKeKFSyNFDqIC0GPHdHTd+JPFPmIwgLKWe9DdVgwqntk7\nTPYRsLtuCyls+2bcM7GYF4Xf70TLCX+HVL/LrTsXxKhuShBjPLRH5AAMnwPOTwNI\nMJ4N6kLXAgMBAAECggEAPeHkMl4eY+aNl1dVfhuzH9lTQlVZm99JValOnHZpxk8q\n6/HtE3dr0/qgsFiI0R7BSOS7yDeovAFVxtgdTwYHgrzOJreNjD2Bd9MgFvgPCCFx\nltZKDA06SAEvRiM7OgdKhfzjId5fDyMAAmmzKrnyBvQYI7NXocZWD8p1ozrqrtyA\nvyiOZVA5sUBbX3wR0J13ASC5LFYpaGAdMbLgdYEtd7ZsdNmC1IXEQRVcSEVIi8Of\nmN/cyo6NXhDw3CYlvHt/asA3MqyXCmYH54wpoZDfqH0umND7d0yIHDZvDJDt+eiF\noXHSV4KC5AK1W/v2xc0QxMGF4nc67AZo0WNAGKzTKQKBgQD3gt4I7+ijVU/ei6Jb\ntMNCe3vdvoSRiBDPEjQHx3qmfOvNv0RzcmYGXISZa2/jbJ0cmIzCzg+TOEsn8Wne\nnf1vsQgXokrRDLhW6SEKiC3cx5d7VowCU39tuk4P6v7K6HDhXTsc8f+XlIr7TRKq\nwMnpHVIrjjeoyhp2cEHdJas5XwKBgQDHsb7Z7fvSZp9dcvIJMMfCWDlysGH9hpAf\n5WjnWp+7wEhFtSzGkRclfMsAMGCz0CEwu1WgnZuBedLl41tM9aKaJevRU4S92yTJ\n2nFfi41yECwjvmMav65X20tLeM/ns11HCCi9IM4YPG2bntCKDyL3T5ESnlt+Gbrm\nC3D8r87RiQKBgQDPFP8QGylY/pfEaq98atCzXv1TmYLxABaQKXq+x3cmtH3VtqFe\ntegGioGmmu0SKl2I/1lF44HEeuTmlmUtjKHuQP+0RmSyYyIYFRU/6o/0mEl1OAQM\nLi//blDBoKtsuO04oPhET3S5Ld7aQrHLi2FjWNTW/DY1UmKxlVqF3G5VoQJ/Kh9U\nIqQQelErTIrygv3HJTd25rpN8SxxOkkp16NGDlSA6jNNPpVcTIwGRgPuYf+FAMKD\nTV3xb15DHjrXB2TI57sYAw+a8HFJUUrCn2TQcT74EJIYVYwZOm8HcuQI9tbe1hzi\newJwdqxIcosNchG/Tmt6LnM42WCUC/Jd4u8ysQKBgQDZNn/tNyN1MSZOD8WwLilN\n6UI8ZpQFpGZQa3LctM6u7COLx6b7lfgwQbRiQIq7Pq0uetF4ZFT8EItrf/yZkNax\nLBDhW79M85Tfw5G1GJrjOIHorA8fYXgtGngftnlflBSYQAdi8Qa4KOEJCG7LAvqU\nEX4Ykim38Qms/c8mnsgpmg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "vanicrm@vanicrm.iam.gserviceaccount.com",
+  "client_id": "108539441612964102491",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vanicrm%40vanicrm.iam.gserviceaccount.com"
+}

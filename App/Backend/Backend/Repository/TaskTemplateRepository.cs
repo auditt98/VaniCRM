@@ -4,6 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Google.Apis.Auth.OAuth2;
+using System.Threading;
+using Google.Apis.Util.Store;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Services;
+using System.Security.Cryptography.X509Certificates;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Backend.Repository
 {
@@ -76,13 +84,39 @@ namespace Backend.Repository
             newTemplate.IsRepeat = apiModel.isReminder;
             newTemplate.RRule = apiModel.rrule;
             newTemplate.Title = apiModel.title;
+            newTemplate.DueDate = DateTime.Now.AddSeconds(apiModel.duration);
+            if(apiModel.status != 0)
+            {
+                newTemplate.TASK_STATUS_ID = apiModel.status;
+
+            }
+            if(apiModel.priority != 0)
+            {
+                newTemplate.PRIORITY_ID = apiModel.priority;
+            }
+            
             db.TASK_TEMPLATE.Add(newTemplate);
             //create call
             var newCall = new CALL();
             newCall.TASK_TEMPLATE = newTemplate;
+            if(apiModel.type != 0)
+            {
+                newCall.CALLTYPE_ID = apiModel.type;
+            }
+            
             newCall.CallOwner = apiModel.owner != 0 ? apiModel.owner : createdUser;
-            newCall.CALLREASON_ID = apiModel.purpose;
-            newCall.CALLRESULT_ID = apiModel.result;
+
+            if (apiModel.purpose != 0)
+            {
+                newCall.CALLREASON_ID = apiModel.purpose;
+
+            }
+
+            if(apiModel.result != 0)
+            {
+                newCall.CALLRESULT_ID = apiModel.result;
+
+            }
             newCall.Length = apiModel.duration;
 
             if(apiModel.relatedAccount != 0)
@@ -108,6 +142,7 @@ namespace Backend.Repository
             newCall.StartTime = apiModel.startTime;
             db.CALLs.Add(newCall);
             db.SaveChanges();
+            
             return true;
         }
 
@@ -198,12 +233,40 @@ namespace Backend.Repository
                 dbCall.TASK_TEMPLATE.Title = apiModel.title;
                 dbCall.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
                 dbCall.TASK_TEMPLATE.ModifiedBy = modifiedUser;
+                //dbCall.TASK_TEMPLATE.DueDate = dbCall.TASK_TEMPLATE.CreatedAt.Value
+                if (dbCall.TASK_TEMPLATE.CreatedAt.HasValue)
+                {
+                    dbCall.TASK_TEMPLATE.DueDate = dbCall.TASK_TEMPLATE.CreatedAt.Value.AddSeconds(apiModel.duration);
+                }
+                if(apiModel.status != 0)
+                {
+                    dbCall.TASK_TEMPLATE.TASK_STATUS_ID = apiModel.status;
 
-                if(apiModel.owner != 0) { dbCall.CallOwner = apiModel.owner; }
-                dbCall.CALLREASON_ID = apiModel.purpose;
-                dbCall.CALLRESULT_ID = apiModel.result;
+                }
+                if(apiModel.priority != 0)
+                {
+                    dbCall.TASK_TEMPLATE.PRIORITY_ID = apiModel.priority;
+
+                }
+                if (apiModel.owner != 0) { dbCall.CallOwner = apiModel.owner; }
+
+                if(apiModel.purpose != 0)
+                {
+                    dbCall.CALLREASON_ID = apiModel.purpose;
+
+                }
+
+                if(apiModel.result != 0)
+                {
+                    dbCall.CALLRESULT_ID = apiModel.result;
+
+                }
                 dbCall.Length = apiModel.duration;
-                dbCall.CALLTYPE_ID = apiModel.type;
+                if(apiModel.type != 0)
+                {
+                    dbCall.CALLTYPE_ID = apiModel.type;
+
+                }
                 dbCall.CONTACT = null;
                 dbCall.LEAD = null;
                 dbCall.ACCOUNT = null;
@@ -359,6 +422,11 @@ namespace Backend.Repository
             newTemplate.IsRepeat = apiModel.isRepeat;
             newTemplate.RRule = apiModel.rrule;
             newTemplate.Title = apiModel.title;
+            newTemplate.DueDate = apiModel.to;
+            if(apiModel.priority != 0)
+            {
+                newTemplate.PRIORITY_ID = apiModel.priority;
+            }
             db.TASK_TEMPLATE.Add(newTemplate);
             var newMeeting = new MEETING();
             newMeeting.FromDate = apiModel.from;
@@ -391,10 +459,16 @@ namespace Backend.Repository
                 dbMeeting.TASK_TEMPLATE.Title = apiModel.title;
                 dbMeeting.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
                 dbMeeting.TASK_TEMPLATE.ModifiedBy = modifiedUser;
+                dbMeeting.TASK_TEMPLATE.DueDate = apiModel.to;
+                if(apiModel.priority != 0)
+                {
+                    dbMeeting.TASK_TEMPLATE.PRIORITY_ID = apiModel.priority;
+                }
                 if (apiModel.host != 0) { dbMeeting.Host = apiModel.host; };
                 dbMeeting.IsAllDay = apiModel.isAllDay;
                 dbMeeting.IsRemindParticipant = true;
                 dbMeeting.Location = apiModel.location;
+                dbMeeting.FromDate = apiModel.from;
                 dbMeeting.ToDate = apiModel.to;
                 db.SaveChanges();
                 return true;
@@ -430,9 +504,314 @@ namespace Backend.Repository
 
         public bool AddParticipantToMeeting(int id, MeetingParticipantCreateModel apiModel)
         {
+            var dbMeeting = db.MEETINGs.Find(id);
+            if (dbMeeting != null)
+            {
+                if (apiModel.contactId != 0)
+                {
+                    var participant = new MEETING_PARTICIPANT();
+                    participant.CONTACT_ID = apiModel.contactId;
+                    participant.MEETING_ID = dbMeeting.ID;
+                    db.MEETING_PARTICIPANT.Add(participant);
+                    db.SaveChanges();
+                }
+                if(apiModel.leadId != 0)
+                {
+                    var participant = new MEETING_PARTICIPANT();
+                    participant.LEAD_ID = apiModel.leadId;
+                    participant.MEETING_ID = dbMeeting.ID;
+                    db.MEETING_PARTICIPANT.Add(participant);
+                    db.SaveChanges();
+                }
+                if(apiModel.userId != 0)
+                {
+                    var participant = new MEETING_PARTICIPANT();
+                    participant.USER_ID = apiModel.userId;
+                    participant.MEETING_ID = dbMeeting.ID;
+                    db.MEETING_PARTICIPANT.Add(participant);
+                    db.SaveChanges();
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool RemoveParticipantFromMeeting(int id, MeetingParticipantCreateModel apiModel)
+        {
+            var dbMeeting = db.MEETINGs.Find(id);
+            if (dbMeeting != null)
+            {
+                if (apiModel.contactId != 0)
+                {
+                    var participant = db.MEETING_PARTICIPANT.Where(c => c.CONTACT.ID == apiModel.contactId && c.MEETING.ID == dbMeeting.ID).FirstOrDefault();
+                    if (participant != null)
+                    {
+                        db.MEETING_PARTICIPANT.Remove(participant);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (apiModel.leadId != 0)
+                {
+                    var participant = db.MEETING_PARTICIPANT.Where(c => c.LEAD.ID == apiModel.leadId && c.MEETING.ID == dbMeeting.ID).FirstOrDefault();
+                    if (participant != null)
+                    {
+                        db.MEETING_PARTICIPANT.Remove(participant);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (apiModel.userId != 0)
+                {
+                    var participant = db.MEETING_PARTICIPANT.Where(c => c.USER.ID == apiModel.userId && c.MEETING.ID == dbMeeting.ID).FirstOrDefault();
+                    if (participant != null)
+                    {
+                        db.MEETING_PARTICIPANT.Remove(participant);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //task
+        public int GetTaskTemplateId(int id)
+        {
+            var dbTask = db.TASKs.Find(id);
+
+            if (dbTask != null)
+            {
+                return dbTask.TASK_TEMPLATE.ID;
+            }
+            else { return 0; }
+        }
+
+        public int GetTaskOwner(int id)
+        {
+            var dbTask = db.TASKs.Find(id);
+            if (dbTask != null)
+            {
+                return dbTask.USER.ID;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public bool AddTagToTask(int id, string tagName)
+        {
+            var dbTask = db.TASKs.Find(id);
+            var dbTag = _tagRepository.GetOneByName(tagName);
+            if (dbTask != null)
+            {
+                if (dbTag != null)
+                {
+                    var tagItem = dbTask.TAG_ITEM.Where(c => c.TAG_ID == dbTag.ID).FirstOrDefault();
+                    if (tagItem != null)
+                    {
+                        var newTagItem = new TAG_ITEM();
+                        newTagItem.TAG_ID = dbTag.ID;
+                        newTagItem.TASK_ID = dbTask.ID;
+                        db.TAG_ITEM.Add(newTagItem);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    var newTag = _tagRepository.Create(tagName);
+                    var tagItem = new TAG_ITEM();
+                    tagItem.TAG_ID = newTag.ID;
+                    tagItem.TASK_ID = dbTask.ID;
+                    db.TAG_ITEM.Add(tagItem);
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool RemoveTagFromTask(int id, int tagId)
+        {
+            var dbTask = db.TASKs.Find(id);
+            if (dbTask != null)
+            {
+                var tagItem = dbTask.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
+                if (tagItem != null)
+                {
+                    db.TAG_ITEM.Remove(tagItem);
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool CreateTask(TaskCreateApiModel apiModel, int createdUser)
+        {
+            //create new template
+            var newTemplate = new TASK_TEMPLATE();
+            newTemplate.CreatedAt = DateTime.Now;
+            newTemplate.CreatedBy = createdUser;
+            newTemplate.Description = apiModel.description;
+            newTemplate.IsRepeat = apiModel.isReminder;
+            newTemplate.RRule = apiModel.rrule;
+            newTemplate.Title = apiModel.title;
+            newTemplate.DueDate = apiModel.dueDate;
+            if(apiModel.status != 0)
+            {
+                newTemplate.TASK_STATUS_ID = apiModel.status;
+
+            }
+            if (apiModel.priority != 0)
+            {
+                newTemplate.PRIORITY_ID = apiModel.priority;
+            }
+            db.TASK_TEMPLATE.Add(newTemplate);
+            //create call
+            var newTask = new TASK();
+            newTask.EndOn = apiModel.dueDate;
+            newTask.TASK_TEMPLATE = newTemplate;
+            newTask.TaskOwner = apiModel.owner != 0 ? apiModel.owner : createdUser;
+            if (apiModel.relatedAccount != 0)
+            {
+                newTask.RELATED_ACCOUNT = apiModel.relatedAccount;
+            }
+            if (apiModel.relatedCampaign != 0)
+            {
+                newTask.RELATED_CAMPAIGN = apiModel.relatedCampaign;
+            }
+            if (apiModel.relatedDeal != 0)
+            {
+                newTask.RELATED_DEAL = apiModel.relatedDeal;
+            }
+            if (apiModel.contact != 0)
+            {
+                newTask.CONTACT_ID = apiModel.contact;
+            }
+            if (apiModel.lead != 0)
+            {
+                newTask.LEAD_ID = apiModel.lead;
+            }
+            db.TASKs.Add(newTask);
+            db.SaveChanges();
+
             return true;
         }
 
+        public bool UpdateTask(int taskId, TaskCreateApiModel apiModel, int modifiedUser)
+        {
+            var dbTask = db.TASKs.Find(taskId);
+            if (dbTask != null)
+            {
+                dbTask.TASK_TEMPLATE.Description = apiModel.description;
+                dbTask.TASK_TEMPLATE.IsRepeat = apiModel.isReminder;
+                dbTask.TASK_TEMPLATE.RRule = apiModel.rrule;
+                dbTask.TASK_TEMPLATE.Title = apiModel.title;
+                dbTask.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
+                dbTask.TASK_TEMPLATE.ModifiedBy = modifiedUser;
+                dbTask.TASK_TEMPLATE.DueDate = apiModel.dueDate;
+                if(apiModel.status != 0)
+                {
+                    dbTask.TASK_TEMPLATE.TASK_STATUS_ID = apiModel.status;
 
+                }
+                if (apiModel.priority != 0)
+                {
+                    dbTask.TASK_TEMPLATE.PRIORITY_ID = apiModel.priority;
+                }
+
+                if (apiModel.owner != 0) { dbTask.TaskOwner = apiModel.owner; }
+
+                dbTask.EndOn = apiModel.dueDate;
+                dbTask.CONTACT = null;
+                dbTask.LEAD = null;
+                dbTask.ACCOUNT = null;
+                dbTask.DEAL = null;
+                dbTask.CAMPAIGN = null;
+
+                if (apiModel.relatedAccount != 0)
+                {
+                    dbTask.RELATED_ACCOUNT = apiModel.relatedAccount;
+                }
+                if (apiModel.relatedCampaign != 0)
+                {
+                    dbTask.RELATED_CAMPAIGN = apiModel.relatedCampaign;
+                }
+                if (apiModel.relatedDeal != 0)
+                {
+                    dbTask.RELATED_DEAL = apiModel.relatedDeal;
+                }
+                if (apiModel.contact != 0)
+                {
+                    dbTask.CONTACT_ID = apiModel.contact;
+                }
+                if (apiModel.lead != 0)
+                {
+                    dbTask.LEAD_ID = apiModel.lead;
+                }
+                db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteTask(int id)
+        {
+            var dbTask = db.TASKs.Find(id);
+            if (dbTask != null)
+            {
+                var template = dbTask.TASK_TEMPLATE;
+                db.TASKs.Remove(dbTask);
+                db.SaveChanges();
+                db.TASK_TEMPLATE.Remove(template);
+                db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public TASK GetTask(int id)
+        {
+            return db.TASKs.Find(id);
+        }
     }
 }

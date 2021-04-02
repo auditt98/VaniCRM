@@ -259,6 +259,24 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Participant successfully added..
+        /// </summary>
+        internal static string PARTICIPANT_ADDED {
+            get {
+                return ResourceManager.GetString("PARTICIPANT_ADDED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participant successfully removed..
+        /// </summary>
+        internal static string PARTICIPANT_REMOVED {
+            get {
+                return ResourceManager.GetString("PARTICIPANT_REMOVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password successfully changed..
         /// </summary>
         internal static string PASSWORD_CHANGED {
@@ -291,6 +309,33 @@ namespace Backend.Resources {
         internal static string TAG_REMOVED {
             get {
                 return ResourceManager.GetString("TAG_REMOVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task successfully created..
+        /// </summary>
+        internal static string TASK_CREATED {
+            get {
+                return ResourceManager.GetString("TASK_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task successfully deleted..
+        /// </summary>
+        internal static string TASK_DELETED {
+            get {
+                return ResourceManager.GetString("TASK_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task successfully updated..
+        /// </summary>
+        internal static string TASK_MODIFIED {
+            get {
+                return ResourceManager.GetString("TASK_MODIFIED", resourceCulture);
             }
         }
         

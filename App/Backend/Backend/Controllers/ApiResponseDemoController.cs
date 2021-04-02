@@ -21,6 +21,10 @@ using System.Web.Http.Cors;
 using System.IO;
 using Backend.Resources;
 using static Backend.Extensions.Enum;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Calendar.v3.Data;
 
 namespace Backend.Controllers
 {
@@ -36,21 +40,88 @@ namespace Backend.Controllers
         /// 
 
         [HttpGet]
-        [Route("test/{id}")]
-        public HttpResponseMessage Test([FromUri]int id)
+        [Route("test/10")]
+        public HttpResponseMessage Test()
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
+            //var byteArray = File.ReadAllBytes(HttpContext.Current.Server.MapPath("~/Resources/vanicrm-d871072c086a.json"));
+            //var certificate = new X509Certificate2(HttpContext.Current.Server.MapPath("~/Resources/vanicrm@vanicrm.iam.gserviceaccount.com.json"), "notasecret", X509KeyStorageFlags.Exportable);
 
-            string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
-            var dbUser = db.USERs.Find(id);
-            var a = MimeMapping.MimeUtility.GetMimeMapping(dbUser.Avatar);
-            //var avatar = System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar));
-            var img = Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(targetFolder, dbUser.Avatar)));
-            response.StatusCode = HttpStatusCode.OK;
-            responseData.data = $"data:{a};base64,{img}";
-            var json = JsonConvert.SerializeObject(responseData);
-            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            //GoogleCredential credential = GoogleCredential.FromFile(HttpContext.Current.Server.MapPath("~/Resources/vanicrm-d871072c086a.json"));
+            //using (var stream = new FileStream(HttpContext.Current.Server.MapPath("~/Resources/vanicrm-d871072c086a.json"), FileMode.Open, FileAccess.Read))
+            //{
+            //    credential = GoogleCredential.FromStream(stream)
+            //                     .CreateScoped(scopes);
+            //}
+
+            //var service = new CalendarService(new BaseClientService.Initializer()
+            //{
+            //    HttpClientInitializer = credential,
+            //    ApplicationName = "VaniCRM",
+            //});
+
+
+            string keyFolder = HttpContext.Current.Server.MapPath("~/Resources");
+            string keyFilePath = Path.Combine(keyFolder, "vanicrm-d871072c086a.json");
+
+            var json = File.ReadAllText(keyFilePath);
+            Newtonsoft.Json.Linq.JObject cr = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(json);
+            string s = (string)cr.GetValue("private_key");
+            string serviceAccountEmail = (string)cr.GetValue("client_email");
+
+            string[] scopes = new string[] {
+                CalendarService.Scope.Calendar // Manage your calendars
+            };
+
+            //GoogleCredential credential = new GoogleCredential() {  }.
+
+            var credential = new ServiceAccountCredential(new ServiceAccountCredential.Initializer(serviceAccountEmail)
+            {
+                Scopes = scopes,
+            }.FromPrivateKey(s));
+
+            var calendarService = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+
+            });
+
+            //new calendar
+            //calendarService.Calendars.Insert(new Google.Apis.Calendar.v3.Data.Calendar() { Summary = "test@vietanh8i1998@gmail.com", Description = "Description", TimeZone = "Asia/Ho_Chi_Minh" }).Execute();
+
+
+
+            var cal = calendarService.CalendarList.List().Execute().Items.Where(c => c.Summary.ToLower() == "test@" + "vietanh8i1998@gmail.com".ToLower()).FirstOrDefault();
+            var id = cal.Id;
+
+
+            //access control
+            //var rule = new AclRule() { Role = "owner", Scope = new AclRule.ScopeData() { Type = "user", Value = "vietanh8i1998@gmail.com" } };
+            //calendarService.Acl.Insert(rule, id).Execute();
+
+            //create event
+            var calEvent = new Event()
+            {
+                Start = new EventDateTime() { DateTime = DateTime.Now, TimeZone= "Asia/Ho_Chi_Minh" },
+                End = new EventDateTime() { DateTime = DateTime.Now.AddHours(1), TimeZone = "Asia/Ho_Chi_Minh" },
+                Description = "Call number 01 for reason abcd",
+                Summary = "Call - lead02",
+                Recurrence = new String[] { "RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20220324T170000Z" },
+                Reminders = new Event.RemindersData()
+                {
+                    UseDefault = false,
+                    Overrides = new EventReminder[] {
+                        new EventReminder() { Method = "email", Minutes = 24 * 60 },
+                    }
+                },
+            };
+            EventsResource.InsertRequest request = calendarService.Events.Insert(calEvent, id);
+            Event createdEvent = request.Execute();
+            responseData = ResponseFormat.Success;
+            responseData.data = createdEvent.HtmlLink;
+            var result = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(result, Encoding.UTF8, "application/json");
             return response;
         }
 

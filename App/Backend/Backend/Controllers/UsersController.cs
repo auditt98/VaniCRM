@@ -990,8 +990,16 @@ namespace Backend.Controllers
                             {
                                 var t = new UserDetailApiModel.T();
                                 t.title = task.Title;
-                                t.status = task.TASK_STATUS.Name;
-                                t.priotity = task.PRIORITY.Name;
+                                if(task.TASK_STATUS != null)
+                                {
+                                    t.status = task.TASK_STATUS.Name;
+
+                                }
+                                if(task.PRIORITY != null)
+                                {
+                                    t.priotity = task.PRIORITY.Name;
+
+                                }
                                 if (task.DueDate.HasValue)
                                 {
                                     t.endDate = task.DueDate.Value;
@@ -1001,24 +1009,46 @@ namespace Backend.Controllers
                                     t.type = "calls";
                                     var call = task.CALLs.FirstOrDefault();
                                     t.id = call.ID;
-                                    if (call.StartTime.HasValue)
+                                    if (call.TASK_TEMPLATE.CreatedAt.HasValue)
                                     {
-                                        t.startDate = call.StartTime.Value;
+                                        t.startDate = call.TASK_TEMPLATE.CreatedAt.Value;
+
+                                    }
+                                    if (call.TASK_TEMPLATE.DueDate.HasValue)
+                                    {
+                                        t.endDate = call.TASK_TEMPLATE.DueDate.Value;
+
                                     }
                                 } else if(task.MEETINGs.Count > 0)
                                 {
                                     t.type = "meetings";
                                     var meeting = task.MEETINGs.FirstOrDefault();
                                     t.id = meeting.ID;
-                                    if (meeting.FromDate.HasValue)
+                                    if (meeting.TASK_TEMPLATE.CreatedAt.HasValue)
                                     {
-                                        t.startDate = meeting.FromDate.Value;
+                                        t.startDate = meeting.TASK_TEMPLATE.CreatedAt.Value;
+
+                                    }
+                                    if (meeting.TASK_TEMPLATE.DueDate.HasValue)
+                                    {
+                                        t.endDate = meeting.TASK_TEMPLATE.DueDate.Value;
+
                                     }
                                 } else if(task.TASKs.Count > 0)
                                 {
                                     t.type = "tasks";
                                     var taskT = task.TASKs.FirstOrDefault();
                                     t.id = taskT.ID;
+                                    if (taskT.TASK_TEMPLATE.CreatedAt.HasValue)
+                                    {
+                                        t.startDate = taskT.TASK_TEMPLATE.CreatedAt.Value;
+
+                                    }
+                                    if (taskT.TASK_TEMPLATE.DueDate.HasValue)
+                                    {
+                                        t.endDate = taskT.TASK_TEMPLATE.DueDate.Value;
+
+                                    }
                                 }
                                 tasks.Add(t);
                             }
