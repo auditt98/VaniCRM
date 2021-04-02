@@ -57,6 +57,7 @@ namespace Backend.Models.ApiModel
         public int status { get; set; }
         public int result { get; set; }
         public int type { get; set; }
+        public int priority { get; set; }
 
         public int relatedDeal { get; set; }
         public int relatedAccount { get; set; }
@@ -90,6 +91,7 @@ namespace Backend.Models.ApiModel
         public List<CallType> types { get; set; }
         public List<TaskStatus> statuses { get; set; }
         public List<CallResult> results { get; set; }
+        public List<PrioritySelectionApiModel> priorities { get; set; }
 
         public int id { get; set; }
         public string title { get; set; }
@@ -106,6 +108,7 @@ namespace Backend.Models.ApiModel
         public List<CallType> types { get; set; }
         public List<TaskStatus> statuses { get; set; }
         public List<CallResult> results { get; set; }
+        public List<PrioritySelectionApiModel> priorities { get; set; }
     }
 
     public class MeetingCreateApiModel
@@ -119,6 +122,7 @@ namespace Backend.Models.ApiModel
         public bool isRepeat { get; set; }
         public string rrule { get; set; }
         public string description { get; set; }
+        public int priority { get; set; }
     }
 
     public class MeetingParticipantCreateModel
@@ -126,6 +130,11 @@ namespace Backend.Models.ApiModel
         public int leadId { get; set; }
         public int userId { get; set; }
         public int contactId { get; set; }
+    }
+
+    public class MeetingBlankApiModel
+    {
+        public List<PrioritySelectionApiModel> priorities { get; set; }
     }
 
     public class MeetingDetailApiModel
@@ -157,6 +166,8 @@ namespace Backend.Models.ApiModel
         public UserLinkApiModel modifiedBy { get; set; }
         public UserLinkApiModel host { get; set; }
 
+        public List<PrioritySelectionApiModel> priorities { get; set; }
+
         public MeetingParticipant participants { get; set; }
         public string title { get; set; }
         public DateTime fromDate { get; set; }
@@ -167,4 +178,56 @@ namespace Backend.Models.ApiModel
         public string rrule { get; set; }
         public string description { get; set; }
     }
+
+    public class TaskBlankApiModel
+    {
+        public List<PrioritySelectionApiModel> priorities { get; set; }
+        public List<TaskStatus> statuses { get; set; }
+    }
+
+    public class TaskCreateApiModel
+    {
+        public string title { get; set; }
+        public DateTime dueDate { get; set; }
+        public int contact { get; set; }
+        public int lead { get; set; }
+        public int priority { get; set; }
+        public int owner { get; set; }
+        public int status { get; set; }
+        public int relatedDeal { get; set; }
+        public int relatedAccount { get; set; }
+        public int relatedCampaign { get; set; }
+        public string description { get; set; }
+        public string rrule { get; set; }
+        public bool isReminder { get; set; }
+    }
+
+    public class TaskDetailApiModel
+    {
+        public List<TagApiModel> tags { get; set; }
+        public List<NoteApiModel> notes { get; set; }
+        public DateTime createdAt { get; set; }
+        public DateTime modifiedAt { get; set; }
+        public UserLinkApiModel createdBy { get; set; }
+        public UserLinkApiModel modifiedBy { get; set; }
+        public UserLinkApiModel owner { get; set; }
+        public List<PrioritySelectionApiModel> priorities { get; set; }
+
+
+        public ContactLinkApiModel contact { get; set; }
+        public LeadLinkApiModel lead { get; set; }
+        public DealLinkApiModel relatedDeal { get; set; }
+        public AccountLinkApiModel relatedAccount { get; set; }
+        public CampaignLinkApiModel relatedCampaign { get; set; }
+
+        public List<TaskStatus> statuses { get; set; }
+
+        public int id { get; set; }
+        public string title { get; set; }
+        public bool isRepeat { get; set; }
+        public string rrule { get; set; }
+        public string description { get; set; }
+        public DateTime dueDate { get; set; }
+    }
+
 }

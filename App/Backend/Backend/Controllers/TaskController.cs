@@ -16,13 +16,13 @@ using static Backend.Extensions.Enum;
 
 namespace Backend.Controllers
 {
-    public class MeetingController : ApiController
+    public class TaskController : ApiController
     {
         TaskTemplateService _taskTemplateService = new TaskTemplateService();
         NoteService _noteService = new NoteService();
 
         [HttpPost]
-        [Route("meetings/{id}/notes")]
+        [Route("tasks/{id}/notes")]
         [ResponseType(typeof(ResponseFormat))]
         public HttpResponseMessage CreateNote([FromUri] int id)
         {
@@ -65,7 +65,7 @@ namespace Backend.Controllers
                             apiModel.body = noteBody;
                             apiModel.createdBy = new UserLinkApiModel() { id = userId };
 
-                            var templateId = _taskTemplateService.GetMeetingTemplateId(id);
+                            var templateId = _taskTemplateService.GetTaskTemplateId(id);
                             apiModel.taskTemplate = templateId;
                             var createdNote = _noteService.Create(apiModel);
 
@@ -113,7 +113,7 @@ namespace Backend.Controllers
         }
 
         [HttpDelete]
-        [Route("meetings/{id}/notes/{noteId}")]
+        [Route("tasks/{id}/notes/{noteId}")]
         [ResponseType(typeof(ResponseFormat))]
         public HttpResponseMessage DeleteNote([FromUri] int id, [FromUri] int noteId)
         {
@@ -145,10 +145,10 @@ namespace Backend.Controllers
                 else
                 {
                     var userId = Convert.ToInt32(payload["id"]);
-                    var meetingOwner = _taskTemplateService.GetMeetingOwner(id);
+                    var taskOwner = _taskTemplateService.GetTaskOwner(id);
 
                     var noteOwner = _noteService.FindOwner(noteId);
-                    if ((userId == meetingOwner) || (userId == noteOwner) || (new AuthorizationService().SetPerm((int)EnumPermissions.NOTE_DELETE_ANY).Authorize(userId)))
+                    if ((userId == taskOwner) || (userId == noteOwner) || (new AuthorizationService().SetPerm((int)EnumPermissions.NOTE_DELETE_ANY).Authorize(userId)))
                     {
                         var isDeleted = _noteService.Delete(noteId);
                         if (isDeleted)
@@ -184,7 +184,7 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        [Route("meetings/{id}/tags")]
+        [Route("tasks/{id}/tags")]
         [ResponseType(typeof(ResponseFormat))]
         public HttpResponseMessage AddTag([FromUri] int id, [FromBody] TagCreateApiModel tag)
         {
@@ -218,7 +218,7 @@ namespace Backend.Controllers
                 else
                 {
                     var userId = Convert.ToInt32(payload["id"]);
-                    var owner = _taskTemplateService.GetMeetingOwner(id);
+                    var owner = _taskTemplateService.GetTaskOwner(id);
                     if ((userId == owner) || (new AuthorizationService().SetPerm((int)EnumPermissions.TASK_DELETE_ANY).Authorize(userId)))
                     {
                         //check if a tag exist
@@ -226,7 +226,7 @@ namespace Backend.Controllers
                         //if it is, create a tag item with current lead
 
                         // else create a new tag and a new tag item
-                        var isAdded = _taskTemplateService.AddTagToMeeting(id, tag.name);
+                        var isAdded = _taskTemplateService.AddTagToTask(id, tag.name);
                         if (isAdded)
                         {
                             response.StatusCode = HttpStatusCode.OK;
@@ -260,7 +260,7 @@ namespace Backend.Controllers
         }
 
         [HttpDelete]
-        [Route("meetings/{id}/tags/{tagId}")]
+        [Route("tasks/{id}/tags/{tagId}")]
         [ResponseType(typeof(ResponseFormat))]
         public HttpResponseMessage DeleteTag([FromUri] int id, [FromUri] int tagId)
         {
@@ -294,11 +294,11 @@ namespace Backend.Controllers
                 else
                 {
                     var userId = Convert.ToInt32(payload["id"]);
-                    var owner = _taskTemplateService.GetMeetingOwner(id);
+                    var owner = _taskTemplateService.GetTaskOwner(id);
                     if ((userId == owner) || (new AuthorizationService().SetPerm((int)EnumPermissions.TASK_DELETE_ANY).Authorize(userId)))
                     {
 
-                        var isRemoved = _taskTemplateService.RemoveTagFromMeeting(id, tagId);
+                        var isRemoved = _taskTemplateService.RemoveTagFromTask(id, tagId);
                         if (isRemoved)
                         {
                             response.StatusCode = HttpStatusCode.OK;
@@ -331,10 +331,11 @@ namespace Backend.Controllers
             return response;
         }
 
+
         [HttpPost]
-        [Route("meetings")]
+        [Route("tasks")]
         [ResponseType(typeof(ResponseFormat))]
-        public HttpResponseMessage Create(MeetingCreateApiModel apiModel)
+        public HttpResponseMessage Create(TaskCreateApiModel apiModel)
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -370,12 +371,12 @@ namespace Backend.Controllers
                     var isAuthorized = _authorizationService.Authorize(Convert.ToInt32(userId));
                     if (isAuthorized)
                     {
-                        var isCreated = _taskTemplateService.CreateMeeting(apiModel, Convert.ToInt32(userId)); ;
+                        var isCreated = _taskTemplateService.CreateTask(apiModel, Convert.ToInt32(userId)); ;
                         if (isCreated)
                         {
                             response.StatusCode = HttpStatusCode.OK;
                             responseData = ResponseFormat.Success;
-                            responseData.message = SuccessMessages.MEETING_CREATED;
+                            responseData.message = SuccessMessages.TASK_CREATED;
                         }
                     }
                     else
@@ -398,9 +399,9 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        [Route("meetings/{id}")]
+        [Route("tasks/{id}")]
         [ResponseType(typeof(ResponseFormat))]
-        public HttpResponseMessage Update([FromUri] int id, [FromBody] MeetingCreateApiModel apiModel)
+        public HttpResponseMessage Update([FromUri] int id, [FromBody] TaskCreateApiModel apiModel)
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -432,15 +433,15 @@ namespace Backend.Controllers
                 else
                 {
                     var userId = Convert.ToInt32(payload["id"]);
-                    var owner = _taskTemplateService.GetMeetingOwner(id);
+                    var owner = _taskTemplateService.GetTaskOwner(id);
                     if ((userId == owner) || (new AuthorizationService().SetPerm((int)EnumPermissions.TASK_MODIFY_ANY).Authorize(userId)))
                     {
-                        var isUpdated = _taskTemplateService.UpdateMeeting(id, apiModel, Convert.ToInt32(userId));
+                        var isUpdated = _taskTemplateService.UpdateTask(id, apiModel, Convert.ToInt32(userId));
                         if (isUpdated)
                         {
                             response.StatusCode = HttpStatusCode.OK;
                             responseData = ResponseFormat.Success;
-                            responseData.message = SuccessMessages.MEETING_MODIFIED;
+                            responseData.message = SuccessMessages.TASK_MODIFIED;
                         }
                         else
                         {
@@ -468,8 +469,9 @@ namespace Backend.Controllers
             return response;
         }
 
+
         [HttpDelete]
-        [Route("meetings/{id}")]
+        [Route("tasks/{id}")]
         [ResponseType(typeof(ResponseFormat))]
         public HttpResponseMessage Delete([FromUri] int id)
         {
@@ -503,16 +505,16 @@ namespace Backend.Controllers
                 else
                 {
                     var userId = Convert.ToInt32(payload["id"]);
-                    var owner = _taskTemplateService.GetMeetingOwner(id);
+                    var owner = _taskTemplateService.GetTaskOwner(id);
                     if ((userId == owner) || (new AuthorizationService().SetPerm((int)EnumPermissions.TASK_DELETE_ANY).Authorize(userId)))
                     {
 
-                        var isRemoved = _taskTemplateService.DeleteMeeting(id);
+                        var isRemoved = _taskTemplateService.DeleteTask(id);
                         if (isRemoved)
                         {
                             response.StatusCode = HttpStatusCode.OK;
                             responseData = ResponseFormat.Success;
-                            responseData.message = SuccessMessages.MEETING_DELETED;
+                            responseData.message = SuccessMessages.TASK_DELETED;
                         }
                         else
                         {
@@ -541,8 +543,8 @@ namespace Backend.Controllers
         }
 
         [HttpGet]
-        [Route("meetings/{id}")]
-        [ResponseType(typeof(CallDetailApiModel))]
+        [Route("tasks/{id}")]
+        [ResponseType(typeof(TaskDetailApiModel))]
         public HttpResponseMessage Detail([FromUri] int id)
         {
             var response = new HttpResponseMessage();
@@ -579,7 +581,7 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        responseData.data = _taskTemplateService.GetMeeting(id);
+                        responseData.data = _taskTemplateService.GetTask(id);
                     }
                     else
                     {
@@ -599,154 +601,12 @@ namespace Backend.Controllers
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
 
-        }
-    
-        [HttpPost]
-        [Route("meetings/{id}/participants")]
-        public HttpResponseMessage AddParticipant([FromUri] int id, [FromBody] MeetingParticipantCreateModel apiModel )
-        {
-            var response = new HttpResponseMessage();
-            ResponseFormat responseData = new ResponseFormat();
-            //AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.LEAD_MODIFY);
-            //read jwt
-
-            IEnumerable<string> headerValues;
-            if (Request.Headers.TryGetValues("Authorization", out headerValues))
-            {
-                string jwt = headerValues.FirstOrDefault();
-                //validate jwt
-                var payload = JwtTokenManager.ValidateJwtToken(jwt);
-
-                if (payload.ContainsKey("error"))
-                {
-                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
-                    {
-                        response.StatusCode = HttpStatusCode.Forbidden;
-                        responseData = ResponseFormat.Fail;
-                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
-                    }
-                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
-                    {
-                        response.StatusCode = HttpStatusCode.Forbidden;
-                        responseData = ResponseFormat.Fail;
-                        responseData.message = ErrorMessages.TOKEN_INVALID;
-                    }
-                }
-                else
-                {
-                    var userId = Convert.ToInt32(payload["id"]);
-                    var owner = _taskTemplateService.GetMeetingOwner(id);
-                    if ((userId == owner) || (new AuthorizationService().SetPerm((int)EnumPermissions.TASK_DELETE_ANY).Authorize(userId)))
-                    {
-
-                        var isAdded = _taskTemplateService.AddParticipantToMeeting(id, apiModel);
-                        if (isAdded)
-                        {
-                            response.StatusCode = HttpStatusCode.OK;
-                            responseData = ResponseFormat.Success;
-                            responseData.message = SuccessMessages.PARTICIPANT_ADDED;
-                        }
-                        else
-                        {
-                            response.StatusCode = HttpStatusCode.InternalServerError;
-                            responseData = ResponseFormat.Fail;
-                            responseData.message = ErrorMessages.SOMETHING_WRONG;
-                        }
-                    }
-                    else
-                    {
-                        response.StatusCode = HttpStatusCode.Forbidden;
-                        responseData = ResponseFormat.Fail;
-                        responseData.message = ErrorMessages.UNAUTHORIZED;
-                    }
-                }
-            }
-            else
-            {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                responseData = ResponseFormat.Fail;
-                responseData.message = ErrorMessages.UNAUTHORIZED;
-            }
-            var json = JsonConvert.SerializeObject(responseData);
-            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
-            return response;
-        }
-
-        [HttpDelete]
-        [Route("meetings/{id}/participants")]
-        public HttpResponseMessage RemoveParticipant([FromUri] int id, [FromBody] MeetingParticipantCreateModel apiModel)
-        {
-            var response = new HttpResponseMessage();
-            ResponseFormat responseData = new ResponseFormat();
-            //AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.LEAD_MODIFY);
-            //read jwt
-
-            IEnumerable<string> headerValues;
-            if (Request.Headers.TryGetValues("Authorization", out headerValues))
-            {
-                string jwt = headerValues.FirstOrDefault();
-                //validate jwt
-                var payload = JwtTokenManager.ValidateJwtToken(jwt);
-
-                if (payload.ContainsKey("error"))
-                {
-                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
-                    {
-                        response.StatusCode = HttpStatusCode.Forbidden;
-                        responseData = ResponseFormat.Fail;
-                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
-                    }
-                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
-                    {
-                        response.StatusCode = HttpStatusCode.Forbidden;
-                        responseData = ResponseFormat.Fail;
-                        responseData.message = ErrorMessages.TOKEN_INVALID;
-                    }
-                }
-                else
-                {
-                    var userId = Convert.ToInt32(payload["id"]);
-                    var owner = _taskTemplateService.GetMeetingOwner(id);
-                    if ((userId == owner) || (new AuthorizationService().SetPerm((int)EnumPermissions.TASK_DELETE_ANY).Authorize(userId)))
-                    {
-
-                        var isAdded = _taskTemplateService.RemoveParticipantFromMeeting(id, apiModel);
-                        if (isAdded)
-                        {
-                            response.StatusCode = HttpStatusCode.OK;
-                            responseData = ResponseFormat.Success;
-                            responseData.message = SuccessMessages.PARTICIPANT_REMOVED;
-                        }
-                        else
-                        {
-                            response.StatusCode = HttpStatusCode.InternalServerError;
-                            responseData = ResponseFormat.Fail;
-                            responseData.message = ErrorMessages.SOMETHING_WRONG;
-                        }
-                    }
-                    else
-                    {
-                        response.StatusCode = HttpStatusCode.Forbidden;
-                        responseData = ResponseFormat.Fail;
-                        responseData.message = ErrorMessages.UNAUTHORIZED;
-                    }
-                }
-            }
-            else
-            {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                responseData = ResponseFormat.Fail;
-                responseData.message = ErrorMessages.UNAUTHORIZED;
-            }
-            var json = JsonConvert.SerializeObject(responseData);
-            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
-            return response;
         }
 
         [HttpGet]
-        [Route("meetings/prepare")]
-        [ResponseType(typeof(MeetingBlankApiModel))]
-        public HttpResponseMessage PrepareNewMeeting()
+        [Route("tasks/prepare")]
+        [ResponseType(typeof(TaskBlankApiModel))]
+        public HttpResponseMessage PrepareNewTask()
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -781,7 +641,7 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        responseData.data = _taskTemplateService.PrepareNewMeeting();
+                        responseData.data = _taskTemplateService.PrepareNewTask();
                     }
                     else
                     {
@@ -801,6 +661,5 @@ namespace Backend.Controllers
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
         }
-
     }
 }

@@ -201,6 +201,15 @@
   <data name="TAG_REMOVED" xml:space="preserve">
     <value>Tag successfully removed from this item.</value>
   </data>
+  <data name="TASK_CREATED" xml:space="preserve">
+    <value>Task successfully created.</value>
+  </data>
+  <data name="TASK_DELETED" xml:space="preserve">
+    <value>Task successfully deleted.</value>
+  </data>
+  <data name="TASK_MODIFIED" xml:space="preserve">
+    <value>Task successfully updated.</value>
+  </data>
   <data name="USER_CREATED" xml:space="preserve">
     <value>User successfully created.</value>
   </data>

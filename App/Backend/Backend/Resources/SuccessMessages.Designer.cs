@@ -313,6 +313,33 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Task successfully created..
+        /// </summary>
+        internal static string TASK_CREATED {
+            get {
+                return ResourceManager.GetString("TASK_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task successfully deleted..
+        /// </summary>
+        internal static string TASK_DELETED {
+            get {
+                return ResourceManager.GetString("TASK_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Task successfully updated..
+        /// </summary>
+        internal static string TASK_MODIFIED {
+            get {
+                return ResourceManager.GetString("TASK_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User successfully created..
         /// </summary>
         internal static string USER_CREATED {

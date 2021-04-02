@@ -15,6 +15,8 @@ namespace Backend.Services
         TaskTemplateRepository _taskTemplateRepository = new TaskTemplateRepository();
         CallValidator _callValidator = new CallValidator();
         MeetingValidator _meetingValidator = new MeetingValidator();
+        TaskValidator _taskValidator = new TaskValidator();
+        PriorityRepository _priorityRepository = new PriorityRepository();
 
         public List<TASK_TEMPLATE> GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0)
         {
@@ -29,7 +31,7 @@ namespace Backend.Services
             apiModel.types = _taskTemplateRepository.GetAllCallTypes().Select(c => new CallType() { id = c.ID, name = c.Name, selected = false }).ToList();
             apiModel.results = _taskTemplateRepository.GetAllCallResults().Select(c => new CallResult() { id = c.ID, name = c.Name, selected = false }).ToList();
             apiModel.purposes = _taskTemplateRepository.GetAllCallReasons().Select(c => new CallPurpose() { id = c.ID, name = c.Name, selected = false }).ToList();
-
+            apiModel.priorities = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = false }).ToList();
 
             return apiModel;
         }
@@ -94,6 +96,8 @@ namespace Backend.Services
                 apiModel.types = _taskTemplateRepository.GetAllCallTypes().Select(c => new CallType() { id = c.ID, name = c.Name, selected = dbCall.CALL_TYPE != null ? c.ID == dbCall.CALL_TYPE.ID : false }).ToList();
                 apiModel.statuses = _taskTemplateRepository.GetAllTaskStatuses().Select(c => new TaskStatus() { id = c.ID, name = c.Name, selected = dbCall.TASK_TEMPLATE.TASK_STATUS != null ? c.ID == dbCall.TASK_TEMPLATE.TASK_STATUS.ID : false }).ToList();
                 apiModel.results = _taskTemplateRepository.GetAllCallResults().Select(c => new CallResult() { id = c.ID, name = c.Name, selected = dbCall.CALL_RESULT != null ? c.ID == dbCall.CALL_RESULT.ID : false}).ToList();
+                apiModel.priorities = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = dbCall.TASK_TEMPLATE.PRIORITY != null ? dbCall.TASK_TEMPLATE.PRIORITY.ID == c.ID : false }).ToList();
+
 
                 apiModel.title = dbCall.TASK_TEMPLATE.Title;
                 apiModel.duration = dbCall.Length.GetValueOrDefault();
@@ -115,7 +119,7 @@ namespace Backend.Services
 
                 }
                 apiModel.tags = dbCall.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
-                apiModel.notes = dbCall.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbCall.Owner.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
+                apiModel.notes = dbCall.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={c.USER.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
                 return apiModel;
             }
             else
@@ -225,10 +229,11 @@ namespace Backend.Services
                 {
                     apiModel.modifiedBy = new UserLinkApiModel() { id = dbMeeting.TASK_TEMPLATE.ModifiedUSer.ID, username = dbMeeting.TASK_TEMPLATE.ModifiedUSer?.Username, email = dbMeeting.TASK_TEMPLATE.ModifiedUSer.Email};
                 }
-                
-                
+
+                apiModel.priorities = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = dbMeeting.TASK_TEMPLATE.PRIORITY != null ? dbMeeting.TASK_TEMPLATE.PRIORITY.ID == c.ID : false }).ToList();
+
                 apiModel.tags = dbMeeting.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
-                apiModel.notes = dbMeeting.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbMeeting.HostUser.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
+                apiModel.notes = dbMeeting.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={c.USER.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
 
                 apiModel.description = dbMeeting.TASK_TEMPLATE.Description;
                 apiModel.fromDate = dbMeeting.FromDate.GetValueOrDefault();
@@ -255,6 +260,128 @@ namespace Backend.Services
                 {
                     apiModel.participants.users = userList.Select(c => new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }).ToList();
                 }
+                return apiModel;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        //get task template id
+        public int GetTaskTemplateId(int id)
+        {
+            return _taskTemplateRepository.GetTaskTemplateId(id);
+        }
+        
+        public int GetTaskOwner(int id)
+        {
+            return _taskTemplateRepository.GetTaskOwner(id);
+        }
+
+        public bool AddTagToTask(int id, string tagName)
+        {
+            return _taskTemplateRepository.AddTagToTask(id, tagName);
+        }
+
+        public bool RemoveTagFromTask(int id, int tagId)
+        {
+            return _taskTemplateRepository.RemoveTagFromTask(id, tagId);
+        }
+
+        public bool CreateTask(TaskCreateApiModel apiModel, int createdUser)
+        {
+            var validator = _taskValidator.Validate(apiModel);
+            if (validator.IsValid)
+            {
+                return _taskTemplateRepository.CreateTask(apiModel, createdUser);
+            }
+            return false;
+        }
+
+        public bool UpdateTask(int id, TaskCreateApiModel apiModel, int modifiedUser)
+        {
+            var validator = _taskValidator.Validate(apiModel);
+
+            if (validator.IsValid)
+            {
+                return _taskTemplateRepository.UpdateTask(id, apiModel, modifiedUser);
+            }
+            return false;
+        }
+
+        public bool DeleteTask(int id)
+        {
+            return _taskTemplateRepository.DeleteTask(id);
+        }
+
+        public MeetingBlankApiModel PrepareNewMeeting()
+        {
+            var apiModel = new MeetingBlankApiModel();
+            apiModel.priorities = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = false }).ToList();
+            return apiModel;
+        }
+
+        public TaskBlankApiModel PrepareNewTask()
+        {
+            var apiModel = new TaskBlankApiModel();
+            apiModel.priorities = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = false }).ToList();
+            apiModel.statuses = _taskTemplateRepository.GetAllTaskStatuses().Select(c => new TaskStatus() { id = c.ID, name = c.Name, selected = false }).ToList();
+            return apiModel;
+        }
+
+        public TaskDetailApiModel GetTask(int id)
+        {
+            var dbTask = _taskTemplateRepository.GetTask(id);
+            if (dbTask != null)
+            {
+                var apiModel = new TaskDetailApiModel();
+                apiModel.id = dbTask.ID;
+                if (dbTask.CONTACT != null)
+                {
+                    apiModel.contact = new ContactLinkApiModel() { id = dbTask.CONTACT.ID, name = dbTask.CONTACT.Name, email = dbTask.CONTACT.Email };
+                }
+                if (dbTask.LEAD != null)
+                {
+                    apiModel.lead = new LeadLinkApiModel() { id = dbTask.LEAD.ID, name = dbTask.LEAD.Name, email = dbTask.LEAD.Email };
+
+                }
+                if (dbTask.ACCOUNT != null)
+                {
+                    apiModel.relatedAccount = new AccountLinkApiModel() { id = dbTask.ACCOUNT.ID, name = dbTask.ACCOUNT.Name, email = dbTask.ACCOUNT.Email };
+                }
+                if (dbTask.DEAL != null)
+                {
+                    apiModel.relatedDeal = new DealLinkApiModel() { id = dbTask.DEAL.ID, name = dbTask.DEAL.Name };
+                }
+                if (dbTask.CAMPAIGN != null)
+                {
+                    apiModel.relatedCampaign = new CampaignLinkApiModel() { id = dbTask.CAMPAIGN.ID, name = dbTask.CAMPAIGN.Name };
+                }
+
+                apiModel.priorities = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = dbTask.TASK_TEMPLATE.PRIORITY != null ? dbTask.TASK_TEMPLATE.PRIORITY.ID == c.ID : false }).ToList();
+
+                apiModel.statuses = _taskTemplateRepository.GetAllTaskStatuses().Select(c => new TaskStatus() { id = c.ID, name = c.Name, selected = dbTask.TASK_TEMPLATE.TASK_STATUS != null ? c.ID == dbTask.TASK_TEMPLATE.TASK_STATUS.ID : false }).ToList();
+
+                apiModel.title = dbTask.TASK_TEMPLATE.Title;
+                apiModel.isRepeat = dbTask.TASK_TEMPLATE.IsRepeat.GetValueOrDefault();
+                apiModel.rrule = dbTask.TASK_TEMPLATE.RRule;
+                apiModel.description = dbTask.TASK_TEMPLATE.Description;
+
+                if (dbTask.USER != null)
+                {
+                    apiModel.owner = new UserLinkApiModel() { id = dbTask.USER.ID, username = dbTask.USER.Username, email = dbTask.USER.Email };
+                }
+                apiModel.createdAt = dbTask.TASK_TEMPLATE.CreatedAt.GetValueOrDefault();
+                apiModel.modifiedAt = dbTask.TASK_TEMPLATE.ModifiedAt.GetValueOrDefault();
+                apiModel.createdBy = new UserLinkApiModel() { id = dbTask.TASK_TEMPLATE.CreatedUser.ID, username = dbTask.TASK_TEMPLATE.CreatedUser.Username, email = dbTask.TASK_TEMPLATE.CreatedUser.Email };
+                if (dbTask.TASK_TEMPLATE.ModifiedUSer != null)
+                {
+                    apiModel.modifiedBy = new UserLinkApiModel() { id = dbTask.TASK_TEMPLATE.ModifiedUSer.ID, username = dbTask.TASK_TEMPLATE.ModifiedUSer.Username, email = dbTask.TASK_TEMPLATE.ModifiedUSer.Email };
+
+                }
+                apiModel.tags = dbTask.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
+                apiModel.notes = dbTask.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={c.USER.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
                 return apiModel;
             }
             else
