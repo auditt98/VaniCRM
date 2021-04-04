@@ -157,7 +157,7 @@ namespace Backend.Models.ApiModel
         {
             participants = new MeetingParticipant();
         }
-
+        public int id { get; set; }
         public List<TagApiModel> tags { get; set; }
         public List<NoteApiModel> notes { get; set; }
         public DateTime createdAt { get; set; }

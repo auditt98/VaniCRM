@@ -61,6 +61,33 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account successfully created..
+        /// </summary>
+        internal static string ACCOUNT_CREATED {
+            get {
+                return ResourceManager.GetString("ACCOUNT_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account successfully deleted..
+        /// </summary>
+        internal static string ACCOUNT_DELETED {
+            get {
+                return ResourceManager.GetString("ACCOUNT_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account successfully modified..
+        /// </summary>
+        internal static string ACCOUNT_MODIFIED {
+            get {
+                return ResourceManager.GetString("ACCOUNT_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Avatar successfully changed..
         /// </summary>
         internal static string AVATAR_CHANGED {
