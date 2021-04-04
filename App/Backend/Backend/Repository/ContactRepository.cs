@@ -45,5 +45,10 @@ namespace Backend.Repository
             var contacts = db.CONTACTs.Where(c => c.Name.ToLower().Contains(q) || c.ACCOUNT.Name.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q)).OrderBy(c => c.ID);
             return contacts;
         }
+
+        public CONTACT GetOne(int id)
+        {
+            return db.CONTACTs.Find(id);
+        }
     }
 }
