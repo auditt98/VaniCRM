@@ -81,6 +81,9 @@ namespace Backend.Domain
         [StringLength(200)]
         public string AddressDetail { get; set; }
 
+        [StringLength(500)]
+        public string Avatar { get; set; }
+
         public virtual ACCOUNT ACCOUNT { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
