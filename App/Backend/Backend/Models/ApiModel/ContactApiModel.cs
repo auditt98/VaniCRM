@@ -84,4 +84,11 @@ namespace Backend.Models.ApiModel
         public UserLinkApiModel owner { get; set; }
         public UserLinkApiModel collaborator { get; set; }
     }
+
+    public class ContactBlankApiModel
+    {
+
+        public List<PrioritySelectionApiModel> priority { get; set; }
+
+    }
 }

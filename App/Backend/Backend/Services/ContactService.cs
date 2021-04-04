@@ -15,7 +15,7 @@ namespace Backend.Services
     {
         ContactRepository _contactRepository = new ContactRepository();
         ContactValidator _contactValidator = new ContactValidator();
-
+        PriorityRepository _priorityRepository = new PriorityRepository();
         public List<CONTACT> GetUserContacts(int userID, string q = "", int currentPage = 1, int pageSize = 0)
         {
             return _contactRepository.GetUserContacts(userID, q, currentPage, pageSize).ToList();
@@ -242,6 +242,13 @@ namespace Backend.Services
             }
             //apiModel.tasks = dbTasks.tasks.Select(c => new TaskListApiModel.TaskInfo() { id = c.ID, type = c.}).ToList();
             apiModel.pageInfo = dbTasks.p;
+            return apiModel;
+        }
+
+        public ContactBlankApiModel PrepareNewLead()
+        {
+            var apiModel = new ContactBlankApiModel();
+            apiModel.priority = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = false }).ToList();
             return apiModel;
         }
     }
