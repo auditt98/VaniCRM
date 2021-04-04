@@ -432,6 +432,7 @@
     <Compile Include="Services\TaskService.cs" />
     <Compile Include="Services\TaskTemplateService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Validators\AccountValidator.cs" />
     <Compile Include="Validators\CallValidator.cs" />
     <Compile Include="Validators\CampaignValidator.cs" />
     <Compile Include="Validators\GroupValidator.cs" />

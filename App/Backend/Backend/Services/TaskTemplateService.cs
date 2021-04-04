@@ -218,6 +218,7 @@ namespace Backend.Services
                 {
                     apiModel.host = new UserLinkApiModel() { id = dbMeeting.HostUser.ID, username = dbMeeting.HostUser.Username, email = dbMeeting.HostUser.Email};
                 }
+                apiModel.id = dbMeeting.ID;
                 apiModel.createdAt = dbMeeting.TASK_TEMPLATE.CreatedAt.GetValueOrDefault();
                 apiModel.modifiedAt = dbMeeting.TASK_TEMPLATE.ModifiedAt.GetValueOrDefault();
                 if(dbMeeting.TASK_TEMPLATE.CreatedUser != null)
