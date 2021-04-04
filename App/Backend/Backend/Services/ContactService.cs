@@ -245,7 +245,7 @@ namespace Backend.Services
             return apiModel;
         }
 
-        public ContactBlankApiModel PrepareNewLead()
+        public ContactBlankApiModel PrepareNewContact()
         {
             var apiModel = new ContactBlankApiModel();
             apiModel.priority = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = false }).ToList();
