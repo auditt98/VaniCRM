@@ -12,6 +12,7 @@ namespace Backend.Repository
     {
         DatabaseContext db = new DatabaseContext();
         TagRepository _tagRepository = new TagRepository();
+        ContactRepository _contactRepository = new ContactRepository();
 
         public IEnumerable<ACCOUNT> GetUserAccounts(int userID, string q = "", int currentPage = 1, int pageSize = 0)
         {
@@ -254,6 +255,57 @@ namespace Backend.Repository
         public ACCOUNT GetOne(int id)
         {
             return db.ACCOUNTs.Find(id);
+        }
+
+        public (IEnumerable<CONTACT> contacts, Pager p) GetContacts(int accountId, int currentPage, int pageSize, string query)
+        {
+            var dbAccount = db.ACCOUNTs.Find(accountId);
+            if (dbAccount != null)
+            {
+                var q = query.ToLower();
+                var contactList = dbAccount.CONTACTs;
+                if (pageSize == 0)
+                {
+                    pageSize = 10;
+                }
+
+                if (String.IsNullOrEmpty(q))
+                {
+                    Pager pager = new Pager(contactList.Count(), currentPage, pageSize, 9999);
+                    return (contactList.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                }
+                var filteredContactList = contactList.Where(c => c.Name.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q)).OrderBy(c => c.ID);
+                if (filteredContactList.Count() > 0)
+                {
+                    Pager p = new Pager(filteredContactList.Count(), currentPage, pageSize, 9999);
+
+                    return (filteredContactList.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+                }
+                else
+                {
+                    return (filteredContactList, null);
+                }
+            }
+            else
+            {
+                return (null, null);
+            }
+        }
+
+        public bool AddContact(int accountId, int contactId)
+        {
+            var dbAccount = db.ACCOUNTs.Find(accountId);
+            var dbContact = _contactRepository.GetOne(contactId);
+            if (dbAccount != null && dbContact != null)
+            {
+                dbAccount.CONTACTs.Add(dbContact);
+                db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -761,7 +761,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("accounts/{id}/contacts")]
         [ResponseType(typeof(ContactListApiModel))]
-        public HttpResponseMessage GetContacts([FromUri] int id)
+        public HttpResponseMessage GetContacts([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -797,7 +797,7 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        //responseData.data = _accountService.GetContacts(id);
+                        responseData.data = _accountService.GetContacts(id, currentPage, pageSize, query);
                     }
                     else
                     {
@@ -818,5 +818,77 @@ namespace Backend.Controllers
             return response;
         }
 
+
+        [HttpPost]
+        [Route("accounts/{id}/contacts")]
+        [ResponseType(typeof(ResponseFormat))]
+        public HttpResponseMessage AddContacts([FromUri] int id, [FromBody] AccountAddContactApiModel contact)
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            //AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.LEAD_MODIFY);
+            //read jwt
+
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    var owner = _accountService.FindOwnerId(id);
+                    var collaborator = _accountService.FindCollaboratorId(id);
+                    if ((userId == owner) || (userId == collaborator) || (new AuthorizationService().SetPerm((int)EnumPermissions.ACCOUNT_DELETE).Authorize(userId)))
+                    {
+                        var isAdded = _accountService.AddContact(id, contact.id);
+                        if (isAdded)
+                        {
+                            response.StatusCode = HttpStatusCode.OK;
+                            responseData = ResponseFormat.Success;
+                            responseData.message = SuccessMessages.CONTACT_ADDED;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.InternalServerError;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.SOMETHING_WRONG;
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
     }
 }

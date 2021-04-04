@@ -47,6 +47,11 @@ namespace Backend.Models.ApiModel
         public string addressDetail { get; set; }
     }
 
+    public class AccountAddContactApiModel
+    {
+        public int id { get; set; }
+    }
+
     public class AccountDetailApiModel
     {
         public int id { get; set; }

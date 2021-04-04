@@ -156,11 +156,20 @@ namespace Backend.Services
                 return null;
             }
         }
-    
-        //public ContactListApiModel GetContacts(int accountId)
-        //{
 
-        //}
+        public ContactListApiModel GetContacts(int accountId, int currentPage, int pageSize, string query)
+        {
+            var dbContacts = _accountRepository.GetContacts(accountId, currentPage, pageSize, query);
+            var apiModel = new ContactListApiModel();
+            apiModel.contacts = dbContacts.contacts.Select(c => new ContactListApiModel.ContactInfo() { id = c.ID, contactName = c.Name, accountName = c.ACCOUNT.Name, email = c.Email, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName }).ToList();
+            apiModel.pageInfo = dbContacts.p;
+            return apiModel;
+        }
+
+        public bool AddContact(int accountId, int contactId)
+        {
+            return _accountRepository.AddContact(accountId, contactId);
+        }
     }
 
 
