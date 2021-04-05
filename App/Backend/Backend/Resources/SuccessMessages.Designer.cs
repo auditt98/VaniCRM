@@ -196,6 +196,33 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deal successfully created..
+        /// </summary>
+        internal static string DEAL_CREATED {
+            get {
+                return ResourceManager.GetString("DEAL_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deal successfully deleted.
+        /// </summary>
+        internal static string DEAL_DELETED {
+            get {
+                return ResourceManager.GetString("DEAL_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deal successfully updated..
+        /// </summary>
+        internal static string DEAL_MODIFIED {
+            get {
+                return ResourceManager.GetString("DEAL_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Group successfully created..
         /// </summary>
         internal static string GROUP_CREATED {

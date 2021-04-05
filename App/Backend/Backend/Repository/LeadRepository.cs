@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using static Backend.Extensions.Enum;
 
 namespace Backend.Repository
 {
@@ -232,6 +233,130 @@ namespace Backend.Repository
             else
             {
                 return false;
+            }
+        }
+    
+        public LeadConvertApiModel Convert(int id, int convertUser)
+        {
+            var apiModel = new LeadConvertApiModel();
+            var dbLead = db.LEADs.Find(id);
+            if (dbLead != null)
+            {
+                if (dbLead.Status != null)
+                {
+                    if (dbLead.Status.ID != (int)EnumLeadStatus.CONVERTED)
+                    {
+                        var newAccount = new ACCOUNT();
+                        var newContact = new CONTACT();
+                        newAccount.Name = dbLead.CompanyName;
+                        newAccount.Website = dbLead.Website;
+                        newAccount.Email = dbLead.Email;
+                        newAccount.AnnualRevenue = dbLead.AnnualRevenue;
+                        newAccount.Country = dbLead.Country;
+                        newAccount.City = dbLead.City;
+                        newAccount.AddressDetail = dbLead.AddressDetail;
+                        newAccount.ConvertFrom = dbLead.ID;
+                        newAccount.Avatar = dbLead.Avatar;
+                        newAccount.Owner = dbLead.Owner;
+                        newAccount.CreatedAt = DateTime.Now;
+                        if (convertUser != 0)
+                        {
+                            newAccount.CreatedBy = convertUser;
+                        }
+                        newAccount.INDUSTRY = dbLead.INDUSTRY;
+                        newAccount.Phone = dbLead.Phone;
+                        newAccount.Fax = dbLead.Fax;
+                        dbLead.LeadStatus = (int)EnumLeadStatus.CONVERTED;
+                        newAccount.NOTEs = dbLead.NOTEs;
+                        db.ACCOUNTs.Add(newAccount);
+
+                        newContact.Name = dbLead.Name;
+                        newContact.NoCall = dbLead.NoCall;
+                        newContact.NoEmail = dbLead.NoEmail;
+                        newContact.NOTEs = dbLead.NOTEs;
+                        newContact.Phone = dbLead.Phone;
+                        newContact.Skype = dbLead.Skype;
+                        newContact.City = dbLead.City;
+                        newContact.Country = dbLead.Country;
+                        newContact.AddressDetail = dbLead.AddressDetail;
+                        if (dbLead.Owner != null)
+                        {
+                            newContact.Owner = dbLead.Owner;
+                        }
+                        newContact.CreatedAt = DateTime.Now;
+                        if (convertUser != 0)
+                        {
+                            newContact.CreatedBy = convertUser;
+                        }
+                        newContact.ACCOUNT = newAccount;
+                        newContact.Avatar = dbLead.Avatar;
+                        db.CONTACTs.Add(newContact);
+                        db.SaveChanges();
+                        apiModel.newAccountId = newAccount.ID;
+                        return apiModel;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    var newAccount = new ACCOUNT();
+                    var newContact = new CONTACT();
+                    newAccount.Name = dbLead.CompanyName;
+                    newAccount.Website = dbLead.Website;
+                    newAccount.Email = dbLead.Email;
+                    newAccount.AnnualRevenue = dbLead.AnnualRevenue;
+                    newAccount.Country = dbLead.Country;
+                    newAccount.City = dbLead.City;
+                    newAccount.AddressDetail = dbLead.AddressDetail;
+                    newAccount.ConvertFrom = dbLead.ID;
+                    newAccount.Avatar = dbLead.Avatar;
+                    newAccount.Owner = dbLead.Owner;
+                    newAccount.CreatedAt = DateTime.Now;
+                    if (convertUser != 0)
+                    {
+                        newAccount.CreatedBy = convertUser;
+                    }
+                    newAccount.INDUSTRY = dbLead.INDUSTRY;
+                    newAccount.Phone = dbLead.Phone;
+                    newAccount.Fax = dbLead.Fax;
+                    dbLead.LeadStatus = (int)EnumLeadStatus.CONVERTED;
+                    newAccount.NOTEs = dbLead.NOTEs;
+                    db.ACCOUNTs.Add(newAccount);
+
+                    newContact.Name = dbLead.Name;
+                    newContact.NoCall = dbLead.NoCall;
+                    newContact.NoEmail = dbLead.NoEmail;
+                    newContact.NOTEs = dbLead.NOTEs;
+                    newContact.Phone = dbLead.Phone;
+                    newContact.Skype = dbLead.Skype;
+                    newContact.City = dbLead.City;
+                    newContact.Country = dbLead.Country;
+                    newContact.AddressDetail = dbLead.AddressDetail;
+                    if (dbLead.Owner != null)
+                    {
+                        newContact.Owner = dbLead.Owner;
+                    }
+                    newContact.CreatedAt = DateTime.Now;
+                    if (convertUser != 0)
+                    {
+                        newContact.CreatedBy = convertUser;
+                    }
+                    newContact.ACCOUNT = newAccount;
+                    newContact.Avatar = dbLead.Avatar;
+                    db.CONTACTs.Add(newContact);
+                    db.SaveChanges();
+                    apiModel.newAccountId = newAccount.ID;
+                    return apiModel;
+                }
+                
+                
+            }
+            else
+            {
+                return null;
             }
         }
     }

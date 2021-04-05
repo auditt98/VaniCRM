@@ -73,5 +73,10 @@ namespace Backend.Extensions
             WON = 7,
             LOST = 8
         }
+        
+        public enum EnumLeadStatus
+        {
+            CONVERTED = 8
+        }
     }
 }

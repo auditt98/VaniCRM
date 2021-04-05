@@ -38,6 +38,11 @@ namespace Backend.Models.ApiModel
         }
     }
 
+    public class LeadConvertApiModel
+    {
+        public int newAccountId { get; set; }
+    }
+
     public class LeadLinkApiModel
     {
         public int id { get; set; }
