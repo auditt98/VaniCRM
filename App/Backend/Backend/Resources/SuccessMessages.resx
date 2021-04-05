@@ -162,6 +162,15 @@
   <data name="CONTACT_REMOVED" xml:space="preserve">
     <value>Contact successfully removed.</value>
   </data>
+  <data name="DEAL_CREATED" xml:space="preserve">
+    <value>Deal successfully created.</value>
+  </data>
+  <data name="DEAL_DELETED" xml:space="preserve">
+    <value>Deal successfully deleted</value>
+  </data>
+  <data name="DEAL_MODIFIED" xml:space="preserve">
+    <value>Deal successfully updated.</value>
+  </data>
   <data name="GROUP_CREATED" xml:space="preserve">
     <value>Group successfully created.</value>
   </data>

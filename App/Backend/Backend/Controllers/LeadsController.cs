@@ -834,20 +834,19 @@ namespace Backend.Controllers
                     var owner = _leadService.FindOwnerId(id);
                     if ((userId == owner) || (new AuthorizationService().SetPerm((int)EnumPermissions.LEAD_DELETE).Authorize(userId)))
                     {
-
-                        //var isRemoved = _leadService.RemoveTag(id, tagId);
-                        //if (isRemoved)
-                        //{
-                        //    response.StatusCode = HttpStatusCode.OK;
-                        //    responseData = ResponseFormat.Success;
-                        //    responseData.message = SuccessMessages.TAG_REMOVED;
-                        //}
-                        //else
-                        //{
-                        //    response.StatusCode = HttpStatusCode.InternalServerError;
-                        //    responseData = ResponseFormat.Fail;
-                        //    responseData.message = ErrorMessages.SOMETHING_WRONG;
-                        //}
+                        var result = _leadService.Convert(id, userId);
+                        if(result != null)
+                        {
+                            response.StatusCode = HttpStatusCode.OK;
+                            responseData = ResponseFormat.Success;
+                            responseData.data = result;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.InternalServerError;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.SOMETHING_WRONG;
+                        }
                     }
                     else
                     {

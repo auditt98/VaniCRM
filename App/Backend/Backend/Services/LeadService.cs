@@ -166,5 +166,10 @@ namespace Backend.Services
         {
             return _leadRepository.RemoveTag(id, tagId);
         }
+
+        public LeadConvertApiModel Convert(int id, int convertUser)
+        {
+            return _leadRepository.Convert(id, convertUser);
+        }
     }
 }

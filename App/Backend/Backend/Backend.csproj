@@ -433,6 +433,8 @@
     <Compile Include="Validators\AccountValidator.cs" />
     <Compile Include="Validators\CallValidator.cs" />
     <Compile Include="Validators\CampaignValidator.cs" />
+    <Compile Include="Validators\ContactValidator.cs" />
+    <Compile Include="Validators\DealValidator.cs" />
     <Compile Include="Validators\GroupValidator.cs" />
     <Compile Include="Validators\LeadValidator.cs" />
     <Compile Include="Validators\MeetingValidator.cs" />
