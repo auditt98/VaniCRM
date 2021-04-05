@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Backend.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -229,5 +230,23 @@ namespace Backend.Models.ApiModel
         public string description { get; set; }
         public DateTime dueDate { get; set; }
     }
+    
+    public class TaskListApiModel
+    {
+        public class TaskInfo
+        {
+            public int id { get; set; }
+            public string type { get; set; }
+            public string status { get; set; }
+            public DateTime startDate { get; set; }
+            public DateTime endDate { get; set; }
+            public string priority { get; set; }
+            public UserLinkApiModel owner { get; set; }
+        }
+        public List<TaskInfo> tasks { get; set; }
+        public Pager pageInfo { get; set; }
 
+
+
+    }
 }

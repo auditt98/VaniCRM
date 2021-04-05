@@ -160,6 +160,33 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contact successfully created..
+        /// </summary>
+        internal static string CONTACT_CREATED {
+            get {
+                return ResourceManager.GetString("CONTACT_CREATED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact successfully deleted..
+        /// </summary>
+        internal static string CONTACT_DELETED {
+            get {
+                return ResourceManager.GetString("CONTACT_DELETED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact successfully modified..
+        /// </summary>
+        internal static string CONTACT_MODIFIED {
+            get {
+                return ResourceManager.GetString("CONTACT_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact successfully removed..
         /// </summary>
         internal static string CONTACT_REMOVED {
