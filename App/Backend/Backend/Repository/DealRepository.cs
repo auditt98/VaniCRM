@@ -1,4 +1,5 @@
 ﻿using Backend.Domain;
+using Backend.Extensions;
 using Backend.Models.ApiModel;
 using System;
 using System.Collections.Generic;
@@ -254,6 +255,45 @@ namespace Backend.Repository
             return db.LOST_REASON;
         }
 
-        
+        public (IEnumerable<TASK_TEMPLATE> tasks, Pager p) GetTasks(int dealId, int currentPage, int pageSize, string query)
+        {
+            var dbDeal = db.DEALs.Find(dealId);
+            if (dbDeal != null)
+            {
+                var q = query.ToLower();
+                var callList = db.CALLs.Where(c => c.DEAL.ID == dealId).Select(c => c.TASK_TEMPLATE).ToList();
+                var taskList = db.TASKs.Where(c => c.DEAL.ID == dealId).Select(c => c.TASK_TEMPLATE).ToList();
+
+                var allTasks = new List<TASK_TEMPLATE>();
+                allTasks.AddRange(callList);
+                allTasks.AddRange(taskList);
+
+                if (pageSize == 0)
+                {
+                    pageSize = 10;
+                }
+
+                if (String.IsNullOrEmpty(q))
+                {
+                    Pager pager = new Pager(allTasks.Count(), currentPage, pageSize, 9999);
+                    return (allTasks.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                }
+                var filtered = allTasks.Where(c => c.Title.Contains(q)).OrderBy(c => c.ID);
+                if (filtered.Count() > 0)
+                {
+                    Pager p = new Pager(filtered.Count(), currentPage, pageSize, 9999);
+
+                    return (filtered.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+                }
+                else
+                {
+                    return (filtered, null);
+                }
+            }
+            else
+            {
+                return (null, null);
+            }
+        }
     }
 }

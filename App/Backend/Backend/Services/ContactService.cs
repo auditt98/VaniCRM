@@ -182,6 +182,7 @@ namespace Backend.Services
                             taskInfo.status = t.TASK_STATUS.Name;
 
                         }
+                        apiModel.tasks.Add(taskInfo);
                     }
                     else
                     {
@@ -207,6 +208,8 @@ namespace Backend.Services
                             taskInfo.status = t.TASK_STATUS.Name;
 
                         }
+                        apiModel.tasks.Add(taskInfo);
+
                     }
                     else
                     {
@@ -232,6 +235,8 @@ namespace Backend.Services
                             taskInfo.status = t.TASK_STATUS.Name;
 
                         }
+                        apiModel.tasks.Add(taskInfo);
+
                     }
                     else
                     {

@@ -206,5 +206,100 @@ namespace Backend.Services
                 return null;
             }
         }
+
+        public TaskListApiModel GetTasks(int contactId, int currentPage, int pageSize, string query)
+        {
+            var dbTasks = _dealRepository.GetTasks(contactId, currentPage, pageSize, query);
+            var apiModel = new TaskListApiModel();
+            apiModel.tasks = new List<TaskListApiModel.TaskInfo>();
+            foreach (var t in dbTasks.tasks)
+            {
+                var taskInfo = new TaskListApiModel.TaskInfo();
+                if (t.MEETINGs.Count > 0)
+                {
+                    var meeting = t.MEETINGs.FirstOrDefault();
+                    if (meeting != null)
+                    {
+                        taskInfo.id = meeting.ID;
+                        taskInfo.startDate = meeting.FromDate.GetValueOrDefault();
+                        taskInfo.owner = new UserLinkApiModel() { id = meeting.HostUser.ID, email = meeting.HostUser.Email, username = meeting.HostUser.Username };
+                        taskInfo.type = "meetings";
+                        if (t.PRIORITY != null)
+                        {
+                            taskInfo.priority = t.PRIORITY.Name;
+                        }
+                        taskInfo.endDate = meeting.ToDate.GetValueOrDefault();
+                        if (t.TASK_STATUS != null)
+                        {
+                            taskInfo.status = t.TASK_STATUS.Name;
+
+                        }
+                        apiModel.tasks.Add(taskInfo);
+
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else if (t.CALLs.Count > 0)
+                {
+                    var call = t.CALLs.FirstOrDefault();
+                    if (call != null)
+                    {
+                        taskInfo.id = call.ID;
+                        taskInfo.startDate = t.CreatedAt.GetValueOrDefault();
+                        taskInfo.owner = new UserLinkApiModel() { id = call.Owner.ID, email = call.Owner.Email, username = call.Owner.Username };
+                        taskInfo.type = "calls";
+                        if (t.PRIORITY != null)
+                        {
+                            taskInfo.priority = t.PRIORITY.Name;
+                        }
+                        taskInfo.endDate = t.DueDate.GetValueOrDefault();
+                        if (t.TASK_STATUS != null)
+                        {
+                            taskInfo.status = t.TASK_STATUS.Name;
+
+                        }
+                        apiModel.tasks.Add(taskInfo);
+
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else if (t.TASKs.Count > 0)
+                {
+                    var task = t.TASKs.FirstOrDefault();
+                    if (task != null)
+                    {
+                        taskInfo.id = task.ID;
+                        taskInfo.startDate = t.CreatedAt.GetValueOrDefault();
+                        taskInfo.owner = new UserLinkApiModel() { id = task.USER.ID, email = task.USER.Email, username = task.USER.Username };
+                        taskInfo.type = "tasks";
+                        if (t.PRIORITY != null)
+                        {
+                            taskInfo.priority = t.PRIORITY.Name;
+                        }
+                        taskInfo.endDate = t.DueDate.GetValueOrDefault();
+                        if (t.TASK_STATUS != null)
+                        {
+                            taskInfo.status = t.TASK_STATUS.Name;
+
+                        }
+                        apiModel.tasks.Add(taskInfo);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                //taskInfo.id = t.ID
+            }
+            //apiModel.tasks = dbTasks.tasks.Select(c => new TaskListApiModel.TaskInfo() { id = c.ID, type = c.}).ToList();
+            apiModel.pageInfo = dbTasks.p;
+            return apiModel;
+        }
     }
 }
