@@ -301,5 +301,15 @@ namespace Backend.Services
             apiModel.pageInfo = dbTasks.p;
             return apiModel;
         }
+
+        public bool ChangeStage(int dealId, int stageId, int modifiedUser)
+        {
+            return _dealRepository.ChangeStage(dealId, stageId, modifiedUser);
+        }
+
+        public int FindCreatorId(int dealId)
+        {
+            return _dealRepository.GetCreator(dealId);
+        }
     }
 }

@@ -376,6 +376,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stage successfully updated..
+        /// </summary>
+        internal static string STAGE_MODIFIED {
+            get {
+                return ResourceManager.GetString("STAGE_MODIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tag successfully added..
         /// </summary>
         internal static string TAG_ADDED {

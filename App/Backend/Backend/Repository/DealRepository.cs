@@ -295,5 +295,63 @@ namespace Backend.Repository
                 return (null, null);
             }
         }
+
+        public int GetCreator(int id)
+        {
+            var dbDeal = db.DEALs.Find(id);
+            if (dbDeal != null)
+            {
+                if (dbDeal.CreatedUser != null)
+                {
+                    return dbDeal.CreatedUser.ID;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public bool ChangeStage(int id, int stageId, int modifiedUser)
+        {
+            var dbDeal = db.DEALs.Find(id);
+            var dbStage = db.STAGEs.Find(stageId);
+            if (dbDeal != null && dbStage != null)
+            {
+                var histories = dbDeal.STAGE_HISTORY.OrderByDescending(sh => sh.ModifiedAt);
+                if(histories.Count() > 0)
+                {
+                    var current = histories.FirstOrDefault();
+                    if(current.STAGE.ID == stageId)
+                    {
+                        return false;
+                    }
+                }
+                var newStageHistory = new STAGE_HISTORY();
+                newStageHistory.ModifiedBy = modifiedUser;
+                newStageHistory.ModifiedAt = DateTime.Now;
+                newStageHistory.STAGE_ID = stageId;
+                newStageHistory.DEAL_ID = dbDeal.ID;
+                if (stageId == (int)EnumStage.LOST)
+                {
+                    dbDeal.isLost = true;
+                }
+                else
+                {
+                    dbDeal.isLost = false;
+                }
+                db.STAGE_HISTORY.Add(newStageHistory);
+                db.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

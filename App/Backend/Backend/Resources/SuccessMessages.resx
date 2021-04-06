@@ -222,6 +222,9 @@
   <data name="PASSWORD_RESET" xml:space="preserve">
     <value>Password has been reset.</value>
   </data>
+  <data name="STAGE_MODIFIED" xml:space="preserve">
+    <value>Stage successfully updated.</value>
+  </data>
   <data name="TAG_ADDED" xml:space="preserve">
     <value>Tag successfully added.</value>
   </data>
