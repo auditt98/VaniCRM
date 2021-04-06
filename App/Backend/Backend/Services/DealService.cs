@@ -141,8 +141,6 @@ namespace Backend.Services
                     apiModel.campaign = new CampaignLinkApiModel() { id = dbDeal.CAMPAIGN.ID, name = dbDeal.CAMPAIGN.Name };
 
                 }
-                //apiModel.
-
                 apiModel.CreatedAt = dbDeal.CreatedAt.GetValueOrDefault();
                 apiModel.CreatedBy = new UserLinkApiModel() { id = dbDeal.CreatedUser.ID, username = dbDeal.CreatedUser.Username, email = dbDeal.CreatedUser.Email };
                 apiModel.ModifiedAt = dbDeal.ModifiedAt.GetValueOrDefault();
