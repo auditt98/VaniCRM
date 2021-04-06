@@ -1,4 +1,5 @@
-﻿using Backend.Models.ApiModel;
+﻿using Backend.Extensions;
+using Backend.Models.ApiModel;
 using Backend.Repository;
 using Backend.Resources;
 using Backend.Validators;
@@ -153,6 +154,52 @@ namespace Backend.Services
                 //tags
                 apiModel.tags = dbDeal.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
                 return apiModel;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public StageHistoryListApiModel GetHistories(int id, int currentPage, int pageSize, string query)
+        {
+            var dbDeal = _dealRepository.GetOne(id);
+            if (dbDeal != null)
+            {
+                var apiModel = new StageHistoryListApiModel();
+                var q = query.ToLower();
+                if (dbDeal.STAGE_HISTORY.Count > 0)
+                {
+                    var histories = dbDeal.STAGE_HISTORY.OrderByDescending(sh => sh.ModifiedAt);
+                    if(pageSize == 0)
+                    {
+                        pageSize = histories.Count();
+                    }
+                    if (string.IsNullOrEmpty(query))
+                    {
+                        //return accounts.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
+                        Pager pager = new Pager(dbDeal.STAGE_HISTORY.Count(), currentPage, pageSize, 9999);
+                        apiModel.histories = histories.Skip((currentPage - 1) * pageSize).Take(pageSize).Select(c => new StageHistoryListApiModel.History() { name = c.STAGE.Name, probability = c.STAGE.Probability.GetValueOrDefault(), expectedRevenue = (c.STAGE.Probability.GetValueOrDefault() * c.DEAL.Amount / 100).GetValueOrDefault(), modifiedAt = c.ModifiedAt.GetValueOrDefault(), modifiedBy = new UserLinkApiModel() { id = c.USER.ID, email = c.USER.Email, username = c.USER.Username }}).ToList();
+                        apiModel.pageInfo = pager;
+                    }
+                    else
+                    {
+                        var historyList = histories.Where(c => c.STAGE.Name.ToLower().Contains(q)).Select(c => new StageHistoryListApiModel.History() { name = c.STAGE.Name, probability = c.STAGE.Probability.GetValueOrDefault(), expectedRevenue = (c.STAGE.Probability.GetValueOrDefault() * c.DEAL.Amount / 100).GetValueOrDefault(), modifiedAt = c.ModifiedAt.GetValueOrDefault(), modifiedBy = new UserLinkApiModel() { id = c.USER.ID, email = c.USER.Email, username = c.USER.Username } }).ToList();
+                        if(historyList.Count > 0)
+                        {
+                            Pager p = new Pager(historyList.Count(), currentPage, pageSize, 9999);
+                            apiModel.histories = historyList;
+                            apiModel.pageInfo = p;
+
+                        }
+                    }
+
+                    return apiModel;
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {

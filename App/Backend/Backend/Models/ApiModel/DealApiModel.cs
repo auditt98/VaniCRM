@@ -97,6 +97,11 @@ namespace Backend.Models.ApiModel
     
     public class StageHistoryListApiModel
     {
+        public StageHistoryListApiModel()
+        {
+            histories = new List<History>();
+
+        }
         public List<History> histories { get; set; }
         public Pager pageInfo { get; set; }
         public class History
