@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.19.0](https://github.com/auditt98/VaniCRM/compare/v1.18.0...v1.19.0) (2021-04-06)
+
+
+### Features
+
+* Deal history ([4606abb](https://github.com/auditt98/VaniCRM/commit/4606abbc6ab67eb245a078a9fae08b24901d8b11))
+
 ## [1.18.0](https://github.com/auditt98/VaniCRM/compare/v1.17.0...v1.18.0) (2021-04-06)
 
 
