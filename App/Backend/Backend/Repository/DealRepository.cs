@@ -353,5 +353,96 @@ namespace Backend.Repository
                 return false;
             }
         }
+    
+        public bool AddCompetitor(int id, CompetitorCreateApiModel apiModel)
+        {
+            var dbDeal = db.DEALs.Find(id);
+            if (dbDeal != null && apiModel != null)
+            {
+                var dbCompetitor = db.COMPETITORs.Find(apiModel.id);
+                if(dbCompetitor != null)
+                {
+                    var dealCompetitor = dbDeal.DEAL_COMPETITOR.Where(c => c.COMPETITOR_ID == dbCompetitor.ID).FirstOrDefault();
+                    dbCompetitor.Website = apiModel.website;
+                    dbCompetitor.Strengths = apiModel.strengths;
+                    dbCompetitor.Weaknesses = apiModel.weaknesses;
+
+                    if (dealCompetitor != null)
+                    {
+                        dealCompetitor.ThreatLevel = apiModel.threat;
+                        dealCompetitor.Suggestions = apiModel.suggestions;
+                    }
+                    else
+                    {
+                        var newDealCompetitor = new DEAL_COMPETITOR();
+                        newDealCompetitor.DEAL = dbDeal;
+                        newDealCompetitor.COMPETITOR = dbCompetitor;
+                        newDealCompetitor.Suggestions = apiModel.suggestions;
+                        newDealCompetitor.ThreatLevel = apiModel.threat;
+                        db.DEAL_COMPETITOR.Add(newDealCompetitor);
+                    }
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    var newCompetitor = new COMPETITOR();
+                    newCompetitor.Name = apiModel.name;
+                    newCompetitor.Strengths = apiModel.strengths;
+                    newCompetitor.Weaknesses = apiModel.weaknesses;
+                    newCompetitor.Website = apiModel.website;
+                    db.COMPETITORs.Add(newCompetitor);
+                    var newDealCompetitor = new DEAL_COMPETITOR();
+                    newDealCompetitor.DEAL_ID = dbDeal.ID;
+                    newDealCompetitor.COMPETITOR = newCompetitor;
+                    newDealCompetitor.Suggestions = apiModel.suggestions;
+                    newDealCompetitor.ThreatLevel = apiModel.threat;
+                    db.DEAL_COMPETITOR.Add(newDealCompetitor);
+                    db.SaveChanges();
+                    return true;
+
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public (IEnumerable<DEAL_COMPETITOR> competitors, Pager p) GetCompetitors(int dealId, int currentPage, int pageSize, string query)
+        {
+            var dbDeal = db.DEALs.Find(dealId);
+            if (dbDeal != null)
+            {
+                var q = query.ToLower();
+                var competitorList = dbDeal.DEAL_COMPETITOR;
+
+                if (pageSize == 0)
+                {
+                    pageSize = 10;
+                }
+
+                if (String.IsNullOrEmpty(q))
+                {
+                    Pager pager = new Pager(competitorList.Count(), currentPage, pageSize, 9999);
+                    return (competitorList.OrderBy(c => c.COMPETITOR.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                }
+                var filtered = competitorList.Where(c => c.COMPETITOR.Name.ToLower().Contains(q)).OrderBy(c => c.COMPETITOR.ID);
+                if (filtered.Count() > 0)
+                {
+                    Pager p = new Pager(filtered.Count(), currentPage, pageSize, 9999);
+
+                    return (filtered.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+                }
+                else
+                {
+                    return (filtered, null);
+                }
+            }
+            else
+            {
+                return (null, null);
+            }
+        }
     }
 }
