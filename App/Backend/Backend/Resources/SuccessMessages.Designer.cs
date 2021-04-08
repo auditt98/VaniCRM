@@ -151,6 +151,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Competitor successfully added..
+        /// </summary>
+        internal static string COMPETITOR_ADDED {
+            get {
+                return ResourceManager.GetString("COMPETITOR_ADDED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact successfully added..
         /// </summary>
         internal static string CONTACT_ADDED {

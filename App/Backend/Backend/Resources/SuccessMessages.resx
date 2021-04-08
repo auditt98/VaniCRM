@@ -147,6 +147,9 @@
   <data name="CAMPAIGN_MODIFIED" xml:space="preserve">
     <value>Campaign successfully updated.</value>
   </data>
+  <data name="COMPETITOR_ADDED" xml:space="preserve">
+    <value>Competitor successfully added.</value>
+  </data>
   <data name="CONTACT_ADDED" xml:space="preserve">
     <value>Contact successfully added.</value>
   </data>

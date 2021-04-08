@@ -15,6 +15,7 @@ namespace Backend.Services
     {
         DealRepository _dealRepository = new DealRepository();
         DealValidator _dealValidator = new DealValidator();
+        CompetitorValidator _competitorValidator = new CompetitorValidator();
         PriorityRepository _priorityRepository = new PriorityRepository();
 
         public List<DealListApiModel.DealInfo> GetDealList(string query = "", int pageSize = 0, int currentPage = 1)
@@ -310,6 +311,29 @@ namespace Backend.Services
         public int FindCreatorId(int dealId)
         {
             return _dealRepository.GetCreator(dealId);
+        }
+
+        public bool AddCompetitor(int id, CompetitorCreateApiModel apiModel)
+        {
+            var validator = _competitorValidator.Validate(apiModel);
+            if (validator.IsValid)
+            {
+                return _dealRepository.AddCompetitor(id, apiModel);
+            }
+            return false;
+        }
+
+        public CompetitorListApiModel GetCompetitors(int id, int currentPage = 1, int pageSize= 0, string query = "")
+        {
+            var dbCompetitors = _dealRepository.GetCompetitors(id, currentPage, pageSize, query);
+            var apiModel = new CompetitorListApiModel();
+            if(dbCompetitors.competitors.Count() > 0)
+            {
+                apiModel.competitors = dbCompetitors.competitors.Select(c => new CompetitorListApiModel.CompetitorInfo() { id = c.COMPETITOR.ID, name = c.COMPETITOR.Name, strengths = c.COMPETITOR.Strengths, weaknesses = c.COMPETITOR.Weaknesses, website = c.COMPETITOR.Website, suggestions = c.Suggestions, threat = c.ThreatLevel }).ToList();
+
+            }
+            apiModel.pageInfo = dbCompetitors.p;
+            return apiModel;
         }
     }
 }

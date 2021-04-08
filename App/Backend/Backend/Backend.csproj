@@ -301,6 +301,7 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CallController.cs" />
     <Compile Include="Controllers\CampaignController.cs" />
+    <Compile Include="Controllers\CompetitorController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DealController.cs" />
@@ -365,6 +366,7 @@
     </Compile>
     <Compile Include="Models\ApiModel\AccountApiModel.cs" />
     <Compile Include="Models\ApiModel\CampaignApiModel.cs" />
+    <Compile Include="Models\ApiModel\CompetitorApiModel.cs" />
     <Compile Include="Models\ApiModel\ContactApiModel.cs" />
     <Compile Include="Models\ApiModel\DealApiModel.cs" />
     <Compile Include="Models\ApiModel\FileApiModel.cs" />
@@ -386,6 +388,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AccountRepository.cs" />
     <Compile Include="Repository\CampaignRepository.cs" />
+    <Compile Include="Repository\CompetitorRepository.cs" />
     <Compile Include="Repository\ContactRepository.cs" />
     <Compile Include="Repository\DealRepository.cs" />
     <Compile Include="Repository\FileRepository.cs" />
@@ -420,6 +423,7 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\AuthorizationService.cs" />
     <Compile Include="Services\CampaignService.cs" />
+    <Compile Include="Services\CompetitorService.cs" />
     <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\DealService.cs" />
     <Compile Include="Services\FileService.cs" />
@@ -433,6 +437,7 @@
     <Compile Include="Validators\AccountValidator.cs" />
     <Compile Include="Validators\CallValidator.cs" />
     <Compile Include="Validators\CampaignValidator.cs" />
+    <Compile Include="Validators\CompetitorValidator.cs" />
     <Compile Include="Validators\ContactValidator.cs" />
     <Compile Include="Validators\DealValidator.cs" />
     <Compile Include="Validators\GroupValidator.cs" />

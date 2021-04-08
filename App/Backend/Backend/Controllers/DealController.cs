@@ -923,5 +923,143 @@ namespace Backend.Controllers
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
         }
+
+        [HttpPost]
+        [Route("deals/{id}/competitors")]
+        [ResponseType(typeof(ResponseFormat))]
+        public HttpResponseMessage AddCompetitors([FromUri] int id, [FromBody] CompetitorCreateApiModel apiModel )
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            //AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.LEAD_MODIFY);
+            //read jwt
+
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    var owner = _dealService.FindOwnerId(id);
+                    if ((userId == owner) || (new AuthorizationService().SetPerm((int)EnumPermissions.DEAL_DELETE).Authorize(userId)))
+                    {
+                        //check if a tag exist
+
+                        //if it is, create a tag item with current lead
+
+                        // else create a new tag and a new tag item
+                        var isAdded = _dealService.AddCompetitor(id, apiModel);
+                        if (isAdded)
+                        {
+                            response.StatusCode = HttpStatusCode.OK;
+                            responseData = ResponseFormat.Success;
+                            responseData.message = SuccessMessages.COMPETITOR_ADDED;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.InternalServerError;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = ErrorMessages.SOMETHING_WRONG;
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+    
+        [HttpGet]
+        [Route("deals/{id}/competitors")]
+        [ResponseType(typeof(CompetitorListApiModel))]
+        public HttpResponseMessage GetCompetitors([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.DEAL_VIEW);
+
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    var isAuthorized = _authorizationService.Authorize(userId);
+                    if (isAuthorized)
+                    {
+                        response.StatusCode = HttpStatusCode.OK;
+                        responseData = ResponseFormat.Success;
+                        var competitors = _dealService.GetCompetitors(id, currentPage, pageSize, query);
+                        responseData.data = competitors;
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
     }
 }
