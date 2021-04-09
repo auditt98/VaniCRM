@@ -82,18 +82,39 @@ namespace Backend.Controllers
 
                     //create response data
                     responseData = ResponseFormat.Success;
-                    responseData.data = new
+                    if (dbUser.Avatar != null)
                     {
-                        user = new
+                        responseData.data = new
                         {
-                            id = validate.Item3.ID,
-                            username = validate.Item3.Username,
-                            firstName = validate.Item3.FirstName,
-                            lastName = validate.Item3.LastName,
-                            jwt = JwtToken,
-                            group = dbUser.GROUP.ID
-                        }
-                    };
+                            user = new
+                            {
+                                id = validate.Item3.ID,
+                                username = validate.Item3.Username,
+                                firstName = validate.Item3.FirstName,
+                                lastName = validate.Item3.LastName,
+                                jwt = JwtToken,
+                                group = dbUser.GROUP.ID,
+                                avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbUser.Avatar}"
+                            }
+                        };
+                    }
+                    else
+                    {
+                        responseData.data = new
+                        {
+                            user = new
+                            {
+                                id = validate.Item3.ID,
+                                username = validate.Item3.Username,
+                                firstName = validate.Item3.FirstName,
+                                lastName = validate.Item3.LastName,
+                                jwt = JwtToken,
+                                group = dbUser.GROUP.ID,
+                                avatar = ""
+                            }
+                        };
+                    }
+                    
                     response.StatusCode = HttpStatusCode.OK;
                 }
                 else
