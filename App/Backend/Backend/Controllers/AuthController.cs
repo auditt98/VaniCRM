@@ -86,6 +86,7 @@ namespace Backend.Controllers
                     {
                         user = new
                         {
+                            id = validate.Item3.ID,
                             username = validate.Item3.Username,
                             firstName = validate.Item3.FirstName,
                             lastName = validate.Item3.LastName,

@@ -34,19 +34,30 @@ namespace Backend.Repository
             return result;
         }
 
-        public IEnumerable<ACCOUNT> GetAllAccounts(string query = "", int pageSize = 0, int currentPage = 1)
+        public (IEnumerable<ACCOUNT> accounts, Pager p) GetAllAccounts(string query = "", int pageSize = 0, int currentPage = 1)
         {
             var q = query.ToLower();
             if (pageSize == 0)
             {
-                pageSize = db.ACCOUNTs.Count();
+                pageSize = 10;
             }
+
             if (String.IsNullOrEmpty(q))
             {
-                return db.ACCOUNTs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
+                Pager pager = new Pager(db.ACCOUNTs.Count(), currentPage, pageSize, 9999);
+                return (db.ACCOUNTs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
-            var accounts = db.ACCOUNTs.Where(c => c.Name.ToLower().Contains(q) || c.Phone.Contains(q)).OrderBy(c=>c.ID);
-            return accounts;
+            var accounts = db.ACCOUNTs.Where(c => c.Name.ToLower().Contains(q) || c.Phone.Contains(q)).OrderBy(c => c.ID);
+            if (accounts.Count() > 0)
+            {
+                Pager p = new Pager(accounts.Count(), currentPage, pageSize, 9999);
+
+                return (accounts.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+            }
+            else
+            {
+                return (accounts, null);
+            }
         }
 
         public bool Create(AccountCreateApiModel apiModel, int createdUser)

@@ -22,10 +22,14 @@ namespace Backend.Services
 
         }
 
-        public List<ContactListApiModel.ContactInfo> GetContactList(string query = "", int pageSize = 0, int currentPage = 1)
+        public ContactListApiModel GetContactList(string query = "", int pageSize = 0, int currentPage = 1)
         {
             var dbContacts = _contactRepository.GetAllContacts(query, pageSize, currentPage);
-            return dbContacts.Select(c => new ContactListApiModel.ContactInfo() { id = c.ID, contactName = c.Name, accountName = c.ACCOUNT.Name, email = c.Email, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName }).ToList();
+            var apiModel = new ContactListApiModel();
+
+            apiModel.contacts = dbContacts.contacts.Select(c => new ContactListApiModel.ContactInfo() { id = c.ID, contactName = c.Name, accountName = c.ACCOUNT.Name, email = c.Email, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName }).ToList();
+            apiModel.pageInfo = dbContacts.p;
+            return apiModel;
         }
 
         public bool Create(ContactCreateApiModel apiModel, int createdUser)

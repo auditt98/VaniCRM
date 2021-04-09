@@ -60,24 +60,7 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        var accounts = _accountService.GetAccountList(query, pageSize, currentPage);
-                        Pager pageInfo;
-                        if (accounts.Count > 0)
-                        {
-                            if (pageSize == 0)
-                            {
-                                pageInfo = new Pager(accounts.Count(), currentPage, accounts.Count());
-                            }
-                            else
-                            {
-                                pageInfo = new Pager(accounts.Count(), currentPage, pageSize);
-                            }
-                            responseData.data = new AccountListApiModel()
-                            {
-                                accounts = accounts,
-                                pageInfo = pageInfo
-                            };
-                        }
+                        responseData.data = _accountService.GetAccountList(query, pageSize, currentPage);
                     }
                     else
                     {

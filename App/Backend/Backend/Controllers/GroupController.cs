@@ -60,24 +60,7 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        var groups = _groupService.GetGroupList(query, pageSize, currentPage);
-                        Pager pageInfo;
-                        if (groups.Count > 0)
-                        {
-                            if (pageSize == 0)
-                            {
-                                pageInfo = new Pager(groups.Count(), currentPage, groups.Count());
-                            }
-                            else
-                            {
-                                pageInfo = new Pager(groups.Count(), currentPage, pageSize);
-                            }
-                            responseData.data = new GroupListApiModel()
-                            {
-                                groups = groups,
-                                pageInfo = pageInfo
-                            };
-                        }
+                        responseData.data = _groupService.GetGroupList(query, pageSize, currentPage);
                     }
                     else
                     {

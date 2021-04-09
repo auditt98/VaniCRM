@@ -60,24 +60,8 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        var deals = _dealService.GetDealList(query, pageSize, currentPage);
-                        Pager pageInfo;
-                        if (deals.Count > 0)
-                        {
-                            if (pageSize == 0)
-                            {
-                                pageInfo = new Pager(deals.Count(), currentPage, deals.Count());
-                            }
-                            else
-                            {
-                                pageInfo = new Pager(deals.Count(), currentPage, pageSize);
-                            }
-                            responseData.data = new DealListApiModel()
-                            {
-                                deals = deals,
-                                pageInfo = pageInfo
-                            };
-                        }
+                        responseData.data = _dealService.GetDealList(query, pageSize, currentPage);
+                        
                     }
                     else
                     {
