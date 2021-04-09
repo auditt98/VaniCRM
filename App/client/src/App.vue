@@ -14,3 +14,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 </style>
+
+<script>
+
+export default{
+  // mounted() {
+  //     let notificationProxy = document.createElement('script')
+  //     notificationProxy.setAttribute('src', 'https://localhost:44375/notifications/hubs')
+  //     document.body.appendChild(notificationProxy)
+  //   },
+}
+</script>
