@@ -61,24 +61,8 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        var contacts = _contactService.GetContactList(query, pageSize, currentPage);
-                        Pager pageInfo;
-                        if (contacts.Count > 0)
-                        {
-                            if (pageSize == 0)
-                            {
-                                pageInfo = new Pager(contacts.Count(), currentPage, contacts.Count());
-                            }
-                            else
-                            {
-                                pageInfo = new Pager(contacts.Count(), currentPage, pageSize);
-                            }
-                            responseData.data = new ContactListApiModel()
-                            {
-                                contacts = contacts,
-                                pageInfo = pageInfo
-                            };
-                        }
+                        responseData.data = _contactService.GetContactList(query, pageSize, currentPage);
+                        
                     }
                     else
                     {

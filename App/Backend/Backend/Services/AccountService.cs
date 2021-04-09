@@ -23,10 +23,14 @@ namespace Backend.Services
 
         }
 
-        public List<AccountListApiModel.AccountInfo> GetAccountList(string query = "", int pageSize = 0, int currentPage = 1)
+        public AccountListApiModel GetAccountList(string query = "", int pageSize = 0, int currentPage = 1)
         {
             var dbAccounts = _accountRepository.GetAllAccounts(query, pageSize, currentPage);
-            return dbAccounts.Select(c => new AccountListApiModel.AccountInfo() { id = c.ID, name = c.Name, website = c.Website, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName }).ToList();
+            var apiModel = new AccountListApiModel();
+
+            apiModel.accounts = dbAccounts.accounts.Select(c => new AccountListApiModel.AccountInfo() { id = c.ID, name = c.Name, website = c.Website, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName }).ToList();
+            apiModel.pageInfo = dbAccounts.p;
+            return apiModel;
         }
 
        

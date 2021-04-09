@@ -1,4 +1,5 @@
 ﻿using Backend.Domain;
+using Backend.Extensions;
 using Backend.Models.ApiModel;
 using System;
 using System.Collections.Generic;
@@ -11,19 +12,29 @@ namespace Backend.Repository
     {
         DatabaseContext db = new DatabaseContext();
 
-        public IEnumerable<GROUP> GetAllGroups(string query = "", int pageSize = 0, int currentPage = 1)
+        public (IEnumerable<GROUP> groups, Pager p) GetAllGroups(string query = "", int pageSize = 0, int currentPage = 1)
         {
             var q = query.ToLower();
             if(pageSize == 0)
             {
-                pageSize = db.GROUPs.Count();
+                pageSize = 10;
             }
             if (String.IsNullOrEmpty(q))
             {
-                return db.GROUPs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                Pager pager = new Pager(db.GROUPs.Count(), currentPage, pageSize, 9999);
+                return (db.GROUPs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(), pager);
             }
             var groups = db.GROUPs.Where(c => c.Name.Contains(q)).OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-            return groups;
+            if (groups.Count() > 0)
+            {
+                Pager p = new Pager(groups.Count(), currentPage, pageSize, 9999);
+
+                return (groups.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+            }
+            else
+            {
+                return (groups, null);
+            }
         } 
 
         public GROUP GetOne(int id)

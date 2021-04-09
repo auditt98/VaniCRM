@@ -35,19 +35,29 @@ namespace Backend.Repository
             return result;
         }
 
-        public IEnumerable<CONTACT> GetAllContacts(string query = "", int pageSize = 0, int currentPage = 1)
+        public (IEnumerable<CONTACT> contacts, Pager p) GetAllContacts(string query = "", int pageSize = 0, int currentPage = 1)
         {
             var q = query.ToLower();
             if (pageSize == 0)
             {
-                pageSize = db.CONTACTs.Count();
+                pageSize = 10;
             }
             if (String.IsNullOrEmpty(q))
             {
-                return db.CONTACTs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
+                Pager pager = new Pager(db.CONTACTs.Count(), currentPage, pageSize, 9999);
+                return (db.CONTACTs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
             var contacts = db.CONTACTs.Where(c => c.Name.ToLower().Contains(q) || c.ACCOUNT.Name.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q)).OrderBy(c => c.ID);
-            return contacts;
+            if (contacts.Count() > 0)
+            {
+                Pager p = new Pager(contacts.Count(), currentPage, pageSize, 9999);
+
+                return (contacts.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+            }
+            else
+            {
+                return (contacts, null);
+            }
         }
 
         public CONTACT GetOne(int id)

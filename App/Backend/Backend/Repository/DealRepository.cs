@@ -14,19 +14,30 @@ namespace Backend.Repository
         DatabaseContext db = new DatabaseContext();
         TagRepository _tagRepository = new TagRepository();
         
-        public IEnumerable<DEAL> GetAllDeals(string query = "", int pageSize = 0, int currentPage = 1)
+        public (IEnumerable<DEAL> deals, Pager p) GetAllDeals(string query = "", int pageSize = 0, int currentPage = 1)
         {
             var q = query.ToLower();
             if (pageSize == 0)
             {
-                pageSize = db.DEALs.Count();
+                pageSize = 10;
             }
             if (String.IsNullOrEmpty(q))
             {
-                return db.DEALs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
+                Pager pager = new Pager(db.DEALs.Count(), currentPage, pageSize, 9999);
+                return (db.DEALs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
             var deals = db.DEALs.Where(c => c.Name.ToLower().Contains(q) || c.PRIORITY.Name.ToLower().Contains(q) || c.ACCOUNT.Name.ToLower().Contains(q)).OrderBy(c => c.ID);
-            return deals;
+            if (deals.Count() > 0)
+            {
+                Pager p = new Pager(deals.Count(), currentPage, pageSize, 9999);
+
+                return (deals.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+            }
+            else
+            {
+                return (deals, null);
+            }
+
         }
 
         public bool Create(DealCreateApiModel apiModel, int createdUser)

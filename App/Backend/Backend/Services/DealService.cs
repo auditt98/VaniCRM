@@ -18,12 +18,13 @@ namespace Backend.Services
         CompetitorValidator _competitorValidator = new CompetitorValidator();
         PriorityRepository _priorityRepository = new PriorityRepository();
 
-        public List<DealListApiModel.DealInfo> GetDealList(string query = "", int pageSize = 0, int currentPage = 1)
+        public DealListApiModel GetDealList(string query = "", int pageSize = 0, int currentPage = 1)
         {
             var dbDeals = _dealRepository.GetAllDeals(query, pageSize, currentPage);
-            var temp = dbDeals.Select(c => new DealListApiModel.DealInfo() { id = c.ID, name = c.Name, expectedDate = c.ClosingDate.GetValueOrDefault(), amount = c.Amount.GetValueOrDefault(), accountName = c.ACCOUNT.Name, priority = c.PRIORITY.Name});
+            var apiModel = new DealListApiModel();
+            //var temp = dbDeals.Select(c => new DealListApiModel.DealInfo() { id = c.ID, name = c.Name, expectedDate = c.ClosingDate.GetValueOrDefault(), amount = c.Amount.GetValueOrDefault(), accountName = c.ACCOUNT.Name, priority = c.PRIORITY.Name});
             var results = new List<DealListApiModel.DealInfo>();
-            foreach(var deal in dbDeals)
+            foreach(var deal in dbDeals.deals)
             {
                 var dealInfo = new DealListApiModel.DealInfo();
                 dealInfo.id = deal.ID;
@@ -43,7 +44,9 @@ namespace Backend.Services
                 }
                 results.Add(dealInfo);
             }
-            return results;
+            apiModel.deals = results;
+            apiModel.pageInfo = dbDeals.p;
+            return apiModel;
         }
 
         public bool Create(DealCreateApiModel apiModel, int createdUser)
