@@ -15,5 +15,11 @@ namespace Backend.Models.ApiModel
         public int? moduleObjectId { get; set; }
         public string subModule { get; set; }
         public int? subModuleObjectId { get; set; }
+        public bool isRead { get; set; }
+    }
+
+    public class NotificationListApiModel
+    {
+        public List<NotificationApiModel> notifications { get; set; }
     }
 }

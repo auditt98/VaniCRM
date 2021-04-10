@@ -990,6 +990,7 @@ namespace Backend.Controllers
                             {
                                 var t = new UserDetailApiModel.T();
                                 t.title = task.Title;
+                                t.rrule = task.RRule;
                                 if(task.TASK_STATUS != null)
                                 {
                                     t.status = task.TASK_STATUS.Name;

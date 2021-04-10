@@ -81,6 +81,7 @@ namespace Backend.Models.ApiModel
             public DateTime startDate { get; set; }
             public DateTime endDate { get; set; }
             public string priotity { get; set; }
+            public string rrule { get; set; }
         }
     }
 
@@ -165,6 +166,7 @@ namespace Backend.Models.ApiModel
             public DateTime startDate { get; set; }
             public DateTime endDate { get; set; }
             public string priotity { get; set; }
+            public string rrule { get; set; }
         }
 
     }
