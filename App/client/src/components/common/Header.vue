@@ -12,11 +12,14 @@
     </div>
     <div class="nav-item mx-auto order-last notificationButton" style="position: relative" v-popover:notificationPanel >
       <popover id="notificationPanel" name="notificationPanel">
-        <div class="notificationPanelHeader"><span>Notifications</span></div>
+        <div class="notificationPanelHeader"><h2>Notifications</h2></div>
         <div class="notificationPanelContent">
           <div class="notificationGroup">
-            <span class="notificationGroupTag">Today</span>
-            <div class="notification">Hello</div>
+            <h4 class="notificationGroupTag">Today</h4>
+            <div class="notification">
+              
+              Hello
+            </div>
             <div class="notification"></div>
             <div class="notification"></div>
             <div class="notification"></div>
@@ -28,8 +31,17 @@
             <div class="notification"></div>
           </div>
           <div class="notificationGroup">
-            <span class="notificationGroupTag">Previous</span>
-
+            <h4 class="notificationGroupTag">Previous</h4>
+            <div class="notification">Hello</div>
+            <div class="notification"></div>
+            <div class="notification"></div>
+            <div class="notification"></div>
+            <div class="notification"></div>
+            <div class="notification">Hello</div>
+            <div class="notification"></div>
+            <div class="notification"></div>
+            <div class="notification"></div>
+            <div class="notification"></div>
           </div>
           
          
@@ -214,49 +226,53 @@ i {
   color: black;
 }
 
-.notificationIcon:hover{
+/* .notificationIcon:hover{
   color: #D93915;
-}
+} */
 
 .notificationButton{
   border-radius: 50%;
 }
 
-.notificationButton:hover{
-  background-color: RGBA(217,57,21,0.2)
-
+.notificationIcon:hover{
+  color: RGBA(217,57,21,1)
 }
 
 .notification{
-  height:30px;
+  height:80px;
+  margin-left:5px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.notification:hover{
+  background-color: rgba(0,0,0,0.03);
 }
 
 .notificationPanelHeader{
   /* position: sticky;
   top: 0; */
   background-color: white;
-  text-align: center;
   height: 40px;
   line-height: 38px;
   vertical-align: middle;
-
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-bottom: 20px;
 }
 
-.notificationPanelHeader span{
-  font-weight: bold;
-  vertical-align: middle;
+.notificationPanelHeader h2{
   font-family: "Segoe UI";
   display: inline-block;
   vertical-align: middle;
   line-height: normal;
-  font-size: 22px;
 }
 
 .notificationGroupTag{
-  font-size: 20px;
   line-height: normal;
-    font-family: "Segoe UI";
-    font-weight: bold;
+  font-family: "Segoe UI";
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 #notificationPanel{
@@ -267,7 +283,7 @@ i {
   left: -80px !important;
   height: 80vh !important;
   width: 300px !important;
-  background-color: white;
+  /* background-color: #FAFAFC; */
 }
 
 </style>
