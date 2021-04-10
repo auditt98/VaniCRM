@@ -14,38 +14,14 @@
       <popover id="notificationPanel" name="notificationPanel">
         <div class="notificationPanelHeader"><h2>Notifications</h2></div>
         <div class="notificationPanelContent">
-          <div class="notificationGroup">
-            <h4 class="notificationGroupTag">Today</h4>
-            <div class="notification">
-              
-              Hello
+            <div class="notification" v-for="notification in this.notifications" :key="notification.id">
+              <h6 style="color: rgba(0,0,0,0.7)">{{notification.title}}</h6>
+              {{notification.title}}
             </div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification">Hello</div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-          </div>
-          <div class="notificationGroup">
-            <h4 class="notificationGroupTag">Previous</h4>
-            <div class="notification">Hello</div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification">Hello</div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-            <div class="notification"></div>
-          </div>
-          
-         
-
+            <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+          <!-- <div class="notificationGroup">
+            <h4 class="notificationGroupTag">All</h4>
+          </div> -->
         </div>
       </popover>
       <div class="header-avatar-icon" >
@@ -133,43 +109,62 @@
 <script>
 import {authenticationService} from "@/service/authentication.service";
 // console.log(authenticationService.currentUserValue)
-import { hubConnection } from 'signalr-no-jquery';
-// if(authenticationService)
+// import { hubConnection } from 'signalr-no-jquery';
+import axios from 'axios';
 
-var connection = hubConnection("https://localhost:44375/signalr", { useDefaultPath: false});
-  var proxy = connection.createHubProxy('notificationHub');
-  proxy.on('pushNotifications', function(notifications){
-    console.log(notifications)
-  })
-  connection.start()
-    .done(function(){ 
-      console.log('Now connected, connection ID=' + connection.id);  
-      proxy.invoke('Join', 1004).done(function () {
-        console.log ('Invocation of join succeeded');
-    }).fail(function (error) {
-        console.log('Error: ' + error);
-    });
-    })
-    .fail(function(){ console.log('Could not connect'); });
+// var connection = hubConnection("https://localhost:44375/signalr", { useDefaultPath: false});
+//   var proxy = connection.createHubProxy('notificationHub');
+//   proxy.on('pushNotifications', function(n){
+//     (n).forEach(element => {
+//       console.log(element)
+//     });
+//   })
+//   connection.start()
+//     .done(function(){ 
+//       console.log('Now connected, connection ID=' + connection.id);  
+//       proxy.invoke('Join', 1004).done(function () {
+//         console.log ('Invocation of join succeeded');
+//     }).fail(function (error) {
+//         console.log('Error: ' + error);
+//     });
+//     })
+//     .fail(function(){ console.log('Could not connect'); });
+
+const api = "https://localhost:44375/notifications";
 
 export default {
   name: "Header",
   data: function(){
     return {
-      currentUser: authenticationService.currentUserValue
+      currentUser: authenticationService.currentUserValue,
+      notifications: [],
+      page: 1,
+      pageSize: 10,
     }
   },
   methods: {
     logout() {
       authenticationService.logout(null);
+    },
+    infiniteHandler($state){
+      axios.get(api, {
+        params: {
+          page: this.page,
+          userId: authenticationService.currentUserValue.id,
+        },
+      }).then(({ data }) => {
+        console.log(data);
+      })
     }
-  }
-}
+  },
+  created(){
+
+  } 
+},
+
 </script>
 
 <style scoped>
-
-
 
 .header {
   /* height: 80px; */
