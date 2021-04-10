@@ -12,6 +12,7 @@ using Google.Apis.Services;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
 using Newtonsoft.Json;
+using Backend.Extensions;
 
 namespace Backend.Repository
 {
@@ -21,10 +22,16 @@ namespace Backend.Repository
         TagRepository _tagRepository = new TagRepository();
         //get user's tasks
 
-        public IEnumerable<TASK_TEMPLATE> GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0)
+        public (List<TASK_TEMPLATE> tasks, Pager p) GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0)
         {
             var dbUser = db.USERs.Find(userID);
-            var templates = dbUser.TaskTemplateCreated.ToList();
+            //var templates = dbUser.TaskTemplateCreated.ToList();
+            //var templates = List<TASK_TEMPLATE>();
+            var templates = db.CALLs.Where(c => c.CallOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
+            var tasks = db.TASKs.Where(c => c.TaskOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
+            templates.AddRange(tasks);
+            var meetingAsHost = db.MEETINGs.Where(c => c.Host == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
+            templates.AddRange(meetingAsHost);
             foreach (var meeting in dbUser.MEETING_PARTICIPANT)
             {
                 templates.Add(meeting.MEETING.TASK_TEMPLATE);
@@ -32,15 +39,25 @@ namespace Backend.Repository
 
             if (pageSize == 0)
             {
-                pageSize = templates.Count();
+                pageSize = 10;
             }
 
             if (String.IsNullOrEmpty(q))
             {
-                return templates.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
+                Pager pager = new Pager(templates.Count(), currentPage, pageSize, 9999);
+                return (templates.OrderByDescending(c=>c.CreatedAt).OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(), pager);
             }
-            var result = templates.Where(c => c.Title.ToLower().Contains(q.ToLower())).OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-            return result;
+            var result = templates.Where(c => c.Title.ToLower().Contains(q.ToLower())).OrderByDescending(c => c.CreatedAt).OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            if (result.Count() > 0)
+            {
+                Pager p = new Pager(result.Count(), currentPage, pageSize, 9999);
+
+                return (result.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(), p);
+            }
+            else
+            {
+                return (result, null);
+            }
         }
 
         public IEnumerable<CALL_RESULT> GetAllCallResults()

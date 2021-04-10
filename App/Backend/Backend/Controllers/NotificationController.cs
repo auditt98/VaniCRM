@@ -18,7 +18,7 @@ namespace Backend.Controllers
         NotificationService _notificationService = new NotificationService();
 
         [HttpGet]
-        [Route("notification")]
+        [Route("notifications")]
         [ResponseType(typeof(NotificationListApiModel))]
         public HttpResponseMessage Get([FromUri] int userId, [FromUri]int page = 1)
         {

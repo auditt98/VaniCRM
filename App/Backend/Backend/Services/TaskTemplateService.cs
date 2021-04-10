@@ -1,4 +1,5 @@
 ﻿using Backend.Domain;
+using Backend.Extensions;
 using Backend.Models.ApiModel;
 using Backend.Repository;
 using Backend.Resources;
@@ -18,9 +19,9 @@ namespace Backend.Services
         TaskValidator _taskValidator = new TaskValidator();
         PriorityRepository _priorityRepository = new PriorityRepository();
 
-        public List<TASK_TEMPLATE> GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0)
+        public (List<TASK_TEMPLATE> tasks, Pager pageInfo) GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0)
         {
-            return _taskTemplateRepository.GetUserTaskTemplate(userID, q, currentPage, pageSize).ToList();
+            return _taskTemplateRepository.GetUserTaskTemplate(userID, q, currentPage, pageSize);
         }
 
         public CallBlankApiModel PrepareNewCall()

@@ -986,7 +986,7 @@ namespace Backend.Controllers
                         {
                             var taskTemplates = _taskTemplateService.GetUserTaskTemplate(dbUser.ID, query, currentPage, pageSize);
                             var tasks = new List<UserDetailApiModel.T>();
-                            foreach(var task in taskTemplates)
+                            foreach(var task in taskTemplates.tasks)
                             {
                                 var t = new UserDetailApiModel.T();
                                 t.title = task.Title;
@@ -1053,25 +1053,30 @@ namespace Backend.Controllers
                                 }
                                 tasks.Add(t);
                             }
-                            Pager pageInfo;
-                            responseData = ResponseFormat.Success;
-
-                            if (tasks.Count() > 0)
+                            responseData.data = new
                             {
-                                if (pageSize == 0)
-                                {
-                                    pageInfo = new Pager(tasks.Count(), currentPage, tasks.Count());
-                                }
-                                else
-                                {
-                                    pageInfo = new Pager(tasks.Count(), currentPage, pageSize);
-                                }
-                                responseData.data = new
-                                {
-                                    tasks,
-                                    pageInfo
-                                };
-                            }
+                                tasks,
+                                pageInfo = taskTemplates.pageInfo
+                            };
+                            //Pager pageInfo;
+                            //responseData = ResponseFormat.Success;
+
+                            //if (tasks.Count() > 0)
+                            //{
+                            //    if (pageSize == 0)
+                            //    {
+                            //        pageInfo = new Pager(tasks.Count(), currentPage, tasks.Count());
+                            //    }
+                            //    else
+                            //    {
+                            //        pageInfo = new Pager(tasks.Count(), currentPage, pageSize);
+                            //    }
+                            //    responseData.data = new
+                            //    {
+                            //        tasks,
+                            //        pageInfo
+                            //    };
+                            //}
                             response.StatusCode = HttpStatusCode.OK;
                         }
                         else
