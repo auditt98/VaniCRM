@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <Header/>
+
     <div class="px-5 pt-3 m-0 background-main">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -126,10 +126,9 @@
                   </tr>
                   <tr>
                     <td><label for="Owner">Owner</label></td>
-                    <td style="width: 525px">
-                      <v-select id="Owner" label="username" :filterable="false" :options="owners" @search="onSearch"
-                                v-model="lead.owner"
-                                :reduce="i => i.id">
+                    <td style="width: 80%">
+                      <vc-select id="Owner" label="username" :filterable="false" :options="owners" @search="onSearch"
+                                v-model="lead.owner">
                         <template slot="no-options">
                           Type for searching...
                         </template>
@@ -143,7 +142,7 @@
                              {{ `${option.username} - ${option.firstName}` }}
                            </div>
                          </template>
-                      </v-select>
+                      </vc-select>
                     </td>
                   </tr>
                   </tbody>
@@ -190,7 +189,7 @@
 </template>
 
 <script>
-import Header from "@/components/common/Header";
+
 import VButton from "@/components/common/VButton";
 import {leadService} from "@/service/lead.service";
 import VLoading from "@/components/common/VLoading";
@@ -201,7 +200,7 @@ import {getValueInArr} from "@/config/config";
 
 export default {
   name: "LeadUpdate",
-  components: {VLoading, VButton, Header},
+  components: {VLoading, VButton, },
   validations: {
     lead: {
       name: {
@@ -235,28 +234,7 @@ export default {
         if (this.files) {
           await this.upload();
         }
-       /* const leadUpdate = {
-          name: this.lead.name,
-          email: this.lead.email,
-          phone: this.lead.phone,
-          fax: this.lead.fax,
-          industry: this.lead.industry,
-          website: this.lead.website,
-          annualRevenue: this.lead.annualRevenue,
-          priority: this.lead.priority,
-          noEmail: this.lead.noEmail,
-          noCall: this.lead.noCall,
-          leadSource: this.lead.leadSource,
-          companyName: this.lead.companyName,
-          numberOfEmployees: 0,
-          leadStatus: this.lead.leadStatus,
-          skype: this.lead.skype,
-          country: this.lead.country,
-          city: this.lead.city,
-          addressDetail: this.lead.addressDetail,
-          description: this.lead.description,
-          owner: this.lead.owner
-        };*/
+        this.lead.owner = this.lead.owner ? this.lead.owner.id : null;
         leadService.update(this.lead, this.lead.id)
             .then(res => {
               if (res) {
@@ -275,7 +253,6 @@ export default {
           this.lead.priority = getValueInArr(res.data.priority, 'selected', 'id');
           this.lead.leadSource = getValueInArr(res.data.leadSource, 'selected', 'id');
           this.lead.leadStatus = getValueInArr(res.data.status, 'selected', 'id');
-          this.lead.owner = this.lead.owner.id;
         }
       })
     },
@@ -351,7 +328,7 @@ export default {
         city: "string",
         addressDetail: "string",
         description: "string",
-        owner: 1
+        owner: null
       },
       loading: false,
       files: null,

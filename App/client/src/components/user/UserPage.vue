@@ -1,6 +1,6 @@
 <template>
   <div class="mb-5">
-    <Header/>
+
     <VLoading :loading="loading"/>
     <div class="px-5 pt-3 m-0 background-main">
       <div class="row ">
@@ -53,7 +53,10 @@
             </TableInDetail>
           </div>
           <div class="row mt-3" id="leadOwn">
-            <TableInDetail :header-columns="leadOwnColumns" :data="[]" :title="'Lead Own'">
+            <TableInDetail :header-columns="leadOwnColumns" :data="[]" :title="'Lead Own'"
+                           :page-config="{page: currentPageLead, pageSize: pageSizeLead, totalItems: totalItemLead, totalPage: totalPageLead}"
+                           @page-size-change="onPageSizeChange($event, 'LEAD')"
+                           @go-to-page="goToPage($event, 'LEAD')">
               <template slot="body">
                 <tbody v-if="leadOwnLst && leadOwnLst.length > 0">
                 <tr v-for="(t, i) in leadOwnLst" :key="i">
@@ -72,7 +75,10 @@
             </TableInDetail>
           </div>
           <div class="row mt-3" id="allAccounts">
-            <TableInDetail :header-columns="accountColumns" :data="accountLst" :title="'All Accounts'">
+            <TableInDetail :header-columns="accountColumns" :data="accountLst" :title="'All Accounts'"
+                           :page-config="{page: currentPageAccount, pageSize: pageSizeAccount, totalItems: totalItemAccount, totalPage: totalPageAccount}"
+                           @page-size-change="onPageSizeChange($event, 'ACCOUNT')"
+                           @go-to-page="goToPage($event, 'ACCOUNT')">
               <template slot="body">
                 <tbody v-if="accountLst && accountLst.length > 0">
                 <tr v-for="(t, i) in accountLst" :key="i">
@@ -92,7 +98,10 @@
             </TableInDetail>
           </div>
           <div class="row mt-3" id="allContacts">
-            <TableInDetail :header-columns="contractColumns" :data="contractLst" :title="'All Contracts'">
+            <TableInDetail :header-columns="contractColumns" :data="contractLst" :title="'All Contracts'"
+                           :page-config="{page: currentPageContact, pageSize: pageSizeContact, totalItems: totalItemContact, totalPage: totalPageContact}"
+                           @page-size-change="onPageSizeChange($event, 'CONTACT')"
+                           @go-to-page="goToPage($event, 'CONTACT')">
               <template slot="body">
                 <tbody v-if="contractLst && contractLst.length > 0">
                 <tr v-for="(t, i) in contractLst" :key="i">
@@ -130,7 +139,7 @@ import MenuLeft from "@/components/common/MenuLeft";
 import UserInfo from "@/components/common/info/UserInfo";
 import BasicInfo from "@/components/common/info/BasicInfo";
 import TableInDetail from "@/components/common/table/TableInDetail";
-import Header from "@/components/common/Header";
+
 import ChangePassModal from "@/components/common/modal/ChangePassModal";
 import {userService} from "@/service/user.service";
 import VLoading from "@/components/common/VLoading";
@@ -183,7 +192,7 @@ export default {
         pageSize: this.pageSizeTask
       };
       userService.getAllTasks(this.user.id, query).then(res => {
-        if (res) {
+        if (res && res.data) {
           this.taskLst = res.data.tasks;
           this.totalPageTask = Number(res.data.pageInfo.TotalPages);
           this.totalItemTask = Number(res.data.pageInfo.TotalItems);
@@ -200,9 +209,10 @@ export default {
         pageSize: this.pageSizeAccount
       };
       userService.getAllAccounts(this.user.id, query).then(res => {
-        if (res) {
+        if (res && res.data) {
           this.accountLst = res.data.accounts;
-          this.totalPage = Number(res.data.pageInfo.totalPage);
+          this.totalPageAccount = Number(res.data.pageInfo.TotalPages);
+          this.totalItemAccount = Number(res.data.pageInfo.TotalItems);
         }
       }).finally(() => {
         this.loading = false;
@@ -216,9 +226,10 @@ export default {
         pageSize: this.pageSizeContact
       };
       userService.getAllContacts(this.user.id, query).then(res => {
-        if (res) {
+        if (res && res.data) {
           this.contractLst = res.data.contacts;
-          this.totalPage = Number(res.data.pageInfo.totalPage);
+          this.totalPageContact= Number(res.data.pageInfo.TotalPages);
+          this.totalItemContact = Number(res.data.pageInfo.TotalItems);
         }
       }).finally(() => {
         this.loading = false;
@@ -232,9 +243,10 @@ export default {
         pageSize: this.pageSizeLead
       };
       userService.getAllLeads(this.user.id, query).then(res => {
-        if (res) {
+        if (res && res.data) {
           this.leadOwnLst = res.data.leads;
-          this.totalPage = Number(res.data.pageInfo.totalPage);
+          this.totalPageLead = Number(res.data.pageInfo.TotalPages);
+          this.totalItemLead = Number(res.data.pageInfo.TotalItems);
         }
       }).finally(() => {
         this.loading = false;
@@ -245,12 +257,35 @@ export default {
         this.pageSizeTask = Number(event);
         this.loadTasks();
       }
+      if (type === 'LEAD') {
+        this.pageSizeLead = Number(event);
+        this.loadLeads();
+      }
+      if (type === 'ACCOUNT') {
+        this.pageSizeAccount = Number(event);
+        this.loadAccounts();
+      }
+      if (type === 'CONTACT') {
+        this.pageSizeContact = Number(event);
+        this.loadContacts();
+      }
     },
     goToPage(event, type) {
       if (type === 'TASK') {
-        console.log(event)
         this.currentPageTask = Number(event);
-        // this.loadTasks();
+        this.loadTasks();
+      }
+      if (type === 'LEAD') {
+        this.currentPageLead = Number(event);
+        this.loadLeads();
+      }
+      if (type === 'ACCOUNT') {
+        this.currentPageAccount = Number(event);
+        this.loadAccounts();
+      }
+      if (type === 'CONTACT') {
+        this.currentPageContact = Number(event);
+        this.loadContacts();
       }
     }
 
@@ -268,16 +303,27 @@ export default {
       user: {},
       loading: false,
       isModalVisible: false,
+
       currentPageTask: 1,
       pageSizeTask: 5,
       totalItemTask: 0,
-      totalPageTask: 1,
+      totalPageTask: 0,
+
       currentPageLead: 1,
-      pageSizeLead: 5,
+      pageSizeLead: 1,
+      totalItemLead: 0,
+      totalPageLead:0,
+
       currentPageAccount: 1,
       pageSizeAccount: 5,
+      totalItemAccount: 0,
+      totalPageAccount:0,
+
       currentPageContact: 1,
       pageSizeContact: 5,
+      totalItemContact: 0,
+      totalPageContact:0,
+
       btnBack: {btnClass: 'btn-purple px-3', icon: 'fa-arrow-left', text: 'Back'},
       btnChangePass: {btnClass: 'btn-white px-3', icon: 'fa-refresh', text: 'Change Password'},
       btnDelete: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Delete'},
@@ -335,7 +381,7 @@ export default {
 
     }
   },
-  components: {VTag, VLoading, ChangePassModal, Header, TableInDetail, BasicInfo, UserInfo, MenuLeft, VButton}
+  components: {VTag, VLoading, ChangePassModal, TableInDetail, BasicInfo, UserInfo, MenuLeft, VButton}
 }
 </script>
 

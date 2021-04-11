@@ -1,6 +1,6 @@
 <template>
   <div class="" >
-    <Header/>
+
     <div class="px-5 pt-3 m-0 background-main" style="position: relative">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -95,7 +95,7 @@
 
 <script>
 import VButton from "@/components/common/VButton";
-import Header from "@/components/common/Header";
+
 import MenuLeft from "@/components/common/MenuLeft";
 import BasicInfo from "@/components/common/info/BasicInfo";
 import Note from "@/components/common/info/Note";
@@ -249,7 +249,7 @@ export default {
 
     }
   },
-  components: {AddParticipantModal, CreateTagModal, VLoading, Note, BasicInfo, MenuLeft, Header, VButton}
+  components: {AddParticipantModal, CreateTagModal, VLoading, Note, BasicInfo, MenuLeft, VButton}
 }
 </script>
 
