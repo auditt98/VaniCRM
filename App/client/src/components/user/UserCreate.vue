@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <Header/>
+
     <VLoading :loading="loading"/>
     <div class="px-5 pt-3 m-0 background-main">
       <div class="row ">
@@ -128,13 +128,13 @@
 import VButton from "@/components/common/VButton";
 import {userService} from "@/service/user.service";
 import router from "@/router";
-import Header from "@/components/common/Header";
+
 import {groupService} from "@/service/group.service";
 import VLoading from "@/components/common/VLoading";
 
 export default {
   name: "UserUpdate",
-  components: {VLoading, Header, VButton},
+  components: {VLoading, VButton},
   methods: {
 /*    fileChange(event) {
       this.files = event.target.files[0];

@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <Header/>
+
     <div class="px-5 pt-3 m-0 background-main" style="position: relative">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -38,7 +38,10 @@
             <Note ref="notes" @remove-note="removeNote" @submit="createNote" :notes="contact.notes"/>
           </div>
           <div class="row mt-3" id="task">
-            <TableInDetail :header-columns="taskColumns" :data="taskLst" :title="'Tasks'" >
+            <TableInDetail :header-columns="taskColumns" :data="taskLst" :title="'Tasks'"
+                           :page-config="{page: currentPageTask, pageSize: pageSizeTask, totalItems: totalItemTask, totalPage: totalPageTask}"
+                           @page-size-change="onPageSizeChange($event)"
+                           @go-to-page="goToPage($event)">
               <template slot="button">
                 <router-link class="mr-2" :to="{name: 'TaskCreate', query: {contactId: contact.id}}">
                   <VButton :data="btnCreateTask"/>
@@ -82,7 +85,7 @@
 
 <script>
 import VButton from "@/components/common/VButton";
-import Header from "@/components/common/Header";
+
 import MenuLeft from "@/components/common/MenuLeft";
 import UserInfo from "@/components/common/info/UserInfo";
 import BasicInfo from "@/components/common/info/BasicInfo";
@@ -117,7 +120,12 @@ export default {
       });
     },
     async loadTaskByContact() {
-      await contactService.loadTasks(this.contact.id)
+      this.taskLst = [];
+      let query = {
+        currentPage: this.currentPageTask,
+        pageSize: this.pageSizeTask
+      };
+      await contactService.loadTasks(query, this.contact.id)
           .then(res => {
             if (res && res.data) {
               this.taskLst = res.data.contacts;
@@ -221,6 +229,14 @@ export default {
               this.loadContact();
             }
           })
+    },
+    onPageSizeChange(event) {
+      this.pageSizeTask = Number(event);
+      this.loadTaskByContact();
+    },
+    goToPage(event) {
+      this.currentPageTask = Number(event);
+      this.loadTaskByContact();
     }
   },
   created() {
@@ -281,10 +297,15 @@ export default {
         {key: 'City', value: ''},
         {key: 'Address Detail', value: ''}
       ],
-      taskColumns: ['Title', 'Type', 'Status', 'Start Date', 'End Date', 'Priority', 'Owner', 'Action']
+      taskColumns: ['Title', 'Type', 'Status', 'Start Date', 'End Date', 'Priority', 'Owner', 'Action'],
+      currentPageTask: 1,
+      pageSizeTask: 5,
+      totalItemTask: 0,
+      totalPageTask: 0,
+
     }
   },
-  components: {TableInDetail, VLoading, Note, BasicInfo, UserInfo, MenuLeft, Header, VButton}
+  components: {TableInDetail, VLoading, Note, BasicInfo, UserInfo, MenuLeft, VButton}
 }
 </script>
 

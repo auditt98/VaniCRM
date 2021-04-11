@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <Header/>
+
     <div class="px-5 pt-3 m-0 mb-3 background-main" style="position: relative">
       <VLoading v-if="isLoading"/>
       <div class="row ">
@@ -72,14 +72,14 @@
 
 <script>
 import TableInDetail from "@/components/common/table/TableInDetail";
-import Header from "@/components/common/Header";
+
 import VButton from "@/components/common/VButton";
 import {groupService} from "@/service/group.service";
 import VLoading from "@/components/common/VLoading";
 
 export default {
   name: "GroupUpdate",
-  components: {VLoading, VButton, Header, TableInDetail},
+  components: {VLoading, VButton, TableInDetail},
   methods: {
     save() {
       this.isCheck = true;
@@ -100,9 +100,9 @@ export default {
         groupService.update({
           name: this.groupName,
           permissions: this.permissionSelected
-        }, this.groupId).then(() => {
-          alert('Thành công');
-          this.loadGroup();
+        }, this.groupId).then((res) => {
+          alert(res.message);
+          this.$router.push('/group-list');
         }).catch(err => alert(err));
       }
     },

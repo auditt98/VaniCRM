@@ -19,7 +19,7 @@
           </thead>
           <slot name="body"></slot>
         </table>
-        <div class="table-in-detail-bottom w-100 row justify-content-end m-0" v-if="pageConfig && pageConfig.totalItems > 0">
+        <div class="table-in-detail-bottom w-100 row justify-content-end m-0" v-if="pageConfig && pageConfig.totalPage && pageConfig.totalPage > 0">
           <div class="form-inline col-sm-2" v-if="pageConfig.pageSize">
             <label for="exampleFormControlSelect1">Rows per page:</label>
             <select class="form-control py-0 ml-3" id="exampleFormControlSelect1" v-model="pageConfig.pageSize" @change="onChangePageSize">
@@ -28,7 +28,7 @@
               <option :value="20">20</option>
             </select>
           </div>
-          <div class="col-sm-2 pt-2 text-right">
+          <div class="col-sm-2 pt-2 text-right" v-if="pageConfig && pageConfig.totalPage && pageConfig.totalPage > 0">
             <span  v-if="pageConfig.pageSize" class="col-sm-8">1 - {{pageConfig.totalItems > pageConfig.pageSize ? pageConfig.pageSize : pageConfig.totalItems}} of {{pageConfig.totalItems}}</span>
             <span class="col-sm-4 justify-content-between d-inline-flex">
             <i class="fa fa-angle-left" :class="{'disabled' : pageConfig.page === 1}" aria-hidden="true" @click="goToPage(pageConfig.page - 1)"></i>
