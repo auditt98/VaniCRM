@@ -19,8 +19,8 @@ export const contactService = {
     loadAllObject
 };
 
-function loadTasks(id) {
-    return fetch(`${config.apiUrl}/contacts/${id}/tasks`, requestOptions.get())
+function loadTasks(q, id) {
+    return fetch(`${config.apiUrl}/contacts/${id}/tasks?${buildQueryURI(q)}`, requestOptions.get())
         .then(handleResponse);
 }
 function getAll(q) {

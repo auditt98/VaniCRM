@@ -1,6 +1,6 @@
 <template>
   <div class="background-main">
-    <Header/>
+
     <VLoading :loading="loading"/>
     <div class="col-sm-9 mx-auto mt-5">
       <TableInList :header-columns="columns"
@@ -39,14 +39,14 @@
 
 <script>
   import TableInList from "@/components/common/table/TableInList";
-  import Header from "@/components/common/Header";
+
   import VButton from "@/components/common/VButton";
   import VLoading from "@/components/common/VLoading";
   import {contactService} from "../../service/contact.service";
 
   export default {
     name: "UserList",
-    components: {VLoading, VButton, TableInList, Header},
+    components: {VLoading, VButton, TableInList, },
     methods: {
       goToPage(page) {
         this.currentPage = page;
