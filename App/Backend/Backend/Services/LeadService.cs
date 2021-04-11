@@ -101,9 +101,9 @@ namespace Backend.Services
             }
         }
 
-        public bool Delete(int id)
+        public bool Delete(int id, int userId)
         {
-            return _leadRepository.Delete(id);
+            return _leadRepository.Delete(id, userId);
         }
     
         public LeadDetailApiModel GetOne(int id)
