@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header/>
+    <Header v-if="!['ResetPassword', 'LoginPage', 'About'].includes($route.name)" />
     <router-view/>
   </div>
 </template>

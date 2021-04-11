@@ -131,6 +131,7 @@ export default {
       page: 1,
       pageSize: 10,
       unreadCount: 0,
+      isDashboard: false,
     }
   },
   methods: {
@@ -198,7 +199,14 @@ export default {
             });
         })
         .fail(function(){ console.log('Could not connect'); });
-  } 
+  },
+  created() {
+    if (window.location.pathname.indexOf('dashboard-marketing') > -1 || window.location.pathname.indexOf('dashboard-sale') > -1) {
+      this.isDashboard = true;
+    } else {
+      this.isDashboard = false;
+    }
+  }
 }
 
 </script>

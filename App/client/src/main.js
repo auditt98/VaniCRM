@@ -10,11 +10,22 @@ import 'vue-select/dist/vue-select.css';
 import Vuetify from 'vuetify'
 import DaySpanVuetify from 'dayspan-vuetify'
 
+import Notifications from 'vue-notification'
 import vSelect from 'vue-select'
 import Vuelidate from 'vuelidate'
+import velocity      from 'velocity-animate'
 
+import Popover from 'vue-js-popover'
+import VPopover from 'vue-js-popover'
+import InfiniteLoading from 'vue-infinite-loading';
+
+Vue.use(InfiniteLoading, { /* options */ });
+Vue.use(Popover)
+Vue.use(VPopover, { tooltip: true })
+
+
+Vue.use(Notifications, { velocity })
 Vue.use(Vuetify);
-
 Vue.use(DaySpanVuetify, {
   methods: {
     getDefaultEventColor: () => '#1976d2'
