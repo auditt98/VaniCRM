@@ -35,22 +35,5 @@ namespace Backend.Controllers
             return response;
         }
 
-        [HttpGet]
-        [Route("notifications/read")]
-        public HttpResponseMessage MarkAsRead([FromUri] int notificationId, [FromUri] int userId)
-        {
-            var response = new HttpResponseMessage();
-            ResponseFormat responseData = new ResponseFormat();
-            var notifications = _notificationService.MarkAsRead(notificationId, userId);
-
-            response.StatusCode = HttpStatusCode.OK;
-            responseData = ResponseFormat.Success;
-            responseData.message = "";
-            var json = JsonConvert.SerializeObject(responseData);
-            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
-            return response;
-        }
-
-
     }
 }

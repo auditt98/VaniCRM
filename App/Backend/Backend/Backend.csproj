@@ -383,7 +383,6 @@
     <Compile Include="Extensions\GoogleCalendar.cs" />
     <Compile Include="Extensions\HashManager.cs" />
     <Compile Include="Extensions\JwtTokenManager.cs" />
-    <Compile Include="Extensions\NotificationManager.cs" />
     <Compile Include="Extensions\PermsAttribute.cs" />
     <Compile Include="Extensions\ResponseFormat.cs" />
     <Compile Include="Extensions\Pager.cs" />
