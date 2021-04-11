@@ -16,7 +16,7 @@
         <div class="notificationPanelContent">
             <div class="notification" v-for="notification in this.notifications" :key="notification.id">
               <h6 style="color: rgba(0,0,0,0.7)">{{notification.title}}</h6>
-              {{notification.title}}
+              {{notification.content}}
             </div>
             <infinite-loading @infinite="infiniteHandler"></infinite-loading>
           <!-- <div class="notificationGroup">
@@ -153,14 +153,20 @@ export default {
           userId: authenticationService.currentUserValue.id,
         },
       }).then(({ data }) => {
-        console.log(data);
+        if(data.data.notifications.length > 0){
+          this.page += 1;
+          this.notifications.push(...data.data.notifications);
+          $state.loaded();
+        } else{
+          $state.complete();
+        }
       })
     }
   },
   created(){
 
   } 
-},
+}
 
 </script>
 
