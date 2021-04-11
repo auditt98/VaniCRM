@@ -48,6 +48,7 @@ function requestResetPass(email) {
 
 function getRefreshToken() {
     return fetch(`${config.apiUrl + 'refresh_token'}`, requestOptions.get())
+        .then(handleResponse)
         .then(res => {
             if (res.data && res.data.user) {
                 const user = res.data.user;

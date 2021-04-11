@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -43,10 +43,24 @@
                   <tbody>
                   <tr>
                     <td><label for="Owner1">Account Owner</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Owner1" label="username" :filterable="false" :options="owners" @search="onSearch"
-                                v-model="account.owner">
-                      </vc-select>
+                    <td style="width: 525px">
+                      <v-select id="Owner1" label="username" :filterable="false" :options="owners" @search="onSearch"
+                                v-model="account.owner"
+                                :reduce="i => i.id">
+                        <template slot="no-options">
+                          Type for searching...
+                        </template>
+                        <template slot="option" slot-scope="option">
+                          <div class="d-center">
+                            {{ `${option.username} - ${option.firstName}` }}
+                          </div>
+                        </template>
+                        <template slot="selected-option" slot-scope="option">
+                          <div class="selected d-center">
+                            {{ `${option.username} - ${option.firstName}` }}
+                          </div>
+                        </template>
+                      </v-select>
                     </td>
                   </tr>
                   <tr :class="{ 'form-group--error': $v.account.name.$error }">
@@ -96,11 +110,24 @@
                   </tr>
                   <tr>
                     <td><label for="Collaborator">Account Collaborator</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Collaborator" label="username" :filterable="false" :options="collaborators" @search="onSearchCo"
-                                v-model="account.collaborator">
-
-                      </vc-select>
+                    <td style="width: 525px">
+                      <v-select id="Collaborator" label="username" :filterable="false" :options="collaborators" @search="onSearchCo"
+                                v-model="account.collaborator"
+                                :reduce="i => i.id">
+                        <template slot="no-options">
+                          Type for searching...
+                        </template>
+                        <template slot="option" slot-scope="option">
+                          <div class="d-center">
+                            {{ `${option.username} - ${option.firstName}` }}
+                          </div>
+                        </template>
+                        <template slot="selected-option" slot-scope="option">
+                          <div class="selected d-center">
+                            {{ `${option.username} - ${option.firstName}` }}
+                          </div>
+                        </template>
+                      </v-select>
                     </td>
                   </tr>
 
@@ -169,7 +196,7 @@
 </template>
 
 <script>
-
+import Header from "@/components/common/Header";
 import VButton from "@/components/common/VButton";
 import VLoading from "@/components/common/VLoading";
 import {required} from 'vuelidate/lib/validators'
@@ -179,7 +206,7 @@ import {accountService} from "@/service/account.service";
 
 export default {
   name: "AccountCreate",
-  components: {VLoading, VButton, },
+  components: {VLoading, VButton, Header},
   validations: {
     account: {
       name: {
@@ -201,42 +228,36 @@ export default {
         alert('loi')
         return;
       }
-      this.loading = true;
       if (!this.account.id) {
-        accountService.create(this.mapModel())
+        accountService.create(this.account)
             .then(res => {
               if (res) {
                 alert(res.message);
                 this.$router.push('/accounts')
               }
-            }).finally(() => {
-          this.loading = false;
-        })
+            })
       } else {
         if (this.files) {
           await this.upload();
         }
-        accountService.update(this.mapModel(), this.account.id)
+        accountService.update(this.account, this.account.id)
             .then(res => {
               if (res) {
                 alert(res.message);
                 // this.$router.push('/lead-detail?id=' + this.account.id);
               }
-            }).finally(() => {
-          this.loading = false;
-        })
+            })
       }
     },
     loadAccount() {
-      this.loading = true;
       accountService.getById(this.account.id)
           .then(res => {
             if (res && res.data) {
               this.account = res.data;
+              this.account.owner = this.account.owner.id;
+              this.account.collaborator = this.account.collaborator.id;
             }
-          }).finally(() => {
-        this.loading = false;
-      })
+          })
     },
     fileChange(event) {
       this.files = event.target.files[0];
@@ -279,26 +300,6 @@ export default {
     },
     validateEmail(email) {
       return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
-    },
-    mapModel() {
-      return {
-        owner: this.account.owner ? this.account.owner.id : null,
-        collaborator: this.account.collaborator ? this.account.collaborator.id : null,
-        name: this.account.name,
-        email: this.account.email,
-        phone: this.account.phone,
-        fax: this.account.fax,
-        taxCode: this.account.taxCode,
-        numberOfEmployees: this.account.numberOfEmployees,
-        annualRevenue: this.account.annualRevenue,
-        website: this.account.website,
-        bankName: this.account.bankName,
-        bankAccountName: this.account.bankAccountName,
-        bankAccount: this.account.bankAccount,
-        country: this.account.country,
-        city: this.account.city,
-        addressDetail: this.account.addressDetail
-      }
     }
   },
   created() {
@@ -316,8 +317,8 @@ export default {
   data: function () {
     return {
       account: {
-        owner: null,
-        collaborator: null,
+        owner: 0,
+        collaborator: 0,
         name: null,
         email: null,
         phone: null,

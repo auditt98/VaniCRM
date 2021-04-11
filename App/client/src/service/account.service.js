@@ -39,8 +39,8 @@ function getById(id) {
         .then(handleResponse);
 }
 
-function loadContacts(q, id) {
-    return fetch(`${config.apiUrl}/accounts/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get())
+function loadContacts(id) {
+    return fetch(`${config.apiUrl}/accounts/${id}/contacts`, requestOptions.get())
         .then(handleResponse);
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main" style="position: relative">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -41,15 +41,7 @@
             <Note ref="notes" @remove-note="removeNote" @submit="createNote" :notes="account.notes"/>
           </div>
           <div class="row mt-3" id="allContacts">
-            <TableInDetail :header-columns="contractColumns" :data="contactLst" :title="'All Contracts'"
-                           :page-config="{page: currentPageContact, pageSize: pageSizeContact, totalItems: totalItemContact, totalPage: totalPageContact}"
-                           @page-size-change="onPageSizeChange($event)"
-                           @go-to-page="goToPage($event)">
-              <template slot="button">
-                <router-link class="mr-2" :to="{name: 'ContactCreate', query: {accountId: account.id}}">
-                  <VButton :data="btnCreateContact"/>
-                </router-link>
-              </template>
+            <TableInDetail :header-columns="contractColumns" :data="contactLst" :title="'All Contracts'">
               <template slot="body">
                 <tbody v-if="contactLst && contactLst.length > 0">
                 <tr v-for="(t, i) in contactLst" :key="i">
@@ -78,7 +70,7 @@
 
 <script>
 import VButton from "@/components/common/VButton";
-
+import Header from "@/components/common/Header";
 import MenuLeft from "@/components/common/MenuLeft";
 import UserInfo from "@/components/common/info/UserInfo";
 import BasicInfo from "@/components/common/info/BasicInfo";
@@ -95,13 +87,7 @@ export default {
       this.$scrollTo(element);
     },
     async loadContactByAccount() {
-      this.loading = true;
-      this.accountLst = [];
-      let query = {
-        currentPage: this.currentPageContact,
-        pageSize: this.pageSizeContact
-      };
-      await accountService.loadContacts(query, this.account.id)
+      await accountService.loadContacts(this.account.id)
       .then(res => {
         if (res && res.data) {
           this.contactLst = res.data.contacts;
@@ -207,14 +193,6 @@ export default {
               this.loadAccount();
             }
           })
-    },
-    onPageSizeChange(event) {
-      this.pageSizeContact = Number(event);
-      this.loadContactByAccount();
-    },
-    goToPage(event) {
-      this.currentPageContact = Number(event);
-      this.loadContactByAccount();
     }
   },
   created() {
@@ -241,7 +219,6 @@ export default {
       btnBack: {btnClass: 'btn-purple px-3', icon: 'fa-arrow-left', text: 'Back'},
       btnDelete: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Delete'},
       btnEdit: {btnClass: 'btn-red px-4', icon: 'fa-pencil', text: 'Edit'},
-      btnCreateContact: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Contact'},
       dataLeftBaseInfo: [
         {key: 'Account Owner', value: 'Lead'},
         {key: 'Account Name', value: 's'},
@@ -278,14 +255,10 @@ export default {
         {key: 'Address Detail', value: ''}
       ],
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-      contractColumns: ['Contract Name', 'Email', 'Phone', 'Mobile', 'Facebook', 'Skype'],
-      currentPageContact: 1,
-      pageSizeContact: 5,
-      totalItemContact: 0,
-      totalPageContact:0,
+      contractColumns: ['Contract Name', 'Email', 'Phone', 'Mobile', 'Facebook', 'Skype']
     }
   },
-  components: {TableInDetail, VLoading, Note, BasicInfo, UserInfo, MenuLeft, VButton}
+  components: {TableInDetail, VLoading, Note, BasicInfo, UserInfo, MenuLeft, Header, VButton}
 }
 </script>
 

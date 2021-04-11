@@ -6,11 +6,6 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        path: '/calendar',
-        name: 'Calendar',
-        component: () => import('../components/calendar/Calendar.vue')
-    },
-    {
         path: '/deal-detail',
         name: 'DealDetail',
         component: () => import('../components/deal/DealDetail.vue')
@@ -103,7 +98,7 @@ const routes = [
 
     {
         path: '/',
-        redirect: '/dashboard-sale'
+        redirect: '/dashboard'
     },
     {
         path: '/users',
@@ -163,13 +158,8 @@ const routes = [
     },
     //end campaign
     {
-        path: '/dashboard-sale',
-        name: 'DashboardSale',
-        component: () => import('../components/dashboard/Dashboard.vue')
-    },
-    {
-        path: '/dashboard-marketing',
-        name: 'DashboardMarketing',
+        path: '/dashboard',
+        name: 'Dashboard',
         component: () => import('../components/dashboard/Dashboard.vue')
     },
     {

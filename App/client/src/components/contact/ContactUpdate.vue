@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main">
       <div class="row ">
         <div class="col-sm-8">
@@ -43,8 +43,9 @@
                   <tr>
                     <td>Contact Owner</td>
                     <td style="width: 80%">
-                      <vc-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
-                                v-model="contact.owner">
+                      <v-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
+                                v-model="contact.owner"
+                                :reduce="i => i.id">
                         <template slot="no-options">
                           Type for searching...
                         </template>
@@ -58,7 +59,7 @@
                             {{ `${option.username} - ${option.firstName}` }}
                           </div>
                         </template>
-                      </vc-select>
+                      </v-select>
                     </td>
                   </tr>
                   <tr :class="{ 'form-group--error': $v.contact.name.$error }">
@@ -91,8 +92,9 @@
                   <tr>
                     <td><label for="Collaborator">Collaborator</label></td>
                     <td style="width: 80%">
-                      <vc-select id="Collaborator" label="username" :filterable="false" :options="owners" @search="onSearch"
-                                v-model="contact.collaborator">
+                      <v-select id="Collaborator" label="username" :filterable="false" :options="owners" @search="onSearch"
+                                v-model="contact.collaborator"
+                                :reduce="i => i.id">
                         <template slot="no-options">
                           Type for searching...
                         </template>
@@ -106,7 +108,7 @@
                             {{ `${option.username} - ${option.firstName}` }}
                           </div>
                         </template>
-                      </vc-select>
+                      </v-select>
                     </td>
 
                   </tr>
@@ -150,10 +152,11 @@
                   <tr>
                     <td><label for="Account">Account</label></td>
                     <td style="width: 80%">
-                      <vc-select id="Account" label="name" :filterable="false" :options="accounts"
+                      <v-select id="Account" label="name" :filterable="false" :options="accounts"
                                 @search="onSearchAccount"
-                                v-model="contact.account">
-                      </vc-select>
+                                v-model="contact.account"
+                                :reduce="i => i.id">
+                      </v-select>
                     </td>
                   </tr>
                   </tbody>
@@ -193,7 +196,7 @@
 </template>
 
 <script>
-
+import Header from "@/components/common/Header";
 import VButton from "@/components/common/VButton";
 import {contactService} from "@/service/contact.service";
 import {userService} from "@/service/user.service";
@@ -204,7 +207,7 @@ import VLoading from "@/components/common/VLoading";
 
 export default {
   name: "LeadUpdate",
-  components: {VLoading, VButton, },
+  components: {VLoading, VButton, Header},
   validations: {
     contact: {
       name: {
@@ -227,9 +230,7 @@ export default {
         return;
       }
       this.loading = true;
-      this.contact.owner = this.contact.owner ? this.contact.owner.id : null;
-      this.contact.collaborator = this.contact.collaborator ? this.contact.collaborator.id : null;
-      this.contact.account = this.contact.account ? this.contact.account.id : null;
+      console.log(this.contact)
       if (this.contact.id) {
         if (this.files) {
           await this.upload();
@@ -249,9 +250,6 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
-                if (this.accountId) {
-                  this.$router.push('/account-detail?id=' + this.accountId);
-                }
               }
             })
             .catch(err => alert(err))
@@ -266,6 +264,9 @@ export default {
           .then(res => {
             if (res && res.data) {
               this.contact = res.data;
+              this.contact.owner = this.contact.owner ? this.contact.owner.id : 0;
+              this.contact.account = this.contact.account ? this.contact.account.id : 0;
+              this.contact.collaborator = this.contact.collaborator ? this.contact.collaborator.id : 0;
               this.contact.priority = getValueInArr(res.data.priorities, 'selected', 'id');
             } else {
               alert('Không có dữ liệu');
@@ -327,14 +328,6 @@ export default {
     },
     validateEmail(email) {
       return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
-    },
-    getAccountById() {
-      accountService.getById(this.accountId)
-      .then(res => {
-        if (res && res.data) {
-          this.contact.account = res.data;
-        }
-      })
     }
   },
   created() {
@@ -345,11 +338,6 @@ export default {
       }
       this.contact.id = this.$route.query.id;
       this.loadContact();
-    } else {
-      if (this.$route.query.accountId) {
-        this.accountId = Number(this.$route.query.accountId);
-        this.getAccountById();
-      }
     }
     this.loadSelectList();
     this.onSearch(null);
@@ -358,9 +346,9 @@ export default {
   data: function () {
     return {
       contact: {
-        owner: null,
-        account: null,
-        collaborator: null,
+        owner: 0,
+        account: 0,
+        collaborator: 1,
         name: null,
         email: null,
         phone: null,
@@ -377,7 +365,6 @@ export default {
         city: null,
         addressDetail: null
       },
-      accountId: null,
       owners: [],
       priorities: [],
       accounts: [],

@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main">
       <div class="row ">
         <div class="col-sm-8">
@@ -37,13 +37,13 @@
 </template>
 
 <script>
-
+import Header from "@/components/common/Header";
 import VButton from "@/components/common/VButton";
 import MenuLeft from "@/components/common/MenuLeft";
 import BaseEdit from "@/components/common/info/BaseEdit";
 export default {
   name: "LeadUpdate",
-  components: {BaseEdit, MenuLeft, VButton, },
+  components: {BaseEdit, MenuLeft, VButton, Header},
   data: function () {
     return {
       btnCancel: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Cancel'},
