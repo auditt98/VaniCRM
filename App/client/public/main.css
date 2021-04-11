@@ -406,3 +406,7 @@ i {
   ::-webkit-scrollbar-thumb:hover {
     background-color: #a8bbbf;
   }
+
+html, body{
+    background-color: #FBFAFA !important;
+}

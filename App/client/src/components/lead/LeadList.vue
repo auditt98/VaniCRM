@@ -51,7 +51,9 @@ import VLoading from "@/components/common/VLoading";
 
 export default {
   name: "LeadList",
-  components: {VLoading, VTag, VButton, TableInList, Header},
+  components: {VLoading, VTag, VButton, TableInList,
+   Header
+   },
   methods: {
     goToPage(page) {
       this.currentPage = page;
