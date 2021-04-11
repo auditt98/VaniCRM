@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -24,9 +24,10 @@
                   <tbody>
                   <tr>
                     <td>Call Owner</td>
-                    <td style="width: 80%">
-                      <vc-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
-                                v-model="call.owner">
+                    <td style="width: 525px">
+                      <v-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
+                                v-model="call.owner"
+                                :reduce="i => i.id">
                         <template slot="no-options">
                           Type for searching...
                         </template>
@@ -40,7 +41,7 @@
                             {{ `${option.username} - ${option.firstName}` }}
                           </div>
                         </template>
-                      </vc-select>
+                      </v-select>
                     </td>
                   </tr>
                   <tr :class="{ 'form-group--error': $v.call.title.$error }">
@@ -49,22 +50,23 @@
                   </tr>
                   <tr>
                     <td><label for="Source1">Contact</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Source1" label="contactName" :class="{'select-disabled': call.lead}"
+                    <td style="width: 525px">
+                      <v-select id="Source1" label="contactName" :class="{'select-disabled': call.lead}"
                                 :filterable="false" :options="contacts"
                                 @search="onSearchContact"
                                 v-model="call.contact">
-                      </vc-select>
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
                     <td><label for="Lead">Lead</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Lead" label="name" :class="{'select-disabled': call.contact}" :filterable="false"
+                    <td style="width: 525px">
+                      <v-select id="Lead" label="name" :class="{'select-disabled': call.contact}" :filterable="false"
                                 :options="leads" @search="onSearchLead"
                                 v-model="call.lead"
+                                :reduce="i => i.id"
                       >
-                      </vc-select>
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
@@ -136,28 +138,31 @@
                   </tr>
                   <tr>
                     <td><label for="Deal">Related Deal</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Deal" label="name" :filterable="false" :options="deals" @search="onSearchDeal"
-                                v-model="call.relatedDeal">
-                      </vc-select>
+                    <td style="width: 525px">
+                      <v-select id="Deal" label="name" :filterable="false" :options="deals" @search="onSearchDeal"
+                                v-model="call.relatedDeal"
+                                :reduce="i => i.id">
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
                     <td><label for="Account">Related Account</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Account" label="name" :filterable="false" :options="accounts"
+                    <td style="width: 525px">
+                      <v-select id="Account" label="name" :filterable="false" :options="accounts"
                                 @search="onSearchAccount"
-                                v-model="call.relatedAccount">
-                      </vc-select>
+                                v-model="call.relatedAccount"
+                                :reduce="i => i.id">
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
                     <td><label for="Campaign">Related Campaign</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Campaign" label="name" :filterable="false" :options="campaigns"
+                    <td style="width: 525px">
+                      <v-select id="Campaign" label="name" :filterable="false" :options="campaigns"
                                 @search="onSearchCampaign"
-                                v-model="call.relatedCampaign">
-                      </vc-select>
+                                v-model="call.relatedCampaign"
+                                :reduce="i => i.id">
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
@@ -234,7 +239,7 @@
 </template>
 
 <script>
-
+import Header from "@/components/common/Header";
 import VButton from "@/components/common/VButton";
 import VSwitchButton from "../common/VSwitchButton";
 import {callService} from "@/service/call.service";
@@ -251,7 +256,7 @@ import {required} from "vuelidate/lib/validators";
 
 export default {
   name: "CallCreateEdit",
-  components: {VLoading, VSwitchButton, VButton, },
+  components: {VLoading, VSwitchButton, VButton, Header},
   validations: {
     call: {
       title: {
@@ -273,7 +278,12 @@ export default {
                 this.duration.s = Number(times[2]);
               }
               this.call.isReminder = res.data.isRepeat;
+              this.call.owner = res.data.owner ? res.data.owner.id : null;
               this.call.contact = res.data.contact ? {id: res.data.contact.id, contactName: res.data.contact.name} : null;
+              this.call.lead = res.data.lead ? res.data.lead.id : null;
+              // this.call.relatedDeal = res.data.relatedDeal ? res.data.relatedDeal.id : null;
+              this.call.relatedAccount = res.data.relatedAccount ? res.data.relatedAccount.id : null;
+              this.call.relatedCampaign = res.data.relatedCampaign ? res.data.relatedCampaign.id : null;
               this.call.priority = getValueInArr(res.data.priorities, 'selected', 'id');
               this.call.result = getValueInArr(res.data.results, 'selected', 'id');
               this.call.status = getValueInArr(res.data.statuses, 'selected', 'id');
@@ -313,7 +323,7 @@ export default {
       this.call.rrule = r.toString();
       this.call.duration = hourToSecond(this.duration);
       if (!this.call.id) {
-        callService.create(this.mapModel())
+        callService.create(this.mapTaskModel())
             .then(res => {
               alert(res.message);
               if (this.contactId) {
@@ -326,7 +336,7 @@ export default {
           this.loading = false;
         })
       } else {
-        callService.update(this.mapModel(), this.call.id)
+        callService.update(this.mapTaskModel(), this.call.id)
             .then(res => {
               alert(res.message);
               // this.$router.push('/call-detail?i')
@@ -335,19 +345,19 @@ export default {
         })
       }
     },
-    mapModel() {
+    mapTaskModel() {
       return {
-        owner: this.call.owner ? this.call.owner.id : null,
+        owner: this.call.owner,
         contact: this.call.contact ? this.call.contact.id : null,
-        lead: this.call.lead ? this.call.lead.id : null,
+        lead: this.call.lead,
         purpose: this.call.purpose,
         status: this.call.status,
         result: this.call.result,
         type: this.call.type,
-        priority: this.call.priority,
+        priority: this.call.pr,
         relatedDeal: this.call.relatedDeal ? this.call.relatedDeal.id : null,
-        relatedAccount: this.call.relatedAccount ? this.call.relatedAccount.id : null,
-        relatedCampaign: this.call.relatedCampaign ? this.call.relatedCampaign.id : null,
+        relatedAccount: this.call.relatedAccount,
+        relatedCampaign: this.call.relatedCampaign,
         title: this.call.title,
         duration: this.call.duration,
         startTime: this.call.startTime,
@@ -518,17 +528,17 @@ export default {
   data: function () {
     return {
       call: {
-        owner: null,
-        contact: null,
-        lead: null,
+        owner: 0,
+        contact: 0,
+        lead: 0,
         purpose: 0,
         status: 0,
         result: 0,
         priority: 0,
         type: 0,
-        relatedDeal: null,
-        relatedAccount: null,
-        relatedCampaign: null,
+        relatedDeal: 0,
+        relatedAccount: 0,
+        relatedCampaign: 0,
         title: "string",
         duration: 0,
         startTime: null,

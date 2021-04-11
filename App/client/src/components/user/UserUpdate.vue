@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -71,7 +71,7 @@
 
               </div>
             </div>
-            <!--<div class="row mt-3" id="tasks">
+            <div class="row mt-3" id="tasks">
               <TableInDetail :header-columns="columns" :tags="tags" :title="'Tasks'"
                              :page-config="{page: currentPageTask, pageSize: pageSizeTask, totalItems: totalItemTask, totalPage: totalPageTask}"
                              @page-size-change="onPageSizeChange($event, 'TASK')"
@@ -156,7 +156,7 @@
                   </tbody>
                 </template>
               </TableInDetail>
-            </div>-->
+            </div>
           </div>
         </div>
 
@@ -166,17 +166,19 @@
 </template>
 
 <script>
-
+import Header from "@/components/common/Header";
 import VButton from "@/components/common/VButton";
 import VLoading from "@/components/common/VLoading";
 import { required } from 'vuelidate/lib/validators'
 import {userService} from "@/service/user.service";
+import TableInDetail from "@/components/common/table/TableInDetail";
 import MenuLeft from "@/components/common/MenuLeft";
+import VTag from "@/components/common/VTag";
 
 
 export default {
   name: "UserUpdate",
-  components: {MenuLeft, VLoading, VButton},
+  components: {VTag, MenuLeft, TableInDetail, VLoading, VButton, Header},
   validations: {
     user: {
       Username: {
@@ -188,7 +190,7 @@ export default {
     scrollTo(element) {
       this.$scrollTo(element);
     },
-    save() {
+    async save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
         alert('loi')
@@ -197,17 +199,17 @@ export default {
       if (this.user.id) {
         this.loading = true;
         if (this.files) {
-          this.upload();
+          await this.upload();
         }
-        userService.update(this.user, this.user.id)
+        /*userService.update(this.user, this.user.id)
             .then(res => {
               if (res) {
                 alert(res.message);
-                this.$router.push('/user-detail?id=' + this.user.id);
+                // this.$router.push('/lead-detail?id=' + this.user.id);
               }
             }).finally(() => {
               this.loading = false;
-        })
+        })*/
       }
     },
     loadUser() {
@@ -220,10 +222,10 @@ export default {
               this.user.Phone = res.data.phone;
               this.user.Skype = res.data.skype;
               this.user.Avatar = res.data.avatar;
-/*              this.loadAccounts();
+              this.loadAccounts();
               this.loadContacts();
               this.loadLeads();
-              this.loadTasks();*/
+              this.loadTasks();
             }
           })
     },
@@ -231,10 +233,10 @@ export default {
       this.files = event.target.files[0];
       this.user.Avatar = URL.createObjectURL(this.files);
     },
-    async upload() {
+    upload() {
       let formData = new FormData();
       formData.append("file", this.files);
-      await userService.changeAvatar(formData, this.user.id).then(res => {
+      userService.changeAvatar(formData, this.user.id).then(res => {
         console.log(res)
       }).catch(err => alert(err))
     },
@@ -246,7 +248,7 @@ export default {
         pageSize: this.pageSizeTask
       };
       userService.getAllTasks(this.user.id, query).then(res => {
-        if (res && res.data) {
+        if (res) {
           this.taskLst = res.data.tasks;
           this.totalPageTask = Number(res.data.pageInfo.TotalPages);
           this.totalItemTask = Number(res.data.pageInfo.TotalItems);
@@ -263,7 +265,7 @@ export default {
         pageSize: this.pageSizeAccount
       };
       userService.getAllAccounts(this.user.id, query).then(res => {
-        if (res && res.data) {
+        if (res) {
           this.accountLst = res.data.accounts;
           this.totalPage = Number(res.data.pageInfo.totalPage);
         }
@@ -279,7 +281,7 @@ export default {
         pageSize: this.pageSizeContact
       };
       userService.getAllContacts(this.user.id, query).then(res => {
-        if (res && res.data) {
+        if (res) {
           this.contractLst = res.data.contacts;
           this.totalPage = Number(res.data.pageInfo.totalPage);
         }
@@ -295,7 +297,7 @@ export default {
         pageSize: this.pageSizeLead
       };
       userService.getAllLeads(this.user.id, query).then(res => {
-        if (res && res.data) {
+        if (res) {
           this.leadOwnLst = res.data.leads;
           this.totalPage = Number(res.data.pageInfo.totalPage);
         }

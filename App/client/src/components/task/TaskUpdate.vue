@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -33,22 +33,23 @@
                   </tr>
                   <tr>
                     <td><label for="Source1">Contact</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Source1" label="contactName" :class="{'select-disabled': task.lead}"
+                    <td style="width: 525px">
+                      <v-select id="Source1" label="contactName" :class="{'select-disabled': task.lead}"
                                 :filterable="false" :options="contacts"
                                 @search="onSearchContact"
                                 v-model="task.contact"
                                 >
-                      </vc-select>
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
                     <td><label for="Lead">Lead</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Lead" label="name" :class="{'select-disabled': task.contact}" :filterable="false"
+                    <td style="width: 525px">
+                      <v-select id="Lead" label="name" :class="{'select-disabled': task.contact}" :filterable="false"
                                 :options="leads" @search="onSearchLead"
-                                v-model="task.lead">
-                      </vc-select>
+                                v-model="task.lead"
+                                :reduce="i => i.id">
+                      </v-select>
                     </td>
                   </tr>
 
@@ -63,9 +64,10 @@
                   </tr>
                   <tr>
                     <td>Owner</td>
-                    <td style="width: 80%">
-                      <vc-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
-                                v-model="task.owner">
+                    <td style="width: 525px">
+                      <v-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
+                                v-model="task.owner"
+                                :reduce="i => i.id">
                         <template slot="no-options">
                           Type for searching...
                         </template>
@@ -79,7 +81,7 @@
                             {{ `${option.username} - ${option.firstName}` }}
                           </div>
                         </template>
-                      </vc-select>
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
@@ -100,28 +102,30 @@
                   <tbody>
                   <tr>
                     <td><label for="Deal">Related Deal</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Deal" label="name" :filterable="false" :options="deals" @search="onSearchDeal"
+                    <td style="width: 525px">
+                      <v-select id="Deal" label="name" :filterable="false" :options="deals" @search="onSearchDeal"
                                 v-model="task.relatedDeal">
-                      </vc-select>
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
                     <td><label for="Account">Related Account</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Account" label="name" :filterable="false" :options="accounts"
+                    <td style="width: 525px">
+                      <v-select id="Account" label="name" :filterable="false" :options="accounts"
                                 @search="onSearchAccount"
-                                v-model="task.relatedAccount">
-                      </vc-select>
+                                v-model="task.relatedAccount"
+                                :reduce="i => i.id">
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
                     <td><label for="Campaign">Related Campaign</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="Campaign" label="name" :filterable="false" :options="campaigns"
+                    <td style="width: 525px">
+                      <v-select id="Campaign" label="name" :filterable="false" :options="campaigns"
                                 @search="onSearchCampaign"
-                                v-model="task.relatedCampaign">
-                      </vc-select>
+                                v-model="task.relatedCampaign"
+                                :reduce="i => i.id">
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
@@ -198,7 +202,7 @@
 </template>
 
 <script>
-
+import Header from "@/components/common/Header";
 import VButton from "@/components/common/VButton";
 import VSwitchButton from "../common/VSwitchButton";
 import {taskService} from "@/service/task.service";
@@ -215,7 +219,7 @@ import {required} from "vuelidate/lib/validators";
 
 export default {
   name: "TaskUpdate",
-  components: {VLoading, VSwitchButton, VButton, },
+  components: {VLoading, VSwitchButton, VButton, Header},
   validations: {
     task: {
       title: {
@@ -237,7 +241,12 @@ export default {
                 this.duration.s = Number(times[2]);
               }
               this.task.isReminder = res.data.isRepeat;
+              this.task.owner = res.data.owner ? res.data.owner.id : null;
               this.task.contact = res.data.contact ? {id: res.data.contact.id, contactName: res.data.contact.name} : null;
+              this.task.lead = res.data.lead ? res.data.lead.id : null;
+              // this.task.relatedDeal = res.data.relatedDeal ? res.data.relatedDeal.id : null;
+              this.task.relatedAccount = res.data.relatedAccount ? res.data.relatedAccount.id : null;
+              this.task.relatedCampaign = res.data.relatedCampaign ? res.data.relatedCampaign.id : null;
               this.task.priority = getValueInArr(res.data.priorities, 'selected', 'id');
               this.task.status = getValueInArr(res.data.statuses, 'selected', 'id');
               this.mapRRule(this.task.rrule);
@@ -409,13 +418,13 @@ export default {
         title: this.task.title,
         dueDate: this.task.dueDate,
         contact: this.task.contact ? this.task.contact.id : null,
-        lead: this.task.lead ? this.task.lead.id : null,
+        lead: this.task.lead,
         priority: this.task.priority,
-        owner: this.task.owner ? this.task.owner.id : null,
+        owner: this.task.owner,
         status: this.task.status,
         relatedDeal: this.task.relatedDeal ? this.task.relatedDeal.id : null,
-        relatedAccount: this.task.relatedAccount ? this.task.relatedAccount.id : null,
-        relatedCampaign: this.task.relatedCampaign ? this.task.relatedCampaign.id : null,
+        relatedAccount: this.task.relatedAccount,
+        relatedCampaign: this.task.relatedCampaign,
         description: this.task.description,
         rrule: this.task.rrule,
         isReminder: this.task.isReminder
