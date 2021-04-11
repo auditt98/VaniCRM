@@ -1,12 +1,7 @@
 <template>
   <div id="app">
-<!--    <div id="nav">-->
-<!--      <router-link to="/">Home</router-link> |-->
-<!--      <router-link to="/about">About</router-link>-->
-<!--    </div>-->
-    <!-- <Header v-if="!['LoginPage'].includes($route.name)"/> -->
+    <Header v-if="!['ResetPassword', 'LoginPage', 'About'].includes($route.name)" />
     <router-view/>
-    <!-- <notifications position="bottom right"/> -->
     <notifications group="custom-template"
                    :duration="50000"
                    :width="500"
@@ -33,7 +28,6 @@
 
       </template>
     </notifications>
-
   </div>
 </template>
 
