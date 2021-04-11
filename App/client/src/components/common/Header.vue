@@ -366,32 +366,3 @@ i {
 }
 
 </style>
-
-
-            // this.$notify({
-            //   group: 'custom-template',
-            //   title: `Join invocation finished`,
-            //   text:  `Join invocation finished`,
-            //   type: `warning`,
-            //   // data: {
-            //   //   randomNumber: Math.random()
-            //   // }
-            // });
-            // this.$notify({
-            //   group: 'custom-template',
-            //   title: `Join invocation finished`,
-            //   text:  `Join invocation finished`,
-            //   type: `success`,
-            //   // data: {
-            //   //   randomNumber: Math.random()
-            //   // }
-            // });
-            // this.$notify({
-            //   group: 'custom-template',
-            //   title: `Join invocation finished`,
-            //   text:  `Join invocation finished`,
-            //   type: `danger`,
-            //   // data: {
-            //   //   randomNumber: Math.random()
-            //   // }
-            // });
