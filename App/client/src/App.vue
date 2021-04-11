@@ -133,10 +133,10 @@
 </style>
 
 <script>
-// import Header from "@/components/common/Header";
+import Header from "@/components/common/Header";
 export default{
   components: {
-    // Header
+    Header
   }
   // mounted() {
   //     let notificationProxy = document.createElement('script')
