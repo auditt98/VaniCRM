@@ -1,0 +1,332 @@
+<template>
+  <div class="">
+
+    <div class="px-5 pt-3 m-0 background-main">
+      <VLoading :loading="loading"/>
+      <div class="row ">
+        <div class="col-sm-8">
+        </div>
+        <div class="col-sm-4 d-flex justify-content-between">
+          <router-link :to="{name : 'DealList'}">
+            <VButton :data="btnCancel"/>
+          </router-link>
+          <span @click="save()"><VButton :data="btnSave"/></span>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="row mt-3">
+          <div class="basic-edit">
+            <h4 class="ml-2"><strong>Deal Information</strong></h4>
+            <div class="row">
+              <div class="col-sm-5">
+                <table class="ml-4">
+                  <tbody>
+                  <tr :class="{ 'form-group--error': $v.deal.name.$error }">
+                    <td class="required">Deal Name</td>
+                    <td><input class="form-control " type="text" v-model="deal.name"></td>
+                  </tr>
+                  <tr>
+                    <td><label for="Account">Account</label></td>
+                    <td style="width: 80%">
+                      <vc-select id="Account" label="name"
+                                :filterable="false" :options="accounts"
+                                @search="onSearchAccount"
+                                v-model="deal.account">
+                      </vc-select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><label for="Source1">Contact</label></td>
+                    <td style="width: 80%">
+                      <vc-select id="Source1" label="contactName" :class="{'select-disabled': deal.lead}"
+                                :filterable="false" :options="contacts"
+                                @search="onSearchContact"
+                                v-model="deal.contact">
+                      </vc-select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><label for="Campaign">Campaign</label></td>
+                    <td style="width: 80%">
+                      <vc-select id="Campaign" label="name"
+                                :filterable="false" :options="campaigns"
+                                @search="onSearchCampaign"
+                                v-model="deal.campaign">
+                      </vc-select>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-sm-1"></div>
+              <div class="col-sm-5">
+                <table>
+                  <tbody>
+                  <tr v-if="stages">
+                    <td><label for="Stage">Stage</label></td>
+                    <td>
+                      <select class="form-control py-0 w-100" id="Stage" v-model="deal.stage">
+                        <option v-for="(f, i) in stages" :key="i" :value="f.id">{{ f.name }}</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Amount</td>
+                    <td>
+                      <input type="number" v-model="deal.amount">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Expected Revenue</td>
+                    <td>
+                      <input type="text" v-model="deal.expectedRevenue">
+                    </td>
+                  </tr>
+                  <tr v-if="reasons">
+                    <td><label for="Reason">Lost Reason</label></td>
+                    <td>
+                      <select class="form-control py-0 w-100" id="Reason" v-model="deal.lostReason">
+                        <option v-for="(f, i) in reasons" :key="i" :value="f.id">{{ f.name }}</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr v-if="priorities">
+                    <td><label for="Priority">Priority</label></td>
+                    <td>
+                      <select class="form-control py-0 w-100" id="Priority" v-model="deal.priority">
+                        <option v-for="(f, i) in priorities" :key="i" :value="f.id">{{ f.name }}</option>
+                      </select>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="basic-edit">
+            <h4 class="ml-2"><strong>Description</strong></h4>
+            <div class="row ml-2">
+              <textarea name="" class="form-control" v-model.trim="deal.description" id="" cols="25"
+                        rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+import VButton from "@/components/common/VButton";
+import {dealService} from "@/service/deal.service";
+import {accountService} from "@/service/account.service";
+import {campaignService} from "@/service/campaign.service";
+import {contactService} from "@/service/contact.service";
+import {getValueInArr} from "@/config/config";
+import VLoading from "@/components/common/VLoading";
+import {required} from "vuelidate/lib/validators";
+
+export default {
+  name: "DealCreateEdit",
+  components: {VLoading, VButton, },
+  validations: {
+    deal: {
+      name: {
+        required
+      }
+    }
+  },
+  methods: {
+    loadDeal() {
+      this.loading = true;
+      dealService.getById(this.deal.id)
+          .then(res => {
+            if (res && res.data) {
+              this.deal = res.data;
+              this.deal.contact = res.data.contact ? {id: res.data.contact.id, contactName: res.data.contact.name} : null;
+              this.deal.priority = getValueInArr(res.data.priorities, 'selected', 'id');
+              this.deal.stage = getValueInArr(res.data.stages, 'selected', 'id');
+              this.deal.lostReason = getValueInArr(res.data.lostReason, 'selected', 'id');
+              this.mapRRule(this.deal.rrule);
+            } else {
+              alert('Không có dữ liệu');
+              this.$router.push('/');
+            }
+          }).finally(() => {
+        this.loading = false;
+      })
+    },
+    save() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        alert('loi')
+        return;
+      }
+      this.loading = true;
+      if (!this.deal.id) {
+        dealService.create(this.mapTaskModel())
+            .then(res => {
+              alert(res.message);
+            }).finally(() => {
+          this.loading = false;
+        })
+      } else {
+        dealService.update(this.mapTaskModel(), this.deal.id)
+            .then(res => {
+              alert(res.message);
+              // this.$router.push('/call-detail?i')
+            }).finally(() => {
+          this.loading = false;
+        })
+      }
+    },
+    mapTaskModel() {
+      return {
+        name: this.deal.name,
+        closingDate: this.deal.closingDate,
+        account: this.deal.account ? this.deal.account.id : null,
+        contact: this.deal.contact ? this.deal.contact.id : null,
+        campaign: this.deal.campaign ? this.deal.campaign.id : null,
+        priority: this.deal.priority,
+        stage: this.deal.stage,
+        amount: this.deal.amount,
+        expectedRevenue: this.deal.expectedRevenue,
+        lostReason: this.deal.lostReason,
+        description: this.deal.description
+      };
+    },
+    loadSelectList() {
+      this.loading = true;
+      dealService.loadAllObject()
+          .then(res => {
+            if (res && res.data && res.status === 'success') {
+              this.reasons = [];
+              this.stages = res.data.stages;
+              this.priorities = res.data.priorities;
+            }
+          }).finally(() => {
+        this.loading = false;
+      })
+    },
+    onSearchContact(search) {
+      let query = {
+        currentPage: 1,
+        pageSize: 10
+      };
+      if (search && search.trim()) {
+        query['query'] = search;
+      }
+      contactService.getAll(query).then(res => {
+        if (res && res.data) {
+          this.contacts = res.data.contacts;
+        }
+      })
+    },
+    onSearchAccount(search) {
+      let query = {
+        currentPage: 1,
+        pageSize: 10
+      };
+      if (search && search.trim()) {
+        query['query'] = search;
+      }
+      accountService.getAll(query).then(res => {
+        if (res && res.data) {
+          this.accounts = res.data.accounts;
+        }
+      })
+    },
+    onSearchCampaign(search) {
+      let query = {
+        currentPage: 1,
+        pageSize: 10
+      };
+      if (search && search.trim()) {
+        query['query'] = search;
+      }
+      campaignService.getAll(query).then(res => {
+        if (res && res.data) {
+          this.campaigns = res.data.campaigns;
+        }
+      })
+    }
+  },
+  created() {
+    if (this.$route.path.indexOf('deal-update') > -1) {
+      if (!this.$route.query.id) {
+        this.$router.push('/');
+        return;
+      }
+      this.deal.id = this.$route.query.id;
+      this.loadDeal();
+    }
+    this.loadSelectList();
+    this.onSearchCampaign(null);
+    this.onSearchAccount(null);
+    this.onSearchContact(null);
+  },
+  data: function () {
+    return {
+      deal: {
+        name: null,
+        closingDate: null,
+        account: null,
+        contact: null,
+        campaign: null,
+        priority: 1,
+        stage: 1,
+        amount: 1,
+        expectedRevenue: 0,
+        lostReason: 1,
+        description: null
+      },
+      contacts: [],
+      accounts: [],
+      campaigns: [],
+      stages: [],
+      reasons: [],
+      priorities: [],
+      loading: false,
+      btnCancel: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Cancel'},
+      btnSave: {btnClass: 'btn-red px-4', icon: 'fa-floppy-o', text: 'Save'},
+
+    }
+  }
+}
+</script>
+
+<style scoped>
+/deep/ .vs__search {
+  width: unset;
+  border: none;
+}
+
+/deep/ .vs--open .vs--single .vs__selected {
+  position: unset;
+}
+
+/deep/ span.vs__selected {
+  padding-left: 0.7rem;
+  margin: 0;
+}
+
+/deep/ .vs__dropdown-toggle {
+  height: 36px;
+}
+
+input {
+  padding: .375rem .75rem !important;
+}
+
+.select-disabled {
+  pointer-events: none;
+  color: #bfcbd9;
+  cursor: not-allowed;
+  background-image: none;
+  background-color: #eef1f6;
+  border-color: #d1dbe5;
+}
+</style>

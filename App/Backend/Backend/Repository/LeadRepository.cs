@@ -1,6 +1,8 @@
 ﻿using Backend.Domain;
 using Backend.Extensions;
 using Backend.Models.ApiModel;
+using Backend.Resources;
+using Backend.SignalRHub;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,8 @@ namespace Backend.Repository
     {
         DatabaseContext db = new DatabaseContext();
         TagRepository _tagRepository = new TagRepository();
+        NotificationRepository _notificationRepository = new NotificationRepository();
+
         public LEAD GetOne(int id)
         {
             return db.LEADs.Find(id);
@@ -72,13 +76,55 @@ namespace Backend.Repository
             return db.LEAD_STATUS;
         }
 
-        public bool Delete(int id)
+        public bool Delete(int id, int userId)
         {
             var dbLead = db.LEADs.Find(id);
+            var dbUser = db.USERs.Find(userId);
             if(dbLead != null)
             {
-                db.LEADs.Remove(dbLead);
+                var dbAccount = db.ACCOUNTs.Where(c => c.ConvertFrom == dbLead.ID).ToList();
+                foreach(var account in dbAccount)
+                {
+                    account.ConvertFrom = null;
+                }
+                var owner = dbLead.Owner;
+                var creator = dbLead.CreatedUser;
+                var deletedLead = db.LEADs.Remove(dbLead);
                 db.SaveChanges();
+
+                //create a notification
+                var apiModel = new NotificationApiModel();
+                apiModel.title = "Lead removed";
+                apiModel.content = $"Lead {deletedLead.Name} removed by user {dbUser.Username}.";
+                apiModel.createdAt = DateTime.Now;
+                var notiCreated = _notificationRepository.Create(apiModel, new List<USER> { dbUser, owner, creator });
+                //send notification
+                if (notiCreated)
+                {
+                    //send to person who performs the delete
+                    apiModel.Success();
+                    NotificationHub.pushNotification(apiModel, new List<int> { userId });
+                    if (userId != deletedLead.LeadOwner)
+                    {
+                        apiModel.Warning();
+                        NotificationHub.pushNotification(apiModel, new List<int> { owner.ID });
+                    }
+                    if(userId != deletedLead.CreatedBy)
+                    {
+                        apiModel.Warning();
+                        NotificationHub.pushNotification(apiModel, new List<int> { creator.ID });
+                    }
+
+                }
+                else
+                {
+                    apiModel.Danger();
+                    apiModel.title = ErrorMessages.SOMETHING_WRONG;
+                    apiModel.content = ErrorMessages.CANT_PERFORM_ACTION;
+                    NotificationHub.pushNotification(apiModel, new List<int> { userId });
+
+                }
+
                 return true;
             }
             else
