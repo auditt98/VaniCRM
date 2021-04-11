@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main">
       <div class="row ">
         <div class="col-sm-8">
@@ -23,9 +23,10 @@
                   <tbody>
                   <tr>
                     <td><label for="cOwner">Campaigns Owner</label></td>
-                    <td style="width: 80%">
-                      <vc-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
-                                v-model="campaign.owner">
+                    <td style="width: 525px">
+                      <v-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
+                                v-model="campaign.owner"
+                                :reduce="i => i.id">
                         <template slot="no-options">
                           Type for searching...
                         </template>
@@ -39,7 +40,7 @@
                             {{ `${option.username} - ${option.firstName}` }}
                           </div>
                         </template>
-                      </vc-select>
+                      </v-select>
                     </td>
                   </tr>
                   <tr>
@@ -119,7 +120,7 @@
 </template>
 
 <script>
-
+import Header from "@/components/common/Header";
 import VButton from "@/components/common/VButton";
 import {userService} from "@/service/user.service";
 import {campaignService} from "@/service/campaign.service";
@@ -127,16 +128,15 @@ import {getValueInArr} from "@/config/config";
 
 export default {
   name: "CampaignCreate",
-  components: {VButton, },
+  components: {VButton, Header},
   methods: {
     save() {
-      this.campaign.owner = this.campaign.owner ? this.campaign.owner.id : null;
       if (!this.campaign.id) {
         campaignService.create(this.campaign)
             .then(res => {
               if (res) {
                 alert(res.message);
-                this.$router.push('/campaigns')
+                // this.$router.push('/campaigns')
               }
             })
       } else {
@@ -144,7 +144,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
-                this.$router.push('/campaigns')
+                // this.$router.push('/campaigns')
               }
             })
       }

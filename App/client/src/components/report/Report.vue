@@ -1,6 +1,6 @@
 <template>
     <div class="background-main">
-
+        <Header/>
         <div class="row">
             <div class="col">
 
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+    import Header from "../common/Header";
     import TableInDetail from "../common/table/TableInDetail";
     import PieChart from "../common/chart/PieChart";
     import BarChart from "../common/chart/BarChart";
@@ -64,7 +65,7 @@
               taskColumns: ['TITLE', 'TYPE', 'STATUS', 'DUE DATE', 'PRIORITY', 'OWNER', 'ACCOUNT NAME', 'CONTACT NAME']
           }
         },
-        components: {AreaChart, BarChart, PieChart, TableInDetail, }
+        components: {AreaChart, BarChart, PieChart, TableInDetail, Header}
     }
 </script>
 

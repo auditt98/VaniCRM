@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main" style="position: relative">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -41,10 +41,7 @@
             <Note ref="notes" @remove-note="removeNote" @submit="createNote" :notes="deal.notes"/>
           </div>
           <div class="row mt-3" id="competitor">
-            <TableInDetail :header-columns="competitorColumns" :title="'Competitor'"
-                           :page-config="{page: currentPageCompetitor, pageSize: pageSizeCompetitor, totalItems: totalItemCompetitor, totalPage: totalPageCompetitor}"
-                           @page-size-change="onPageSizeChange($event, 'COMPETITOR')"
-                           @go-to-page="goToPage($event, 'COMPETITOR')">
+            <TableInDetail :header-columns="competitorColumns" :title="'Competitor'">
               <template slot="button">
                 <span @click="openCompetitorModal"><VButton :data="btnCreateCompetitor"/></span>
               </template>
@@ -74,10 +71,7 @@
             </TableInDetail>
           </div>
           <div class="row mt-3" id="history">
-            <TableInDetail :header-columns="historyColumns" :title="'History'"
-                           :page-config="{page: currentPageHistory, pageSize: pageSizeHistory, totalItems: totalItemHistory, totalPage: totalPageHistory}"
-                           @page-size-change="onPageSizeChange($event, 'HISTORY')"
-                           @go-to-page="goToPage($event, 'HISTORY')">
+            <TableInDetail :header-columns="historyColumns" :title="'History'">
               <template slot="body">
                 <tbody v-if="historyLst && historyLst.length > 0">
 
@@ -91,10 +85,7 @@
             </TableInDetail>
           </div>
           <div class="row mt-3" id="task">
-            <TableInDetail :header-columns="taskColumns" :data="taskLst" :title="'Tasks'"
-                           :page-config="{page: currentPageTask, pageSize: pageSizeTask, totalItems: totalItemTask, totalPage: totalPageTask}"
-                           @page-size-change="onPageSizeChange($event, 'TASK')"
-                           @go-to-page="goToPage($event, 'TASK')">
+            <TableInDetail :header-columns="taskColumns" :data="taskLst" :title="'Tasks'">
               <template slot="button">
                 <router-link class="mr-2" :to="{name: 'TaskCreate', query: {dealId: deal.id}}">
                   <VButton :data="btnCreateTask"/>
@@ -138,7 +129,7 @@
 
 <script>
 import VButton from "@/components/common/VButton";
-
+import Header from "@/components/common/Header";
 import {DATE_TIME_FORMAT, formatDate, getValueInArr, mapValue} from "@/config/config";
 import {dealService} from "@/service/deal.service";
 import VLoading from "@/components/common/VLoading";
@@ -193,11 +184,7 @@ export default {
       });
     },
     async loadTaskByDeal() {
-      let query = {
-        currentPage: this.currentPageTask,
-        pageSize: this.pageSizeTask
-      };
-      await dealService.loadTasks(query, this.deal.id)
+      await dealService.loadTasks(this.deal.id)
           .then(res => {
             if (res && res.data) {
               this.taskLst = res.data.tasks;
@@ -205,11 +192,7 @@ export default {
           })
     },
     async loadCompetitorByDeal() {
-      let query = {
-        currentPage: this.currentPageCompetitor,
-        pageSize: this.pageSizeCompetitor
-      };
-      await dealService.loadCompetitors(query, this.deal.id)
+      await dealService.loadCompetitors(this.deal.id)
           .then(res => {
             if (res && res.data) {
               this.competitorLst = res.data.competitors;
@@ -320,34 +303,6 @@ export default {
         this.loading = false;
       })
     },
-    onPageSizeChange(event, type) {
-      if (type === 'TASK') {
-        this.pageSizeTask = Number(event);
-        this.loadTaskByDeal();
-      }
-      if (type === 'COMPETITOR') {
-        this.pageSizeLead = Number(event);
-        this.loadCompetitorByDeal();
-      }
-      if (type === 'HISTORY') {
-        this.pageSizeContact = Number(event);
-        this.loadContacts();
-      }
-    },
-    goToPage(event, type) {
-      if (type === 'TASK') {
-        this.currentPageTask = Number(event);
-        this.loadTaskByDeal();
-      }
-      if (type === 'COMPETITOR') {
-        this.currentPageLead = Number(event);
-        this.loadCompetitorByDeal();
-      }
-      if (type === 'HISTORY') {
-        this.currentPageAccount = Number(event);
-        // this.loadAccounts();
-      }
-    }
   },
   created() {
     if (this.$route.query.id) {
@@ -412,25 +367,11 @@ export default {
       competitorColumns: ['Name', 'Website', 'Strengths', 'Weaknesses', 'Threat', 'Suggestion', 'Action'],
       historyColumns: ['Stage', 'Probability', 'Expected Revenue', 'Modified At', 'Modified By'],
       taskColumns: ['Title', 'Type', 'Status', 'Start Date', 'End Date', 'Priority', 'Owner', 'Action'],
-      currentPageCompetitor: 1,
-      pageSizeCompetitor: 5,
-      totalItemCompetitor: 0,
-      totalPageCompetitor: 0,
-
-      currentPageHistory: 1,
-      pageSizeHistory: 5,
-      totalItemHistory: 0,
-      totalPageHistory: 0,
-
-      currentPageTask: 1,
-      pageSizeTask: 5,
-      totalItemTask: 0,
-      totalPageTask: 0,
     }
   },
   components: {
     AddCompetitorModal,
-    TableInDetail, BasicInfo, Note, VTimeLine, MenuLeft, UserInfo, VLoading, VButton
+    TableInDetail, BasicInfo, Note, VTimeLine, MenuLeft, UserInfo, VLoading, Header, VButton
   }
 }
 </script>

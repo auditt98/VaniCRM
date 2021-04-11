@@ -1,6 +1,6 @@
 <template>
   <div class="background-main">
-
+    <Header/>
     <div class="col-sm-9 mx-auto mt-5">
       <TableInList :header-columns="columns"
                    :page-size="pageSize"
@@ -40,22 +40,26 @@
 
 <script>
 import TableInList from "@/components/common/table/TableInList";
-
+import Header from "@/components/common/Header";
 import {groupService} from "@/service/group.service";
 import VButton from "@/components/common/VButton";
 
 export default {
   name: "GroupList",
-  components: {VButton, TableInList, },
+  components: {VButton, TableInList, Header},
   methods: {
     goToPage(page) {
       this.currentPage = page;
       this.loadGroups(this.keyword);
+
     },
     search(keyword, pageSize) {
       this.currentPage = 1;
       this.pageSize = Number(pageSize);
       this.loadGroups(keyword);
+    },
+    create() {
+      alert(123)
     },
     edit(id) {
       this.$router.push({path: '/group-update', query : { id: id}});
@@ -64,11 +68,8 @@ export default {
       if (!confirm("Xác nhận xóa!")) {
         return ;
       }
-      groupService.remove(id).then(res => {
-        if (res) {
-          this.loadGroups(this.keyword);
-        }
-      });
+      groupService.remove(id);
+      this.loadGroups(this.keyword);
     }
     ,
     loadGroups(keyword) {
@@ -103,11 +104,7 @@ export default {
       keyword: '',
       pageSize: 5,
       totalPage: 5,
-      columns: [
-        {text: 'Group Name', style: 'width: 25%;'},
-        {text: 'Number Of Users', style: 'width: 25%;'},
-        {text: 'Number Of Permission', style: 'width: 25%'},
-        {text: 'Action', style: 'width: 25%;'},
+      columns: ['Group Name', 'Number Of Users', 'Number Of Permission', 'Action'
       ],
       btnCreate: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Group'},
     };
@@ -116,7 +113,5 @@ export default {
 </script>
 
 <style scoped>
-th, td {
-  text-align: center;
-}
+
 </style>

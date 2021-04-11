@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <Header/>
     <div class="px-5 pt-3 m-0 background-main" >
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -25,8 +25,9 @@
                   <tr :class="{ 'form-group--error': $v.meeting.host.$error }">
                     <td class="required">Host</td>
                     <td style="width: 80%">
-                      <vc-select id="cOwner" label="username" :filterable="false" :options="users" @search="onSearch"
-                                v-model="meeting.host">
+                      <v-select id="cOwner" label="username" :filterable="false" :options="users" @search="onSearch"
+                                v-model="meeting.host"
+                                :reduce="i => i.id">
                         <template slot="no-options">
                           Type for searching...
                         </template>
@@ -40,7 +41,7 @@
                             {{ `${option.username} - ${option.firstName}` }}
                           </div>
                         </template>
-                      </vc-select>
+                      </v-select>
                     </td>
                   </tr>
                   <tr :class="{ 'form-group--error': $v.meeting.title.$error }">
@@ -178,7 +179,7 @@
 </template>
 
 <script>
-
+import Header from "@/components/common/Header";
 import VButton from "@/components/common/VButton";
 import VSwitchButton from "../common/VSwitchButton";
 import {meetingService} from "@/service/meeting.service";
@@ -191,7 +192,7 @@ import {userService} from "@/service/user.service";
 
 export default {
   name: "MeetingCreateEdit",
-  components: {VLoading, AddParticipantModal, VSwitchButton, VButton, },
+  components: {VLoading, AddParticipantModal, VSwitchButton, VButton, Header},
   validations: {
     meeting: {
       host: {
@@ -222,7 +223,7 @@ export default {
       }
       const r = new RRule(rrule);
       this.meeting.rrule = r.toString();
-      this.meeting.host = this.meeting.host ? this.meeting.host.id : null;
+      console.log(this.meeting)
       if (this.meeting.id) {
         meetingService.update(this.meeting, this.meeting.id)
             .then(res => {
@@ -256,6 +257,7 @@ export default {
               this.meeting.isRepeat = res.data.isReminder;
               this.meeting.from = formatDate(res.data.fromDate, 'yyyy-MM-dd') + 'T' + formatDate(res.data.fromDate, 'HH:mm');
               this.meeting.to = formatDate(res.data.toDate, 'yyyy-MM-dd') + 'T' + formatDate(res.data.toDate, 'HH:mm');
+              this.meeting.host = res.data.host ? res.data.host.id : null;
               this.meeting.priority = getValueInArr(res.data.priorities, 'selected', 'id');
               this.mapRRule(this.meeting.rrule);
             } else {
