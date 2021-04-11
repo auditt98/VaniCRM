@@ -22,13 +22,13 @@ export const dealService = {
     loadAllObject
 };
 
-function loadTasks(id) {
-    return fetch(`${config.apiUrl}/deals/${id}/tasks`, requestOptions.get())
+function loadTasks(q, id) {
+    return fetch(`${config.apiUrl}/deals/${id}/tasks?${buildQueryURI(q)}`, requestOptions.get())
         .then(handleResponse);
 }
 
-function loadCompetitors(id) {
-    return fetch(`${config.apiUrl}/deals/${id}/competitors`, requestOptions.get())
+function loadCompetitors(q, id) {
+    return fetch(`${config.apiUrl}/deals/${id}/competitors?${buildQueryURI(q)}`, requestOptions.get())
         .then(handleResponse);
 }
 

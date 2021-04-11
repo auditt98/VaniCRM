@@ -3,8 +3,8 @@
     <div class="card dashboard-card mb-3">
       <div class="card-body">
         <h5 class="card-title">{{data.title}}</h5>
-        <p class="card-text">{{data.accountName}}</p>
-        <p class="card-text">{{data.ownerUsername}}</p>
+        <p class="card-text">{{data.title1}}</p>
+        <p class="card-text">{{data.title2}}</p>
         <span v-if="data.tags" class="d-flex flex-wrap">
           <a v-for="tag in data.tags" :key="tag.tagID" class="col" href="javascript:void(0)" >{{tag.tagName}}</a>
         </span>
