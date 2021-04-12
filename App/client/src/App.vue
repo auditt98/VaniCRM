@@ -1,9 +1,13 @@
 <template>
   <div id="app">
+
+    <keep-alive>
     <Header v-if="!['ResetPassword', 'LoginPage', 'About'].includes($route.name)" />
-    <router-view/>
+    </keep-alive>
+      <router-view :key="$route.fullPath"></router-view> 
+    <!-- <router-view/> -->
     <notifications group="custom-template"
-                   :duration="50000"
+                   :duration="5000"
                    :width="500"
                    animation-name="v-fade-left"
                    position="bottom right">
@@ -55,6 +59,12 @@
 
 }
 
+.custom-template:hover{
+ background-color: rgba(255, 255, 255, 0.5);
+
+    -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
 
 .custom-template,
 .custom-template>div {

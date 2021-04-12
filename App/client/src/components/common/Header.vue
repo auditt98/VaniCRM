@@ -171,7 +171,7 @@ export default {
     },
   },
   mounted(){
-      proxy.on('getUnreadCount', (count) =>{  
+      proxy.on('getUnreadCount', (count) =>{
         this.unreadCount = count;
       });
       proxy.on('pushNotification', (notification) =>{
@@ -181,6 +181,8 @@ export default {
             text:  notification.content,
             type:  notification.type,
             });
+          this.notifications.unshift(notification);
+          this.unreadCount++;
       })
       connection.start()
         .done(() =>{ 
@@ -282,12 +284,14 @@ i {
   background-color: white;
   border-radius: 10px;
   cursor: default;
-
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* background: transparent; */
 
 }
 
 .notification:hover{
-  background-color: rgba(0,0,0,0.03);
+  background-color: #FBFAFA;
 }
 
 .notificationPanelHeader{
@@ -360,6 +364,7 @@ i {
   left: -80px !important;
   height: 80vh !important;
   width: 300px !important;
+
   /* background-color: #FAFAFC; */
 }
 </style>

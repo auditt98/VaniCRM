@@ -24,6 +24,7 @@ namespace Backend.SignalRHub
             var groupName = groupId.ToString();
 
             await Groups.Add(Context.ConnectionId, groupName);
+
             //get notification counts
             var unreadCount = _notificationService.GetUnreadCount(groupId);
             await Clients.Group(groupName).getUnreadCount(unreadCount);
@@ -46,6 +47,7 @@ namespace Backend.SignalRHub
 
         public static void pushNotification(NotificationApiModel notification, List<int> people)
         {
+            people = people.Distinct().ToList();
             foreach(var person in people)
             {
                 if(person != 0)
@@ -67,7 +69,6 @@ namespace Backend.SignalRHub
 
     public interface IClient
     {
-        //List<NotificationApiModel> notification { get; set; }
 
         Task getUnreadCount(int unreadCount);
         Task pushNotification(NotificationApiModel notification);

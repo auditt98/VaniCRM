@@ -99,22 +99,12 @@ namespace Backend.Repository
                 apiModel.createdAt = DateTime.Now;
                 var notiCreated = _notificationRepository.Create(apiModel, new List<USER> { dbUser, owner, creator });
                 //send notification
-                if (notiCreated)
+                if (notiCreated.isCreated)
                 {
                     //send to person who performs the delete
-                    apiModel.Success();
-                    NotificationHub.pushNotification(apiModel, new List<int> { userId });
-                    if (userId != deletedLead.LeadOwner)
-                    {
-                        apiModel.Warning();
-                        NotificationHub.pushNotification(apiModel, new List<int> { owner.ID });
-                    }
-                    if(userId != deletedLead.CreatedBy)
-                    {
-                        apiModel.Warning();
-                        NotificationHub.pushNotification(apiModel, new List<int> { creator.ID });
-                    }
-
+                    apiModel.Info();
+                    apiModel.id = notiCreated.notiId;
+                    NotificationHub.pushNotification(apiModel, new List<int> { userId, owner.ID, creator.ID });
                 }
                 else
                 {

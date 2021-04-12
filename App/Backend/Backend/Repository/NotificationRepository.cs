@@ -43,8 +43,9 @@ namespace Backend.Repository
             }
         }
 
-        public bool Create(NotificationApiModel notification, List<USER> users)
+        public (bool isCreated, int notiId) Create(NotificationApiModel notification, List<USER> users)
         {
+            users = users.Distinct().ToList();
             var newNotification = new NOTIFICATION();
             newNotification.CreatedAt = DateTime.Now;
             newNotification.Module = notification.module;
@@ -69,12 +70,11 @@ namespace Backend.Repository
                     }
                 } 
                 db.SaveChanges();
-                return true;
+                return (true, newNotification.ID);
             }
             catch
             {
                 throw;
-                return false;
             }
         }
     }
