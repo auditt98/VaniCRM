@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <Header/>
+
     <div class="px-5 pt-3 m-0 background-main" style="position: relative">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -40,7 +40,7 @@
 
 <script>
 import VButton from "@/components/common/VButton";
-import Header from "@/components/common/Header";
+
 import MenuLeft from "@/components/common/MenuLeft";
 import UserInfo from "@/components/common/info/UserInfo";
 import BasicInfo from "@/components/common/info/BasicInfo";
@@ -206,7 +206,7 @@ export default {
 
     }
   },
-  components: {VLoading, Note, BasicInfo, UserInfo, MenuLeft, Header, VButton}
+  components: {VLoading, Note, BasicInfo, UserInfo, MenuLeft, VButton}
 }
 </script>
 

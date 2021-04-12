@@ -29,6 +29,7 @@
       </template>
     </notifications>
   </div>
+  
 </template>
 
 <style>
@@ -129,19 +130,10 @@
 	opacity: 0;
 	transform: translateX(-500px) scale(0.2);
 }
- 
 </style>
-
 <script>
 import Header from "@/components/common/Header";
-export default{
-  components: {
-    Header
-  }
-  // mounted() {
-  //     let notificationProxy = document.createElement('script')
-  //     notificationProxy.setAttribute('src', 'https://localhost:44375/notifications/hubs')
-  //     document.body.appendChild(notificationProxy)
-  //   },
+export default {
+  components: {Header}
 }
 </script>

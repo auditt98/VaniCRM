@@ -1,6 +1,6 @@
 <template>
   <div class="background-main">
-    <!-- <Header/> -->
+
     <div class="col-sm-9 mx-auto mt-5">
       <VLoading :loading="loading"/>
       <TableInList :header-columns="columns"
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-// import Header from "@/components/common/Header";
+
 import TableInList from "@/components/common/table/TableInList";
 import {leadService} from "@/service/lead.service";
 import VButton from "@/components/common/VButton";
@@ -51,9 +51,7 @@ import VLoading from "@/components/common/VLoading";
 
 export default {
   name: "LeadList",
-  components: {VLoading, VTag, VButton, TableInList,
-  //  Header
-   },
+  components: {VLoading, VTag, VButton, TableInList, },
   methods: {
     goToPage(page) {
       this.currentPage = page;

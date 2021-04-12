@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <Header/>
+
     <div class="px-5 pt-3 m-0 background-main" style="position: relative">
       <VLoading :loading="loading"/>
       <div class="row ">
@@ -38,10 +38,13 @@
             <Note ref="notes" @remove-note="removeNote" @submit="createNote" :notes="campaign.notes"/>
           </div>
           <div class="row mt-3" id="allContacts">
-            <TableInDetail :header-columns="contractColumns" :data="contractLst" :title="'All Contracts'">
+            <TableInDetail :header-columns="contractColumns" :title="'All Contracts'"
+                           :page-config="{page: currentPageContact, pageSize: pageSizeContact, totalItems: totalItemContact, totalPage: totalPageContact}"
+                           @page-size-change="onPageSizeChange($event, 'CONTACT')"
+                           @go-to-page="goToPage($event, 'CONTACT')">
               <template slot="body">
-                <tbody v-if="contractLst">
-                <tr v-for="(t, i) in contractLst" :key="i">
+                <tbody v-if="contactLst">
+                <tr v-for="(t, i) in contactLst" :key="i">
                   <td>{{ t.name }}</td>
                   <td><a :href="'mailto:'+t.email">{{ t.email }}</a></td>
                   <td>{{ t.phone }}</td>
@@ -60,7 +63,10 @@
             </TableInDetail>
           </div>
           <div class="row mt-3" id="allLeads">
-            <TableInDetail :header-columns="leadColumns" :title="'Leads'">
+            <TableInDetail :header-columns="leadColumns" :title="'Leads'"
+                           :page-config="{page: currentPageLead, pageSize: pageSizeLead, totalItems: totalItemLead, totalPage: totalPageLead}"
+                           @page-size-change="onPageSizeChange($event, 'LEAD')"
+                           @go-to-page="goToPage($event, 'LEAD')">
               <template slot="body">
                 <tbody v-if="leadLst">
                 <tr v-for="(t, i) in leadLst" :key="i">
@@ -90,7 +96,7 @@
 
 <script>
 import VButton from "@/components/common/VButton";
-import Header from "@/components/common/Header";
+
 import MenuLeft from "@/components/common/MenuLeft";
 import UserInfo from "@/components/common/info/UserInfo";
 import BasicInfo from "@/components/common/info/BasicInfo";
@@ -110,7 +116,9 @@ export default {
       this.loading = true;
       campaignService.getById(this.campaign.id).then(res => {
         if (res && res.data) {
-          this.lead = res.data;
+          this.campaign = res.data;
+          this.loadContacts();
+          this.loadLeads();
           mapValue(this.dataLeftBaseInfo, [
             this.campaign.name,
             `<i class="fa fa-envelope-o"></i> <a href="mailto:${this.campaign.email}">${this.campaign.email}</a>`,
@@ -201,6 +209,60 @@ export default {
               this.loadCampaign();
             }
           })
+    },
+    loadContacts() {
+      this.loading = true;
+      this.contactLst = [];
+      let query = {
+        currentPage: this.currentPageContact,
+        pageSize: this.pageSizeContact
+      };
+      campaignService.loadContacts(this.campaign.id, query).then(res => {
+        if (res && res.data) {
+          this.contactLst = res.data.contacts;
+          this.totalPageContact= Number(res.data.pageInfo.TotalPages);
+          this.totalItemContact = Number(res.data.pageInfo.TotalItems);
+        }
+      }).finally(() => {
+        this.loading = false;
+      })
+    },
+    loadLeads() {
+      this.loading = true;
+      this.leadLst = [];
+      let query = {
+        currentPage: this.currentPageLead,
+        pageSize: this.pageSizeLead
+      };
+      campaignService.loadLeads(this.campaign.id, query).then(res => {
+        if (res && res.data) {
+          this.leadLst = res.data.leads;
+          this.totalPageLead = Number(res.data.pageInfo.TotalPages);
+          this.totalItemLead = Number(res.data.pageInfo.TotalItems);
+        }
+      }).finally(() => {
+        this.loading = false;
+      })
+    },
+    onPageSizeChange(event, type) {
+      if (type === 'LEAD') {
+        this.pageSizeLead = Number(event);
+        this.loadLeads();
+      }
+      if (type === 'CONTACT') {
+        this.pageSizeContact = Number(event);
+        this.loadContacts();
+      }
+    },
+    goToPage(event, type) {
+      if (type === 'LEAD') {
+        this.currentPageLead = Number(event);
+        this.loadLeads();
+      }
+      if (type === 'CONTACT') {
+        this.currentPageContact = Number(event);
+        this.loadContacts();
+      }
     }
   },
   created() {
@@ -254,9 +316,17 @@ export default {
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
       contractColumns: ['Contract Name', 'Email', 'Phone', 'Mobile', 'Skype'],
       leadColumns: ['Lead Name', 'Email', 'Phone', 'Mobile', 'Skype'],
+      currentPageContact: 1,
+      pageSizeContact: 5,
+      totalItemContact: 0,
+      totalPageContact:0,
+      currentPageLead: 1,
+      pageSizeLead: 1,
+      totalItemLead: 0,
+      totalPageLead:0,
     }
   },
-  components: {VLoading, Note, BasicInfo, UserInfo, MenuLeft, Header, VButton}
+  components: {VLoading, Note, BasicInfo, UserInfo, MenuLeft, VButton}
 }
 </script>
 

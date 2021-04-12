@@ -13,12 +13,12 @@
     "chart.js": "^2.9.4",
     "core-js": "^3.9.1",
     "date-fns": "2.14.0",
-    "dayspan-vuetify": "^0.4.0",
+    "dayspan-vuetify": "0.2.3",
+    "vuetify": "1.1.9",
     "jquery": "^3.2.1",
     "popper.js": "^1.16.1",
     "rrule": "^2.6.8",
     "rxjs": "^6.6.6",
-    "sass-loader": "^10.1.1",
     "vue": "^2.6.12",
     "vue-chartjs": "^3.5.1",
     "vue-router": "^3.5.1",
@@ -43,7 +43,6 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.2.2",
-    "expose-loader": "^2.0.0",
     "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {

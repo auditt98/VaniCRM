@@ -5,7 +5,7 @@
             aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="color: black;">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="nav-item mx-auto order-last">
+    <div class="nav-item mx-auto order-last" @click="alert('123');">
       <div class="header-avatar-icon">
         <i class="fa fa-calendar-o" aria-hidden="true"></i>
       </div>
@@ -31,36 +31,33 @@
       <div class="header-avatar-icon" >
         <i class="fa fa-bell-o notificationIcon has-badge" aria-hidden="true"></i><span class="badge badge-main">{{unreadCount}}</span>
       </div>
-      
     </div>
-      
-
     <div class="nav-item mx-auto order-last dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
          aria-haspopup="true" aria-expanded="false">
         {{currentUser.username}}
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" :href="'/user-page?id=' + currentUser.id" >View profile</a>
+        <a class="dropdown-item" href="#">View profile</a>
         <a class="dropdown-item" @click="logout()" style="cursor: pointer;">Logout</a>
 
       </div>
     </div>
     <div class="nav-item mx-auto order-last">
       <img class="header-avatar m-auto" v-bind:src="currentUser.avatar">
-        <!-- <img v-bind:src="currentUser.avatar"> -->
+
 
     </div>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"
+          <a class="nav-link dropdown-toggle"  :class="{'active': isDashboard}" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
             Dashboard
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-            <router-link active-class="active" :to="{ name: 'Dashboard'}" class="dropdown-item">Dashboard Sale</router-link>
-            <router-link active-class="active" :to="{ name: 'Dashboard'}" class="dropdown-item">Dashboard Marketing</router-link>
+            <a href="/dashboard-sale" class="dropdown-item">Dashboard Sale</a>
+            <a href="/dashboard-marketing" class="dropdown-item">Dashboard Marketing</a>
           </div>
         </li>
         <li class="nav-item">
@@ -89,9 +86,6 @@
             <router-link active-class="active" :to="{ name: 'CallCreate'}" class="dropdown-item">Call</router-link>
           </div>
         </li>
-        <!-- <li class="nav-item">
-          <router-link active-class="active" :to="{ name: 'TaskList'}" class="nav-link">Tasks</router-link>
-        </li> -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
@@ -105,7 +99,6 @@
         </li>
       </ul>
     </div>
-    
   </nav>
 
 </template>
@@ -124,7 +117,7 @@ const api = "https://localhost:44375/notifications";
 
 export default {
   name: "Header",
-  data: function(){
+  data() {
     return {
       currentUser: authenticationService.currentUserValue,
       notifications: [],
@@ -207,14 +200,12 @@ export default {
     }
   }
 }
-
 </script>
- 
-<style scoped>
 
+<style scoped>
 .header {
   /* height: 80px; */
-  box-shadow: 0px -8px 10px rgba(255, 255, 255, 0.5), 0px 16px 24px rgba(55, 71, 79, 0.2);
+  box-shadow: 0px -8px 10px rgba(255, 255, 255, 0.5), 0px 7px 24px rgba(55, 71, 79, 0.2);
   /* overflow: hidden; */
   margin-bottom: 2px;
   background: white;

@@ -15,8 +15,20 @@ export const campaignService = {
     createTag,
     removeNote,
     removeTag,
+    loadContacts,
+    loadLeads,
     loadAllObject
 };
+
+function loadContacts(q, id) {
+    return fetch(`${config.apiUrl}/campaigns/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get())
+        .then(handleResponse);
+}
+
+function loadLeads(q, id) {
+    return fetch(`${config.apiUrl}/campaigns/${id}/leads?${buildQueryURI(q)}`, requestOptions.get())
+        .then(handleResponse);
+}
 
 function getAll(q) {
     return fetch(`${config.apiUrl}/campaigns?${buildQueryURI(q)}`, requestOptions.get())
