@@ -44,7 +44,9 @@ Chạy script ```DB_Create.sql``` và ```DB_Data.sql``` trong SQL Express
 ```cd App/Backend```
 Chạy ```Backend.sln```
 Restore Nuget Package
+Trong Package Manager run ```Update-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -r```
 Build và Run
 
 #### Swagger
 Navigate tới ```/swagger``` để xem API documentation
+

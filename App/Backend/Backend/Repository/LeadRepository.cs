@@ -97,23 +97,7 @@ namespace Backend.Repository
                 apiModel.title = "Lead removed";
                 apiModel.content = $"Lead {deletedLead.Name} removed by user {dbUser.Username}.";
                 apiModel.createdAt = DateTime.Now;
-                var notiCreated = _notificationRepository.Create(apiModel, new List<USER> { dbUser, owner, creator });
-                //send notification
-                if (notiCreated.isCreated)
-                {
-                    //send to person who performs the delete
-                    apiModel.Info();
-                    apiModel.id = notiCreated.notiId;
-                    NotificationHub.pushNotification(apiModel, new List<int> { userId, owner.ID, creator.ID });
-                }
-                else
-                {
-                    apiModel.Danger();
-                    apiModel.title = ErrorMessages.SOMETHING_WRONG;
-                    apiModel.content = ErrorMessages.CANT_PERFORM_ACTION;
-                    NotificationHub.pushNotification(apiModel, new List<int> { userId });
-
-                }
+                NotificationManager.SendNotification(apiModel, new List<USER> { owner, creator, dbUser });
 
                 return true;
             }
@@ -137,7 +121,7 @@ namespace Backend.Repository
             newLead.Email = apiModel.email;
             newLead.Fax = apiModel.fax;
             newLead.INDUSTRY_ID = apiModel.industry;
-            newLead.LeadOwner = apiModel.owner;
+            newLead.LeadOwner = apiModel.owner != 0 ? apiModel.owner : createdUser;
             newLead.LeadSource = apiModel.leadSource;
             newLead.LeadStatus = apiModel.leadStatus;
             newLead.Name = apiModel.name;

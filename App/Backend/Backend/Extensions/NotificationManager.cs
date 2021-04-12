@@ -1,4 +1,8 @@
-﻿using Backend.Services;
+﻿using Backend.Domain;
+using Backend.Models.ApiModel;
+using Backend.Repository;
+using Backend.Resources;
+using Backend.Services;
 using Backend.SignalRHub;
 using Microsoft.AspNet.SignalR;
 using System;
@@ -11,24 +15,20 @@ namespace Backend.Extensions
 {
     public class NotificationManager
     {
-        NotificationService _notificationService = new NotificationService();
+        static NotificationRepository _notificationRepository = new NotificationRepository();
 
-        private readonly static Lazy<NotificationManager> _instance = new Lazy<NotificationManager>(
-        () => new NotificationManager(GlobalHost.ConnectionManager.GetHubContext<NotificationHub>()));
-        private IHubContext _context;
-
-        private NotificationManager(IHubContext context)
+        public static void SendNotification(NotificationApiModel apiModel, List<USER> users)
         {
-            _context = context;
+            var notiCreated = _notificationRepository.Create(apiModel, users);
+            //send notification
+            if (notiCreated.isCreated)
+            {
+                //send to person who performs the delete
+                apiModel.Info();
+                apiModel.id = notiCreated.notiId;
+                NotificationHub.pushNotification(apiModel, users.Select(c => c.ID).ToList());
+            }
         }
-
-        public void UpdateUnreadCount(int groupId)
-        {
-            var unreadCount = _notificationService.GetUnreadCount(groupId);
-            var groupName = groupId.ToString();
-            _context.Clients.Group(groupName).getUnreadCount(unreadCount);
-        }
-
 
     }
 }

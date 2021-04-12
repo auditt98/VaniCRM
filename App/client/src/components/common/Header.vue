@@ -5,7 +5,7 @@
             aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="color: black;">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="nav-item mx-auto order-last" @click="alert('123');">
+    <div class="nav-item mx-auto order-last" @click="testNotification();">
       <div class="header-avatar-icon">
         <i class="fa fa-calendar-o" aria-hidden="true"></i>
       </div>
