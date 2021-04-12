@@ -5,7 +5,7 @@
             aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="color: black;">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="nav-item mx-auto order-last" @click="alert('123');">
+    <div class="nav-item mx-auto order-last" @click="testNotification();">
       <div class="header-avatar-icon">
         <i class="fa fa-calendar-o" aria-hidden="true"></i>
       </div>
@@ -15,8 +15,12 @@
         <div class="notificationPanelHeader"><h2>Notifications</h2></div>
         <div class="notificationPanelContent">
             <div class="notification" v-for="notification in this.notifications" :key="notification.id">
-              <h6 style="color: rgba(0,0,0,0.7)">{{notification.title}}</h6>
-              {{notification.content}}
+              <div v-on:click="goToNotification(notification)">
+                <h6 style="color: rgba(0,0,0,0.7); font-weight:bold;">{{notification.title}}</h6>
+                {{notification.content}}
+                <div class="circle" v-if="notification.isRead == false"></div>
+                <div class="notificationTimestamp" style="margin-top:5px;"><span v-bind:class="{ newNotification: notification.isRead == false,  }">{{Date.create(notification.createdAt).relative('en', () => {}) }}</span></div>
+              </div>
             </div>
             <infinite-loading @infinite="infiniteHandler"></infinite-loading>
           <!-- <div class="notificationGroup">
@@ -25,38 +29,35 @@
         </div>
       </popover>
       <div class="header-avatar-icon" >
-        <i class="fa fa-bell-o notificationIcon" aria-hidden="true"></i>
+        <i class="fa fa-bell-o notificationIcon has-badge" aria-hidden="true"></i><span class="badge badge-main">{{unreadCount}}</span>
       </div>
-      
     </div>
-      
-
     <div class="nav-item mx-auto order-last dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
          aria-haspopup="true" aria-expanded="false">
-        Admin
+        {{currentUser.username}}
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" :href="'/user-page?id=' + currentUser.id" >View profile</a>
+        <a class="dropdown-item" href="#">View profile</a>
         <a class="dropdown-item" @click="logout()" style="cursor: pointer;">Logout</a>
 
       </div>
     </div>
     <div class="nav-item mx-auto order-last">
       <img class="header-avatar m-auto" v-bind:src="currentUser.avatar">
-        <!-- <img v-bind:src="currentUser.avatar"> -->
+
 
     </div>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"
+          <a class="nav-link dropdown-toggle"  :class="{'active': isDashboard}" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
             Dashboard
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-            <router-link active-class="active" :to="{ name: 'Dashboard'}" class="dropdown-item">Dashboard Sale</router-link>
-            <router-link active-class="active" :to="{ name: 'Dashboard'}" class="dropdown-item">Dashboard Marketing</router-link>
+            <a href="/dashboard-sale" class="dropdown-item">Dashboard Sale</a>
+            <a href="/dashboard-marketing" class="dropdown-item">Dashboard Marketing</a>
           </div>
         </li>
         <li class="nav-item">
@@ -85,9 +86,6 @@
             <router-link active-class="active" :to="{ name: 'CallCreate'}" class="dropdown-item">Call</router-link>
           </div>
         </li>
-        <!-- <li class="nav-item">
-          <router-link active-class="active" :to="{ name: 'TaskList'}" class="nav-link">Tasks</router-link>
-        </li> -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
@@ -101,48 +99,56 @@
         </li>
       </ul>
     </div>
-    
   </nav>
 
 </template>
 
 <script>
 import {authenticationService} from "@/service/authentication.service";
-// console.log(authenticationService.currentUserValue)
-// import { hubConnection } from 'signalr-no-jquery';
+import { hubConnection } from 'signalr-no-jquery';
 import axios from 'axios';
+import Sugar from 'sugar'
+Sugar.extend();
 
-// var connection = hubConnection("https://localhost:44375/signalr", { useDefaultPath: false});
-//   var proxy = connection.createHubProxy('notificationHub');
-//   proxy.on('pushNotifications', function(n){
-//     (n).forEach(element => {
-//       console.log(element)
-//     });
-//   })
-//   connection.start()
-//     .done(function(){ 
-//       console.log('Now connected, connection ID=' + connection.id);  
-//       proxy.invoke('Join', 1004).done(function () {
-//         console.log ('Invocation of join succeeded');
-//     }).fail(function (error) {
-//         console.log('Error: ' + error);
-//     });
-//     })
-//     .fail(function(){ console.log('Could not connect'); });
+var connection = hubConnection("https://localhost:44375/signalr", { useDefaultPath: false});
+var proxy = connection.createHubProxy('notificationHub');
 
 const api = "https://localhost:44375/notifications";
 
 export default {
   name: "Header",
-  data: function(){
+  data() {
     return {
       currentUser: authenticationService.currentUserValue,
       notifications: [],
       page: 1,
       pageSize: 10,
+      unreadCount: 0,
+      isDashboard: false,
     }
   },
   methods: {
+    goToNotification(notification){
+      //mark as read
+      if(notification.isRead == false){
+        axios.get(api + "/read", {
+          params:{
+            notificationId: notification.id,
+            userId: authenticationService.currentUserValue.id,
+          }
+        }).then(({data}) =>{
+          if(data.status=="success"){
+            var noti = this.notifications.find(x => x.id === notification.id)
+            noti.isRead = true;
+          }
+        })
+      }
+      //go to module if exist
+      if(notification.module != null){
+        this.$router.push({ path: notification.module + '-detail', query: { id: notification.moduleObjectId } }).catch(() =>{});
+      }
+      // console.log(notification);
+    },
     logout() {
       authenticationService.logout(null);
     },
@@ -154,6 +160,7 @@ export default {
         },
       }).then(({ data }) => {
         if(data.data.notifications.length > 0){
+          this.unreadCount = data.data.unreadCount;
           this.page += 1;
           this.notifications.push(...data.data.notifications);
           $state.loaded();
@@ -161,20 +168,46 @@ export default {
           $state.complete();
         }
       })
-    }
+    },
   },
-  created(){
-
-  } 
+  mounted(){
+      proxy.on('getUnreadCount', (count) =>{
+        this.unreadCount = count;
+      });
+      proxy.on('pushNotification', (notification) =>{
+          this.$notify({
+            group: 'custom-template',
+            title: notification.title,
+            text:  notification.content,
+            type:  notification.type,
+            });
+          this.notifications.unshift(notification);
+          this.unreadCount++;
+      })
+      connection.start()
+        .done(() =>{ 
+          console.log('Now connected, connection ID=' + connection.id);  
+          proxy.invoke('Join', authenticationService.currentUserValue.id).done(() => {
+            console.log("joined")
+          }).fail(function (error) {
+              console.log('Error: ' + error);
+            });
+        })
+        .fail(function(){ console.log('Could not connect'); });
+  },created() {
+    if (window.location.pathname.indexOf('dashboard-marketing') > -1 || window.location.pathname.indexOf('dashboard-sale') > -1) {
+      this.isDashboard = true;
+    } else {
+      this.isDashboard = false;
+    }
+  }
 }
-
 </script>
 
 <style scoped>
-
 .header {
   /* height: 80px; */
-  box-shadow: 0px -8px 10px rgba(255, 255, 255, 0.5), 0px 16px 24px rgba(55, 71, 79, 0.2);
+  box-shadow: 0px -8px 10px rgba(255, 255, 255, 0.5), 0px 7px 24px rgba(55, 71, 79, 0.2);
   /* overflow: hidden; */
   margin-bottom: 2px;
   background: white;
@@ -187,6 +220,10 @@ export default {
   line-height: 29px;
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.nav-link{
+  color:black !important;
 }
 
 .nav-item a.active {
@@ -240,14 +277,21 @@ i {
 }
 
 .notification{
-  height:80px;
+  /* height:100px; */
+  height: fit-content;
+  padding: 10px;
   margin-left:5px;
   background-color: white;
   border-radius: 10px;
+  cursor: default;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* background: transparent; */
+
 }
 
 .notification:hover{
-  background-color: rgba(0,0,0,0.03);
+  background-color: #FBFAFA;
 }
 
 .notificationPanelHeader{
@@ -276,6 +320,42 @@ i {
   margin-right: 8px;
 }
 
+.notificationLink{
+  text-decoration: none !important;
+  cursor: default;
+  color: black;
+}
+
+.circle {
+  position:absolute;
+  left:90%;
+  background: #D93915;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.newNotification{
+  color: #D93915;
+  font-weight: bold;
+}
+
+.oldNotification{
+  font-weight: bold;
+}
+
+.badge-main{
+  position:absolute;
+  top: 10%;
+  font-family: "Segoe UI";
+  color: white;
+  background-color: #D93915;
+  cursor: default;
+  border-radius: 20px;
+  width: fit-content;
+}
+
 #notificationPanel{
   padding: 0 !important;
   overflow:auto;
@@ -284,7 +364,7 @@ i {
   left: -80px !important;
   height: 80vh !important;
   width: 300px !important;
+
   /* background-color: #FAFAFC; */
 }
-
 </style>

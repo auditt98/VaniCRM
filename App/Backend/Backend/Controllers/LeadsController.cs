@@ -186,6 +186,7 @@ namespace Backend.Controllers
                             response.StatusCode = HttpStatusCode.OK;
                             responseData = ResponseFormat.Success;
                             responseData.message = SuccessMessages.LEAD_CREATED;
+
                         }
                     }
                     else
@@ -545,7 +546,7 @@ namespace Backend.Controllers
                     var isAuthorized = _authorizationService.Authorize(Convert.ToInt32(userId));
                     if (isAuthorized)
                     {
-                        var isDeleted = _leadService.Delete(id);
+                        var isDeleted = _leadService.Delete(id, Convert.ToInt32(userId));
                         if (isDeleted)
                         {
                             response.StatusCode = HttpStatusCode.OK;

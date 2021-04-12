@@ -120,6 +120,9 @@
   <data name="ADDRESS_LENGTH_TOO_LONG" xml:space="preserve">
     <value>Address length is too long.</value>
   </data>
+  <data name="CANT_PERFORM_ACTION" xml:space="preserve">
+    <value>There was an error performing this action. Please try again later.</value>
+  </data>
   <data name="CITY_NAME_TOO_LONG" xml:space="preserve">
     <value>City name is too long.</value>
   </data>

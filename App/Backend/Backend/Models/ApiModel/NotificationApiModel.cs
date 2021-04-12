@@ -16,10 +16,47 @@ namespace Backend.Models.ApiModel
         public string subModule { get; set; }
         public int? subModuleObjectId { get; set; }
         public bool isRead { get; set; }
+        public string type { get; set; }
+
+        public NotificationApiModel()
+        {
+            
+        }
+
+        public NotificationApiModel(string type)
+        {
+            this.type = type;
+        }
+
+        public NotificationApiModel Success()
+        {
+            type = "success";
+            return this;
+        }
+
+        public NotificationApiModel Danger()
+        {
+            type = "danger";
+            return this;
+        }
+
+        public NotificationApiModel Info()
+        {
+            type = "info";
+            return this;
+        }
+
+        public NotificationApiModel Warning()
+        {
+            type = "warning";
+            return this;
+        }
+
     }
 
     public class NotificationListApiModel
     {
         public List<NotificationApiModel> notifications { get; set; }
+        public int unreadCount { get; set; }
     }
 }

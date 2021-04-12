@@ -1,6 +1,8 @@
 ﻿using Backend.Domain;
 using Backend.Extensions;
 using Backend.Models.ApiModel;
+using Backend.Resources;
+using Backend.SignalRHub;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,8 @@ namespace Backend.Repository
     {
         DatabaseContext db = new DatabaseContext();
         TagRepository _tagRepository = new TagRepository();
+        NotificationRepository _notificationRepository = new NotificationRepository();
+
         public LEAD GetOne(int id)
         {
             return db.LEADs.Find(id);
@@ -72,13 +76,29 @@ namespace Backend.Repository
             return db.LEAD_STATUS;
         }
 
-        public bool Delete(int id)
+        public bool Delete(int id, int userId)
         {
             var dbLead = db.LEADs.Find(id);
+            var dbUser = db.USERs.Find(userId);
             if(dbLead != null)
             {
-                db.LEADs.Remove(dbLead);
+                var dbAccount = db.ACCOUNTs.Where(c => c.ConvertFrom == dbLead.ID).ToList();
+                foreach(var account in dbAccount)
+                {
+                    account.ConvertFrom = null;
+                }
+                var owner = dbLead.Owner;
+                var creator = dbLead.CreatedUser;
+                var deletedLead = db.LEADs.Remove(dbLead);
                 db.SaveChanges();
+
+                //create a notification
+                var apiModel = new NotificationApiModel();
+                apiModel.title = "Lead removed";
+                apiModel.content = $"Lead {deletedLead.Name} removed by user {dbUser.Username}.";
+                apiModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(apiModel, new List<USER> { owner, creator, dbUser });
+
                 return true;
             }
             else
@@ -101,7 +121,7 @@ namespace Backend.Repository
             newLead.Email = apiModel.email;
             newLead.Fax = apiModel.fax;
             newLead.INDUSTRY_ID = apiModel.industry;
-            newLead.LeadOwner = apiModel.owner;
+            newLead.LeadOwner = apiModel.owner != 0 ? apiModel.owner : createdUser;
             newLead.LeadSource = apiModel.leadSource;
             newLead.LeadStatus = apiModel.leadStatus;
             newLead.Name = apiModel.name;

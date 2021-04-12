@@ -1,3 +1,8 @@
+html, body{
+    background-color: #FBFAFA !important;
+}
+
+
 .under-line {
     background: #D93915;
     height: 1px;

@@ -70,6 +70,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an error performing this action. Please try again later..
+        /// </summary>
+        internal static string CANT_PERFORM_ACTION {
+            get {
+                return ResourceManager.GetString("CANT_PERFORM_ACTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to City name is too long..
         /// </summary>
         internal static string CITY_NAME_TOO_LONG {
