@@ -45,11 +45,12 @@ export default {
     arrRight: Array
   }
 }
+
 </script>
 
-<style scoped>
-td {
+<style>
 
+td {
   min-width: 145px;
 }
 </style>

@@ -42,6 +42,11 @@
                            :page-config="{page: currentPageContact, pageSize: pageSizeContact, totalItems: totalItemContact, totalPage: totalPageContact}"
                            @page-size-change="onPageSizeChange($event, 'CONTACT')"
                            @go-to-page="goToPage($event, 'CONTACT')">
+              <template slot="button">
+                <router-link class="mr-2" :to="{name: 'ContactCreate', query: {campaignId: campaign.id}}">
+                  <VButton :data="btnCreateContact"/>
+                </router-link>
+              </template>
               <template slot="body">
                 <tbody v-if="contactLst">
                 <tr v-for="(t, i) in contactLst" :key="i">
@@ -67,6 +72,11 @@
                            :page-config="{page: currentPageLead, pageSize: pageSizeLead, totalItems: totalItemLead, totalPage: totalPageLead}"
                            @page-size-change="onPageSizeChange($event, 'LEAD')"
                            @go-to-page="goToPage($event, 'LEAD')">
+              <template slot="button">
+                <router-link class="mr-2" :to="{name: 'LeadCreate', query: {campaignId: campaign.id}}">
+                  <VButton :data="btnCreateLead"/>
+                </router-link>
+              </template>
               <template slot="body">
                 <tbody v-if="leadLst">
                 <tr v-for="(t, i) in leadLst" :key="i">
@@ -104,6 +114,7 @@ import Note from "@/components/common/info/Note";
 import {formatDate, getValueInArr, mapValue} from "@/config/config";
 import {campaignService} from "@/service/campaign.service";
 import VLoading from "@/components/common/VLoading";
+import TableInDetail from "@/components/common/table/TableInDetail";
 
 export default {
   name: "LeadDetail",
@@ -120,34 +131,29 @@ export default {
           this.loadContacts();
           this.loadLeads();
           mapValue(this.dataLeftBaseInfo, [
-            this.campaign.name,
-            `<i class="fa fa-envelope-o"></i> <a href="mailto:${this.campaign.email}">${this.campaign.email}</a>`,
-            `<i class="fa fa-phone"></i> ${this.campaign.phone}`,
-            getValueInArr(this.campaign.status, 'selected', 'name'),
-            getValueInArr(this.campaign.priority, 'selected', 'name')
+            this.campaign.owner ? this.campaign.owner.username : '',
+            getValueInArr(this.campaign.types, 'selected', 'name'),
+            getValueInArr(this.campaign.statuses, 'selected', 'name'),
+              this.campaign.actualCost
           ]);
           mapValue(this.dataLeftDetail, [
+            this.campaign.owner ? this.campaign.owner.username : '',
             this.campaign.name,
-            `<i class="fa fa-envelope-o"></i> <a href="mailto:${this.campaign.email}">${this.campaign.email}</a>`,
-            `<i class="fa fa-phone"></i> ${this.campaign.phone}`,
-            this.campaign.fax,
-            getValueInArr(this.campaign.industry, 'selected', 'name'),
-            this.campaign.website,
-            this.campaign.annualRevenue,
-            getValueInArr(this.campaign.status, 'selected', 'name'),
-            this.campaign.skype,
-            getValueInArr(this.campaign.priority, 'selected', 'name')
+            formatDate(this.campaign.startDate, 'dd/MM/yyyy HH:mm'),
+            formatDate(this.campaign.endDate, 'dd/MM/yyyy HH:mm'),
+            this.campaign.actualCost,
+            this.campaign.budgetedCost,
+            this.campaign.expectedResponse
 
           ]);
           mapValue(this.dataRightDetail, [
-            this.campaign.noEmail,
-            this.campaign.noCall,
-            getValueInArr(this.campaign.leadSource, 'selected', 'name'),
-            this.campaign.companyName,
-            formatDate(this.campaign.CreatedAt, 'dd/MM/yyyy HH:mm'),
+            this.campaign.numberSent,
+            getValueInArr(this.campaign.types, 'selected', 'name'),
+            getValueInArr(this.campaign.statuses, 'selected', 'name'),
             this.campaign.CreatedBy ? this.campaign.CreatedBy.username : '',
-            formatDate(this.campaign.ModifiedAt, 'dd/MM/yyyy HH:mm'),
+            formatDate(this.campaign.CreatedAt, 'dd/MM/yyyy HH:mm'),
             this.campaign.ModifiedBy ? this.campaign.ModifiedBy.username : '',
+            formatDate(this.campaign.ModifiedAt, 'dd/MM/yyyy HH:mm'),
           ]);
 
         } else {
@@ -217,7 +223,7 @@ export default {
         currentPage: this.currentPageContact,
         pageSize: this.pageSizeContact
       };
-      campaignService.loadContacts(this.campaign.id, query).then(res => {
+      campaignService.loadContacts(query, this.campaign.id).then(res => {
         if (res && res.data) {
           this.contactLst = res.data.contacts;
           this.totalPageContact= Number(res.data.pageInfo.TotalPages);
@@ -234,7 +240,8 @@ export default {
         currentPage: this.currentPageLead,
         pageSize: this.pageSizeLead
       };
-      campaignService.loadLeads(this.campaign.id, query).then(res => {
+      console.log(this.campaign.id)
+      campaignService.loadLeads(query, this.campaign.id).then(res => {
         if (res && res.data) {
           this.leadLst = res.data.leads;
           this.totalPageLead = Number(res.data.pageInfo.TotalPages);
@@ -324,9 +331,11 @@ export default {
       pageSizeLead: 1,
       totalItemLead: 0,
       totalPageLead:0,
+      btnCreateContact: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Contact'},
+      btnCreateLead: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Lead'},
     }
   },
-  components: {VLoading, Note, BasicInfo, UserInfo, MenuLeft, VButton}
+  components: {TableInDetail, VLoading, Note, BasicInfo, UserInfo, MenuLeft, VButton}
 }
 </script>
 

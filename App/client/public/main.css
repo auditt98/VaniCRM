@@ -23,8 +23,8 @@ html, body{
 }
 .icon-green {
     background: #00B894;
-    top: 30%;
-    left: 5%;
+    top: 34%;
+    left: 4%;
 }
 .icon-purple {
     background: #6C5CE7;
@@ -36,7 +36,7 @@ html, body{
     top: 10%;
 }
 .icon-blue {
-    background: #0984E3;
+    /*background: #0984E3;*/
     left: 95%;
     top: 24%;
 }

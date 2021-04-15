@@ -2,12 +2,12 @@
   <div class="w-100 login-page">
     <div class="row mx-0">
       <VLoading :loading="loading"/>
-      <div class="col-sm-6 login-form pt-5">
-        <div class="col-sm-8 m-auto">
+      <div class="col-sm-6 login-form">
+        <div class="col-sm-7 m-auto">
           <div class="mb-5">
             <p class="text-center font-weight-bold login-text">LOGIN</p>
-            <p class="under-line w-50 mx-auto mb-5"></p>
-            <p class="text-center">Welcome back! Please login to your account.</p>
+            <p class="under-line mx-auto mb-5"></p>
+            <p class="text-center login-note">Welcome back! Please login to your account.</p>
           </div>
           <form class="mt-2" @submit.prevent="onSubmit">
             <div class="form-group">
@@ -23,12 +23,8 @@
                 </button>
               </div>
             </div>
-            <div class="row justify-content-between mx-0 my-4">
-              <div class="col-5 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Remember Me</label>
-              </div>
-              <div class="col-6 p-0 text-right">
+            <div class="row mx-0 my-4">
+              <div class="col-12 p-0 text-center">
                 <a href="javascript:void(0)" @click="showModal" class="text-dark">Forgot Password?</a>
               </div>
             </div>
@@ -39,6 +35,9 @@
       </div>
       <div class="col-sm-6 login-right">
         <div class="login-image mx-auto">
+          <div class="login-title">
+            <span>CRM</span>
+          </div>
           <div class="icon icon-green">
             <span><img src="../../assets/like.png" alt=""></span>
           </div>
@@ -49,7 +48,7 @@
             <span><img src="../../assets/pink.png" alt=""></span>
           </div>
           <div class="icon icon-blue">
-            <span><img src="../../assets/blue.png" alt=""></span>
+            <span><img src="../../assets/x1.png" alt=""></span>
           </div>
         </div>
       </div>
@@ -150,7 +149,7 @@ export default {
 }
 
 .login-image {
-  height: 900px;
+  height: 780px;
   width: 65%;
   background: url('../../assets/Messages-bro.png');
   background-repeat: no-repeat;
@@ -187,5 +186,25 @@ export default {
 
 i {
   color: black;
+}
+.login-right, .login-form  {
+  padding-top: 150px;
+}
+.login-form > div {
+  padding-top: 100px;
+}
+.login-note {
+  font-size: 18px;
+}
+.under-line {
+  width: 40%;
+}
+.login-title {
+  color: #D93915;
+  font-weight: bold;
+  font-size: 36px;
+  position: absolute;
+  left: 26%;
+  top: 15%;
 }
 </style>

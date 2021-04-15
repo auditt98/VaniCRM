@@ -21,7 +21,7 @@
           <tbody v-if="leads && leads.length > 0">
           <tr v-for="(item,index) in leads" :key="index">
             <th>
-              <router-link :to="{name: 'LeadDetail', query: {id: item.id}}">{{ item.name }}</router-link>
+              {{ item.name }}
             </th>
             <th>{{ item.companyName }}</th>
             <th>{{ item.email }}</th>
@@ -29,7 +29,13 @@
             <th>{{ item.leadSource }}</th>
             <th>{{ item.leadOwner }}</th>
             <th>
-              <VTag :data="{text: item.priority, bgColor: 'rgb(222, 0, 80)'}"/>
+              <VTag :data="{text: item.priority, bgColor: getBgColor(item.priority)}"/>
+            </th>
+            <th>
+              <span class="action">
+              <span @click="editItem(item.id)" class="mr-1"><img src="images/newspaper-line.png" alt=""></span>
+              <span @click="deleteItem(item.id)"><img src="images/delete-bin-2-line.png" alt=""></span>
+            </span>
             </th>
 
           </tr>
@@ -53,6 +59,34 @@ export default {
   name: "LeadList",
   components: {VLoading, VTag, VButton, TableInList, },
   methods: {
+    getBgColor(data) {
+      if (data.toUpperCase() === 'HIGH') {
+        return '#F12B2C';
+      }
+      if (data.toUpperCase() === 'LOW') {
+        return '#FEC400';
+      }
+      if (data.toUpperCase() === 'NORMAL') {
+        return '#29CC97';
+      }
+    },
+    editItem(id) {
+      this.$router.push({path: '/lead-detail', query : { id: id}});
+    },
+    deleteItem(id) {
+      if (!confirm("Xác nhận xóa!")) {
+        return ;
+      }
+      this.loading = true;
+      leadService.remove(id).then(res => {
+        if(res) {
+          alert('Xóa thành công!');
+          this.loadLeads(this.keyword);
+        }
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     goToPage(page) {
       this.currentPage = page;
       this.loadLeads(this.keyword);
@@ -100,7 +134,8 @@ export default {
         {text: 'Phone', style: 'width: 10%;'},
         {text: 'Lead Source', style: 'width: 15%;'},
         {text: 'Lead Owner', style: 'width: 15%;'},
-        {text: 'Priority', style: 'width: 10%;'},
+        {text: 'Priority', style: 'width: 5%;'},
+        {text: 'Action', style: 'width: 10%;'},
       ],
       leads: Array,
       keyword: '',

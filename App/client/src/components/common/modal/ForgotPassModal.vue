@@ -4,7 +4,7 @@
       <div class="modal" ref="modal">
         <header class="modal-header">
           <slot name="header">
-            <h2 class="text-center w-100">Forgot Password</h2>
+            <h5 class="text-center w-100">Forgot Password</h5>
           </slot>
         </header>
 
@@ -33,8 +33,8 @@ export default {
   components: {VButton},
   data () {
     return {
-      btnCancel: {btnClass: 'btn-white px-3 mr-4', icon: 'fa-times', text: 'Cancel'},
-      btnSend: {btnClass: 'btn-red px-4', icon: 'fa-pencil', text: 'Send'},
+      btnCancel: {btnClass: 'btn-white px-3 mr-4 btn-modal', icon: '', text: 'Cancel'},
+      btnSend: {btnClass: 'btn-red px-4 btn-modal', icon: '', text: 'Send'},
       email: '',
       error: ''
     }
@@ -69,5 +69,21 @@ export default {
 <style scoped>
 .modal-footer {
   display: unset;
+}
+.modal-body {
+  flex: unset;
+}
+.modal-header {
+  margin-top: 20px;
+}
+.modal {
+  width: 440px;
+  height: 276px;
+  position: absolute !important;
+  top: 15%;
+  left: 38%;
+  z-index: 10040;
+  overflow: auto;
+  overflow-y: auto;
 }
 </style>
