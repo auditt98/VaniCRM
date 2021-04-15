@@ -1,3 +1,0 @@
-# vani-crm
-
-web vuejs

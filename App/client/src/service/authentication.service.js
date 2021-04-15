@@ -47,8 +47,9 @@ function requestResetPass(email) {
 }
 
 function getRefreshToken() {
-    return fetch(`${config.apiUrl + 'refresh_token'}`, requestOptions.get())
+    return fetch(`${config.apiUrl + 'refresh_token'}`, {method: "GET", credentials: 'include'})
         .then(res => {
+            console.log(res)
             if (res.data && res.data.user) {
                 const user = res.data.user;
                 localStorage.setItem('currentUser', JSON.stringify(user));
@@ -56,7 +57,8 @@ function getRefreshToken() {
                 return user;
             }
             return null;
-        }).catch(() => {
+        }).catch((e) => {
+            console.log(e)
             return null;
         });
 }

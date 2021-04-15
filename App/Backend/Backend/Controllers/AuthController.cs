@@ -22,7 +22,7 @@ using System.Web.Http.Cors;
 
 namespace Backend.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class AuthController : ApiController
     {
         DatabaseContext db = new DatabaseContext();
@@ -77,9 +77,10 @@ namespace Backend.Controllers
                     var cookie = new CookieHeaderValue("refreshTokenData", nv);
                     cookie.HttpOnly = true;
                     cookie.Secure = true;
+
                     cookie.Domain = Request.RequestUri.Host;
                     response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
-
+                    
                     //create response data
                     responseData = ResponseFormat.Success;
                     if (dbUser.Avatar != null)
