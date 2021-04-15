@@ -15,19 +15,23 @@
         <template slot="body">
           <tbody v-if="!accounts || accounts.length === 0">
           <tr>
-            <td colspan="4" class="text-center">Không có dữ liệu</td>
+            <td colspan="5" class="text-center">Không có dữ liệu</td>
           </tr>
           </tbody>
           <tbody v-if="accounts && accounts.length > 0">
           <tr v-for="(item,index) in accounts" :key="index">
             <th>
-              <router-link :to="{name: 'AccountUpdate', query: {id: item.id}}">
                 {{ item.name }}
-              </router-link>
             </th>
             <th>{{ item.phone }}</th>
             <th>{{ item.website }}</th>
             <th>{{ item.owner }}</th>
+            <th>
+              <span class="action">
+              <span @click="editItem(item.id)" class="mr-1"><img src="images/newspaper-line.png" alt=""></span>
+              <span @click="deleteItem(item.id)"><img src="images/delete-bin-2-line.png" alt=""></span>
+            </span>
+            </th>
           </tr>
           </tbody>
         </template>
@@ -48,6 +52,23 @@ export default {
   name: "AccountList",
   components: {VButton, VLoading, TableInList, },
   methods: {
+    editItem(id) {
+      this.$router.push({path: '/account-detail', query : { id: id}});
+    },
+    deleteItem(id) {
+      if (!confirm("Xác nhận xóa!")) {
+        return ;
+      }
+      this.loading = true;
+      accountService.remove(id).then(res => {
+        if(res) {
+          alert('Xóa thành công!');
+          this.loadAccounts(this.keyword);
+        }
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     goToPage(page) {
       this.currentPage = page;
       this.loadAccounts(this.keyword);
@@ -95,6 +116,7 @@ export default {
         {text: 'Phone', style: 'width: 15%;'},
         {text: 'Website', style: 'width: 15%'},
         {text: 'Account Owner', style: 'width: 15%;'},
+        {text: 'Action', style: 'width: 15%;'},
       ],
       btnCreate: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Account'},
     };

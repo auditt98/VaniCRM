@@ -7,7 +7,7 @@
     </button>
     <div class="nav-item mx-auto order-last" @click="testNotification();">
       <div class="header-avatar-icon">
-        <i class="fa fa-calendar-o" aria-hidden="true"></i>
+        <router-link active-class="active" :to="{ name: 'Calendar'}" class="nav-link"> <i class="fa fa-calendar-o" aria-hidden="true"></i> </router-link>
       </div>
     </div>
     <div class="nav-item mx-auto order-last notificationButton" style="position: relative" v-popover:notificationPanel >
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="nav-item mx-auto order-last dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
+      <a v-if="currentUser" class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
          aria-haspopup="true" aria-expanded="false">
         {{currentUser.username}}
       </a>
@@ -69,33 +69,17 @@
         <li class="nav-item">
           <router-link active-class="active" :to="{ name: 'AccountList'}" class="nav-link">Accounts</router-link>
         </li>
-        <!-- <li class="nav-item">
-          <router-link active-class="active" :to="{ name: 'MeetingCreate'}" class="nav-link">Meeting</router-link>
-        </li> -->
         <li class="nav-item">
-          <router-link active-class="active" :to="{ name: 'CampaignList'}" class="nav-link">Campaigns</router-link>
+          <router-link active-class="active" :to="{ name: 'DealList'}" class="nav-link">Deals</router-link>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-             aria-haspopup="true" aria-expanded="false">
-            Tasks
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <router-link active-class="active" :to="{ name: 'TaskCreate'}" class="dropdown-item">Task</router-link>
-            <router-link active-class="active" :to="{ name: 'MeetingCreate'}" class="dropdown-item">Meeting</router-link>
-            <router-link active-class="active" :to="{ name: 'CallCreate'}" class="dropdown-item">Call</router-link>
-          </div>
+        <li class="nav-item">
+          <router-link active-class="active" :to="{ name: 'CampaignList'}" class="nav-link">Campaign</router-link>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-             aria-haspopup="true" aria-expanded="false">
-            Configs
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <router-link active-class="active" :to="{ name: 'Users'}" class="dropdown-item">Users</router-link>
-            <router-link active-class="active" :to="{ name: 'GroupList'}" class="dropdown-item">Groups</router-link>
-            <router-link active-class="active" :to="{ name: 'CallCreate'}" class="dropdown-item">Call</router-link>
-          </div>
+        <li class="nav-item">
+          <router-link active-class="active" :to="{ name: 'TaskList'}" class="nav-link">Tasks</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link active-class="active" :to="{ name: 'Report'}" class="nav-link">Reports</router-link>
         </li>
       </ul>
     </div>
@@ -119,7 +103,7 @@ export default {
   name: "Header",
   data() {
     return {
-      currentUser: authenticationService.currentUserValue,
+      currentUser: null,
       notifications: [],
       page: 1,
       pageSize: 10,
@@ -195,6 +179,7 @@ export default {
         })
         .fail(function(){ console.log('Could not connect'); });
   },created() {
+    this.currentUser = authenticationService.currentUserValue;
     if (window.location.pathname.indexOf('dashboard-marketing') > -1 || window.location.pathname.indexOf('dashboard-sale') > -1) {
       this.isDashboard = true;
     } else {
@@ -228,6 +213,10 @@ export default {
 
 .nav-item a.active {
   color: #D93915 !important;
+}
+
+.active i {
+  color: #D93915;
 }
 
 .header-avatar {

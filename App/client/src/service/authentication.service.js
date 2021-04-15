@@ -65,6 +65,7 @@ function getRefreshToken() {
 
 function logout(nextUrl) {
     // remove user from local storage to log user out
+
     localStorage.removeItem('currentUser');
     currentUserSubject.next(null);
     const url = nextUrl ? '/login?returnUrl=' + nextUrl : '/login';

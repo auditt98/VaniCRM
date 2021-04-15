@@ -5,12 +5,12 @@
       <div class="row ">
         <div class="col-sm-8">
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
+        <div class="col-sm-4 d-flex justify-content-end">
           <router-link :to="{name : 'ContactList'}">
             <VButton :data="btnCancel"/>
           </router-link>
 
-          <span @click="save()"><VButton :data="btnSave"/></span>
+          <span class="ml-5" @click="save()"><VButton :data="btnSave"/></span>
         </div>
       </div>
       <div class="mt-3">
@@ -335,7 +335,7 @@ export default {
           this.contact.account = res.data;
         }
       })
-    }
+    },
   },
   created() {
     if (this.$route.path.indexOf('contact-update') > -1) {
@@ -378,6 +378,7 @@ export default {
         addressDetail: null
       },
       accountId: null,
+      campaignId: null,
       owners: [],
       priorities: [],
       accounts: [],

@@ -6,12 +6,12 @@
       <div class="row ">
         <div class="col-sm-8">
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
+        <div class="col-sm-4 d-flex justify-content-end">
           <router-link :to="{name : 'LeadList'}">
             <VButton :data="btnCancel"/>
           </router-link>
 
-          <span @click="save()"><VButton :data="btnSave"/></span>
+          <span class="ml-5" @click="save()"><VButton :data="btnSave"/></span>
         </div>
       </div>
       <div class="mt-3">
@@ -310,24 +310,24 @@ export default {
   data: function () {
     return {
       lead: {
-        name: "string",
-        email: "string",
-        phone: "string",
-        fax: "string",
-        industry: 1,
-        website: "string",
-        annualRevenue: 1,
-        priority: 1,
+        name: null,
+        email: null,
+        phone: null,
+        fax: null,
+        industry: null,
+        website: null,
+        annualRevenue: null,
+        priority: null,
         noEmail: true,
         noCall: true,
-        leadSource: 1,
-        companyName: "string",
-        leadStatus: 1,
-        skype: "string",
-        country: "string",
-        city: "string",
-        addressDetail: "string",
-        description: "string",
+        leadSource: null,
+        companyName: null,
+        leadStatus: null,
+        skype: null,
+        country: null,
+        city: null,
+        addressDetail: null,
+        description: null,
         owner: null
       },
       loading: false,

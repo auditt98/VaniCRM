@@ -14,7 +14,7 @@
 
       </div>
       <div class="row">
-        <div class="list-file-upload">
+        <div class="list-file-upload mt-3 ml-2">
           <ul v-if="files && files.length > 0">
             <li v-for="(f, i) in files" :key="i">{{f.name}}</li>
           </ul>
@@ -47,7 +47,7 @@
                 </div>
                 <p class="note-comment-time">{{note.createdAt | formatDate}} - {{note.createdBy.username}}</p>
               </div>
-              <div class="col-sm-2 text-center" @click="removeNote(note.id)">
+              <div class="col-sm-2 text-center icon-delete" @click="removeNote(note.id)">
                 <i class="fa fa-trash text-danger"></i>
               </div>
             </li>
@@ -125,8 +125,8 @@ export default {
   padding: 15px 10px 15px 40px;
   width: 100%;
 }
-.note-comment {
-
+.note-comment li:hover .icon-delete {
+  display: block;
 }
 .note-comment-image {
   border-radius: 50%;
@@ -170,5 +170,8 @@ i {
 .note-comment-file-list .file-image-header {
   background: #E8E0E0;
   height: 25px;
+}
+.icon-delete {
+  display: none;
 }
 </style>

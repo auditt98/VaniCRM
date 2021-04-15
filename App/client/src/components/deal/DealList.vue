@@ -25,10 +25,16 @@
             <th>{{ item.amount }}</th>
             <th>{{ item.stage }}</th>
             <th>
-              <VTag :data="{text: item.priority, bgColor: '#E03E82'}"/>
+              <VTag :data="{text: item.priority, bgColor: getBgColor(item.priority)}"/>
             </th>
             <th>{{ item.accountName }}</th>
             <th>{{ item.owner }}</th>
+            <th>
+              <span class="action">
+              <span @click="editItem(item.id)" class="mr-1"><img src="images/newspaper-line.png" alt=""></span>
+              <span @click="deleteItem(item.id)"><img src="images/delete-bin-2-line.png" alt=""></span>
+            </span>
+            </th>
 
           </tr>
           </tbody>
@@ -51,6 +57,32 @@ export default {
   name: "DealList",
   components: {VLoading, VTag, VButton, TableInList, },
   methods: {
+    getBgColor(data) {
+      if (data.toUpperCase() === 'HIGH') {
+        return '#F12B2C';
+      }
+      if (data.toUpperCase() === 'MEDIUM') {
+        return '#FEC400';
+      }
+      return '#29CC97';
+    },
+    editItem(id) {
+      this.$router.push({path: '/deal-detail', query : { id: id}});
+    },
+    deleteItem(id) {
+      if (!confirm("Xác nhận xóa!")) {
+        return ;
+      }
+      this.loading = true;
+      dealService.remove(id).then(res => {
+        if(res) {
+          alert('Xóa thành công!');
+          this.loadAccounts(this.keyword);
+        }
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     goToPage(page) {
       this.currentPage = page;
       this.loadDeals(this.keyword);
@@ -95,10 +127,11 @@ export default {
         {text: 'Deal Name', style: 'width: 15%;'},
         {text: 'Closing Date', style: 'width: 15%;'},
         {text: 'Amount', style: 'width: 10%'},
-        {text: 'Stage', style: 'width: 15%;'},
+        {text: 'Stage', style: 'width: 10%;'},
         {text: 'Priority', style: 'width: 10%;'},
         {text: 'Account Name', style: 'width: 15%;'},
         {text: 'Deal Owner', style: 'width: 15%;'},
+        {text: 'Action', style: 'width: 15%;'},
       ],
       deals: Array,
       keyword: '',

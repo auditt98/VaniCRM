@@ -18,4 +18,9 @@ export default {
 .color-white i {
   color: white;
 }
+.btn-modal {
+  width: 143px;
+  height: 40px;
+  font-weight: bold;
+}
 </style>

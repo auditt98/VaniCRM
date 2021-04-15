@@ -21,13 +21,19 @@
           <tbody v-if="campaigns && campaigns.length > 0">
           <tr v-for="(item,index) in campaigns" :key="index">
             <th>
-              <router-link :to="{name: 'CampaignDetail', query: {id: item.id}}">{{ item.name }}</router-link>
+              {{ item.name }}
             </th>
-            <th>{{ item.name }}</th>
             <th>{{ item.type }}</th>
-            <th>{{ item.status }}</th>
+            <th><span :style="'color: ' + getColor(item.status)">{{ item.status }}</span></th>
             <th>{{ item.startDate | formatDate }}</th>
             <th>{{ item.endDate | formatDate }}</th>
+            <th>{{ item.owner ? item.owner  : '' }}</th>
+            <th>
+              <span class="action">
+              <span @click="editItem(item.id)" class="mr-1"><img src="images/newspaper-line.png" alt=""></span>
+              <span @click="deleteItem(item.id)"><img src="images/delete-bin-2-line.png" alt=""></span>
+            </span>
+            </th>
           </tr>
           </tbody>
         </template>
@@ -48,6 +54,32 @@ export default {
   name: "LeadList",
   components: {VLoading,  VButton, TableInList, },
   methods: {
+    getColor(data) {
+      if (data.toUpperCase() === 'PLANNING') {
+        return '#109CF1';
+      }
+      if (data.toUpperCase() === 'CANCELLED') {
+        return 'red';
+      }
+      return '#29CC97';
+    },
+    editItem(id) {
+      this.$router.push({path: '/campaign-detail', query : { id: id}});
+    },
+    deleteItem(id) {
+      if (!confirm("Xác nhận xóa!")) {
+        return ;
+      }
+      this.loading = true;
+      campaignService.remove(id).then(res => {
+        if(res) {
+          alert('Xóa thành công!');
+          this.loadAccounts(this.keyword);
+        }
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     goToPage(page) {
       this.currentPage = page;
       this.loadCampaigns(this.keyword);
@@ -90,10 +122,11 @@ export default {
       columns: [
         {text: 'Campaigns Name', style: 'width: 20%;'},
         {text: 'Type', style: 'width: 15%;'},
-        {text: 'Status', style: 'width: 15%'},
+        {text: 'Status', style: 'width: 10%'},
         {text: 'Start Date', style: 'width: 15%;'},
         {text: 'End Date', style: 'width: 15%;'},
-        {text: 'Campaigns Owner', style: 'width: 20%;'},
+        {text: 'Campaigns Owner', style: 'width: 15%;'},
+        {text: 'Action', style: 'width: 20%;'},
       ],
       loading: false,
       campaigns: Array,

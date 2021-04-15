@@ -19,7 +19,7 @@
         <template slot="body">
           <tbody v-if="!tasks || tasks.length === 0">
           <tr>
-            <td colspan="8" class="text-center">Không có dữ liệu</td>
+            <td colspan="9" class="text-center">Không có dữ liệu</td>
           </tr>
           </tbody>
           <tbody v-if="tasks && tasks.length > 0">
@@ -28,6 +28,12 @@
             <th>{{ item.phone }}</th>
             <th>{{ item.website }}</th>
             <th>{{ item.owner }}</th>
+            <th>
+              <span class="action">
+              <span @click="editItem(item.id)" class="mr-1"><img src="images/newspaper-line.png" alt=""></span>
+              <span @click="deleteItem(item.id)"><img src="images/delete-bin-2-line.png" alt=""></span>
+            </span>
+            </th>
           </tr>
           </tbody>
         </template>
@@ -48,6 +54,23 @@ export default {
   name: "TaskList",
   components: {VButton, VLoading, TableInList, },
   methods: {
+    editItem(id) {
+      this.$router.push({path: '/task-detail', query : { id: id}});
+    },
+    deleteItem(id) {
+      if (!confirm("Xác nhận xóa!")) {
+        return ;
+      }
+      this.loading = true;
+      taskService.remove(id).then(res => {
+        if(res) {
+          alert('Xóa thành công!');
+          this.loadAccounts(this.keyword);
+        }
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     goToPage(page) {
       this.currentPage = page;
       this.loadTasks(this.keyword);
@@ -91,14 +114,15 @@ export default {
       keyword: '',
       loading: false,
       columns: [
-        {text: 'Title', style: 'width: 20%;'},
+        {text: 'Title', style: 'width: 15%;'},
         {text: 'Type', style: 'width: 10%;'},
         {text: 'From', style: 'width: 10%'},
         {text: 'Ovner Date', style: 'width: 10%;'},
         {text: 'Prority', style: 'width: 10%'},
         {text: 'Related To', style: 'width: 10%'},
         {text: 'Contact Name', style: 'width: 10%'},
-        {text: 'Campains Owner', style: 'width: 10%'},
+        {text: 'Campains Owner', style: 'width: 15%'},
+        {text: 'Action', style: 'width: 10%'},
       ],
       btnCreateTask: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Task'},
       btnCreateCall: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Call'},
