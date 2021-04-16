@@ -220,7 +220,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
-                // this.$router.push('/lead-detail?id=' + this.account.id);
+                this.$router.push('/account-detail?id=' + this.account.id);
               }
             }).finally(() => {
           this.loading = false;

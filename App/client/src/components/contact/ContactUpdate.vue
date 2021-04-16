@@ -45,19 +45,6 @@
                     <td style="width: 80%">
                       <vc-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
                                 v-model="contact.owner">
-                        <template slot="no-options">
-                          Type for searching...
-                        </template>
-                        <template slot="option" slot-scope="option">
-                          <div class="d-center">
-                            {{ `${option.username} - ${option.firstName}` }}
-                          </div>
-                        </template>
-                        <template slot="selected-option" slot-scope="option">
-                          <div class="selected d-center">
-                            {{ `${option.username} - ${option.firstName}` }}
-                          </div>
-                        </template>
                       </vc-select>
                     </td>
                   </tr>
@@ -93,19 +80,6 @@
                     <td style="width: 80%">
                       <vc-select id="Collaborator" label="username" :filterable="false" :options="owners" @search="onSearch"
                                 v-model="contact.collaborator">
-                        <template slot="no-options">
-                          Type for searching...
-                        </template>
-                        <template slot="option" slot-scope="option">
-                          <div class="d-center">
-                            {{ `${option.username} - ${option.firstName}` }}
-                          </div>
-                        </template>
-                        <template slot="selected-option" slot-scope="option">
-                          <div class="selected d-center">
-                            {{ `${option.username} - ${option.firstName}` }}
-                          </div>
-                        </template>
                       </vc-select>
                     </td>
 
@@ -198,7 +172,7 @@ import VButton from "@/components/common/VButton";
 import {contactService} from "@/service/contact.service";
 import {userService} from "@/service/user.service";
 import {required} from "vuelidate/lib/validators";
-import {getValueInArr} from "@/config/config";
+import {formatDate, getValueInArr} from "@/config/config";
 import {accountService} from "@/service/account.service";
 import VLoading from "@/components/common/VLoading";
 
@@ -238,6 +212,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
+                this.$router.push('/contact-detail?id=' + this.contact.id);
               }
             })
             .catch(err => alert(err))
@@ -251,6 +226,8 @@ export default {
                 alert(res.message);
                 if (this.accountId) {
                   this.$router.push('/account-detail?id=' + this.accountId);
+                } else {
+                  this.$router.push('/contacts');
                 }
               }
             })
@@ -266,6 +243,7 @@ export default {
           .then(res => {
             if (res && res.data) {
               this.contact = res.data;
+              this.contact.birthday = formatDate(this.contact.birthday, 'yyyy-MM-dd') ;
               this.contact.priority = getValueInArr(res.data.priorities, 'selected', 'id');
             } else {
               alert('Không có dữ liệu');

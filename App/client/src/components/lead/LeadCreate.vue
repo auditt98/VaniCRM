@@ -94,11 +94,11 @@
                   <tbody>
                   <tr>
                     <td>No Email</td>
-                    <td><input class="form-control" type="text" v-model.trim="lead.noEmail"></td>
+                    <td><input class="form-control" type="checkbox" v-model="lead.noEmail"></td>
                   </tr>
                   <tr>
                     <td>No Call</td>
-                    <td><input class="form-control " type="text" v-model.trim="lead.noCall"></td>
+                    <td><input class="form-control " type="checkbox" v-model="lead.noCall"></td>
                   </tr>
                   <tr>
                     <td><label for="Source">Lead Source</label></td>
@@ -129,19 +129,7 @@
                     <td style="width: 80%">
                       <vc-select id="Owner" label="username" :filterable="false" :options="owners" @search="onSearch"
                                 v-model="lead.owner">
-                        <template slot="no-options">
-                          Type for searching...
-                        </template>
-                        <template slot="option" slot-scope="option">
-                          <div class="d-center">
-                            {{ `${option.username} - ${option.firstName}` }}
-                          </div>
-                        </template>
-                         <template slot="selected-option" slot-scope="option">
-                           <div class="selected d-center">
-                             {{ `${option.username} - ${option.firstName}` }}
-                           </div>
-                         </template>
+
                       </vc-select>
                     </td>
                   </tr>
@@ -239,7 +227,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
-                // this.$router.push('/lead-detail?id=' + this.lead.id);
+                this.$router.push('/lead-detail?id=' + this.lead.id);
               }
             })
       }

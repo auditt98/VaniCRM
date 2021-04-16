@@ -66,7 +66,7 @@
                     <td style="width: 80%">
                       <vc-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
                                 v-model="task.owner">
-                        <template slot="no-options">
+                        <!--<template slot="no-options">
                           Type for searching...
                         </template>
                         <template slot="option" slot-scope="option">
@@ -78,7 +78,7 @@
                           <div class="selected d-center">
                             {{ `${option.username} - ${option.firstName}` }}
                           </div>
-                        </template>
+                        </template>-->
                       </vc-select>
                     </td>
                   </tr>
@@ -243,7 +243,7 @@ export default {
               this.mapRRule(this.task.rrule);
             } else {
               alert('Không có dữ liệu');
-              this.$router.push('/');
+              this.$router.push('/tasks');
             }
           }).finally(() => {
         this.loading = false;
@@ -280,8 +280,10 @@ export default {
               if (this.contactId) {
                 this.$router.push('/contact-detail?id=' + this.contactId);
               }
-              if (this.dealId) {
+              else if (this.dealId) {
                 this.$router.push('/deal-detail?id=' + this.dealId);
+              } else {
+                this.$router.push('/tasks');
               }
             }).finally(() => {
           this.loading = false;
@@ -290,6 +292,7 @@ export default {
         taskService.update(this.mapTaskModel(), this.task.id)
             .then(res => {
               alert(res.message);
+              this.$router.push('/task-detail?id=' + this.task.id);
             }).finally(() => {
           this.loading = false;
         })

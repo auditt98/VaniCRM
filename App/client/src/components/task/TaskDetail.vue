@@ -88,7 +88,8 @@ export default {
             formatDate(this.task.modifiedAt, DATE_TIME_FORMAT),
           ]);
         } else {
-          this.$router.push('/');
+          alert('Không có dữ liệu');
+          this.$router.push('/tasks');
         }
       }).finally(() => this.loading = false);
     },

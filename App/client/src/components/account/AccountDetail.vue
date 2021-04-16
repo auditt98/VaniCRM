@@ -5,13 +5,13 @@
       <VLoading :loading="loading"/>
       <div class="row ">
         <div class="col-sm-8">
-          <router-link :to="{name: 'LeadList'}">
+          <router-link :to="{name: 'AccountList'}">
             <VButton :data="btnBack"/>
           </router-link>
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
+        <div class="col-sm-4 d-flex justify-content-end">
           <span @click="remove"><VButton :data="btnDelete"/></span>
-          <router-link :to="{name: 'AccountUpdate', query: {id: account.id}}">
+          <router-link class="ml-4" :to="{name: 'AccountUpdate', query: {id: account.id}}">
             <VButton :data="btnEdit"/>
           </router-link>
         </div>

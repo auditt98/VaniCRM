@@ -5,13 +5,13 @@
       <VLoading :loading="loading"/>
       <div class="row ">
         <div class="col-sm-8">
-          <router-link :to="{name: 'LeadList'}">
+          <router-link :to="{name: 'ContactList'}">
             <VButton :data="btnBack"/>
           </router-link>
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
+        <div class="col-sm-4 d-flex justify-content-end">
           <span @click="remove"><VButton :data="btnDelete"/></span>
-          <router-link :to="{name: 'ContactUpdate', query: {id: contact.id}}">
+          <router-link class="ml-4" :to="{name: 'ContactUpdate', query: {id: contact.id}}">
             <VButton :data="btnEdit"/>
           </router-link>
         </div>
@@ -37,7 +37,7 @@
           <div class="row mt-3" id="notes" v-if="contact.notes">
             <Note ref="notes" @remove-note="removeNote" @submit="createNote" :notes="contact.notes"/>
           </div>
-          <div class="row mt-3" id="task">
+          <div class="row mt-3 mb-5" id="task">
             <TableInDetail :header-columns="taskColumns" :data="taskLst" :title="'Tasks'"
                            :page-config="{page: currentPageTask, pageSize: pageSizeTask, totalItems: totalItemTask, totalPage: totalPageTask}"
                            @page-size-change="onPageSizeChange($event)"
@@ -128,7 +128,7 @@ export default {
       await contactService.loadTasks(query, this.contact.id)
           .then(res => {
             if (res && res.data) {
-              this.taskLst = res.data.contacts;
+              this.taskLst = res.data.tasks;
             }
           })
     },
@@ -173,7 +173,8 @@ export default {
           ]);
 
         } else {
-          this.$router.push('/');
+          alert('Không có dữ liệu');
+          this.$router.push('/contacts');
         }
       }).catch(err => alert(err))
           .finally(() => this.loading = false);

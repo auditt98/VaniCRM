@@ -166,6 +166,9 @@ export default {
           this.loadTasks();
           mapValue(this.dataLeftDetail, [this.user.firstName, this.user.lastName, this.user.username, `<a href="mailto:${this.user.email}">${this.user.email}</a>`]);
           mapValue(this.dataRightDetail, [this.user.skype, this.user.phone, formatDate(this.user.createdAt, 'dd/MM/yyyy HH:mm'), this.user.createdByName]);
+        } else {
+          alert('Không có dữ liệu');
+          this.$router.push('/users');
         }
       }).catch(err => alert(err))
       .finally(() => this.loading = false);

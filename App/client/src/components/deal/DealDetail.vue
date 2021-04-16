@@ -9,9 +9,9 @@
             <VButton :data="btnBack"/>
           </router-link>
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
+        <div class="col-sm-4 d-flex justify-content-end">
           <span @click="remove"><VButton :data="btnDelete"/></span>
-          <router-link :to="{name: 'DealUpdate', query: {id: deal.id}}">
+          <router-link class="ml-4" :to="{name: 'DealUpdate', query: {id: deal.id}}">
             <VButton :data="btnEdit"/>
           </router-link>
         </div>
@@ -90,7 +90,7 @@
               </template>
             </TableInDetail>
           </div>
-          <div class="row mt-3" id="task">
+          <div class="row mt-3 mb-5" id="task">
             <TableInDetail :header-columns="taskColumns" :data="taskLst" :title="'Tasks'"
                            :page-config="{page: currentPageTask, pageSize: pageSizeTask, totalItems: totalItemTask, totalPage: totalPageTask}"
                            @page-size-change="onPageSizeChange($event, 'TASK')"
@@ -251,7 +251,8 @@ export default {
           ]);
 
         } else {
-          this.$router.push('/');
+          alert('Không có dữ liệu');
+          this.$router.push('/deals');
         }
       }).catch(err => alert(err))
           .finally(() => this.loading = false);
