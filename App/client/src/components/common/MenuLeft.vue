@@ -3,7 +3,7 @@
     <div class="menu-left">
       <ul class="list-group" v-if="elements">
         <li class="list-group-item font-weight-bold">Jump to</li>
-        <li v-for="(e, i) in elements" :key="i" @click="scrollToElement(e.id)" class="list-group-item">{{e.text}}</li>
+        <li v-for="(e, i) in elements" :key="i" @click="scrollToElement(e.id)" :class="{'text-danger' : (activeMenu && e.id === activeMenu)}" class="list-group-item">{{e.text}}</li>
       </ul>
     </div>
   </div>
@@ -15,10 +15,19 @@ export default {
   props: {
     elements: Array
   },
+  data() {
+    return {
+      activeMenu: null
+    }
+  },
   methods: {
    scrollToElement(element) {
+     this.activeMenu = element;
      this.$emit('scroll-to', element);
    }
+  },
+  created() {
+    this.activeMenu = null;
   }
 }
 </script>
@@ -44,5 +53,8 @@ export default {
   padding-left: 45px;
   margin-bottom: 20px;
   cursor: pointer;
+}
+.text-danger {
+  font-weight: bold;
 }
 </style>

@@ -48,7 +48,19 @@ Vue.filter('formatDate', value => {
   }
   return '';
 });
-Vue.use(VueScrollTo)
+Vue.use(VueScrollTo, {
+  container: "body",
+  duration: 500,
+  easing: "ease",
+  offset: -100,
+  force: true,
+  cancelable: true,
+  onStart: false,
+  onDone: false,
+  onCancel: false,
+  x: false,
+  y: true
+})
 Vue.config.productionTip = false
 
 new Vue({
