@@ -4,6 +4,8 @@ import router from './router'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'jquery/src/jquery.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
+import '../public/main.css'
+import '../public/css/font-awesome.min.css'
 import Popover from 'vue-js-popover'
 import VPopover from 'vue-js-popover'
 import InfiniteLoading from 'vue-infinite-loading';

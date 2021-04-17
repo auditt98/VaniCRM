@@ -10,7 +10,7 @@
                    @search="search"
       >
         <template slot="button">
-          <router-link to="/lead-create"><VButton :data="btnCreate"/></router-link>
+          <router-link to="/leads/create"><VButton :data="btnCreate"/></router-link>
         </template>
         <template slot="body">
           <tbody v-if="!leads || leads.length === 0">
@@ -72,7 +72,7 @@ export default {
       return 'red';
     },
     editItem(id) {
-      this.$router.push({path: '/lead-detail', query : { id: id}});
+      this.$router.push({path: '/leads/detail', query : { id: id}});
     },
     deleteItem(id) {
       if (!confirm("Xác nhận xóa!")) {

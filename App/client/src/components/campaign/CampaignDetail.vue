@@ -9,9 +9,9 @@
             <VButton :data="btnBack"/>
           </router-link>
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
+        <div class="col-sm-4 d-flex justify-content-end">
           <span @click="remove"><VButton :data="btnDelete"/></span>
-          <router-link :to="{name: 'LeadUpdate', query: {id: campaign.id}}">
+          <router-link class="ml-4" :to="{name: 'CampaignUpdate', query: {id: campaign.id}}">
             <VButton :data="btnEdit"/>
           </router-link>
         </div>
