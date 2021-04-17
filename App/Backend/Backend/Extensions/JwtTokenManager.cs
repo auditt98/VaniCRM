@@ -32,7 +32,7 @@ namespace Backend.Extensions
                                   .WithSecret(Secret)
                                   .AddClaim("id", user.ID)
                                   .AddClaim("email", user.Email)
-                                  .ExpirationTime(DateTime.Now.AddMinutes(1))
+                                  .ExpirationTime(DateTime.Now.AddHours(2))
                                   .Encode();
             return token;
         }

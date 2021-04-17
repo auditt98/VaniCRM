@@ -9,13 +9,12 @@ namespace Backend.Domain
     public partial class STAGE_HISTORY
     {
         [Key]
+        [Column(Order = 4)]
+        public int ID { get; set; }
+        
         [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int STAGE_ID { get; set; }
-
-        [Key]
         [Column(Order = 1)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int DEAL_ID { get; set; }
 
         public int? ModifiedBy { get; set; }
