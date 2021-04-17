@@ -121,7 +121,7 @@ const routes = [
 
     {
         path: '/',
-        redirect: '/dashboard-sale'
+        redirect: '/dashboard/sale'
     },
     {
         path: '/users',
