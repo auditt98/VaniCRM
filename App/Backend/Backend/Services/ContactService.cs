@@ -27,7 +27,7 @@ namespace Backend.Services
             var dbContacts = _contactRepository.GetAllContacts(query, pageSize, currentPage);
             var apiModel = new ContactListApiModel();
 
-            apiModel.contacts = dbContacts.contacts.Select(c => new ContactListApiModel.ContactInfo() { id = c.ID, contactName = c.Name, accountName = c.ACCOUNT.Name, email = c.Email, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName }).ToList();
+            apiModel.contacts = dbContacts.contacts.Select(c => new ContactListApiModel.ContactInfo() { id = c.ID, contactName = c.Name, accountName = c.ACCOUNT != null ? c.ACCOUNT.Name : "", email = c.Email, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName }).ToList();
             apiModel.pageInfo = dbContacts.p;
             return apiModel;
         }

@@ -26,9 +26,9 @@ namespace Backend.Repository
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(db.CAMPAIGNs.Count(), currentPage, pageSize, 9999);
-                return (db.CAMPAIGNs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                return (db.CAMPAIGNs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
-            var campaigns = db.CAMPAIGNs.Where(c => c.Name.ToLower().Contains(q) || c.CAMPAIGN_TYPE.Name.ToLower().Contains(q)).OrderBy(c => c.ID);
+            var campaigns = db.CAMPAIGNs.Where(c => c.Name.ToLower().Contains(q) || c.CAMPAIGN_TYPE.Name.ToLower().Contains(q)).OrderByDescending(c => c.ID);
             if (campaigns.Count() > 0)
             {
                 Pager p = new Pager(campaigns.Count(), currentPage, pageSize, 9999);
@@ -330,11 +330,11 @@ namespace Backend.Repository
                 if (String.IsNullOrEmpty(q))
                 {
                     Pager pager = new Pager(contactList.Count(), currentPage, pageSize, 9999);
-                    return (contactList.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                    return (contactList.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
                 }
                 else
                 {
-                    var result = contactList.Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.Mobile.Contains(q)).OrderBy(c => c.ID);
+                    var result = contactList.Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.Mobile.Contains(q)).OrderByDescending(c => c.ID);
                     if (result.Count() > 0)
                     {
                         Pager p = new Pager(result.Count(), currentPage, pageSize, 9999);
@@ -368,11 +368,11 @@ namespace Backend.Repository
                 if (String.IsNullOrEmpty(q))
                 {
                     Pager pager = new Pager(leadList.Count(), currentPage, pageSize, 9999);
-                    return (leadList.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                    return (leadList.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
                 }
                 else
                 {
-                    var result = leadList.Where(c => c.Name.ToLower().Contains(q) || c.CompanyName.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q) || c.LEAD_SOURCE.Name.ToLower().Contains(q) || c.PRIORITY.Name.ToLower().Contains(q)).OrderBy(c => c.ID);
+                    var result = leadList.Where(c => c.Name.ToLower().Contains(q) || c.CompanyName.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q) || c.LEAD_SOURCE.Name.ToLower().Contains(q) || c.PRIORITY.Name.ToLower().Contains(q)).OrderByDescending(c => c.ID);
                     if (result.Count() > 0)
                     {
                         Pager p = new Pager(result.Count(), currentPage, pageSize, 9999);

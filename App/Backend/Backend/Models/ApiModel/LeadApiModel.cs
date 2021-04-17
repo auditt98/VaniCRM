@@ -22,6 +22,10 @@ namespace Backend.Models.ApiModel
 
     public class LeadListApiModel
     {
+        public LeadListApiModel()
+        {
+            leads = new List<LeadInfo>();
+        }
         public List<LeadInfo> leads { get; set; }
         public Pager pageInfo { get; set; }
         public class LeadInfo

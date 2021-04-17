@@ -225,6 +225,7 @@ namespace Backend.Services
                     if (meeting != null)
                     {
                         taskInfo.id = meeting.ID;
+                        taskInfo.title = t.Title;
                         taskInfo.startDate = meeting.FromDate.GetValueOrDefault();
                         taskInfo.owner = new UserLinkApiModel() { id = meeting.HostUser.ID, email = meeting.HostUser.Email, username = meeting.HostUser.Username };
                         taskInfo.type = "meetings";
@@ -252,6 +253,8 @@ namespace Backend.Services
                     if (call != null)
                     {
                         taskInfo.id = call.ID;
+                        taskInfo.title = t.Title;
+
                         taskInfo.startDate = t.CreatedAt.GetValueOrDefault();
                         taskInfo.owner = new UserLinkApiModel() { id = call.Owner.ID, email = call.Owner.Email, username = call.Owner.Username };
                         taskInfo.type = "calls";
@@ -279,6 +282,7 @@ namespace Backend.Services
                     if (task != null)
                     {
                         taskInfo.id = task.ID;
+                        taskInfo.title = t.Title;
                         taskInfo.startDate = t.CreatedAt.GetValueOrDefault();
                         taskInfo.owner = new UserLinkApiModel() { id = task.USER.ID, email = task.USER.Email, username = task.USER.Username };
                         taskInfo.type = "tasks";

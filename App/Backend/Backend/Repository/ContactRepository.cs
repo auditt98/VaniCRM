@@ -29,7 +29,7 @@ namespace Backend.Repository
             {
                 return contacts.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             }
-            var result = contacts.Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.Mobile.Contains(q)).OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            var result = contacts.Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.Mobile.Contains(q)).OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
 
 
             return result;
@@ -45,9 +45,9 @@ namespace Backend.Repository
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(db.CONTACTs.Count(), currentPage, pageSize, 9999);
-                return (db.CONTACTs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                return (db.CONTACTs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
-            var contacts = db.CONTACTs.Where(c => c.Name.ToLower().Contains(q) || c.ACCOUNT.Name.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q)).OrderBy(c => c.ID);
+            var contacts = db.CONTACTs.Where(c => c.Name.ToLower().Contains(q) || c.ACCOUNT.Name.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q)).OrderByDescending(c => c.ID);
             if (contacts.Count() > 0)
             {
                 Pager p = new Pager(contacts.Count(), currentPage, pageSize, 9999);
@@ -295,8 +295,6 @@ namespace Backend.Repository
             if (dbContact != null)
             {
                 var q = query.ToLower();
-                //var contactList = dbContact.Ta;
-                //var taskList = db.TASK_TEMPLATE.Where(c => c.)
                 var callList = db.CALLs.Where(c => c.CONTACT.ID == contactId).Select(c => c.TASK_TEMPLATE).ToList();
                 var meetingParticipantList = db.MEETING_PARTICIPANT.Where(c => c.CONTACT.ID == contactId).Select(c => c.MEETING.TASK_TEMPLATE).ToList();
                 var taskList = db.TASKs.Where(c => c.CONTACT.ID == contactId).Select(c => c.TASK_TEMPLATE).ToList();
@@ -314,9 +312,9 @@ namespace Backend.Repository
                 if (String.IsNullOrEmpty(q))
                 {
                     Pager pager = new Pager(allTasks.Count(), currentPage, pageSize, 9999);
-                    return (allTasks.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                    return (allTasks.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
                 }
-                var filtered = allTasks.Where(c => c.Title.Contains(q)).OrderBy(c => c.ID);
+                var filtered = allTasks.Where(c => c.Title.Contains(q)).OrderByDescending(c => c.ID);
                 if (filtered.Count() > 0)
                 {
                     Pager p = new Pager(filtered.Count(), currentPage, pageSize, 9999);
