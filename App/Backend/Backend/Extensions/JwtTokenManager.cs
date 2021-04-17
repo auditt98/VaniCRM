@@ -87,7 +87,8 @@ namespace Backend.Extensions
             using(var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
+                var base64 = Convert.ToBase64String(randomNumber);
+                return Base64UrlEncoder.Encode(base64);
             }
         }
     }

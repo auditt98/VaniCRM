@@ -3,6 +3,7 @@ import {config} from "@/config/config";
 import {requestOptions} from "@/helper/request-options";
 import {handleResponse} from "@/helper/handle-response";
 import router from "@/router";
+// import { resolve } from "core-js/fn/promise";
 
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
@@ -47,20 +48,29 @@ function requestResetPass(email) {
 }
 
 function getRefreshToken() {
-    return fetch(`${config.apiUrl + 'refresh_token'}`, {method: "GET", credentials: 'include'})
-        .then(res => {
-            console.log(res)
-            if (res.data && res.data.user) {
-                const user = res.data.user;
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                currentUserSubject.next(user);
-                return user;
-            }
-            return null;
-        }).catch((e) => {
-            console.log(e)
-            return null;
-        });
+    // return new Promise(() => {
+        return fetch(`${config.apiUrl + 'refresh_token'}`, {method: "GET", credentials: 'include', headers: {
+            'Content-Type': 'application/json'
+        }}).then((res) => {
+                return res.text().then(text =>{
+                    const data = text && JSON.parse(text);
+                    if(res.ok){
+                        if(data.data && data.data.user){
+                            let user = data.data.user;
+                            localStorage.setItem('currentUser', JSON.stringify(user));
+                            currentUserSubject.next(user);
+                            return data.data.user;
+                        }
+                    } else{
+                        return null;
+                    }
+                })
+            }).catch((e) => {
+                console.log(e)
+                return null;
+            });
+    // })
+    
 }
 
 function logout(nextUrl) {

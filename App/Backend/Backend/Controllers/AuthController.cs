@@ -19,10 +19,13 @@ using System.Collections.Specialized;
 using System.Web.Http.Description;
 using Backend.Resources;
 using System.Web.Http.Cors;
+using Microsoft.Owin;
+using System.Web;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
+    [EnableCors(origins: "http://localhost:8080", headers: "*", methods: "*", SupportsCredentials = true)]
     public class AuthController : ApiController
     {
         DatabaseContext db = new DatabaseContext();
@@ -40,7 +43,6 @@ namespace Backend.Controllers
         [HttpPost]
         [Route("login")]
         [ResponseType(typeof(SwaggerLoginReponse))]
-        //[EnableCors(origins: "*", headers: "*", methods: "*")]
         public HttpResponseMessage Login([FromBody]LoginApiModel apiModel)
         {
             HttpResponseMessage response = new HttpResponseMessage();
@@ -69,18 +71,12 @@ namespace Backend.Controllers
                     db.SaveChanges();
 
                     //set refresh token to httponly and add it to cookies
-                    var nv = new NameValueCollection();
-                    nv["refreshToken"] = RefreshToken;
-                    nv["seriesIdentifier"] = dbUser.ID.ToString();
-                    nv["tokenIdentifier"] = newRefreshToken.ID.ToString();
+                    //var nv = new NameValueCollection();
+                    //nv["refreshToken"] = RefreshToken;
+                    //nv["seriesIdentifier"] = dbUser.ID.ToString();
+                    //nv["tokenIdentifier"] = newRefreshToken.ID.ToString();
+                    response.Headers.Add("set-cookie", $"refreshTokenData=refreshToken={RefreshToken}&seriesIdentifier={dbUser.ID}&tokenIdentifier={newRefreshToken.ID}; path=/; SameSite=None; Secure; max-age=2592000");
 
-                    var cookie = new CookieHeaderValue("refreshTokenData", nv);
-                    cookie.HttpOnly = true;
-                    cookie.Secure = true;
-
-                    cookie.Domain = Request.RequestUri.Host;
-                    response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
-                    
                     //create response data
                     responseData = ResponseFormat.Success;
                     if (dbUser.Avatar != null)
@@ -129,14 +125,10 @@ namespace Backend.Controllers
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
         }
-        /// <summary>
-        /// Refresh jwt and refresh_key
-        /// </summary>
-        /// <param name="apiModel"></param>
-        /// <returns></returns>
+
         [HttpGet]
         [Route("refresh_token")]
-        [ResponseType(typeof(SwaggerLoginReponse))]
+        [ResponseType(typeof(ResponseFormat))]
         public HttpResponseMessage Refresh()
         {
             string c_refreshToken = "";
@@ -148,7 +140,6 @@ namespace Backend.Controllers
             CookieHeaderValue cookie = Request.Headers.GetCookies("refreshTokenData").FirstOrDefault();
             if(cookie != null)
             {
-                cookie.Expires = DateTimeOffset.Now.AddMonths(1);
                 CookieState cookieState = cookie["refreshTokenData"];
                 c_refreshToken = cookieState["refreshToken"];
                 c_series = cookieState["seriesIdentifier"];
@@ -159,6 +150,8 @@ namespace Backend.Controllers
                 {
                     //look for token
                     var temp = int.Parse(t_series);
+                    //var a = WebUtility.UrlDecode(c_refreshToken);
+                    var a = Base64UrlEncoder.Decode(c_refreshToken);
                     var dbToken = dbUser.REFRESH_TOKEN.Where(c => c.ID == temp).FirstOrDefault();
                     if (dbToken != null)
                     {
@@ -172,16 +165,7 @@ namespace Backend.Controllers
                             //store new value for token
                             dbToken.Token = RefreshToken;
                             db.SaveChanges();
-                            //make a cookie
-                            var nv = new NameValueCollection();
-                            nv["refreshToken"] = RefreshToken;
-                            nv["seriesIdentifier"] = dbUser.ID.ToString();
-                            nv["tokenIdentifier"] = dbToken.ID.ToString();
-                            var respCookie = new CookieHeaderValue("refreshTokenData", nv);
-                            respCookie.HttpOnly = true;
-                            respCookie.Secure = true;
-                            respCookie.Domain = Request.RequestUri.Host;
-                            response.Headers.AddCookies(new CookieHeaderValue[] { respCookie });
+                            response.Headers.Add("set-cookie", $"refreshTokenData=refreshToken={RefreshToken}&seriesIdentifier={dbUser.ID}&tokenIdentifier={dbToken.ID}; path=/; SameSite=None; Secure; max-age=2592000");
                             //build response data
                             responseData = ResponseFormat.Success;
                             responseData.data = new
@@ -248,8 +232,9 @@ namespace Backend.Controllers
                 var token = db.REFRESH_TOKEN.Find(temp);
                 db.REFRESH_TOKEN.Remove(token);
                 db.SaveChanges();
-                cookie.Expires = DateTime.Now.AddDays(-10);
-                response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                //cookie.Expires = DateTime.Now.AddDays(-10);
+                //response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                response.Headers.Add("set-cookie", $"refreshTokenData=1; path=/; SameSite=None; Secure; max-age=-1");
                 response.StatusCode = HttpStatusCode.OK;
                 responseData = ResponseFormat.Success;
                 
