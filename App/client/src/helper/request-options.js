@@ -12,8 +12,7 @@ export const requestOptions = {
             method: 'POST',
             ...headers(),
             body: JSON.stringify(body),
-            // withCredentials: true
-            credentials: 'include'
+            // credentials: 'include'
         };
     },
     patch(body) {
@@ -40,7 +39,6 @@ export const requestOptions = {
 
 function headers() {
     const currentUser = authenticationService.currentUserValue || {};
-    console.log("current user in header: ", currentUser);
     const authHeader = currentUser.jwt ? { 'Authorization': currentUser.jwt } : {};
     return {
         headers: {
