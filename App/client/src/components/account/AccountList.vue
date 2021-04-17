@@ -10,7 +10,7 @@
                    @search="search"
       >
         <template slot="button">
-          <router-link to="/account-create"><VButton :data="btnCreate"/></router-link>
+          <router-link to="/accounts/create"><VButton :data="btnCreate"/></router-link>
         </template>
         <template slot="body">
           <tbody v-if="!accounts || accounts.length === 0">
@@ -53,7 +53,7 @@ export default {
   components: {VButton, VLoading, TableInList, },
   methods: {
     editItem(id) {
-      this.$router.push({path: '/account-detail', query : { id: id}});
+      this.$router.push({path: '/accounts/detail', query : { id: id}});
     },
     deleteItem(id) {
       if (!confirm("Xác nhận xóa!")) {

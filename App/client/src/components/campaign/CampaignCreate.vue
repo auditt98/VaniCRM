@@ -26,19 +26,7 @@
                     <td style="width: 80%">
                       <vc-select id="cOwner" label="username" :filterable="false" :options="owners" @search="onSearch"
                                 v-model="campaign.owner">
-                        <template slot="no-options">
-                          Type for searching...
-                        </template>
-                        <template slot="option" slot-scope="option">
-                          <div class="d-center">
-                            {{ `${option.username} - ${option.firstName}` }}
-                          </div>
-                        </template>
-                        <template slot="selected-option" slot-scope="option">
-                          <div class="selected d-center">
-                            {{ `${option.username} - ${option.firstName}` }}
-                          </div>
-                        </template>
+
                       </vc-select>
                     </td>
                   </tr>

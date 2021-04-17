@@ -212,7 +212,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
-                this.$router.push('/contact-detail?id=' + this.contact.id);
+                this.$router.push('/contacts/detail?id=' + this.contact.id);
               }
             })
             .catch(err => alert(err))
@@ -225,7 +225,7 @@ export default {
               if (res) {
                 alert(res.message);
                 if (this.accountId) {
-                  this.$router.push('/account-detail?id=' + this.accountId);
+                  this.$router.push('/accounts/detail?id=' + this.accountId);
                 } else {
                   this.$router.push('/contacts');
                 }
@@ -316,7 +316,7 @@ export default {
     },
   },
   created() {
-    if (this.$route.path.indexOf('contact-update') > -1) {
+    if (this.$route.path.indexOf('contacts/update') > -1) {
       if (!this.$route.query.id) {
         this.$router.push('/');
         return;

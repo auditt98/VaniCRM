@@ -2,6 +2,7 @@ import {buildQueryURI, config} from "@/config/config";
 import {requestOptions} from "@/helper/request-options";
 import {handleResponse} from "@/helper/handle-response";
 import {authenticationService} from "@/service/authentication.service";
+import {fetchRetry} from "@/helper/fetchRetry";
 
 
 export const userService = {
@@ -30,12 +31,24 @@ function update(user, id) {
 
 function getAll(q) {
     return fetch(`${config.apiUrl}/users?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/users?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function getById(id) {
     return fetch(`${config.apiUrl}/users/${id}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/accounts/${id}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function changePassword(id, oldPassword, newPassword) {
@@ -52,22 +65,46 @@ function remove(id) {
 
 function getAllTasks(id, q) {
     return fetch(`${config.apiUrl}/users/${id}/tasks?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/users/${id}/tasks?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function getAllLeads(id, q) {
     return fetch(`${config.apiUrl}/users/${id}/leads?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/users/${id}/leads?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function getAllAccounts(id, q) {
     return fetch(`${config.apiUrl}/users/${id}/accounts?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/users/${id}/accounts?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function getAllContacts(id, q) {
     return fetch(`${config.apiUrl}/users/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/users/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function changeAvatar(formData, id) {

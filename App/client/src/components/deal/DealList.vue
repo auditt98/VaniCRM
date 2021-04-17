@@ -10,7 +10,7 @@
                    @search="search"
       >
         <template slot="button">
-          <router-link to="/deal-create"><VButton :data="btnCreate"/></router-link>
+          <router-link to="/deals/create"><VButton :data="btnCreate"/></router-link>
         </template>
         <template slot="body">
           <tbody v-if="!deals || deals.length === 0">
@@ -67,7 +67,7 @@ export default {
       return '#29CC97';
     },
     editItem(id) {
-      this.$router.push({path: '/deal-detail', query : { id: id}});
+      this.$router.push({path: '/deals/detail', query : { id: id}});
     },
     deleteItem(id) {
       if (!confirm("Xác nhận xóa!")) {

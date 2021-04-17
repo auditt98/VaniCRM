@@ -10,7 +10,7 @@
                    @search="search"
       >
         <template slot="button">
-          <router-link to="/campaign-create"><VButton :data="btnCreate"/></router-link>
+          <router-link to="/campaigns/create"><VButton :data="btnCreate"/></router-link>
         </template>
         <template slot="body">
           <tbody v-if="!campaigns || campaigns.length === 0">
@@ -64,7 +64,7 @@ export default {
       return '#29CC97';
     },
     editItem(id) {
-      this.$router.push({path: '/campaign-detail', query : { id: id}});
+      this.$router.push({path: '/campaigns/detail', query : { id: id}});
     },
     deleteItem(id) {
       if (!confirm("Xác nhận xóa!")) {

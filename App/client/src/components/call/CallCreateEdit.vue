@@ -317,10 +317,10 @@ export default {
             .then(res => {
               alert(res.message);
               if (this.contactId) {
-                this.$router.push('/contact-detail?id=' + this.contactId);
+                this.$router.push('/contacts/detail?id=' + this.contactId);
               }
               if (this.dealId) {
-                this.$router.push('/deal-detail?id=' + this.dealId);
+                this.$router.push('/deals/detail?id=' + this.dealId);
               }
             }).finally(() => {
           this.loading = false;
@@ -329,7 +329,7 @@ export default {
         callService.update(this.mapModel(), this.call.id)
             .then(res => {
               alert(res.message);
-              // this.$router.push('/call-detail?i')
+              // this.$router.push('/calls/detail?i')
             }).finally(() => {
           this.loading = false;
         })
@@ -490,7 +490,7 @@ export default {
     }
   },
   created() {
-    if (this.$route.path.indexOf('call-update') > -1) {
+    if (this.$route.path.indexOf('calls/update') > -1) {
       if (!this.$route.query.id) {
         this.$router.push('/');
         return;

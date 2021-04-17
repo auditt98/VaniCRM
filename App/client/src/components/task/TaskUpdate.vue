@@ -278,10 +278,10 @@ export default {
             .then(res => {
               alert(res.message);
               if (this.contactId) {
-                this.$router.push('/contact-detail?id=' + this.contactId);
+                this.$router.push('/contacts/detail?id=' + this.contactId);
               }
               else if (this.dealId) {
-                this.$router.push('/deal-detail?id=' + this.dealId);
+                this.$router.push('/deals/detail?id=' + this.dealId);
               } else {
                 this.$router.push('/tasks');
               }
@@ -292,7 +292,7 @@ export default {
         taskService.update(this.mapTaskModel(), this.task.id)
             .then(res => {
               alert(res.message);
-              this.$router.push('/task-detail?id=' + this.task.id);
+              this.$router.push('/tasks/detail?id=' + this.task.id);
             }).finally(() => {
           this.loading = false;
         })
@@ -446,7 +446,7 @@ export default {
     }
   },
   created() {
-    if (this.$route.path.indexOf('task-update') > -1) {
+    if (this.$route.path.indexOf('tasks/update') > -1) {
       if (!this.$route.query.id) {
         this.$router.push('/');
         return;

@@ -176,7 +176,7 @@ export default {
       this.openModalCompetitor = false;
     },
     editTask(id) {
-      this.$router.push({path: '/task-update', query: {id: id}});
+      this.$router.push({path: '/tasks/update', query: {id: id}});
     },
     deleteTask(id) {
       if (!confirm("Xác nhận xóa!")) {

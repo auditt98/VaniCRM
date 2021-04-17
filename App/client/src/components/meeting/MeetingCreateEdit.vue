@@ -314,7 +314,7 @@ export default {
     }
   },
   created() {
-    if (this.$route.path.indexOf('meeting-update') > -1) {
+    if (this.$route.path.indexOf('meetings/update') > -1) {
       if (!this.$route.query.id) {
         this.$router.push('/');
         return;

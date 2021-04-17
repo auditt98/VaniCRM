@@ -220,7 +220,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
-                this.$router.push('/account-detail?id=' + this.account.id);
+                this.$router.push('/accounts/detail?id=' + this.account.id);
               }
             }).finally(() => {
           this.loading = false;
@@ -302,7 +302,7 @@ export default {
     }
   },
   created() {
-    if (this.$route.path.indexOf('account-update') > -1) {
+    if (this.$route.path.indexOf('accounts/update') > -1) {
       if (!this.$route.query.id) {
         this.$router.push('/');
         return;

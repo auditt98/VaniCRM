@@ -11,19 +11,19 @@ const routes = [
         meta: { title: 'Calendar' }
     },
     {
-        path: '/deal-detail',
+        path: '/deals/detail',
         name: 'DealDetail',
         component: () => import('../components/deal/DealDetail.vue'),
         meta: { title: 'Deal Detail' }
     },
     {
-        path: '/deal-create',
+        path: '/deals/create',
         name: 'DealCreate',
         component: () => import('../components/deal/DealCreateEdit.vue'),
         meta: { title: 'Create Deal' }
     },
     {
-        path: '/deal-update',
+        path: '/deals/update',
         name: 'DealUpdate',
         component: () => import('../components/deal/DealCreateEdit.vue'),
         meta: { title: 'Update Deal' }
@@ -35,37 +35,37 @@ const routes = [
         meta: { title: 'List Deal' }
     },
     {
-        path: '/meeting-create',
+        path: '/meetings/create',
         name: 'MeetingCreate',
         component: () => import('../components/meeting/MeetingCreateEdit.vue'),
         meta: { title: 'Create Meeting' }
     },
     {
-        path: '/meeting-update',
+        path: '/meetings/update',
         name: 'MeetingUpdate',
         component: () => import('../components/meeting/MeetingCreateEdit.vue'),
         meta: { title: 'Update Meeting' }
     },
     {
-        path: '/meeting-detail',
+        path: '/meetings/detail',
         name: 'MeetingDetail',
         component: () => import('../components/meeting/MeetingDetail.vue'),
         meta: { title: 'Meeting Detail' }
     },
     {
-        path: '/call-create',
+        path: '/calls/create',
         name: 'CallCreate',
         component: () => import('../components/call/CallCreateEdit.vue'),
         meta: { title: 'Create Call' }
     },
     {
-        path: '/call-update',
+        path: '/calls/update',
         name: 'CallUpdate',
         component: () => import('../components/call/CallCreateEdit.vue'),
         meta: { title: 'Update Call' }
     },
     {
-        path: '/call-detail',
+        path: '/calls/detail',
         name: 'CallDetail',
         component: () => import('../components/call/CallDetail.vue'),
         meta: { title: 'Call Detail' }
@@ -83,31 +83,31 @@ const routes = [
         meta: { title: 'List Task' }
     },
     {
-        path: '/task-create',
+        path: '/tasks/create',
         name: 'TaskCreate',
         component: () => import('../components/task/TaskUpdate.vue'),
         meta: { title: 'Create Task' }
     },
     {
-        path: '/task-update',
+        path: '/tasks/update',
         name: 'TaskUpdate',
         component: () => import('../components/task/TaskUpdate.vue'),
         meta: { title: 'Update Task' }
     },
     {
-        path: '/task-detail',
+        path: '/tasks/detail',
         name: 'TaskDetail',
         component: () => import('../components/task/TaskDetail.vue'),
         meta: { title: 'Task Detail' }
     },
     {
-        path: '/group',
+        path: '/groups',
         name: 'GroupList',
         component: () => import('../components/group/GroupList.vue'),
         meta: { title: 'List Group' }
     },
     {
-        path: '/group-update',
+        path: '/groups/update',
         name: 'GroupUpdate',
         component: () => import('../components/group/GroupUpdate.vue'),
         meta: { title: 'Update Group' }
@@ -130,31 +130,31 @@ const routes = [
         meta: { title: 'List User' }
     },
     {
-        path: '/user-create',
+        path: '/users/create',
         name: 'UserCreate',
         component: () => import('../components/user/UserCreate.vue'),
         meta: { title: 'Create User' }
     },
     {
-        path: '/user-update',
+        path: '/users/update',
         name: 'UserUpdate',
         component: () => import('../components/user/UserUpdate.vue'),
         meta: { title: 'Update User' }
     },
     {
-        path: '/user-page',
+        path: '/users/page',
         name: 'UserPage',
         component: () => import('../components/user/UserPage.vue'),
         meta: { title: 'User Page' }
     },
     {
-        path: '/lead-create',
+        path: '/leads/create',
         name: 'LeadCreate',
         component: () => import('../components/lead/LeadCreate.vue'),
         meta: { title: 'Create Lead' }
     },
     {
-        path: '/lead-detail',
+        path: '/leads/detail',
         name: 'LeadDetail',
         component: () => import('../components/lead/LeadDetail.vue'),
         meta: { title: 'Lead Detail' }
@@ -166,20 +166,26 @@ const routes = [
         meta: { title: 'Lead List' }
     },
     {
-        path: '/lead-update',
+        path: '/leads/update',
         name: 'LeadUpdate',
         component: () => import('../components/lead/LeadCreate.vue'),
         meta: { title: 'Update Lead' }
     },
     //campaign
     {
-        path: '/campaign-create',
+        path: '/campaigns/create',
         name: 'CampaignCreate',
         component: () => import('../components/campaign/CampaignCreate.vue'),
         meta: { title: 'Create Campaign' }
     },
     {
-        path: '/campaign-detail',
+        path: '/campaigns/update',
+        name: 'CampaignUpdate',
+        component: () => import('../components/campaign/CampaignCreate.vue'),
+        meta: { title: 'Update Campaign' }
+    },
+    {
+        path: '/campaigns/detail',
         name: 'CampaignDetail',
         component: () => import('../components/campaign/CampaignDetail.vue'),
         meta: { title: 'Campaign Detail' }
@@ -192,13 +198,13 @@ const routes = [
     },
     //end campaign
     {
-        path: '/dashboard-sale',
+        path: '/dashboard/sale',
         name: 'DashboardSale',
         component: () => import('../components/dashboard/Dashboard.vue'),
         meta: { title: 'Dashboard Sale' }
     },
     {
-        path: '/dashboard-marketing',
+        path: '/dashboard/marketing',
         name: 'DashboardMarketing',
         component: () => import('../components/dashboard/Dashboard.vue'),
         meta: { title: 'Dashboard Marketing' }
@@ -216,19 +222,19 @@ const routes = [
         meta: { title: 'List Contact' }
     },
     {
-        path: '/contact-update',
+        path: '/contacts/update',
         name: 'ContactUpdate',
         component: () => import('../components/contact/ContactUpdate.vue'),
         meta: { title: 'Update Contact' }
     },
     {
-        path: '/contact-create',
+        path: '/contacts/create',
         name: 'ContactCreate',
         component: () => import('../components/contact/ContactUpdate.vue'),
         meta: { title: 'Create Contact' }
     },
     {
-        path: '/contact-detail',
+        path: '/contacts/detail',
         name: 'ContactDetail',
         component: () => import('../components/contact/ContactDetail.vue'),
         meta: { title: 'Contact Detail' }
@@ -240,19 +246,19 @@ const routes = [
         meta: { title: 'List Account' }
     },
     {
-        path: '/account-create',
+        path: '/accounts/create',
         name: 'AccountCreate',
         component: () => import('../components/account/AccountCreate.vue'),
         meta: { title: 'Create Account' }
     },
     {
-        path: '/account-update',
+        path: '/accounts/update',
         name: 'AccountUpdate',
         component: () => import('../components/account/AccountCreate.vue'),
         meta: { title: 'Update Account' }
     },
     {
-        path: '/account-detail',
+        path: '/accounts/detail',
         name: 'AccountDetail',
         component: () => import('../components/account/AccountDetail.vue'),
         meta: { title: 'Account Detail' }

@@ -2,6 +2,7 @@ import {buildQueryURI, config} from "@/config/config";
 import {requestOptions} from "@/helper/request-options";
 import {handleResponse} from "@/helper/handle-response";
 import {authenticationService} from "@/service/authentication.service";
+import {fetchRetry} from "@/helper/fetchRetry";
 
 
 export const leadService = {
@@ -21,7 +22,13 @@ export const leadService = {
 
 function getAll(q) {
     return fetch(`${config.apiUrl}/leads?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/leads?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
 }
 
 function create(lead) {
@@ -41,12 +48,24 @@ function convertToAccount(id) {
 
 function getById(id) {
     return fetch(`${config.apiUrl}/leads/${id}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/leads/${id}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function loadAllObject() {
     return fetch(`${config.apiUrl}/leads/prepare`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/leads/prepare`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function update(lead, id) {

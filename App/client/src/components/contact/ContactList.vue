@@ -93,7 +93,7 @@
         })
       },
       editContact(id) {
-        this.$router.push({path: '/contact-detail', query : { id: id}});
+        this.$router.push({path: '/contacts/detail', query : { id: id}});
       },
     },
 

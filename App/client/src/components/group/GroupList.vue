@@ -9,7 +9,7 @@
                    @search="search"
       >
         <template slot="button">
-          <router-link to="/group-update"><VButton :data="btnCreate"/></router-link>
+          <router-link to="/groups/update"><VButton :data="btnCreate"/></router-link>
         </template>
         <template slot="body">
           <tbody v-if="!groups || groups.length === 0">
@@ -58,7 +58,7 @@ export default {
       this.loadGroups(keyword);
     },
     edit(id) {
-      this.$router.push({path: '/group-update', query : { id: id}});
+      this.$router.push({path: '/groups/update', query : { id: id}});
     },
     remove(id) {
       if (!confirm("Xác nhận xóa!")) {

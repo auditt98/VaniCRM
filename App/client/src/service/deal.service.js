@@ -2,6 +2,7 @@ import {buildQueryURI, config} from "@/config/config";
 import {requestOptions} from "@/helper/request-options";
 import {handleResponse} from "@/helper/handle-response";
 import {authenticationService} from "@/service/authentication.service";
+import {fetchRetry} from "@/helper/fetchRetry";
 
 
 export const dealService = {
@@ -24,12 +25,24 @@ export const dealService = {
 
 function loadTasks(q, id) {
     return fetch(`${config.apiUrl}/deals/${id}/tasks?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/deals/${id}/tasks?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
 }
 
 function loadCompetitors(q, id) {
     return fetch(`${config.apiUrl}/deals/${id}/competitors?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/deals/${id}/competitors?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
 }
 
 function createCompetitor(data, id) {
@@ -39,7 +52,13 @@ function createCompetitor(data, id) {
 
 function getAll(q) {
     return fetch(`${config.apiUrl}/deals?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/deals?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function create(lead) {
@@ -54,7 +73,13 @@ function remove(id) {
 
 function getById(id) {
     return fetch(`${config.apiUrl}/deals/${id}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/deals/${id}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        })
 }
 
 function changeStage(dealId, stageId) {
@@ -64,7 +89,13 @@ function changeStage(dealId, stageId) {
 
 function loadAllObject() {
     return fetch(`${config.apiUrl}/deals/prepare`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/deals/prepare`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function update(lead, id) {

@@ -9,8 +9,9 @@ export function handleResponse(response) {
                 if(Object.prototype.hasOwnProperty.call(res, 'jwt')){
                     return Promise.reject("retry")
                 }
+                console.log(res)
 
-                if(res === null){
+                if(!res || !res.data){
                     authenticationService.logout(window.location.pathname + window.location.search);
                     const error = (data && data.message) || response.statusText;
                     return Promise.reject(error);

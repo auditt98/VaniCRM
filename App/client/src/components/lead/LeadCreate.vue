@@ -227,7 +227,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
-                this.$router.push('/lead-detail?id=' + this.lead.id);
+                this.$router.push('/leads/detail?id=' + this.lead.id);
               }
             })
       }

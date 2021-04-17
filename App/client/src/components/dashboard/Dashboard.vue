@@ -15,11 +15,22 @@
           <div class="mb-3">
             <div class="card-header-text row justify-content-between">
               <p class="col-sm-10" :style="'color:' + item.color">{{item.title}}</p>
-              <span class="col-sm-2 m-auto">
+              <span class="col-sm-2 m-auto cursor-pointer" @click="item.isAdd = !item.isAdd">
                 <i class="fa fa-plus-circle"></i>
               </span>
             </div>
             <p class="card-header-under-line w-100"></p>
+            <div class="card add-campaign" v-if="item.isAdd">
+              <div class="card-body p-2">
+                <input type="text" class="form-control mb-2" placeholder="Name">
+                <input type="text" class="form-control mb-2" placeholder="Email">
+                <input type="text" class="form-control mb-2" placeholder="Phone">
+                <div class="d-flex justify-content-between">
+                  <VButton :data="btnEdit"/>
+                  <VButton :data="btnCancel"/>
+                </div>
+              </div>
+            </div>
           </div>
           <draggable :list="item.deals" :move="checkMove" v-bind="dragOptions"
                      @start="item.drag = true"
@@ -95,6 +106,7 @@ import VLoading from "@/components/common/VLoading";
 import {dealService} from "@/service/deal.service";
 import {leadService} from "@/service/lead.service";
 import {accountService} from "@/service/account.service";
+import VButton from "@/components/common/VButton";
 
 export default {
   name: "Dashboard",
@@ -107,7 +119,9 @@ export default {
       leads: [],
       accounts: [],
       leadDrag: false,
-      accountDrag: false
+      accountDrag: false,
+      btnCancel: {btnClass: 'btn-white px-3', icon: '', text: 'CANCEL'},
+      btnEdit: {btnClass: 'btn-red px-4', icon: '', text: 'CREATE'},
     };
   },
   methods: {
@@ -148,7 +162,8 @@ export default {
         if (res && res.data) {
           this.items = res.data.stages.map((s, index) => {
             return {
-              id: s.stageID, title: s.stageName + ' - ' + s.probability + '%', color: this.colors[index], drag: false, deals:
+              id: s.stageID, title: s.stageName + ' - ' + s.probability + '%', color: this.colors[index], drag: false, isAdd: false,
+              deals:
                   s.deals ? s.deals.map(d => {
                     return {
                       id: d.dealID, title: d.dealName, title1: d.accountName,
@@ -225,7 +240,7 @@ export default {
       this.loadListDashboardSale();
     }
   },
-  components: {VLoading, DashboardCard, draggable}
+  components: {VButton, VLoading, DashboardCard, draggable}
 }
 </script>
 
@@ -295,5 +310,14 @@ i {
 .custom .col-1 {
   flex: 0 0 12.5%;
   max-width: 12.5%;
+}
+.add-campaign input[type='text'].form-control {
+  padding: 4px 5px;
+  line-height: 0.4;
+}
+.add-campaign /deep/ button {
+  padding: 5px 10px;
+  line-height: 1;
+  font-size: 0.8rem;
 }
 </style>

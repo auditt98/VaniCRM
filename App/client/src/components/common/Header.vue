@@ -51,13 +51,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle"  :class="{'active': isDashboard}" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"
+          <a class="nav-link dropdown-toggle" href="javascript:void(0)" :class="{ 'active': isActive }" id="navbarDropdown1" role="button" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
             Dashboard
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-            <a href="/dashboard-sale" class="dropdown-item">Dashboard Sale</a>
-            <a href="/dashboard-marketing" class="dropdown-item">Dashboard Marketing</a>
+            <router-link :to="{ name: 'DashboardSale'}" class="nav-link">Dashboard Sale</router-link>
+            <router-link :to="{ name: 'DashboardMarketing'}" class="nav-link">Dashboard Marketing</router-link>
           </div>
         </li>
         <li class="nav-item">
@@ -180,11 +180,11 @@ export default {
         .fail(function(){ console.log('Could not connect'); });
   },created() {
     this.currentUser = authenticationService.currentUserValue;
-    if (window.location.pathname.indexOf('dashboard-marketing') > -1 || window.location.pathname.indexOf('dashboard-sale') > -1) {
-      this.isDashboard = true;
-    } else {
-      this.isDashboard = false;
-    }
+  },
+  computed: {
+    isActive() {
+      return this.$route.name === 'DashboardSale' || this.$route.name === 'DashboardMarketing';
+    },
   }
 }
 </script>
@@ -355,5 +355,9 @@ i {
   width: 300px !important;
 
   /* background-color: #FAFAFC; */
+}
+.dropdown-menu a {
+  font-size: 15px !important;
+  margin: 0 !important;
 }
 </style>

@@ -59,7 +59,7 @@ export default {
       this.loadUsers(keyword);
     },
     editUser(id) {
-      this.$router.push({path: '/user-page', query : { id: id}});
+      this.$router.push({path: '/users/page', query : { id: id}});
     },
     deleteUser(id) {
       if (!confirm("Xác nhận xóa!")) {

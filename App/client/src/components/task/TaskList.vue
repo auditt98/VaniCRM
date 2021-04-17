@@ -11,9 +11,9 @@
       >
         <template slot="button">
           <div class="d-flex justify-content-between">
-            <router-link to="/task-create"><VButton :data="btnCreateTask"/></router-link>
-            <router-link to="/meeting-create"><VButton :data="btnCreateMeeting"/></router-link>
-            <router-link to="/call-create"><VButton :data="btnCreateCall"/></router-link>
+            <router-link to="/tasks/create"><VButton :data="btnCreateTask"/></router-link>
+            <router-link to="/meetings/create"><VButton :data="btnCreateMeeting"/></router-link>
+            <router-link to="/calls/create"><VButton :data="btnCreateCall"/></router-link>
           </div>
         </template>
         <template slot="body">
@@ -55,7 +55,7 @@ export default {
   components: {VButton, VLoading, TableInList, },
   methods: {
     editItem(id) {
-      this.$router.push({path: '/task-detail', query : { id: id}});
+      this.$router.push({path: '/tasks/detail', query : { id: id}});
     },
     deleteItem(id) {
       if (!confirm("Xác nhận xóa!")) {

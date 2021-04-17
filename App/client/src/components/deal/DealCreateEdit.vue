@@ -150,7 +150,7 @@ export default {
               this.deal.priority = getValueInArr(res.data.priorities, 'selected', 'id');
               this.deal.stage = getValueInArr(res.data.stages, 'selected', 'id');
               this.deal.lostReason = getValueInArr(res.data.lostReason, 'selected', 'id');
-              this.mapRRule(this.deal.rrule);
+              // this.mapRRule(this.deal.rrule);
             } else {
               alert('Không có dữ liệu');
               this.$router.push('/');
@@ -178,7 +178,7 @@ export default {
         dealService.update(this.mapTaskModel(), this.deal.id)
             .then(res => {
               alert(res.message);
-              this.$router.push('/deal-detail?id=' + this.deal.id);
+              this.$router.push('/deals/detail?id=' + this.deal.id);
             }).finally(() => {
           this.loading = false;
         })
@@ -256,7 +256,7 @@ export default {
     }
   },
   created() {
-    if (this.$route.path.indexOf('deal-update') > -1) {
+    if (this.$route.path.indexOf('deals/update') > -1) {
       if (!this.$route.query.id) {
         this.$router.push('/');
         return;
