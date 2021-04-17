@@ -170,6 +170,7 @@ export default {
         dealService.create(this.mapTaskModel())
             .then(res => {
               alert(res.message);
+              this.$router.push('/deals');
             }).finally(() => {
           this.loading = false;
         })
@@ -177,7 +178,7 @@ export default {
         dealService.update(this.mapTaskModel(), this.deal.id)
             .then(res => {
               alert(res.message);
-              // this.$router.push('/call-detail?i')
+              this.$router.push('/deal-detail?id=' + this.deal.id);
             }).finally(() => {
           this.loading = false;
         })

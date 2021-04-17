@@ -102,7 +102,8 @@ export default {
              this.lead.addressDetail,
           ]);
         } else {
-          //this.$router.push('/');
+          alert('Không có dữ liệu');
+          this.$router.push('/leads');
         }
       }).catch(err => alert(err))
           .finally(() => this.loading = false);

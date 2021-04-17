@@ -69,6 +69,7 @@ export default {
       if (data.toUpperCase() === 'NORMAL') {
         return '#29CC97';
       }
+      return 'red';
     },
     editItem(id) {
       this.$router.push({path: '/lead-detail', query : { id: id}});

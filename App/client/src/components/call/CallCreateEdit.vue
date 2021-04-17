@@ -529,12 +529,12 @@ export default {
         relatedDeal: null,
         relatedAccount: null,
         relatedCampaign: null,
-        title: "string",
+        title: null,
         duration: 0,
         startTime: null,
         isReminder: true,
         rrule: null,
-        description: "string"
+        description: null
       },
       duration: {
         h: 1,

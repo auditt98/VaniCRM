@@ -157,7 +157,8 @@ export default {
           ]);
 
         } else {
-          //this.$router.push('/');
+          alert('Không có dữ liệu');
+          this.$router.push('/campaigns');
         }
       }).catch(err => alert(err))
           .finally(() => this.loading = false);
