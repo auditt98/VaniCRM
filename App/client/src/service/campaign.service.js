@@ -2,6 +2,7 @@ import {buildQueryURI, config} from "@/config/config";
 import {requestOptions} from "@/helper/request-options";
 import {handleResponse} from "@/helper/handle-response";
 import {authenticationService} from "@/service/authentication.service";
+import {fetchRetry} from "@/helper/fetchRetry";
 
 
 export const campaignService = {
@@ -22,17 +23,35 @@ export const campaignService = {
 
 function loadContacts(q, id) {
     return fetch(`${config.apiUrl}/campaigns/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/campaigns/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
 }
 
 function loadLeads(q, id) {
     return fetch(`${config.apiUrl}/campaigns/${id}/leads?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/campaigns/${id}/leads?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
 }
 
 function getAll(q) {
     return fetch(`${config.apiUrl}/campaigns?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/campaigns?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        })
 }
 
 function create(lead) {
@@ -47,12 +66,24 @@ function remove(id) {
 
 function getById(id) {
     return fetch(`${config.apiUrl}/campaigns/${id}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/campaigns/${id}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        })
 }
 
 function loadAllObject() {
     return fetch(`${config.apiUrl}/campaigns/prepare`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/campaigns/prepare`, requestOptions.get(), 2).then(handleResponse)
+            }
+        })
 }
 
 function update(lead, id) {

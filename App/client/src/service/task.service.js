@@ -2,6 +2,7 @@ import {buildQueryURI, config} from "@/config/config";
 import {requestOptions} from "@/helper/request-options";
 import {handleResponse} from "@/helper/handle-response";
 import {authenticationService} from "@/service/authentication.service";
+import {fetchRetry} from "@/helper/fetchRetry";
 
 
 export const taskService = {
@@ -21,7 +22,13 @@ export const taskService = {
 
 function getAll(q) {
     return fetch(`${config.apiUrl}/tasks?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/tasks?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
 }
 
 function create(lead) {
@@ -36,17 +43,35 @@ function remove(id) {
 
 function getById(id) {
     return fetch(`${config.apiUrl}/tasks/${id}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/tasks/${id}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function loadContacts(id) {
-    return fetch(`${config.apiUrl}/tasks/${id}/contacts`, requestOptions.get())
-        .then(handleResponse);
+    return fetch(`${config.apiUrl}/tasks/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get())
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/tasks/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function loadAllObject() {
     return fetch(`${config.apiUrl}/tasks/prepare`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/tasks/prepare`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
 }
 
 function update(lead, id) {

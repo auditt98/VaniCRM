@@ -1,6 +1,7 @@
 import {buildQueryURI, config} from "@/config/config";
 import {requestOptions} from "@/helper/request-options";
 import {handleResponse} from "@/helper/handle-response";
+import {fetchRetry} from "@/helper/fetchRetry";
 
 
 export const groupService = {
@@ -24,12 +25,24 @@ function update(group, id) {
 
 function getAll(q) {
     return fetch(`${config.apiUrl}/groups?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/groups?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
 }
 
 function getById(id) {
     return fetch(`${config.apiUrl}/groups/${id}`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/groups/${id}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
 
 function remove(id) {
@@ -38,6 +51,14 @@ function remove(id) {
 }
 
 function getAllPermission() {
+/*    return fetch(`${config.apiUrl}/groups/all_perms`, requestOptions.get())
+        .then(handleResponse);*/
     return fetch(`${config.apiUrl}/groups/all_perms`, requestOptions.get())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/groups/all_perms`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
 }
