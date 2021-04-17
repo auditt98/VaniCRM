@@ -16,8 +16,7 @@ export const taskService = {
     createTag,
     removeNote,
     removeTag,
-    loadAllObject,
-    loadContacts
+    loadAllObject
 };
 
 function getAll(q) {
@@ -52,16 +51,6 @@ function getById(id) {
         });
 }
 
-function loadContacts(id) {
-    return fetch(`${config.apiUrl}/tasks/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get())
-        .then(handleResponse).then(resolve => {
-            return resolve
-        }, reject =>{
-            if(reject == "retry"){
-                return fetchRetry(`${config.apiUrl}/tasks/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
-            }
-        });
-}
 
 function loadAllObject() {
     return fetch(`${config.apiUrl}/tasks/prepare`, requestOptions.get())
