@@ -67,9 +67,9 @@
              aria-haspopup="true" aria-expanded="false">
             Dashboard
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-            <router-link :to="{ name: 'DashboardSale'}" class="nav-link">Dashboard Sale</router-link>
-            <router-link :to="{ name: 'DashboardMarketing'}" class="nav-link">Dashboard Marketing</router-link>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown1" v-if="currentUser">
+            <router-link v-if="[3, 2].indexOf(currentUser.group) > -1" :to="{ name: 'DashboardSale'}" class="nav-link">Dashboard Sale</router-link>
+            <router-link v-if="[3, 1].indexOf(currentUser.group) > -1" :to="{ name: 'DashboardMarketing'}" class="nav-link">Dashboard Marketing</router-link>
           </div>
         </li>
         <li class="nav-item">
@@ -190,7 +190,8 @@ export default {
             });
         })
         .fail(function(){ console.log('Could not connect'); });
-  },created() {
+  },
+  created() {
     this.currentUser = authenticationService.currentUserValue;
   },
   computed: {
