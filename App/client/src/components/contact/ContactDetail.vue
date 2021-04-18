@@ -129,6 +129,8 @@ export default {
           .then(res => {
             if (res && res.data) {
               this.taskLst = res.data.tasks;
+              this.totalPageTask= Number(res.data.pageInfo.TotalPages);
+              this.totalItemTask = Number(res.data.pageInfo.TotalItems);
             }
           })
     },

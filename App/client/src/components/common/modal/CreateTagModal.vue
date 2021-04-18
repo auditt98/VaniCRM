@@ -32,8 +32,8 @@ export default {
   components: {VButton},
   data () {
     return {
-      btnCancel: {btnClass: 'btn-white px-3 mr-4', icon: 'fa-times', text: 'Cancel'},
-      btnSend: {btnClass: 'btn-red px-4', icon: 'fa-pencil', text: 'Save'},
+      btnCancel: {btnClass: 'btn-white px-3 mr-4', icon: 'fa-times-circle', text: 'Cancel'},
+      btnSend: {btnClass: 'btn-red px-4', icon: 'fa-floppy-o', text: 'Save'},
       tagName: '',
       error: ''
     }

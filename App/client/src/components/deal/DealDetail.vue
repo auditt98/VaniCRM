@@ -26,7 +26,7 @@
                       :title="'Tags'"/>
           </div>
           <div class="row mt-3" id="timeline">
-            <VTimeLine :timeline-status="stages"/>
+            <VTimeLine :timeline-status="deal.stages"/>
           </div>
           <div class="row mt-3" id="basicInfo">
             <BasicInfo :arr-left="dataLeftBaseInfo" :arr-right="[]" :title="'Basic Info'"/>
@@ -80,7 +80,13 @@
                            @go-to-page="goToPage($event, 'HISTORY')">
               <template slot="body">
                 <tbody v-if="historyLst && historyLst.length > 0">
-
+                <tr v-for="(t, i) in historyLst" :key="i">
+                  <td>{{ t.name }}</td>
+                  <td>{{ t.probability }} %</td>
+                  <td>$ {{ t.expectedRevenue }}</td>
+                  <td>{{ t.modifiedAt | formatDateTime }}</td>
+                  <td style="color: #109CF1">{{ t.modifiedBy ? t.modifiedBy.username : '' }}</td>
+                </tr>
                 </tbody>
                 <tbody v-else>
                 <tr>
@@ -201,6 +207,8 @@ export default {
           .then(res => {
             if (res && res.data) {
               this.taskLst = res.data.tasks;
+              this.totalPageTask= Number(res.data.pageInfo.TotalPages);
+              this.totalItemTask = Number(res.data.pageInfo.TotalItems);
             }
           })
     },
@@ -213,6 +221,22 @@ export default {
           .then(res => {
             if (res && res.data) {
               this.competitorLst = res.data.competitors;
+              this.totalPageCompetitor = Number(res.data.pageInfo.TotalPages);
+              this.totalItemCompetitor = Number(res.data.pageInfo.TotalItems);
+            }
+          })
+    },
+    async loadHistoriesByDeal() {
+      let query = {
+        currentPage: this.currentPageHistory,
+        pageSize: this.pageSizeHistory
+      };
+      await dealService.loadHistories(query, this.deal.id)
+          .then(res => {
+            if (res && res.data) {
+              this.historyLst = res.data.histories;
+              this.totalPageHistory = Number(res.data.pageInfo.TotalPages);
+              this.totalItemHistory = Number(res.data.pageInfo.TotalItems);
             }
           })
     },
@@ -223,6 +247,7 @@ export default {
           this.deal = res.data;
           this.loadTaskByDeal();
           this.loadCompetitorByDeal();
+          this.loadHistoriesByDeal();
           mapValue(this.dataLeftBaseInfo, [
             this.deal.name,
             this.deal.owner ? this.deal.owner.username : '',
@@ -309,30 +334,18 @@ export default {
             }
           })
     },
-    loadStages() {
-      this.loading = true;
-      dealService.loadAllObject()
-          .then(res => {
-            if (res && res.data && res.status === 'success') {
-              this.stages = res.data.stages;
-              console.log(this.stages)
-            }
-          }).finally(() => {
-        this.loading = false;
-      })
-    },
     onPageSizeChange(event, type) {
       if (type === 'TASK') {
         this.pageSizeTask = Number(event);
         this.loadTaskByDeal();
       }
       if (type === 'COMPETITOR') {
-        this.pageSizeLead = Number(event);
+        this.pageSizeCompetitor = Number(event);
         this.loadCompetitorByDeal();
       }
       if (type === 'HISTORY') {
-        this.pageSizeContact = Number(event);
-        this.loadContacts();
+        this.pageSizeHistory = Number(event);
+        this.loadHistoriesByDeal();
       }
     },
     goToPage(event, type) {
@@ -341,12 +354,12 @@ export default {
         this.loadTaskByDeal();
       }
       if (type === 'COMPETITOR') {
-        this.currentPageLead = Number(event);
+        this.currentPageCompetitor = Number(event);
         this.loadCompetitorByDeal();
       }
       if (type === 'HISTORY') {
-        this.currentPageAccount = Number(event);
-        // this.loadAccounts();
+        this.currentPageHistory = Number(event);
+        this.loadHistoriesByDeal();
       }
     }
   },
@@ -354,7 +367,6 @@ export default {
     if (this.$route.query.id) {
       this.deal.id = this.$route.query.id;
       this.loadDeal();
-      this.loadStages();
     } else {
       this.$router.push('/');
     }
@@ -367,7 +379,6 @@ export default {
       taskLst: [],
       historyLst: [],
       competitorLst: [],
-      stages: [],
       dataMenuLeft: [
         {id: '#tags', text: 'Tags'},
         {id: '#timeline', text: 'Timeline'},
@@ -437,5 +448,10 @@ export default {
 </script>
 
 <style scoped>
-
+th, td {
+  text-align: center;
+}
+/deep/ table th {
+  text-align: center;
+}
 </style>

@@ -60,6 +60,9 @@ export default {
   components: {VLoading, VTag, VButton, TableInList, },
   methods: {
     getBgColor(data) {
+      if (!data) {
+        return '';
+      }
       if (data.toUpperCase() === 'HIGH') {
         return '#F12B2C';
       }

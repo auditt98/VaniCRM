@@ -128,7 +128,7 @@ export default {
             this.account.fax,
             this.account.website,
             this.account.taxCode,
-            this.account.convertedFrom ? this.account.convertedFrom : 'Empty',
+            this.account.convertedFrom ? this.account.convertedFrom.name : 'Empty',
           ]);
           mapValue(this.dataRightDetail, [
             this.account.numberOfEmployees,

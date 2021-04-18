@@ -18,6 +18,7 @@ export const dealService = {
     removeNote,
     removeTag,
     loadTasks,
+    loadHistories,
     loadCompetitors,
     createCompetitor,
     loadAllObject
@@ -30,6 +31,17 @@ function loadTasks(q, id) {
         }, reject =>{
             if(reject == "retry"){
                 return fetchRetry(`${config.apiUrl}/deals/${id}/tasks?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
+}
+
+function loadHistories(q, id) {
+    return fetch(`${config.apiUrl}/deals/${id}/histories?${buildQueryURI(q)}`, requestOptions.get())
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/deals/${id}/histories?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
             }
         }) ;
 }

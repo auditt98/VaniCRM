@@ -125,7 +125,7 @@ const routes = [
     },
     {
         path: '/users',
-        name: 'Users',
+        name: 'UserList',
         component: () => import('../components/user/UserList.vue'),
         meta: { title: 'List User' }
     },

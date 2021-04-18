@@ -227,12 +227,15 @@ i {
 .basic-edit table {
     width: 100%;
 }
-.basic-edit table input, select, textarea {
+.basic-edit table input, .basic-edit table select, .basic-edit table textarea {
     width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     border-radius: 5px;
-    padding: 5px 5px;
+    padding: 5px 7px;
+}
+.basic-edit table select {
+    padding-left: 4px;
 }
 .basic-edit {
     padding: 2rem;

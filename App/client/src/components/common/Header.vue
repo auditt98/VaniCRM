@@ -32,8 +32,20 @@
         <i class="fa fa-bell-o notificationIcon has-badge" aria-hidden="true"></i><span class="badge badge-main">{{unreadCount}}</span>
       </div>
     </div>
+<!--    -->
     <div class="nav-item mx-auto order-last dropdown">
-      <a v-if="currentUser" class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
+      <a class="nav-link dropdown-toggle ml-3 mr-0" href="#" id="navbarDropdown9" role="button" data-toggle="dropdown"
+         aria-haspopup="true" aria-expanded="false">
+        <img src="images/icon-settings.png" alt="">
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown9">
+        <router-link :to="{ name: 'UserList'}" class="nav-link">User</router-link>
+        <router-link :to="{ name: 'GroupList'}" class="nav-link">Group</router-link>
+      </div>
+    </div>
+<!--    -->
+    <div class="nav-item mx-auto order-last dropdown">
+      <a v-if="currentUser" class="nav-link dropdown-toggle mx-0" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
          aria-haspopup="true" aria-expanded="false">
         {{currentUser.username}}
       </a>
@@ -359,5 +371,8 @@ i {
 .dropdown-menu a {
   font-size: 15px !important;
   margin: 0 !important;
+}
+#navbarDropdown9::after {
+  display: none;
 }
 </style>
