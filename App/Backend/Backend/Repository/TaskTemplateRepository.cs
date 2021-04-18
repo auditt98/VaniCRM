@@ -101,7 +101,14 @@ namespace Backend.Repository
             newTemplate.IsRepeat = apiModel.isReminder;
             newTemplate.RRule = apiModel.rrule;
             newTemplate.Title = apiModel.title;
-            newTemplate.DueDate = DateTime.Now.AddSeconds(apiModel.duration);
+
+            var startTime = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
+            if(startTime != null)
+            {
+                newTemplate.DueDate = startTime.Value.AddSeconds(apiModel.duration);
+            }
+            //newTemplate.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
+            //newTemplate.DueDate = DateTime.Now.AddSeconds(apiModel.duration);
             if(apiModel.status != 0)
             {
                 newTemplate.TASK_STATUS_ID = apiModel.status;
@@ -156,7 +163,8 @@ namespace Backend.Repository
             {
                 newCall.LEAD_ID = apiModel.lead;
             }
-            newCall.StartTime = apiModel.startTime;
+            
+            newCall.StartTime = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
             db.CALLs.Add(newCall);
             db.SaveChanges();
             
@@ -250,6 +258,7 @@ namespace Backend.Repository
                 dbCall.TASK_TEMPLATE.Title = apiModel.title;
                 dbCall.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
                 dbCall.TASK_TEMPLATE.ModifiedBy = modifiedUser;
+                dbCall.StartTime = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
                 //dbCall.TASK_TEMPLATE.DueDate = dbCall.TASK_TEMPLATE.CreatedAt.Value
                 if (dbCall.TASK_TEMPLATE.CreatedAt.HasValue)
                 {
@@ -439,14 +448,14 @@ namespace Backend.Repository
             newTemplate.IsRepeat = apiModel.isRepeat;
             newTemplate.RRule = apiModel.rrule;
             newTemplate.Title = apiModel.title;
-            newTemplate.DueDate = apiModel.to;
+            newTemplate.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.to);
             if(apiModel.priority != 0)
             {
                 newTemplate.PRIORITY_ID = apiModel.priority;
             }
             db.TASK_TEMPLATE.Add(newTemplate);
             var newMeeting = new MEETING();
-            newMeeting.FromDate = apiModel.from;
+            newMeeting.FromDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.from);
             if(apiModel.host != 0)
             {
                 newMeeting.Host = apiModel.host;
@@ -458,7 +467,7 @@ namespace Backend.Repository
             newMeeting.IsAllDay = apiModel.isAllDay;
             newMeeting.IsRemindParticipant = true;
             newMeeting.Location = apiModel.location;
-            newMeeting.ToDate = apiModel.to;
+            newMeeting.ToDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.to);
             newMeeting.TASK_TEMPLATE = newTemplate;
             db.MEETINGs.Add(newMeeting);
             db.SaveChanges();
@@ -476,7 +485,7 @@ namespace Backend.Repository
                 dbMeeting.TASK_TEMPLATE.Title = apiModel.title;
                 dbMeeting.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
                 dbMeeting.TASK_TEMPLATE.ModifiedBy = modifiedUser;
-                dbMeeting.TASK_TEMPLATE.DueDate = apiModel.to;
+                dbMeeting.TASK_TEMPLATE.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.to);
                 if(apiModel.priority != 0)
                 {
                     dbMeeting.TASK_TEMPLATE.PRIORITY_ID = apiModel.priority;
@@ -485,8 +494,8 @@ namespace Backend.Repository
                 dbMeeting.IsAllDay = apiModel.isAllDay;
                 dbMeeting.IsRemindParticipant = true;
                 dbMeeting.Location = apiModel.location;
-                dbMeeting.FromDate = apiModel.from;
-                dbMeeting.ToDate = apiModel.to;
+                dbMeeting.FromDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.from);
+                dbMeeting.ToDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.to);
                 db.SaveChanges();
                 return true;
             }
@@ -706,7 +715,7 @@ namespace Backend.Repository
             newTemplate.IsRepeat = apiModel.isReminder;
             newTemplate.RRule = apiModel.rrule;
             newTemplate.Title = apiModel.title;
-            newTemplate.DueDate = apiModel.dueDate;
+            newTemplate.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.dueDate);
             if(apiModel.status != 0)
             {
                 newTemplate.TASK_STATUS_ID = apiModel.status;
@@ -719,7 +728,7 @@ namespace Backend.Repository
             db.TASK_TEMPLATE.Add(newTemplate);
             //create call
             var newTask = new TASK();
-            newTask.EndOn = apiModel.dueDate;
+            newTask.EndOn = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.dueDate);
             newTask.TASK_TEMPLATE = newTemplate;
             newTask.TaskOwner = apiModel.owner != 0 ? apiModel.owner : createdUser;
             if (apiModel.relatedAccount != 0)
@@ -759,7 +768,7 @@ namespace Backend.Repository
                 dbTask.TASK_TEMPLATE.Title = apiModel.title;
                 dbTask.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
                 dbTask.TASK_TEMPLATE.ModifiedBy = modifiedUser;
-                dbTask.TASK_TEMPLATE.DueDate = apiModel.dueDate;
+                dbTask.TASK_TEMPLATE.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.dueDate);
                 if(apiModel.status != 0)
                 {
                     dbTask.TASK_TEMPLATE.TASK_STATUS_ID = apiModel.status;

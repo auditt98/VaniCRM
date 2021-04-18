@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using static Backend.Extensions.Enum;
+using static Backend.Extensions.DbDateHelper;
 
 namespace Backend.Repository
 {
@@ -48,7 +49,7 @@ namespace Backend.Repository
                 newDeal.ACCOUNT_ID = apiModel.account;
             }
             newDeal.Amount = apiModel.amount;
-            newDeal.ClosingDate = apiModel.closingDate.GetValueOrDefault();
+            //newDeal.ClosingDate = apiModel.closingDate.GetValueOrDefault();
             if (apiModel.contact != 0)
             {
                 newDeal.Contact_ID = apiModel.contact;
@@ -81,8 +82,21 @@ namespace Backend.Repository
             {
                 newDeal.PRIORITY_ID = apiModel.priority;
             }
+            if(apiModel.closingDate != null)
+            {
+                newDeal.ClosingDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.closingDate.Value);
+            } 
             newDeal.CreatedAt = DateTime.Now;
             newDeal.CreatedBy = createdUser;
+            newDeal.ModifiedAt = DateTime.Now;
+            if(apiModel.campaign != 0)
+            {
+                newDeal.CAMPAIGN_ID = apiModel.campaign;
+            }
+            if(apiModel.contact != 0)
+            {
+                newDeal.Contact_ID = apiModel.contact;
+            }
 
             try
             {
@@ -126,7 +140,11 @@ namespace Backend.Repository
                     dbDeal.ACCOUNT_ID = apiModel.account;
                 }
                 dbDeal.Amount = apiModel.amount;
-                dbDeal.ClosingDate = apiModel.closingDate.GetValueOrDefault();
+                if(apiModel.closingDate != null)
+                {
+
+                    dbDeal.ClosingDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.closingDate.Value);
+                }
                 if (apiModel.contact != 0)
                 {
                     dbDeal.Contact_ID = apiModel.contact;

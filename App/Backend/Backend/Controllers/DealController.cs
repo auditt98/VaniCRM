@@ -661,7 +661,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("deals/prepare")]
         [ResponseType(typeof(DealBlankApiModel))]
-        public HttpResponseMessage PrepareNewContact()
+        public HttpResponseMessage PrepareNewDeal()
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();

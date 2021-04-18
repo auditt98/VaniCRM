@@ -204,7 +204,7 @@ export default {
       dealService.loadAllObject()
           .then(res => {
             if (res && res.data && res.status === 'success') {
-              this.reasons = [];
+              this.reasons = res.data.lostReasons;
               this.stages = res.data.stages;
               this.priorities = res.data.priorities;
             }

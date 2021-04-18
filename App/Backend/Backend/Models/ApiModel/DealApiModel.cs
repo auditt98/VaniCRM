@@ -49,6 +49,7 @@ namespace Backend.Models.ApiModel
     {
         public List<PrioritySelectionApiModel> priorities { get; set; }
         public List<StageLinkApiModel> stages { get; set; }
+        public List<LostReasonLinkApiModel> lostReasons { get; set; }
         //public List<Lost MyProperty { get; set; }
     }
 

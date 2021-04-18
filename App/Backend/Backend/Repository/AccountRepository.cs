@@ -105,6 +105,10 @@ namespace Backend.Repository
                 {
                     dbAccount.AccountOwner = apiModel.owner;
                 }
+                if(apiModel.collaborator != 0)
+                {
+                    dbAccount.AccountCollaborator = apiModel.collaborator;
+                }
                 dbAccount.Name = apiModel.name;
                 dbAccount.Email = apiModel.email;
                 dbAccount.Phone = apiModel.phone;

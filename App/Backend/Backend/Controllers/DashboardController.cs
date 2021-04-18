@@ -128,8 +128,8 @@ namespace Backend.Controllers
                             d.dealName = deal.Name;
                             d.ownerID = deal.Owner.ID;
                             d.ownerUsername = deal.Owner.Username;
-                            d.accountID = deal.ACCOUNT.ID;
-                            d.accountName = deal.ACCOUNT.Name;
+                            d.accountID = deal.ACCOUNT != null ? deal.ACCOUNT.ID : 0;
+                            d.accountName = deal.ACCOUNT != null ? deal.ACCOUNT.Name : "";
                             foreach (var tag in deal.TAG_ITEM)
                             {
                                 var t = new DashboardApiModel.T();

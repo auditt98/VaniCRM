@@ -77,18 +77,25 @@ namespace Backend.Repository
             var newCampaign = new CAMPAIGN();
             newCampaign.ActualCost = apiModel.actualCost;
             newCampaign.BudgetedCost = apiModel.budgetedCost;
-            newCampaign.CampaignOwner = apiModel.owner;
-            newCampaign.CAMPAIGN_STATUS_ID = apiModel.status;
-            newCampaign.CAMPAIGN_TYPE_ID = apiModel.type;
+            newCampaign.CampaignOwner = apiModel.owner != 0 ? apiModel.owner : createdUser;
+            var dbStatus = db.CAMPAIGN_STATUS.Find(apiModel.status);
+            if(dbStatus != null)
+            {
+                newCampaign.CAMPAIGN_STATUS_ID = apiModel.status;
+            }
+            if(db.CAMPAIGN_TYPE.Find(apiModel.type) != null)
+            {
+                newCampaign.CAMPAIGN_TYPE_ID = apiModel.type;
+            }
             newCampaign.CreatedAt = DateTime.Now;
             newCampaign.CreatedBy = createdUser;
             newCampaign.Description = apiModel.description;
-            newCampaign.EndDate = apiModel.endDate;
+            newCampaign.EndDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.endDate);
             newCampaign.ExpectedResponse = apiModel.expectedResponse;
             newCampaign.ExpectedRevenue = apiModel.expectedRevenue;
             newCampaign.Name = apiModel.campaignName;
             newCampaign.NumberSent = apiModel.numberSent;
-            newCampaign.StartDate = apiModel.startDate;
+            newCampaign.StartDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startDate);
             try
             {
                 db.CAMPAIGNs.Add(newCampaign);
@@ -108,16 +115,28 @@ namespace Backend.Repository
             {
                 dbCampaign.ActualCost = apiModel.actualCost;
                 dbCampaign.BudgetedCost = apiModel.budgetedCost;
-                dbCampaign.CampaignOwner = apiModel.owner;
-                dbCampaign.CAMPAIGN_STATUS_ID = apiModel.status;
-                dbCampaign.CAMPAIGN_TYPE_ID = apiModel.type;
+                if(apiModel.owner != 0)
+                {
+                    dbCampaign.CampaignOwner = apiModel.owner;
+                }
+                if (apiModel.status != 0)
+                {
+                    dbCampaign.CAMPAIGN_STATUS_ID = apiModel.status;
+
+                }
+
+
+                if(apiModel.type != 0)
+                {
+                    dbCampaign.CAMPAIGN_TYPE_ID = apiModel.type;
+                }
                 dbCampaign.Description = apiModel.description;
-                dbCampaign.EndDate = apiModel.endDate;
+                dbCampaign.EndDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.endDate);
                 dbCampaign.ExpectedResponse = apiModel.expectedResponse;
                 dbCampaign.ExpectedRevenue = apiModel.expectedRevenue;
                 dbCampaign.Name = apiModel.campaignName;
                 dbCampaign.NumberSent = apiModel.numberSent;
-                dbCampaign.StartDate = apiModel.startDate;
+                dbCampaign.StartDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startDate);
                 dbCampaign.ModifiedAt = DateTime.Now;
                 dbCampaign.ModifiedBy = modifiedUser;
                 db.SaveChanges();
@@ -372,7 +391,7 @@ namespace Backend.Repository
                 }
                 else
                 {
-                    var result = leadList.Where(c => c.Name.ToLower().Contains(q) || c.CompanyName.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q) || c.LEAD_SOURCE.Name.ToLower().Contains(q) || c.PRIORITY.Name.ToLower().Contains(q)).OrderByDescending(c => c.ID);
+                    var result = leadList.Where(c => c.Name.ToLower().Contains(q) || c.CompanyName.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q) || c.LEAD_SOURCE != null ? c.LEAD_SOURCE.Name.ToLower().Contains(q) : false || c.PRIORITY != null ? c.LEAD_SOURCE.Name.ToLower().Contains(q) : false).OrderByDescending(c => c.ID);
                     if (result.Count() > 0)
                     {
                         Pager p = new Pager(result.Count(), currentPage, pageSize, 9999);

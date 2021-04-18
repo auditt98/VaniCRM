@@ -376,6 +376,7 @@
     <Compile Include="Domain\USER.cs" />
     <Compile Include="Domain\USER_NOTIFICATION.cs" />
     <Compile Include="Extensions\AutoMapperConfig.cs" />
+    <Compile Include="Extensions\DbDateHelper.cs" />
     <Compile Include="Extensions\EmailManager.cs" />
     <Compile Include="Extensions\Enum.cs" />
     <Compile Include="Extensions\FileManager.cs" />

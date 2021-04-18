@@ -19,7 +19,7 @@ namespace Backend.Services
             var dbCampaigns = _campaignRepository.GetAllCampaigns(query, pageSize, currentPage);
             var apiModel = new CampaignListApiModel();
 
-            apiModel.campaigns = dbCampaigns.campaigns.Select(c => new CampaignListApiModel.CampaignInfo() { id = c.ID, name = c.Name, type = c.CAMPAIGN_TYPE != null ? c.CAMPAIGN_TYPE.Name : null, endDate = c.EndDate.GetValueOrDefault(), startDate = c.StartDate.GetValueOrDefault(), status = c.CAMPAIGN_STATUS != null ? c.CAMPAIGN_STATUS.Name : null, owner = c.Owner.Username }).ToList();
+            apiModel.campaigns = dbCampaigns.campaigns.Select(c => new CampaignListApiModel.CampaignInfo() { id = c.ID, name = c.Name, type = c.CAMPAIGN_TYPE != null ? c.CAMPAIGN_TYPE.Name : "", endDate = c.EndDate.GetValueOrDefault(), startDate = c.StartDate.GetValueOrDefault(), status = c.CAMPAIGN_STATUS != null ? c.CAMPAIGN_STATUS.Name : "", owner = c.Owner.Username }).ToList();
             apiModel.pageInfo = dbCampaigns.p;
             return apiModel;
         }

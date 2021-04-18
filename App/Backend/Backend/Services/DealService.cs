@@ -31,8 +31,8 @@ namespace Backend.Services
                 dealInfo.name = deal.Name;
                 dealInfo.expectedDate = deal.ClosingDate.GetValueOrDefault();
                 dealInfo.amount = deal.Amount.GetValueOrDefault();
-                dealInfo.accountName = deal.ACCOUNT.Name;
-                dealInfo.priority = deal.PRIORITY.Name;
+                dealInfo.accountName = deal.ACCOUNT != null ? deal.ACCOUNT.Name : "";
+                dealInfo.priority = deal.PRIORITY != null ? deal.PRIORITY.Name : "";
                 dealInfo.owner = deal.Owner.FirstName + " " + deal.Owner.LastName;
                 if(deal.STAGE_HISTORY.Count > 0)
                 {
@@ -94,6 +94,7 @@ namespace Backend.Services
             var apiModel = new DealBlankApiModel();
             apiModel.priorities = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = false }).ToList();
             apiModel.stages = _dealRepository.GetAllStages().Select(c => new StageLinkApiModel() { id = c.ID, name = c.Name, probability = c.Probability.GetValueOrDefault(), selected = false, passed = false }).ToList();
+            apiModel.lostReasons = _dealRepository.GetAllLostReason().Select(c => new LostReasonLinkApiModel() { id = c.ID, name = c.Reason, selected = false }).ToList();
             return apiModel;
         }
 
