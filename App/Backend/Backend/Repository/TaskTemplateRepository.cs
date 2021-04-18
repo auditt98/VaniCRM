@@ -45,7 +45,7 @@ namespace Backend.Repository
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(templates.Count(), currentPage, pageSize, 9999);
-                return (templates.OrderByDescending(c=>c.CreatedAt).OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(), pager);
+                return (templates.OrderByDescending(c=>c.CreatedAt).OrderByDescending(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(), pager);
             }
             var result = templates.Where(c => c.Title.ToLower().Contains(q.ToLower())).OrderByDescending(c => c.CreatedAt).OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             if (result.Count() > 0)

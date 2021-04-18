@@ -236,6 +236,7 @@ namespace Backend.Models.ApiModel
         public class TaskInfo
         {
             public int id { get; set; }
+            public string title { get; set; }
             public string type { get; set; }
             public string status { get; set; }
             public DateTime startDate { get; set; }

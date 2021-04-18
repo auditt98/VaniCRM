@@ -24,9 +24,9 @@ namespace Backend.Repository
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(db.DEALs.Count(), currentPage, pageSize, 9999);
-                return (db.DEALs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                return (db.DEALs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
-            var deals = db.DEALs.Where(c => c.Name.ToLower().Contains(q) || c.PRIORITY.Name.ToLower().Contains(q) || c.ACCOUNT.Name.ToLower().Contains(q)).OrderBy(c => c.ID);
+            var deals = db.DEALs.Where(c => c.Name.ToLower().Contains(q) || c.PRIORITY.Name.ToLower().Contains(q) || c.ACCOUNT.Name.ToLower().Contains(q)).OrderByDescending(c => c.ID);
             if (deals.Count() > 0)
             {
                 Pager p = new Pager(deals.Count(), currentPage, pageSize, 9999);
@@ -287,9 +287,9 @@ namespace Backend.Repository
                 if (String.IsNullOrEmpty(q))
                 {
                     Pager pager = new Pager(allTasks.Count(), currentPage, pageSize, 9999);
-                    return (allTasks.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                    return (allTasks.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
                 }
-                var filtered = allTasks.Where(c => c.Title.Contains(q)).OrderBy(c => c.ID);
+                var filtered = allTasks.Where(c => c.Title.Contains(q)).OrderByDescending(c => c.ID);
                 if (filtered.Count() > 0)
                 {
                     Pager p = new Pager(filtered.Count(), currentPage, pageSize, 9999);
@@ -436,9 +436,9 @@ namespace Backend.Repository
                 if (String.IsNullOrEmpty(q))
                 {
                     Pager pager = new Pager(competitorList.Count(), currentPage, pageSize, 9999);
-                    return (competitorList.OrderBy(c => c.COMPETITOR.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                    return (competitorList.OrderByDescending(c => c.COMPETITOR.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
                 }
-                var filtered = competitorList.Where(c => c.COMPETITOR.Name.ToLower().Contains(q)).OrderBy(c => c.COMPETITOR.ID);
+                var filtered = competitorList.Where(c => c.COMPETITOR.Name.ToLower().Contains(q)).OrderByDescending(c => c.COMPETITOR.ID);
                 if (filtered.Count() > 0)
                 {
                     Pager p = new Pager(filtered.Count(), currentPage, pageSize, 9999);

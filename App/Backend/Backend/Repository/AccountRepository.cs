@@ -27,9 +27,9 @@ namespace Backend.Repository
 
             if (String.IsNullOrEmpty(q))
             {
-                return accounts.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
+                return accounts.OrderByDescending(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
             }
-            var result = accounts.OrderBy(c=>c.ID).Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.TaxCode.ToLower().Contains(q.ToLower())).Skip((currentPage - 1) * pageSize).Take(pageSize);
+            var result = accounts.OrderByDescending(c=>c.ID).Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.TaxCode.ToLower().Contains(q.ToLower())).Skip((currentPage - 1) * pageSize).Take(pageSize);
 
             return result;
         }
@@ -45,9 +45,9 @@ namespace Backend.Repository
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(db.ACCOUNTs.Count(), currentPage, pageSize, 9999);
-                return (db.ACCOUNTs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                return (db.ACCOUNTs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
-            var accounts = db.ACCOUNTs.Where(c => c.Name.ToLower().Contains(q) || c.Phone.Contains(q)).OrderBy(c => c.ID);
+            var accounts = db.ACCOUNTs.Where(c => c.Name.ToLower().Contains(q) || c.Phone.Contains(q)).OrderByDescending(c => c.ID);
             if (accounts.Count() > 0)
             {
                 Pager p = new Pager(accounts.Count(), currentPage, pageSize, 9999);
@@ -283,9 +283,9 @@ namespace Backend.Repository
                 if (String.IsNullOrEmpty(q))
                 {
                     Pager pager = new Pager(contactList.Count(), currentPage, pageSize, 9999);
-                    return (contactList.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                    return (contactList.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
                 }
-                var filteredContactList = contactList.Where(c => c.Name.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q)).OrderBy(c => c.ID);
+                var filteredContactList = contactList.Where(c => c.Name.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q)).OrderByDescending(c => c.ID);
                 if (filteredContactList.Count() > 0)
                 {
                     Pager p = new Pager(filteredContactList.Count(), currentPage, pageSize, 9999);

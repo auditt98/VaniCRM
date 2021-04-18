@@ -23,9 +23,9 @@ namespace Backend.Repository
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(db.COMPETITORs.Count(), currentPage, pageSize, 9999);
-                return (db.COMPETITORs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                return (db.COMPETITORs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
-            var competitors = db.COMPETITORs.Where(c => c.Name.ToLower().Contains(q)).OrderBy(c => c.ID);
+            var competitors = db.COMPETITORs.Where(c => c.Name.ToLower().Contains(q)).OrderByDescending(c => c.ID);
             if (competitors.Count() > 0)
             {
                 Pager p = new Pager(competitors.Count(), currentPage, pageSize, 9999);

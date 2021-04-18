@@ -22,9 +22,9 @@ namespace Backend.Repository
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(db.GROUPs.Count(), currentPage, pageSize, 9999);
-                return (db.GROUPs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(), pager);
+                return (db.GROUPs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(), pager);
             }
-            var groups = db.GROUPs.Where(c => c.Name.Contains(q)).OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            var groups = db.GROUPs.Where(c => c.Name.Contains(q)).OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             if (groups.Count() > 0)
             {
                 Pager p = new Pager(groups.Count(), currentPage, pageSize, 9999);

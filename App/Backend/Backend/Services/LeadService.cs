@@ -26,7 +26,7 @@ namespace Backend.Services
             var dbLeads = _leadRepository.GetAllLeads(query, pageSize, currentPage);
             var apiModel = new LeadListApiModel();
 
-            apiModel.leads = dbLeads.leads.Select(c => new LeadListApiModel.LeadInfo() { id = c.ID, name = c.Name, companyName = c.CompanyName, email = c.Email, phone = c.Phone, leadSource = c.LEAD_SOURCE.Name, leadOwner = c.Owner.FirstName + " " + c.Owner.LastName, priority = c.PRIORITY.Name }).ToList();
+            apiModel.leads = dbLeads.leads.Select(c => new LeadListApiModel.LeadInfo() { id = c.ID, name = c.Name, companyName = c.CompanyName, email = c.Email, phone = c.Phone, leadSource = c.LEAD_SOURCE != null ? c.LEAD_SOURCE.Name : "", leadOwner = c.Owner?.FirstName + " " + c.Owner?.LastName, priority = c.PRIORITY != null ? c.PRIORITY.Name : ""}).ToList();
             apiModel.pageInfo = dbLeads.p;
             return apiModel;
         }
@@ -132,7 +132,7 @@ namespace Backend.Services
                 apiModel.email = dbLead.Email;
                 apiModel.fax = dbLead.Fax;
                 apiModel.id = dbLead.ID;
-                apiModel.industry = _industryRepository.GetAllIndustries().Select(c => new IndustrySelectionApiModel() { id = c.ID, name = c.Name, selected = dbLead.INDUSTRY.ID == c.ID }).ToList();
+                apiModel.industry = _industryRepository.GetAllIndustries().Select(c => new IndustrySelectionApiModel() { id = c.ID, name = c.Name, selected = dbLead.INDUSTRY != null ? dbLead.INDUSTRY.ID == c.ID : false}).ToList();
                 apiModel.leadSource = _leadRepository.GetAllLeadSources().Select(c => new LeadSource() { id = c.ID, name = c.Name, selected = dbLead.LEAD_SOURCE != null ? dbLead.LEAD_SOURCE.ID == c.ID : false}).ToList();
                 apiModel.ModifiedAt = dbLead.ModifiedAt.GetValueOrDefault();
                 apiModel.ModifiedBy = new UserLinkApiModel() { id = dbLead.ModifiedUser?.ID, username = dbLead.ModifiedUser?.Username, email = dbLead.ModifiedUser?.Email };

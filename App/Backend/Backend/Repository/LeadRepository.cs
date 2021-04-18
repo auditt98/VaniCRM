@@ -33,9 +33,9 @@ namespace Backend.Repository
 
             if (String.IsNullOrEmpty(q))
             {
-                return leads.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                return leads.OrderByDescending(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             }
-            var result = leads.Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.CompanyName.ToLower().Contains(q.ToLower())).OrderBy(c => c.ID).Skip((currentPage - 1)*pageSize).Take(pageSize).ToList();
+            var result = leads.Where(c => c.Name.ToLower().Contains(q.ToLower()) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q.ToLower()) || c.CompanyName.ToLower().Contains(q.ToLower())).OrderByDescending(c => c.ID).Skip((currentPage - 1)*pageSize).Take(pageSize).ToList();
             return result;
         }
 
@@ -51,9 +51,9 @@ namespace Backend.Repository
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(db.LEADs.Count(), currentPage, pageSize, 9999);
-                return (db.LEADs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                return (db.LEADs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
-            var leads = db.LEADs.Where(c => c.Name.ToLower().Contains(q) || c.CompanyName.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q) || c.LEAD_SOURCE.Name.ToLower().Contains(q) || c.PRIORITY.Name.ToLower().Contains(q)).OrderBy(c => c.ID);
+            var leads = db.LEADs.Where(c => c.Name.ToLower().Contains(q) || c.CompanyName.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q) || c.LEAD_SOURCE.Name.ToLower().Contains(q) ||  c.PRIORITY == null ? false : c.PRIORITY.Name.ToLower().Contains(q)).OrderByDescending(c => c.ID);
             if(leads.Count() > 0)
             {
                 Pager p = new Pager(leads.Count(), currentPage, pageSize, 9999);
@@ -120,22 +120,48 @@ namespace Backend.Repository
             newLead.Description = apiModel.description;
             newLead.Email = apiModel.email;
             newLead.Fax = apiModel.fax;
-            newLead.INDUSTRY_ID = apiModel.industry;
+            var dbIndustry = db.INDUSTRies.Find(apiModel.industry);
+            if(dbIndustry != null)
+            {
+                newLead.INDUSTRY = dbIndustry;
+            }
             newLead.LeadOwner = apiModel.owner != 0 ? apiModel.owner : createdUser;
-            newLead.LeadSource = apiModel.leadSource;
-            newLead.LeadStatus = apiModel.leadStatus;
+            var dbLeadSource = db.LEAD_SOURCE.Find(apiModel.leadSource);
+            if(dbLeadSource != null)
+            {
+                newLead.LEAD_SOURCE = dbLeadSource;
+
+            }
+            var dbLeadStatus = db.LEAD_STATUS.Find(apiModel.leadStatus);
+            if(dbLeadStatus != null)
+            {
+                newLead.Status = dbLeadStatus;
+
+            }
             newLead.Name = apiModel.name;
             newLead.NoCall = apiModel.noCall;
             newLead.NoEmail = apiModel.noEmail;
             newLead.Phone = apiModel.phone;
-            newLead.PRIORITY_ID = apiModel.priority;
+
+            var dbPriority = db.PRIORITies.Find(apiModel.priority);
+            if(dbPriority != null)
+            {
+                newLead.PRIORITY_ID = apiModel.priority;
+            }
             newLead.Skype = apiModel.skype;
             newLead.Website = apiModel.website;
             try
             {
                 db.LEADs.Add(newLead);
                 db.SaveChanges();
+                var owner = db.USERs.Find(newLead.LeadOwner);
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Lead assigned";
+                notifyModel.content = $"Lead {newLead.Name} has been created and assigned to you.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                 return true;
+
             }
             catch
             {
@@ -158,18 +184,44 @@ namespace Backend.Repository
                 dbLead.Description = apiModel.description;
                 dbLead.Email = apiModel.email;
                 dbLead.Fax = apiModel.fax;
-                dbLead.INDUSTRY_ID = apiModel.industry;
-                dbLead.LeadSource = apiModel.leadSource;
+                if (apiModel.industry != 0)
+                {
+                    dbLead.INDUSTRY_ID = apiModel.industry;
+                }
+                if(apiModel.leadSource != 0)
+                {
+                    dbLead.LeadSource = apiModel.leadSource;
+
+                }
+                if(apiModel.priority != 0)
+                {
+                    dbLead.PRIORITY_ID = apiModel.priority;
+                }
+
                 dbLead.Name = apiModel.name;
                 dbLead.NoCall = apiModel.noCall;
                 dbLead.NoEmail = apiModel.noEmail;
                 dbLead.Phone = apiModel.phone;
-                dbLead.PRIORITY_ID = apiModel.priority;
                 dbLead.Skype = apiModel.skype;
-                dbLead.LeadStatus = apiModel.leadStatus;
+                if(apiModel.leadStatus != 0)
+                {
+                    dbLead.LeadStatus = apiModel.leadStatus;
+                }
                 dbLead.Website = apiModel.website;
-                dbLead.LeadOwner = apiModel.owner;
+                if(apiModel.owner != 0)
+                {
+                    dbLead.LeadOwner = apiModel.owner;
+                }
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(dbLead.LeadOwner);
+                var modifyUser = db.USERs.Find(modifiedUser);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Lead modified";
+                notifyModel.content = $"Lead {dbLead.Name} has been modified by {modifyUser.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, modifyUser });
                 return true;
             }
             else
@@ -185,6 +237,13 @@ namespace Backend.Repository
             {
                 dbLead.Avatar = fileName;
                 db.SaveChanges();
+
+                var owner = dbLead.Owner;
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Lead's avatar changed";
+                notifyModel.content = $"Lead {dbLead.Name}'s avatar has been modified.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                 return true;
             }
             else
@@ -209,6 +268,12 @@ namespace Backend.Repository
                         newTagItem.LEAD_ID = dbLead.ID;
                         db.TAG_ITEM.Add(newTagItem);
                         db.SaveChanges();
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Tag added to lead";
+                        notifyModel.content = $"Tag '{newTagItem.TAG.Name}' has been added to lead {dbLead.Name}.";
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { dbLead.Owner });
                         return true;
                     }
                     else
@@ -224,6 +289,12 @@ namespace Backend.Repository
                     tagItem.LEAD_ID = dbLead.ID;
                     db.TAG_ITEM.Add(tagItem);
                     db.SaveChanges();
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag added to lead";
+                    notifyModel.content = $"Tag '{tagName}' has been added to lead {dbLead.Name}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { dbLead.Owner });
                     return true;
                 }
             }
@@ -243,6 +314,7 @@ namespace Backend.Repository
                 {
                     db.TAG_ITEM.Remove(tagItem);
                     db.SaveChanges();
+
                     return true;
                 }
                 else
@@ -313,6 +385,15 @@ namespace Backend.Repository
                         db.CONTACTs.Add(newContact);
                         db.SaveChanges();
                         apiModel.newAccountId = newAccount.ID;
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Lead converted";
+                        notifyModel.content = $"Lead {dbLead.Name} has been converted to account {newAccount.Name}.";
+                        notifyModel.module = "accounts";
+                        notifyModel.moduleObjectId = newAccount.ID;
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { dbLead.Owner });
+
                         return apiModel;
                     }
                     else
@@ -369,6 +450,14 @@ namespace Backend.Repository
                     db.CONTACTs.Add(newContact);
                     db.SaveChanges();
                     apiModel.newAccountId = newAccount.ID;
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Lead converted";
+                    notifyModel.content = $"Lead {dbLead.Name} has been converted to account {newAccount.Name}.";
+                    notifyModel.module = "accounts";
+                    notifyModel.moduleObjectId = newAccount.ID;
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { dbLead.Owner });
                     return apiModel;
                 }
                 

@@ -26,9 +26,9 @@ namespace Backend.Repository
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(db.USERs.Count(), currentPage, pageSize, 9999);
-                return (db.USERs.OrderBy(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                return (db.USERs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
             }
-            var users = db.USERs.Where(c => c.Username.ToLower().Contains(q) || c.FirstName.ToLower().Contains(q) || c.LastName.ToLower().Contains(q) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q) || c.Skype.ToLower().Contains(q)).OrderBy(c => c.ID);
+            var users = db.USERs.Where(c => c.Username.ToLower().Contains(q) || c.FirstName.ToLower().Contains(q) || c.LastName.ToLower().Contains(q) || c.Phone.Contains(q) || c.Email.ToLower().Contains(q) || c.Skype.ToLower().Contains(q)).OrderByDescending(c => c.ID);
             if (users.Count() > 0)
             {
                 Pager p = new Pager(users.Count(), currentPage, pageSize, 9999);
@@ -48,10 +48,10 @@ namespace Backend.Repository
             
             if (String.IsNullOrEmpty(q))
             {
-                return db.USERs.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+                return db.USERs.OrderByDescending(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             }
             var result = db.USERs.Where(c => c.Username.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.ToLower().Contains(q) || c.Skype.ToLower().Contains(q) || c.FirstName.ToLower().Contains(q) || c.LastName.ToLower().Contains(q));
-            return result.OrderBy(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
+            return result.OrderByDescending(c=>c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize);
         }
 
         public USER GetById(int id = 0)
