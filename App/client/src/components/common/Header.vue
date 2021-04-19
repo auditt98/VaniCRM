@@ -5,7 +5,7 @@
             aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="color: black;">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="nav-item mx-auto order-last" @click="testNotification();">
+    <div class="nav-item mx-auto order-last">
       <div class="header-avatar-icon">
         <router-link active-class="active" :to="{ name: 'Calendar'}" class="nav-link"> <i class="fa fa-calendar-o" aria-hidden="true"></i> </router-link>
       </div>

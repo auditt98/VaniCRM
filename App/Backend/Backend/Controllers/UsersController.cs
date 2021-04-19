@@ -726,7 +726,7 @@ namespace Backend.Controllers
                         var dbUser = db.USERs.Find(id);
                         if(dbUser != null)
                         {
-                            var accounts = _accountService.GetUserAccounts(dbUser.ID, query, currentPage, pageSize).Select(c => new UserDetailApiModel.A { id = c.ID, name = c.Name, email = c.Email, phone = c.Phone, website = c.Website, taxCode = c.TaxCode, isOwner = c.Owner.ID == dbUser.ID, isCollaborator = c.Collaborator.ID == dbUser.ID });
+                            var accounts = _accountService.GetUserAccounts(dbUser.ID, query, currentPage, pageSize).Select(c => new UserDetailApiModel.A { id = c.ID, name = c.Name, email = c.Email, phone = c.Phone, website = c.Website, taxCode = c.TaxCode, isOwner = c.Owner.ID == dbUser.ID, isCollaborator = c.Collaborator != null ? c.Collaborator.ID == dbUser.ID : false });
                             Pager pageInfo;
                             responseData = ResponseFormat.Success;
 
@@ -812,7 +812,7 @@ namespace Backend.Controllers
                         var dbUser = db.USERs.Find(id);
                         if (dbUser != null)
                         {
-                            var contacts = _contactService.GetUserContacts(dbUser.ID, query, currentPage, pageSize).Select(c => new UserDetailApiModel.C { id = c.ID, name = c.Name, email = c.Email, phone = c.Phone, mobile = c.Mobile, skype = c.Skype, isOwner = c.Owner.ID == dbUser.ID, isCollaborator = c.Collaborator.ID == dbUser.ID });
+                            var contacts = _contactService.GetUserContacts(dbUser.ID, query, currentPage, pageSize).Select(c => new UserDetailApiModel.C { id = c.ID, name = c.Name, email = c.Email, phone = c.Phone, mobile = c.Mobile, skype = c.Skype, isOwner = c.Owner.ID == dbUser.ID, isCollaborator = c.Collaborator != null ? c.Collaborator.ID == dbUser.ID : false });
                             Pager pageInfo;
                             responseData = ResponseFormat.Success;
 
