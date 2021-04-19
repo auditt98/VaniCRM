@@ -82,6 +82,11 @@ namespace Backend.Repository
             newContact.DepartmentName = apiModel.departmentName;
             newContact.Birthday = apiModel.birthday;
 
+            if(apiModel.account != 0)
+            {
+                newContact.ACCOUNT_ID = apiModel.account;
+            }
+
             if(apiModel.priority != 0)
             {
                 newContact.PRIORITY_ID= apiModel.priority;
@@ -177,6 +182,11 @@ namespace Backend.Repository
                     dbContact.PRIORITY_ID = apiModel.priority;
 
                 }
+                if (apiModel.account != 0)
+                {
+                    dbContact.ACCOUNT_ID = apiModel.account;
+                }
+
                 dbContact.NoEmail = apiModel.noEmail;
                 dbContact.NoCall = apiModel.noCall;
                 dbContact.Skype = apiModel.skype;
