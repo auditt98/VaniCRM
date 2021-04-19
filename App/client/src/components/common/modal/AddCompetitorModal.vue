@@ -12,28 +12,36 @@
           <slot name="body">
             <table class="col-sm-12 table-in-detail">
               <tr class="row mt-2" :class="{ 'form-group--error': $v.competitor.name.$error }">
-                <td class="col-sm-3">Name</td>
+                <td class="col-sm-2 text-left ml-3">Name</td>
                 <td class="col-sm-6"><input class="w-100 form-control" type="text" v-model.trim="competitor.name"></td>
               </tr>
               <tr class="row mt-2" :class="{ 'form-group--error': $v.competitor.website.$error }">
-                <td class="col-sm-3">Website</td>
+                <td class="col-sm-2 text-left ml-3">Website</td>
                 <td class="col-sm-6"><input class="w-100 form-control" type="text" v-model.trim="competitor.website"></td>
               </tr>
               <tr class="row mt-2">
-                <td class="col-sm-3">Threat</td>
-                <td class="col-sm-6"><input class="w-100 form-control" type="text" v-model.trim="competitor.threat"></td>
+                <td class="col-sm-2 text-left ml-3">Threat</td>
+<!--                <td class="col-sm-6"><input class="w-100 form-control" type="text" v-model.trim="competitor.threat"></td>-->
+                <td class="col-sm-6">
+                  <select class="form-control py-0 w-100" id="Priority" v-model.trim="competitor.threat">
+                    <option :value="'LOW'">LOW</option>
+                    <option :value="'MEDIUM'">MEDIUM</option>
+                    <option :value="'HIGH'">HIGH</option>
+                    <option :value="'SEND'">SEND</option>
+                  </select>
+                </td>
               </tr>
               <tr class="row mt-2">
-                <td class="col-sm-3">Strengths</td>
-                <td class="col-sm-9 text-left"><input v-model.trim="competitor.strengths" class="w-100 form-control" type="text" placeholder="Type something here..."></td>
+                <td class="col-sm-2 text-left ml-3">Strengths</td>
+                <td class="col-sm-8 text-left"><input v-model.trim="competitor.strengths" class="w-100 form-control" type="text" placeholder="Type something here..."></td>
               </tr>
               <tr class="row mt-2">
-                <td class="col-sm-3">Weaknesses</td>
-                <td class="col-sm-9 text-left"><input v-model.trim="competitor.weaknesses" class="w-100 form-control"  type="text" placeholder="Type something here..."></td>
+                <td class="col-sm-2 text-left ml-3">Weaknesses</td>
+                <td class="col-sm-8 text-left"><input v-model.trim="competitor.weaknesses" class="w-100 form-control"  type="text" placeholder="Type something here..."></td>
               </tr>
               <tr class="row mt-2">
-                <td class="col-sm-3">Suggestions</td>
-                <td class="col-sm-9 text-left"><input v-model.trim="competitor.suggestions" class="w-100 form-control"  type="text" placeholder="Type something here..."></td>
+                <td class="col-sm-2 text-left ml-3">Suggestions</td>
+                <td class="col-sm-8 text-left"><input v-model.trim="competitor.suggestions" class="w-100 form-control"  type="text" placeholder="Type something here..."></td>
               </tr>
             </table>
           </slot>
@@ -41,8 +49,8 @@
 
         <footer class="modal-footer text-center">
           <slot name="footer">
-            <span @click="save"><VButton :data="btnSend"/></span>
             <span @click="close"><VButton :data="btnCancel"/></span>
+            <span @click="save"><VButton :data="btnSend"/></span>
           </slot>
         </footer>
       </div>
@@ -51,10 +59,10 @@
 </template>
 
 <script>
-import VButton from "@/components/common/VButton";
 import {required} from "vuelidate/lib/validators";
 import {dealService} from "@/service/deal.service";
 import VLoading from "@/components/common/VLoading";
+import VButton from "@/components/common/VButton";
 export default {
   name: "AddCompetitorModal",
   props: {
@@ -70,7 +78,7 @@ export default {
       }
     }
   },
-  components: {VLoading, VButton},
+  components: {VButton, VLoading},
   data () {
     return {
       competitor: {
@@ -84,8 +92,8 @@ export default {
       },
       loading: false,
       dealId: null,
-      btnCancel: {btnClass: 'btn-white px-3 mr-4', icon: 'fa-times', text: 'Cancel'},
-      btnSend: {btnClass: 'btn-red px-4', icon: 'fa-pencil', text: 'Send'},
+      btnCancel: {btnClass: 'btn-white px-3 mr-4', icon: 'fa-times-circle', text: 'Cancel'},
+      btnSend: {btnClass: 'btn-red px-4', icon: 'fa-floppy-o', text: 'Save'},
     }
   },
   methods: {
@@ -124,5 +132,11 @@ export default {
 <style scoped>
   input:focus{
     outline: none;
+  }
+  .modal {
+    width: 50%;
+  }
+  .modal-header h4 {
+    color: black;
   }
 </style>

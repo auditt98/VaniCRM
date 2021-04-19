@@ -1,6 +1,6 @@
 <template>
   <div class="w-100">
-    <div class="table-in-detail p-3">
+    <div class="table-in-detail p-3" v-if="pageConfig && pageConfig.totalPage && pageConfig.totalPage > 0">
       <div class="row mx-2">
         <h4 :class="{'col-8': !tags, 'col-2': tags}"><strong>{{ title }}</strong></h4>
         <div class="row col-6" v-if="tags">
@@ -37,6 +37,17 @@
           </div>
         </div>
         <slot name="pagination"></slot>
+      </div>
+    </div>
+    <div class="table-in-detail p-3" v-else style="min-height: 150px">
+      <div class="row mx-2">
+        <h4 :class="'col-12'"><strong>{{ title }}</strong></h4>
+        <div class="row col-12 mt-3">
+          <span class="col-2 pt-2">No record found</span>
+          <div class="col-4 text-left">
+            <slot name="button"></slot>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -88,6 +99,8 @@ export default {
 
 .table-in-detail-bottom {
   background: #FFE9E4;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .table-in-detail-bottom select, .table-in-detail-bottom option {

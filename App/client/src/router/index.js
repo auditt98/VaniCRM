@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import {authenticationService} from "@/service/authentication.service";
 
 Vue.use(VueRouter)
 
@@ -125,7 +126,7 @@ const routes = [
     },
     {
         path: '/users',
-        name: 'Users',
+        name: 'UserList',
         component: () => import('../components/user/UserList.vue'),
         meta: { title: 'List User' }
     },
@@ -201,13 +202,13 @@ const routes = [
         path: '/dashboard/sale',
         name: 'DashboardSale',
         component: () => import('../components/dashboard/Dashboard.vue'),
-        meta: { title: 'Dashboard Sale' }
+        meta: { title: 'Dashboard Sale', group: [2, 3] }
     },
     {
         path: '/dashboard/marketing',
         name: 'DashboardMarketing',
         component: () => import('../components/dashboard/Dashboard.vue'),
-        meta: { title: 'Dashboard Marketing' }
+        meta: { title: 'Dashboard Marketing', group: [1, 3] }
     },
     {
         path: '/login',
@@ -280,17 +281,25 @@ const router = new VueRouter({
 
 export default router
 router.beforeEach((to, from, next) => {
-    /*const {authorize} = to.meta;
+    const authorize = to.meta;
     const currentUser = authenticationService.currentUserValue;
-    if (authorize) {
+    if (authorize && authorize.group) {
         if (!currentUser) {
             return next({path: '/login', query: {returnUrl: to.path}});
         }
-        if (authorize.length && !authorize.includes(currentUser.group)) {
-            alert('Khong co quyen!!');
-            return next({path: '/'});
+        console.log(authorize.group)
+        console.log(currentUser.group)
+        if (authorize.group.length && !authorize.group.includes(currentUser.group)) {
+            if (to.name === 'DashboardSale' && currentUser.group === 1) {
+                return next({name: 'DashboardMarketing'});
+            } else if (to.name === 'DashboardMarketing' && currentUser.group === 2) {
+                return next({name: 'DashboardSale'});
+            } else {
+                alert('Khong co quyen!!');
+                return next({path: '/'});
+            }
         }
-    }*/
+    }
 
     next();
 })

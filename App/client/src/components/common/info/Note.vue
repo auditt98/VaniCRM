@@ -16,7 +16,7 @@
       <div class="row">
         <div class="list-file-upload mt-3 ml-2">
           <ul v-if="files && files.length > 0">
-            <li v-for="(f, i) in files" :key="i">{{f.name}}</li>
+            <li v-for="(f, i) in files" @click="download(f)" class="cursor-pointer" title="Click to download" :key="i">{{f.name}}</li>
           </ul>
         </div>
       </div>
@@ -80,6 +80,13 @@ export default {
     },
     upload(event) {
       this.files = [...this.files, ...event.target.files];
+    },
+    download(file) {
+      let link = document.createElement('a')
+      link.href = window.URL.createObjectURL(file)
+      link.download = file.name;
+      link.click();
+      link.remove();
     },
     submit() {
       if (!this.text || !this.text.trim()) {
@@ -173,5 +180,9 @@ i {
 }
 .icon-delete {
   display: none;
+}
+.cursor-pointer:hover {
+  color: black;
+  text-decoration: underline;
 }
 </style>

@@ -32,8 +32,20 @@
         <i class="fa fa-bell-o notificationIcon has-badge" aria-hidden="true"></i><span class="badge badge-main">{{unreadCount}}</span>
       </div>
     </div>
+<!--    -->
     <div class="nav-item mx-auto order-last dropdown">
-      <a v-if="currentUser" class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
+      <a class="nav-link dropdown-toggle ml-3 mr-0" href="#" id="navbarDropdown9" role="button" data-toggle="dropdown"
+         aria-haspopup="true" aria-expanded="false">
+        <img src="images/icon-settings.png" alt="">
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown9">
+        <router-link :to="{ name: 'UserList'}" class="nav-link">User</router-link>
+        <router-link :to="{ name: 'GroupList'}" class="nav-link">Group</router-link>
+      </div>
+    </div>
+<!--    -->
+    <div class="nav-item mx-auto order-last dropdown">
+      <a v-if="currentUser" class="nav-link dropdown-toggle mx-0" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown"
          aria-haspopup="true" aria-expanded="false">
         {{currentUser.username}}
       </a>
@@ -55,9 +67,9 @@
              aria-haspopup="true" aria-expanded="false">
             Dashboard
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-            <router-link :to="{ name: 'DashboardSale'}" class="nav-link">Dashboard Sale</router-link>
-            <router-link :to="{ name: 'DashboardMarketing'}" class="nav-link">Dashboard Marketing</router-link>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown1" v-if="currentUser">
+            <router-link v-if="[3, 2].indexOf(currentUser.group) > -1" :to="{ name: 'DashboardSale'}" class="nav-link">Dashboard Sale</router-link>
+            <router-link v-if="[3, 1].indexOf(currentUser.group) > -1" :to="{ name: 'DashboardMarketing'}" class="nav-link">Dashboard Marketing</router-link>
           </div>
         </li>
         <li class="nav-item">
@@ -178,7 +190,8 @@ export default {
             });
         })
         .fail(function(){ console.log('Could not connect'); });
-  },created() {
+  },
+  created() {
     this.currentUser = authenticationService.currentUserValue;
   },
   computed: {
@@ -359,5 +372,8 @@ i {
 .dropdown-menu a {
   font-size: 15px !important;
   margin: 0 !important;
+}
+#navbarDropdown9::after {
+  display: none;
 }
 </style>

@@ -211,6 +211,7 @@ export default {
         return;
       }
       if (!this.lead.id) {
+        this.lead.owner = this.lead.owner ? this.lead.owner.id : null;
         leadService.create(this.lead)
             .then(res => {
               if (res) {

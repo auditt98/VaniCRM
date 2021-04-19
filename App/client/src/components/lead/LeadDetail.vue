@@ -7,10 +7,10 @@
         <div class="col-sm-8">
           <router-link :to="{name: 'LeadList'}"><VButton :data="btnBack"/></router-link>
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
+        <div class="col-sm-4 d-flex justify-content-end">
           <span @click="convertToAccount"><VButton :data="btnConvert"/></span>
-          <span @click="remove"><VButton :data="btnDelete"/></span>
-          <router-link :to="{name: 'LeadUpdate', query: {id: lead.id}}"><VButton :data="btnEdit"/></router-link>
+          <span class="ml-4" @click="remove"><VButton :data="btnDelete"/></span>
+          <router-link class="ml-4" :to="{name: 'LeadUpdate', query: {id: lead.id}}"><VButton :data="btnEdit"/></router-link>
         </div>
       </div>
       <div class="row mt-3">
