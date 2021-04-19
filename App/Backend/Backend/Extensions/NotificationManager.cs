@@ -19,14 +19,15 @@ namespace Backend.Extensions
 
         public static void SendNotification(NotificationApiModel apiModel, List<USER> users)
         {
-            var notiCreated = _notificationRepository.Create(apiModel, users);
+            var sendTo = users.Distinct().ToList();
+            var notiCreated = _notificationRepository.Create(apiModel, sendTo);
             //send notification
             if (notiCreated.isCreated)
             {
                 //send to person who performs the delete
                 apiModel.Info();
                 apiModel.id = notiCreated.notiId;
-                NotificationHub.pushNotification(apiModel, users.Select(c => c.ID).ToList());
+                NotificationHub.pushNotification(apiModel, sendTo.Select(c => c.ID).ToList());
             }
         }
 

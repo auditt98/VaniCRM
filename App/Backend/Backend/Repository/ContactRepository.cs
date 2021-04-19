@@ -107,6 +107,14 @@ namespace Backend.Repository
             {
                 db.CONTACTs.Add(newContact);
                 db.SaveChanges();
+                var owner = db.USERs.Find(newContact.ContactOwner);
+                var collaborator = db.USERs.Find(newContact.ContactCollaborator);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Contact assigned";
+                notifyModel.content = $"Contact {newContact.Name} has been created and assigned to you.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator });
                 return true;
             }
             catch

@@ -237,13 +237,6 @@ namespace Backend.Repository
             {
                 dbLead.Avatar = fileName;
                 db.SaveChanges();
-
-                var owner = dbLead.Owner;
-                var notifyModel = new NotificationApiModel();
-                notifyModel.title = "Lead's avatar changed";
-                notifyModel.content = $"Lead {dbLead.Name}'s avatar has been modified.";
-                notifyModel.createdAt = DateTime.Now;
-                NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                 return true;
             }
             else

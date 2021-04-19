@@ -45,7 +45,6 @@ namespace Backend.Repository
 
         public (bool isCreated, int notiId) Create(NotificationApiModel notification, List<USER> users)
         {
-            users = users.Distinct().ToList();
             var newNotification = new NOTIFICATION();
             newNotification.CreatedAt = DateTime.Now;
             newNotification.Module = notification.module;
