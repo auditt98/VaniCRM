@@ -271,7 +271,7 @@ export default {
     upload() {
       let formData = new FormData();
       formData.append("file", this.files);
-      contactService.changeAvatar(formData, 1).then(res => {
+      contactService.changeAvatar(formData, this.contact.id).then(res => {
         console.log(res);
       }).catch(err => alert(err))
     },
