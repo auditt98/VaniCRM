@@ -44,10 +44,11 @@
 </template>
 
 <script>
-import { Calendar  } from 'dayspan';
+import { Calendar, Day, Time } from 'dayspan';
 import Vue from 'vue';
 import VLoading from "@/components/common/VLoading";
 import {userService} from "@/service/user.service";
+import {RRule} from 'rrule';
 
 
 export default {
@@ -84,12 +85,12 @@ export default {
           this.loading = true;
           let query = {
             currentPage: 1,
-            pageSize: 10
+            pageSize: 100
           };
           userService.getAllTasks(this.currentUser.id, query).then(res => {
             if (res && res.data) {
               this.tasks = res.data.tasks;
-              /*this.tasks.forEach(task => {
+              this.tasks.forEach(task => {
                 if (task.rrule) {
                   const rrule = RRule.fromString(task.rrule);
                   if (rrule) {
@@ -111,7 +112,7 @@ export default {
                     }
                   }
                 }
-              })*/
+              })
               this.loadState();
             }
           }).finally(() => {
