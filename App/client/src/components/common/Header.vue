@@ -36,7 +36,7 @@
     <div class="nav-item mx-auto order-last dropdown">
       <a class="nav-link dropdown-toggle ml-3 mr-0" href="#" id="navbarDropdown9" role="button" data-toggle="dropdown"
          aria-haspopup="true" aria-expanded="false">
-        <img src="images/icon-settings.png" alt="">
+        <img src="../../assets/icon-settings.png" alt="">
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown9">
         <router-link :to="{ name: 'UserList'}" class="nav-link">User</router-link>
@@ -49,8 +49,8 @@
          aria-haspopup="true" aria-expanded="false">
         {{currentUser.username}}
       </a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#">View profile</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown" v-if="currentUser">
+        <router-link :to="{ name: 'UserPage', query: {id: currentUser.id}}" class="dropdown-item">View Profile</router-link>
         <a class="dropdown-item" @click="logout()" style="cursor: pointer;">Logout</a>
 
       </div>

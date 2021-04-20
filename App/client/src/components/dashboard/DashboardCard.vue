@@ -2,7 +2,11 @@
   <div>
     <div class="card dashboard-card mb-3">
       <div class="card-body">
-        <h5 class="card-title">{{data.title}}</h5>
+        <h5 class="card-title">
+          <router-link :to="{name: data.routeName, query: {id: data.id}}">
+          {{data.title}}
+          </router-link>
+        </h5>
         <p class="card-text">{{data.title1}}</p>
         <p class="card-text">{{data.title2}}</p>
         <span v-if="data.tags" class="d-flex flex-wrap">
@@ -32,7 +36,7 @@ export default {
   cursor: pointer;
   background: #ccc;
 }
-.dashboard-card a {
+.dashboard-card span a {
   background: #F12B2C;
   border-radius: 100px;
   color: white;
@@ -43,6 +47,8 @@ export default {
   margin-top: 3px;
   text-align: center;
 }
-
+ a{
+   color: black;
+ }
 
 </style>

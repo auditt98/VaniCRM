@@ -197,28 +197,31 @@ export default {
           name: item.deal.name,
           account: item.deal.account ? item.deal.account.id : null,
           priority: item.deal.priority,
-          stage: item.deal.id
+          stage: item.id
         };
         dealService.create(deal)
             .then(res => {
-              if (res && res.data) {
+              if (res && res.status === 'success') {
                 alert(res.message);
+                item.isAdd = false;
                 this.loadListDashboardSale();
               }
             }).finally(() => {
-          this.loading = false;
+          // this.loading = false;
         })
       } else if (type === 'LEAD') {
         leadService.create(item).then(res => {
-          if (res && res.data) {
+          if (res) {
             alert(res.message);
+            item.isAdd = false;
             this.loadLeads();
           }
         })
       } else if (type === 'ACCOUNT') {
         accountService.create(item).then(res => {
-          if (res && res.data) {
+          if (res) {
             alert(res.message);
+            item.isAdd = false;
             this.loadAccounts();
           }
         })
@@ -271,7 +274,8 @@ export default {
                   s.deals ? s.deals.map(d => {
                     return {
                       id: d.dealID, title: d.dealName, title1: d.accountName,
-                      title2: d.ownerUsername, type: s.stageID, tags: d.tags
+                      title2: d.ownerUsername, type: s.stageID, tags: d.tags,
+                      routeName: 'DealDetail'
                     }
                   }) : []
             }
@@ -295,7 +299,8 @@ export default {
         if (res && res.data) {
           this.leads = res.data.leads.map((d) => {
             return {
-              id: d.id, title: d.name, type: 1, tags: [],title1: d.phone, title2: d.email
+              id: d.id, title: d.name, type: 1, tags: [],title1: d.phone, title2: d.email,
+              routeName: 'LeadDetail'
             }
           });
         }
@@ -315,7 +320,8 @@ export default {
             if (res && res.data) {
               this.accounts = res.data.accounts.map((d) => {
                 return {
-                  id: d.id, title: d.name, type: 2, tags: [],title1: d.phone, title2: d.website
+                  id: d.id, title: d.name, type: 2, tags: [],title1: d.phone, title2: d.website,
+                  routeName: 'AccountDetail'
                 }
               });
             }
@@ -447,9 +453,9 @@ i {
   line-height: 0.4;
 }
 .add-campaign /deep/ button {
-  padding: 5px 10px;
+  padding: 4px 5px;
   line-height: 1;
-  font-size: 0.8rem;
+  font-size: 0.5rem;
 }
 /deep/ .vs__search {
   width: unset;

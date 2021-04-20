@@ -4,7 +4,7 @@
       <div class="user-info-avatar" v-if="image">
         <img class="w-100" :src="image" alt="">
       </div>
-      <div class="user-info-avatar" v-else>
+      <div class="user-info-avatar" v-if="isShowAvatar">
         <img class="w-100" src="../../../assets/avatar-header.jpeg" alt="">
       </div>
       <div class="user-info-detail ml-3">
@@ -34,7 +34,8 @@ export default {
     image: String,
     title: String,
     titleDetail: String,
-    tags: Array
+    tags: Array,
+    isShowAvatar: Boolean
   },
   data() {
     return{

@@ -22,7 +22,7 @@
         </div>
         <div class="col-sm-10">
           <div class="row" id="tags">
-            <UserInfo ref="userInfo" @create-tag="createTag" :tags="deal.tags"
+            <UserInfo ref="userInfo" @create-tag="createTag" :tags="deal.tags" :is-show-avatar="false"
                       :title="'Tags'"/>
           </div>
           <div class="row mt-3" id="timeline">

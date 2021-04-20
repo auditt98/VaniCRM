@@ -53,7 +53,7 @@
               <template slot="body">
                 <tbody v-if="taskLst && taskLst.length > 0">
                 <tr v-for="(t, i) in taskLst" :key="i">
-                  <td></td>
+                  <td>{{t.title}}</td>
                   <td>{{ t.type }}</td>
                   <td>{{ t.status }}</td>
                   <td>{{ t.startDate | formatDate }}</td>
@@ -142,7 +142,7 @@ export default {
           this.loadTaskByContact();
           mapValue(this.dataLeftBaseInfo, [
             this.contact.owner ? this.contact.owner.username : '',
-            this.contact.account ? this.contact.account.username : '',
+            this.contact.account ? this.contact.account.name : '',
             `<i class="fa fa-envelope-o"></i> <a href="mailto:${this.contact.email}">${this.contact.email}</a>`,
             `<i class="fa fa-phone"></i> ${this.contact.phone}`
           ]);

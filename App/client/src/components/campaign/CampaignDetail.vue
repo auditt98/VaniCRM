@@ -137,8 +137,8 @@ export default {
               this.campaign.actualCost
           ]);
           mapValue(this.dataLeftDetail, [
+            this.campaign.campaignName,
             this.campaign.owner ? this.campaign.owner.username : '',
-            this.campaign.name,
             formatDate(this.campaign.startDate, 'dd/MM/yyyy HH:mm'),
             formatDate(this.campaign.endDate, 'dd/MM/yyyy HH:mm'),
             this.campaign.actualCost,
