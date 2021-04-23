@@ -781,7 +781,7 @@ namespace Backend.Repository
 
                 if (apiModel.owner != 0) { dbTask.TaskOwner = apiModel.owner; }
 
-                dbTask.EndOn = apiModel.dueDate;
+                dbTask.EndOn = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.dueDate);
                 dbTask.CONTACT = null;
                 dbTask.LEAD = null;
                 dbTask.ACCOUNT = null;

@@ -24,6 +24,8 @@ import Notifications from 'vue-notification'
 import vSelect from 'vue-select'
 import Vuelidate from 'vuelidate'
 import velocity      from 'velocity-animate'
+import VueExpandableImage from 'vue-expandable-image'
+Vue.use(VueExpandableImage)
 
 Vue.use(Notifications, { velocity })
 Vue.use(Vuetify);

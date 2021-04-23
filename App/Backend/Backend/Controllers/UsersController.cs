@@ -991,6 +991,7 @@ namespace Backend.Controllers
                                 var t = new UserDetailApiModel.T();
                                 t.title = task.Title;
                                 t.rrule = task.RRule;
+
                                 if(task.TASK_STATUS != null)
                                 {
                                     t.status = task.TASK_STATUS.Name;
@@ -998,7 +999,7 @@ namespace Backend.Controllers
                                 }
                                 if(task.PRIORITY != null)
                                 {
-                                    t.priotity = task.PRIORITY.Name;
+                                    t.priority = task.PRIORITY.Name;
 
                                 }
                                 if (task.DueDate.HasValue)
@@ -1018,6 +1019,28 @@ namespace Backend.Controllers
                                     if (call.TASK_TEMPLATE.DueDate.HasValue)
                                     {
                                         t.endDate = call.TASK_TEMPLATE.DueDate.Value;
+
+                                    }
+
+                                    if(call.CONTACT != null)
+                                    {
+                                        t.contact = new ContactLinkApiModel() { email = call.CONTACT.Email, id = call.CONTACT.ID, name = call.CONTACT.Name };
+
+                                    }
+
+                                    if(call.LEAD != null)
+                                    {
+                                        t.lead = new LeadLinkApiModel() { email = call.LEAD.Email, id = call.LEAD.ID, name = call.LEAD.Name };
+                                    }
+
+                                    if(call.ACCOUNT != null)
+                                    {
+                                        t.relatedAccount = new AccountLinkApiModel() { email = call.ACCOUNT.Email, id = call.ACCOUNT.ID, name = call.ACCOUNT.Name };
+                                    }
+
+                                    if(call.CAMPAIGN != null)
+                                    {
+                                        t.relatedCampaign = new CampaignLinkApiModel() { id = call.CAMPAIGN.ID, name = call.CAMPAIGN.Name };
 
                                     }
                                 } else if(task.MEETINGs.Count > 0)
@@ -1050,6 +1073,28 @@ namespace Backend.Controllers
                                         t.endDate = taskT.TASK_TEMPLATE.DueDate.Value;
 
                                     }
+
+                                    if (taskT.CONTACT != null)
+                                    {
+                                        t.contact = new ContactLinkApiModel() { email = taskT.CONTACT.Email, id = taskT.CONTACT.ID, name = taskT.CONTACT.Name };
+
+                                    }
+
+                                    if (taskT.LEAD != null)
+                                    {
+                                        t.lead = new LeadLinkApiModel() { email = taskT.LEAD.Email, id = taskT.LEAD.ID, name = taskT.LEAD.Name };
+                                    }
+
+                                    if (taskT.ACCOUNT != null)
+                                    {
+                                        t.relatedAccount = new AccountLinkApiModel() { email = taskT.ACCOUNT.Email, id = taskT.ACCOUNT.ID, name = taskT.ACCOUNT.Name };
+                                    }
+
+                                    if (taskT.CAMPAIGN != null)
+                                    {
+                                        t.relatedCampaign = new CampaignLinkApiModel() { id = taskT.CAMPAIGN.ID, name = taskT.CAMPAIGN.Name };
+
+                                    }
                                 }
                                 tasks.Add(t);
                             }
@@ -1058,25 +1103,6 @@ namespace Backend.Controllers
                                 tasks,
                                 pageInfo = taskTemplates.pageInfo
                             };
-                            //Pager pageInfo;
-                            //responseData = ResponseFormat.Success;
-
-                            //if (tasks.Count() > 0)
-                            //{
-                            //    if (pageSize == 0)
-                            //    {
-                            //        pageInfo = new Pager(tasks.Count(), currentPage, tasks.Count());
-                            //    }
-                            //    else
-                            //    {
-                            //        pageInfo = new Pager(tasks.Count(), currentPage, pageSize);
-                            //    }
-                            //    responseData.data = new
-                            //    {
-                            //        tasks,
-                            //        pageInfo
-                            //    };
-                            //}
                             response.StatusCode = HttpStatusCode.OK;
                         }
                         else

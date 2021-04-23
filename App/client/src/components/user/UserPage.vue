@@ -98,7 +98,7 @@
             </TableInDetail>
           </div>
           <div class="row mt-3" id="allContacts">
-            <TableInDetail :header-columns="contractColumns" :data="contractLst" :title="'All Contracts'"
+            <TableInDetail :header-columns="contractColumns" :data="contractLst" :title="'All Contacts'"
                            :page-config="{page: currentPageContact, pageSize: pageSizeContact, totalItems: totalItemContact, totalPage: totalPageContact}"
                            @page-size-change="onPageSizeChange($event, 'CONTACT')"
                            @go-to-page="goToPage($event, 'CONTACT')">

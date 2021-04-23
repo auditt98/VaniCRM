@@ -5,7 +5,7 @@
       <VLoading :loading="loading"/>
       <div class="row ">
         <div class="col-sm-8">
-          <router-link :to="{name: 'LeadList'}"><VButton :data="btnBack"/></router-link>
+          <router-link :to="{name: 'TaskList'}"><VButton :data="btnBack"/></router-link>
         </div>
         <div class="col-sm-4 d-flex justify-content-between">
           <span @click="remove"><VButton :data="btnDelete"/></span>

@@ -165,8 +165,13 @@ namespace Backend.Models.ApiModel
             public string status { get; set; }
             public DateTime startDate { get; set; }
             public DateTime endDate { get; set; }
-            public string priotity { get; set; }
+            public string priority { get; set; }
             public string rrule { get; set; }
+            public LeadLinkApiModel lead { get; set; }
+            public ContactLinkApiModel contact { get; set; }
+            public AccountLinkApiModel relatedAccount { get; set; }
+            public CampaignLinkApiModel relatedCampaign { get; set; }
+            public DealLinkApiModel relatedDeal { get; set; }
         }
 
     }

@@ -2,7 +2,7 @@
   <div class="w-100 ">
     <div class="user-info d-flex p-3">
       <div class="user-info-avatar" v-if="image">
-        <img class="w-100" :src="image" alt="">
+        <expandable-image style="background-color: rgba(0, 0, 0, 0.9); " :close-on-background-click='true' class="w-100" :src="image" alt="" />
       </div>
       <div class="user-info-avatar" v-if="isShowAvatar">
         <img class="w-100" src="../../../assets/avatar-header.jpeg" alt="">

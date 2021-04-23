@@ -39,9 +39,9 @@ export default {
   border-radius: 30px;
   overflow: hidden;
   max-width: 270px;
-  position: fixed;
+  /* position: fixed;
   top: 17%;
-  width: 100%;
+  width: 100%; */
 }
 
 .menu-left .list-group {

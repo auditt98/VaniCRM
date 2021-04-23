@@ -19,7 +19,17 @@ export const authenticationService = {
 };
 
 function login(email, password) {
-    return fetch(`${config.apiUrl + 'login'}`, requestOptions.post({ email, password }))
+    return fetch(`${config.apiUrl + 'login'}`, 
+                //requestOptions.post({ email, password }
+                {
+                    method: "POST", 
+                    credentials: 'include', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({email, password}),
+                }
+        )
         .then(handleResponse)
         .then(res => {
             const user = res.data.user;
