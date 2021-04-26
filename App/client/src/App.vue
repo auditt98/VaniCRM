@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <Header v-if="!['ResetPassword', 'LoginPage', 'About'].includes($route.name)" />
+    <Header v-if="!['ResetPassword', 'LoginPage', 'About'].includes($route.name)"/>
+    
       <router-view :key="$route.fullPath"></router-view>
     <!-- <router-view/> -->
     <notifications group="custom-template"

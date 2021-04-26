@@ -105,7 +105,7 @@ export default {
           alert('Không có dữ liệu');
           this.$router.push('/leads');
         }
-      }).catch(err => alert(err))
+      }).catch(()=> {})
           .finally(() => this.loading = false);
     },
     removeNote(noteId) {
@@ -121,7 +121,6 @@ export default {
       });
     },
     createNote(event) {
-      console.log(event)
       let formData = new FormData();
       formData.append("body", event.text);
       if (event.files && event.files.length > 0) {
@@ -131,7 +130,6 @@ export default {
       }
       leadService.createNote(formData, this.lead.id).then(res => {
         if (res && res.status === 'success') {
-          alert('Thành công!');
           this.$refs.notes.clear();
           this.loadLead();
         }
@@ -144,7 +142,6 @@ export default {
       leadService.convertToAccount(this.lead.id)
           .then(res => {
             if (res && res.status === 'success') {
-              alert('Thành công');
               this.$router.push('/leads');
             }
           })
@@ -156,19 +153,17 @@ export default {
       leadService.remove(this.lead.id)
       .then(res => {
         if (res) {
-          alert('Thành công');
           this.$router.push('/leads');
         }
       })
     },
     createTag(event) {
-      if (!confirm('Xác nhận!')) {
-        return ;
-      }
+      // if (!confirm('Xác nhận!')) {
+      //   return ;
+      // }
       leadService.createTag({name: event}, this.lead.id)
       .then(res => {
         if (res) {
-          alert('Thành công!');
           this.$refs.userInfo.closeModal();
           this.loadLead();
         }

@@ -22,6 +22,7 @@ namespace Backend.SignalRHub
             
 
             var groupName = groupId.ToString();
+            
 
             await Groups.Add(Context.ConnectionId, groupName);
 

@@ -102,6 +102,17 @@ namespace Backend.Repository
             {
                 db.DEALs.Add(newDeal);
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(newDeal.DealOwner);
+                var creator = db.USERs.Find(createdUser);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Deal created";
+                notifyModel.content = $"Deal {newDeal.Name} has been created and assigned to you by {creator?.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "deals";
+                notifyModel.moduleObjectId = newDeal.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                 return true;
             }
             catch
@@ -183,6 +194,18 @@ namespace Backend.Repository
                 dbDeal.ModifiedAt = DateTime.Now;
                 dbDeal.ModifiedBy = modifiedUser;
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(dbDeal.DealOwner);
+                var modifyUser = db.USERs.Find(modifiedUser);
+                var creator = db.USERs.Find(dbDeal.CreatedBy);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Deal updated";
+                notifyModel.content = $"Deal {dbDeal.Name} has been updated by {modifyUser?.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "deals";
+                notifyModel.moduleObjectId = dbDeal.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                 return true;
             }
             else
@@ -222,6 +245,17 @@ namespace Backend.Repository
                         newTagItem.DEAL_ID = dbDeal.ID;
                         db.TAG_ITEM.Add(newTagItem);
                         db.SaveChanges();
+
+                        var owner = db.USERs.Find(dbDeal.DealOwner);
+                        var creator = db.USERs.Find(dbDeal.CreatedBy);
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Tag added";
+                        notifyModel.content = $"Tag {tagName} has been added to deal {dbDeal.Name}.";
+                        notifyModel.module = "deals";
+                        notifyModel.moduleObjectId = dbDeal.ID;
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                         return true;
                     }
                     else
@@ -237,6 +271,16 @@ namespace Backend.Repository
                     tagItem.DEAL_ID = dbDeal.ID;
                     db.TAG_ITEM.Add(tagItem);
                     db.SaveChanges();
+                    var owner = db.USERs.Find(dbDeal.DealOwner);
+                    var creator = db.USERs.Find(dbDeal.CreatedBy);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag added";
+                    notifyModel.content = $"Tag {tagName} has been added to deal {dbDeal.Name}.";
+                    notifyModel.module = "deals";
+                    notifyModel.moduleObjectId = dbDeal.ID;
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
                 }
             }
@@ -254,8 +298,18 @@ namespace Backend.Repository
                 var tagItem = dbDeal.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
                 if (tagItem != null)
                 {
+                    var tagName = tagItem.TAG.Name;
                     db.TAG_ITEM.Remove(tagItem);
                     db.SaveChanges();
+                    var owner = db.USERs.Find(dbDeal.DealOwner);
+                    var creator = db.USERs.Find(dbDeal.CreatedBy);
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag removed";
+                    notifyModel.content = $"Tag {tagName} has been removed from deal {dbDeal.Name}.";
+                    notifyModel.module = "deals";
+                    notifyModel.moduleObjectId = dbDeal.ID;
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
                 }
                 else
@@ -375,6 +429,18 @@ namespace Backend.Repository
                 }
                 db.STAGE_HISTORY.Add(newStageHistory);
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(dbDeal.DealOwner);
+                var modifyUser = db.USERs.Find(modifiedUser);
+                var creator = db.USERs.Find(dbDeal.CreatedBy);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Stage updated";
+                notifyModel.content = $"Deal {dbDeal.Name}'s stage has been updated by {modifyUser?.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "deals";
+                notifyModel.moduleObjectId = dbDeal.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                 return true;
             }
             else
@@ -411,6 +477,17 @@ namespace Backend.Repository
                         db.DEAL_COMPETITOR.Add(newDealCompetitor);
                     }
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbDeal.DealOwner);
+                    var creator = db.USERs.Find(dbDeal.CreatedBy);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Competitor added";
+                    notifyModel.content = $"Competitor {dbCompetitor.Name} has been added to deal {dbDeal.Name}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    notifyModel.module = "deals";
+                    notifyModel.moduleObjectId = dbDeal.ID;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
                 }
                 else
@@ -428,6 +505,15 @@ namespace Backend.Repository
                     newDealCompetitor.ThreatLevel = apiModel.threat;
                     db.DEAL_COMPETITOR.Add(newDealCompetitor);
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbDeal.DealOwner);
+                    var creator = db.USERs.Find(dbDeal.CreatedBy);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Competitor added";
+                    notifyModel.content = $"Competitor {newCompetitor.Name} has been added to deal {dbDeal.Name}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
 
                 }

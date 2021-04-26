@@ -7,7 +7,7 @@
           <ul v-if="timelineStatus" class="timeline timeline-horizontal w-100">
             <li v-for="(timeline, index) in timelineStatus" :key="index" class="timeline-item">
               <div class="timeline-badge" :class="{'primary-bg': timeline.passed, 'primary' : !timeline.passed, 'stage-selected': timeline.selected}"></div>
-              <div class="timeline-text">
+              <div class="timeline-text" :class="{'timeline-text-selected': timeline.selected}">
                 {{timeline.name}}
               </div>
             </li>
@@ -48,7 +48,8 @@ export default {
   border-radius: 30px;
 }
 .stage-selected {
-  background-color: #6CC9E7 !important;
+  background-color: #D93915 !important;
+  
 }
 
 .time-line-status {
@@ -129,5 +130,10 @@ export default {
   left: -20%;
   width: 100%;
   text-align: center;
+}
+
+.timeline-text-selected{
+  font-weight: bold;
+  color: #D93915;
 }
 </style>

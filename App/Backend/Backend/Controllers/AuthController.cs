@@ -168,18 +168,40 @@ namespace Backend.Controllers
                             response.Headers.Add("set-cookie", $"refreshTokenData=refreshToken={RefreshToken}&seriesIdentifier={dbUser.ID}&tokenIdentifier={dbToken.ID}; path=/; SameSite=None; Secure; max-age=2592000");
                             //build response data
                             responseData = ResponseFormat.Success;
-                            responseData.data = new
+
+                            if (dbUser.Avatar != null)
                             {
-                                user = new
+                                responseData.data = new
                                 {
-                                    id = user.ID,
-                                    username = user.Username,
-                                    firstName = user.FirstName,
-                                    lastName = user.LastName,
-                                    jwt = JwtToken,
-                                    group = dbUser.GROUP.ID
-                                }
-                            };
+                                    user = new
+                                    {
+                                        id = user.ID,
+                                        username = user.Username,
+                                        firstName = user.FirstName,
+                                        lastName = user.LastName,
+                                        jwt = JwtToken,
+                                        group = dbUser.GROUP.ID,
+                                        avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbUser.Avatar}"
+                                    }
+                                };
+                            }
+                            else
+                            {
+                                responseData.data = new
+                                {
+                                    user = new
+                                    {
+                                        id = user.ID,
+                                        username = user.Username,
+                                        firstName = user.FirstName,
+                                        lastName = user.LastName,
+                                        jwt = JwtToken,
+                                        group = dbUser.GROUP.ID,
+                                        avatar = ""
+                                    }
+                                };
+                            }
+                            
                             response.StatusCode = HttpStatusCode.OK;
 
                         }

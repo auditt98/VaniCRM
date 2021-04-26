@@ -7,7 +7,7 @@
         <button class="btn btn-default" type="button">
           <i class="fa fa-search"></i>
         </button>
-        <input type="text" class="form-control" placeholder="Search">
+        <input type="text" class="form-control" v-model="searchQuery" placeholder="Search" @change="filterList">
       </div>
       <div class="testimonial-group">
       <div class="row flex-row flex-nowrap custom" v-if="type === 2">
@@ -150,6 +150,7 @@ export default {
   name: "Dashboard",
   data: function () {
     return {
+      searchQuery: '',
       loading: false,
       type: null,
       colors: ['#109CF1', '#A29BFE', '#E84393', '#F2994A', '#F7685B', '#8949F2', '#1A9A05', '#FF002E'],
@@ -177,6 +178,9 @@ export default {
     };
   },
   methods: {
+    filterList(){
+      console.log(this.searchQuery)
+    },
     openAdd(item, type) {
       if (type === 'DEAL') {
         item.deal.name = null;

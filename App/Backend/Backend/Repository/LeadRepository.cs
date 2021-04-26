@@ -158,6 +158,8 @@ namespace Backend.Repository
                 var notifyModel = new NotificationApiModel();
                 notifyModel.title = "Lead assigned";
                 notifyModel.content = $"Lead {newLead.Name} has been created and assigned to you.";
+                notifyModel.module = "leads";
+                notifyModel.moduleObjectId = newLead.ID;
                 notifyModel.createdAt = DateTime.Now;
                 NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                 return true;
@@ -220,6 +222,8 @@ namespace Backend.Repository
                 var notifyModel = new NotificationApiModel();
                 notifyModel.title = "Lead modified";
                 notifyModel.content = $"Lead {dbLead.Name} has been modified by {modifyUser.Username}.";
+                notifyModel.module = "leads";
+                notifyModel.moduleObjectId = dbLead.ID;
                 notifyModel.createdAt = DateTime.Now;
                 NotificationManager.SendNotification(notifyModel, new List<USER> { owner, modifyUser });
                 return true;
@@ -254,7 +258,7 @@ namespace Backend.Repository
                 if (dbTag != null)
                 {
                     var tagItem = dbLead.TAG_ITEM.Where(c => c.TAG_ID == dbTag.ID).FirstOrDefault();
-                    if(tagItem != null)
+                    if(tagItem == null)
                     {
                         var newTagItem = new TAG_ITEM();
                         newTagItem.TAG_ID = dbTag.ID;
@@ -264,7 +268,9 @@ namespace Backend.Repository
 
                         var notifyModel = new NotificationApiModel();
                         notifyModel.title = "Tag added to lead";
-                        notifyModel.content = $"Tag '{newTagItem.TAG.Name}' has been added to lead {dbLead.Name}.";
+                        notifyModel.content = $"Tag '{tagName}' has been added to lead {dbLead.Name}.";
+                        notifyModel.module = "leads";
+                        notifyModel.moduleObjectId = dbLead.ID;
                         notifyModel.createdAt = DateTime.Now;
                         NotificationManager.SendNotification(notifyModel, new List<USER> { dbLead.Owner });
                         return true;
@@ -286,6 +292,8 @@ namespace Backend.Repository
                     var notifyModel = new NotificationApiModel();
                     notifyModel.title = "Tag added to lead";
                     notifyModel.content = $"Tag '{tagName}' has been added to lead {dbLead.Name}.";
+                    notifyModel.module = "leads";
+                    notifyModel.moduleObjectId = dbLead.ID;
                     notifyModel.createdAt = DateTime.Now;
                     NotificationManager.SendNotification(notifyModel, new List<USER> { dbLead.Owner });
                     return true;
@@ -305,9 +313,17 @@ namespace Backend.Repository
                 var tagItem = dbLead.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
                 if (tagItem != null)
                 {
+                    var tagName = tagItem.TAG.Name;
                     db.TAG_ITEM.Remove(tagItem);
                     db.SaveChanges();
 
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag removed";
+                    notifyModel.content = $"Tag '{tagName}' has been removed from lead {dbLead.Name}.";
+                    notifyModel.module = "leads";
+                    notifyModel.moduleObjectId = dbLead.ID;
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { dbLead.Owner });
                     return true;
                 }
                 else

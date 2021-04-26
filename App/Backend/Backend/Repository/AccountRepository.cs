@@ -88,6 +88,18 @@ namespace Backend.Repository
             {
                 db.ACCOUNTs.Add(newAccount);
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(newAccount.AccountOwner);
+                var collaborator = db.USERs.Find(newAccount.AccountCollaborator);
+                var creator = db.USERs.Find(createdUser);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Account assigned";
+                notifyModel.content = $"Account {newAccount.Name} has been created and assigned to you by {creator?.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "accounts";
+                notifyModel.moduleObjectId = newAccount.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator });
                 return true;
             }
             catch
@@ -126,6 +138,19 @@ namespace Backend.Repository
                 dbAccount.ModifiedAt = DateTime.Now;
                 dbAccount.ModifiedBy = modifiedUser;
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(dbAccount.AccountOwner);
+                var collaborator = db.USERs.Find(dbAccount.AccountCollaborator);
+                var modifyUser = db.USERs.Find(modifiedUser);
+                var creator = db.USERs.Find(dbAccount.CreatedBy);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Account updated";
+                notifyModel.content = $"Account {dbAccount.Name} has been updated by {modifyUser.Username}.";
+                notifyModel.module = "accounts";
+                notifyModel.moduleObjectId = dbAccount.ID;
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator, creator });
                 return true;
             }
             else
@@ -179,8 +204,16 @@ namespace Backend.Repository
             var dbAccount = db.ACCOUNTs.Find(id);
             if (dbAccount != null)
             {
+                var accountName = dbAccount.Name;
+                var owner = db.USERs.Find(dbAccount.AccountOwner);
+                var collaborator = db.USERs.Find(dbAccount.AccountCollaborator);
                 db.ACCOUNTs.Remove(dbAccount);
                 db.SaveChanges();
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Account deleted";
+                notifyModel.content = $"Account {accountName} has been deleted.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator });
                 return true;
             }
             else
@@ -220,6 +253,17 @@ namespace Backend.Repository
                         newTagItem.ACCOUNT_ID = dbAccount.ID;
                         db.TAG_ITEM.Add(newTagItem);
                         db.SaveChanges();
+                        var owner = db.USERs.Find(dbAccount.AccountOwner);
+                        var collaborator = db.USERs.Find(dbAccount.AccountCollaborator);
+                        var createdUser = db.USERs.Find(dbAccount.CreatedBy);
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Tag added";
+                        notifyModel.content = $"Tag {tagName} has been added to account {dbAccount.Name}.";
+                        notifyModel.module = "accounts";
+                        notifyModel.moduleObjectId = dbAccount.ID;
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator, createdUser });
                         return true;
                     }
                     else
@@ -235,6 +279,17 @@ namespace Backend.Repository
                     tagItem.ACCOUNT_ID = dbAccount.ID;
                     db.TAG_ITEM.Add(tagItem);
                     db.SaveChanges();
+                    var owner = db.USERs.Find(dbAccount.AccountOwner);
+                    var collaborator = db.USERs.Find(dbAccount.AccountCollaborator);
+                    var createdUser = db.USERs.Find(dbAccount.CreatedBy);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag added";
+                    notifyModel.content = $"Tag {tagName} has been added to account {dbAccount.Name}.";
+                    notifyModel.module = "accounts";
+                    notifyModel.moduleObjectId = dbAccount.ID;
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator, createdUser });
                     return true;
                 }
             }
@@ -252,8 +307,19 @@ namespace Backend.Repository
                 var tagItem = dbAccount.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
                 if (tagItem != null)
                 {
+                    var tagName = tagItem.TAG.Name;
                     db.TAG_ITEM.Remove(tagItem);
                     db.SaveChanges();
+                    var owner = db.USERs.Find(dbAccount.AccountOwner);
+                    var collaborator = db.USERs.Find(dbAccount.AccountCollaborator);
+                    var createdUser = db.USERs.Find(dbAccount.CreatedBy);
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag removed";
+                    notifyModel.content = $"Tag {tagName} has been removed from account {dbAccount.Name}.";
+                    notifyModel.module = "accounts";
+                    notifyModel.moduleObjectId = dbAccount.ID;
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator, createdUser });
                     return true;
                 }
                 else
@@ -315,6 +381,17 @@ namespace Backend.Repository
             {
                 dbAccount.CONTACTs.Add(dbContact);
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(dbAccount.AccountOwner);
+                var collaborator = db.USERs.Find(dbAccount.AccountCollaborator);
+                var createdUser = db.USERs.Find(dbAccount.CreatedBy);
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Contact added to account";
+                notifyModel.content = $"Contact {dbContact.Name} has been added to account {dbAccount.Name}.";
+                notifyModel.module = "accounts";
+                notifyModel.moduleObjectId = dbAccount.ID;
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator, createdUser });
                 return true;
             }
             else

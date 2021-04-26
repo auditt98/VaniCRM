@@ -19,7 +19,7 @@ namespace Backend.Extensions
 
         public static void SendNotification(NotificationApiModel apiModel, List<USER> users)
         {
-            var sendTo = users.Distinct().ToList();
+            var sendTo = users.Distinct().Where(c => c != null).ToList();
             var notiCreated = _notificationRepository.Create(apiModel, sendTo);
             //send notification
             if (notiCreated.isCreated)

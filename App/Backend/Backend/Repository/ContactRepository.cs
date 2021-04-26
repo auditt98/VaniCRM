@@ -109,11 +109,13 @@ namespace Backend.Repository
                 db.SaveChanges();
                 var owner = db.USERs.Find(newContact.ContactOwner);
                 var collaborator = db.USERs.Find(newContact.ContactCollaborator);
-
+                var creator = db.USERs.Find(createdUser);
                 var notifyModel = new NotificationApiModel();
                 notifyModel.title = "Contact assigned";
-                notifyModel.content = $"Contact {newContact.Name} has been created and assigned to you.";
+                notifyModel.content = $"Contact {newContact.Name} has been created and assigned to you by {creator?.Username}.";
                 notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "contacts";
+                notifyModel.moduleObjectId = newContact.ID;
                 NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator });
                 return true;
             }
@@ -206,6 +208,21 @@ namespace Backend.Repository
                 dbContact.ModifiedAt = DateTime.Now;
                 dbContact.ModifiedBy = modifiedUser;
                 db.SaveChanges();
+
+                var modifyUser = db.USERs.Find(modifiedUser);
+                var collaborator = db.USERs.Find(dbContact.ContactCollaborator);
+                var createdUser = db.USERs.Find(dbContact.CreatedBy);
+
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Contact updated";
+                notifyModel.content = $"Contact {dbContact.Name} has been updated by {modifyUser.Username}.";
+                notifyModel.module = "contacts";
+                notifyModel.moduleObjectId = dbContact.ID;
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "contacts";
+                notifyModel.moduleObjectId = dbContact.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { dbContact.Owner, collaborator, createdUser});
                 return true;
             }
             else
@@ -219,8 +236,16 @@ namespace Backend.Repository
             var dbContact = db.CONTACTs.Find(id);
             if (dbContact != null)
             {
+                var contactName = dbContact.Name;
+                var owner = db.USERs.Find(dbContact.ContactOwner);
+                var collaborator = db.USERs.Find(dbContact.ContactCollaborator);
                 db.CONTACTs.Remove(dbContact);
                 db.SaveChanges();
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Contact deleted";
+                notifyModel.content = $"Contact {contactName} has been deleted.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator });
                 return true;
             }
             else
@@ -260,6 +285,18 @@ namespace Backend.Repository
                         newTagItem.CONTACT_ID = dbContact.ID;
                         db.TAG_ITEM.Add(newTagItem);
                         db.SaveChanges();
+
+                        var owner = db.USERs.Find(dbContact.ContactOwner);
+                        var collaborator = db.USERs.Find(dbContact.ContactCollaborator);
+                        var createdUser = db.USERs.Find(dbContact.CreatedBy);
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Tag added";
+                        notifyModel.content = $"Tag {tagName} has been added to contact {dbContact.Name}.";
+                        notifyModel.module = "contacts";
+                        notifyModel.moduleObjectId = dbContact.ID;
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator, createdUser });
                         return true;
                     }
                     else
@@ -275,6 +312,16 @@ namespace Backend.Repository
                     tagItem.CONTACT_ID = dbContact.ID;
                     db.TAG_ITEM.Add(tagItem);
                     db.SaveChanges();
+                    var owner = db.USERs.Find(dbContact.ContactOwner);
+                    var collaborator = db.USERs.Find(dbContact.ContactCollaborator);
+                    var createdUser = db.USERs.Find(dbContact.CreatedBy);
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag added";
+                    notifyModel.content = $"Tag {tagName} has been added to contact {dbContact.Name}.";
+                    notifyModel.module = "contacts";
+                    notifyModel.moduleObjectId = dbContact.ID;
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator, createdUser });
                     return true;
                 }
             }
@@ -292,8 +339,19 @@ namespace Backend.Repository
                 var tagItem = dbContact.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
                 if (tagItem != null)
                 {
+                    var tagName = tagItem.TAG.Name;
                     db.TAG_ITEM.Remove(tagItem);
                     db.SaveChanges();
+                    var owner = db.USERs.Find(dbContact.ContactOwner);
+                    var collaborator = db.USERs.Find(dbContact.ContactCollaborator);
+                    var createdUser = db.USERs.Find(dbContact.CreatedBy);
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag removed";
+                    notifyModel.content = $"Tag {tagName} has been removed from contact {dbContact.Name}.";
+                    notifyModel.module = "contacts";
+                    notifyModel.moduleObjectId = dbContact.ID;
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, collaborator, createdUser });
                     return true;
                 }
                 else

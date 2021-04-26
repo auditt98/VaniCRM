@@ -141,11 +141,16 @@ export default {
       }
       //go to module if exist
       if(notification.module != null){
-        this.$router.push({ path: notification.module + '-detail', query: { id: notification.moduleObjectId } }).catch(() =>{});
+        this.$router.push({ path: notification.module + '/detail', query: { id: notification.moduleObjectId } }).catch(() =>{});
       }
       // console.log(notification);
     },
     logout() {
+          proxy.invoke('Leave', authenticationService.currentUserValue.id).done(() => {
+            console.log("left")
+          }).fail(function (error) {
+              console.log('Error: ' + error);
+            });
       authenticationService.logout(null);
     },
     infiniteHandler($state){
@@ -166,8 +171,9 @@ export default {
       })
     },
   },
-  mounted(){
-      proxy.on('getUnreadCount', (count) =>{
+  created() {
+    this.currentUser = authenticationService.currentUserValue;
+    proxy.on('getUnreadCount', (count) =>{
         this.unreadCount = count;
       });
       proxy.on('pushNotification', (notification) =>{
@@ -190,9 +196,6 @@ export default {
             });
         })
         .fail(function(){ console.log('Could not connect'); });
-  },
-  created() {
-    this.currentUser = authenticationService.currentUserValue;
   },
   computed: {
     isActive() {

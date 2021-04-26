@@ -55,6 +55,16 @@
                       </vc-select>
                     </td>
                   </tr>
+                  <tr>
+                    <td><label for="Owner">Owner</label></td>
+                    <td style="width: 80%">
+                      <vc-select id="Owner" label="username"
+                                :filterable="false" :options="owners"
+                                @search="onSearchUser"
+                                v-model="deal.owner">
+                      </vc-select>
+                    </td>
+                  </tr>
                   </tbody>
                 </table>
               </div>
@@ -125,6 +135,7 @@ import {dealService} from "@/service/deal.service";
 import {accountService} from "@/service/account.service";
 import {campaignService} from "@/service/campaign.service";
 import {contactService} from "@/service/contact.service";
+import {userService} from "@/service/user.service";
 import {getValueInArr} from "@/config/config";
 import VLoading from "@/components/common/VLoading";
 import {required} from "vuelidate/lib/validators";
@@ -191,6 +202,7 @@ export default {
         account: this.deal.account ? this.deal.account.id : null,
         contact: this.deal.contact ? this.deal.contact.id : null,
         campaign: this.deal.campaign ? this.deal.campaign.id : null,
+        owner: this.deal.owner ? this.deal.owner.id : null,
         priority: this.deal.priority,
         stage: this.deal.stage,
         amount: this.deal.amount,
@@ -223,6 +235,20 @@ export default {
       contactService.getAll(query).then(res => {
         if (res && res.data) {
           this.contacts = res.data.contacts;
+        }
+      })
+    },
+    onSearchUser(search) {
+      let query = {
+        currentPage: 1,
+        pageSize: 10
+      };
+      if (search) {
+        query['query'] = search;
+      }
+      userService.getAll(query).then(res => {
+        if (res) {
+          this.owners = res.data.users;
         }
       })
     },
@@ -282,8 +308,10 @@ export default {
         amount: 1,
         expectedRevenue: 0,
         lostReason: 1,
-        description: null
+        description: null,
+        owner: null,
       },
+      owners: [],
       contacts: [],
       accounts: [],
       campaigns: [],
