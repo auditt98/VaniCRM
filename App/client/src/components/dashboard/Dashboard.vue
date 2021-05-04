@@ -238,7 +238,7 @@ export default {
         dealService.changeStage(Number(e.added.element.id), item.id)
         .then(res => {
           if (res && res.status === 'success') {
-            alert('Thành công');
+            
             e.added.element.type = item.id;
           }
         }).finally(() => {
@@ -367,6 +367,7 @@ export default {
     }
   },
   created() {
+    this.$root.$refs.Dashboard = this;
     if (this.$route.name === 'DashboardMarketing') {
       this.type = 1;
       this.loadLeads();

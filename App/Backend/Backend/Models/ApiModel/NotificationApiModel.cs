@@ -17,7 +17,7 @@ namespace Backend.Models.ApiModel
         public int? subModuleObjectId { get; set; }
         public bool isRead { get; set; }
         public string type { get; set; }
-
+        public bool isDashboardChanged { get; set; }
         public NotificationApiModel()
         {
             

@@ -173,10 +173,16 @@ export default {
   },
   created() {
     this.currentUser = authenticationService.currentUserValue;
-    proxy.on('getUnreadCount', (count) =>{
+      proxy.on('reloadDashboardSale', () =>{
+        if(this.$route.name === 'DashboardSale'){
+          this.$root.$refs.Dashboard.loadListDashboardSale();
+        }
+      })
+      proxy.on('getUnreadCount', (count) =>{
         this.unreadCount = count;
       });
       proxy.on('pushNotification', (notification) =>{
+          
           this.$notify({
             group: 'custom-template',
             title: notification.title,
@@ -185,6 +191,9 @@ export default {
             });
           this.notifications.unshift(notification);
           this.unreadCount++;
+          // if(notification.module == "deals"){
+          //   this.$root.$refs.Dashboard.loadListDashboardSale();
+          // }
       })
       connection.start()
         .done(() =>{ 

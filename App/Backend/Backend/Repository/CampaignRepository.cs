@@ -100,6 +100,17 @@ namespace Backend.Repository
             {
                 db.CAMPAIGNs.Add(newCampaign);
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(newCampaign.CampaignOwner);
+                var creator = db.USERs.Find(createdUser);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Campaign created";
+                notifyModel.content = $"Campaign {newCampaign.Name} has been created by {creator?.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "campaigns";
+                notifyModel.moduleObjectId = newCampaign.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                 return true;
             }
             catch
@@ -140,6 +151,18 @@ namespace Backend.Repository
                 dbCampaign.ModifiedAt = DateTime.Now;
                 dbCampaign.ModifiedBy = modifiedUser;
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                var creator = db.USERs.Find(dbCampaign.CreatedBy);
+                var modifyUser = db.USERs.Find(modifiedUser);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Campaign updated";
+                notifyModel.content = $"Campaign {dbCampaign.Name} has been updated by {modifyUser?.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "campaigns";
+                notifyModel.moduleObjectId = dbCampaign.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                 return true;
             }
             else
@@ -153,8 +176,18 @@ namespace Backend.Repository
             var dbCampaign = db.CAMPAIGNs.Find(id);
             if (dbCampaign != null)
             {
+                var campaignName = dbCampaign.Name;
+                var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                var creator = db.USERs.Find(dbCampaign.CreatedBy);
+
                 db.CAMPAIGNs.Remove(dbCampaign);
                 db.SaveChanges();
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Campaign deleted";
+                notifyModel.content = $"Campaign {campaignName} has been deleted.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                 return true;
             }
             else
@@ -179,6 +212,16 @@ namespace Backend.Repository
                         newTagItem.CAMPAIGN_ID = dbCampaign.ID;
                         db.TAG_ITEM.Add(newTagItem);
                         db.SaveChanges();
+
+                        var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                        var creator = db.USERs.Find(dbCampaign.CreatedBy);
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Tag added";
+                        notifyModel.content = $"Tag  {tagName} has been added to campaign {dbCampaign.Name}.";
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+
                         return true;
                     }
                     else
@@ -194,6 +237,15 @@ namespace Backend.Repository
                     tagItem.CAMPAIGN_ID = dbCampaign.ID;
                     db.TAG_ITEM.Add(tagItem);
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                    var creator = db.USERs.Find(dbCampaign.CreatedBy);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag added";
+                    notifyModel.content = $"Tag {tagName} has been added to campaign {dbCampaign.Name}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
                 }
             }
@@ -211,8 +263,18 @@ namespace Backend.Repository
                 var tagItem = dbCampaign.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
                 if (tagItem != null)
                 {
+                    var tagName = tagItem.TAG.Name;
                     db.TAG_ITEM.Remove(tagItem);
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                    var creator = db.USERs.Find(dbCampaign.CreatedBy);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag removed";
+                    notifyModel.content = $"Tag {tagName} has been removed from campaign {dbCampaign.Name}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
                 }
                 else
@@ -245,6 +307,17 @@ namespace Backend.Repository
                     dbCampaign.ModifiedAt = DateTime.Now;
                     dbCampaign.ModifiedBy = modifiedUser;
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                    var creator = db.USERs.Find(dbCampaign.CreatedBy);
+                    var modifyUser = db.USERs.Find(modifiedUser);
+                    var contactAdded = db.CONTACTs.Find(apiModel.id);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Campaign target added";
+                    notifyModel.content = $"Contact {contactAdded.Name} has been added to campaign {dbCampaign.Name} by {modifyUser.Username}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
                 }
 
@@ -274,6 +347,17 @@ namespace Backend.Repository
                     dbCampaign.ModifiedAt = DateTime.Now;
                     dbCampaign.ModifiedBy = modifiedUser;
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                    var creator = db.USERs.Find(dbCampaign.CreatedBy);
+                    var modifyUser = db.USERs.Find(modifiedUser);
+                    var leadAdded = db.LEADs.Find(apiModel.id);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Campaign target added";
+                    notifyModel.content = $"Lead {leadAdded.Name} has been added to campaign {dbCampaign.Name} by {modifyUser.Username}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
                 }
 
@@ -292,10 +376,21 @@ namespace Backend.Repository
                 var campaignLead = dbCampaign.CAMPAIGN_TARGET.Where(c => c.LEAD.ID == leadId).FirstOrDefault();
                 if (campaignLead != null)
                 {
+                    var leadName = campaignLead.LEAD.Name;
                     db.CAMPAIGN_TARGET.Remove(campaignLead);
                     dbCampaign.ModifiedAt = DateTime.Now;
                     dbCampaign.ModifiedBy = modifiedUser;
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                    var creator = db.USERs.Find(dbCampaign.CreatedBy);
+                    var modifyUser = db.USERs.Find(modifiedUser);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Campaign target removed";
+                    notifyModel.content = $"Lead {leadName} has been removed from campaign {dbCampaign.Name} by {modifyUser.Username}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
                 }
                 else
@@ -317,10 +412,21 @@ namespace Backend.Repository
                 var campaignContact = dbCampaign.CAMPAIGN_TARGET.Where(c => c.CONTACT.ID == contactId).FirstOrDefault();
                 if (campaignContact != null)
                 {
+                    var contactName = campaignContact.CONTACT.Name;
                     db.CAMPAIGN_TARGET.Remove(campaignContact);
                     dbCampaign.ModifiedAt = DateTime.Now;
                     dbCampaign.ModifiedBy = modifiedUser;
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                    var creator = db.USERs.Find(dbCampaign.CreatedBy);
+                    var modifyUser = db.USERs.Find(modifiedUser);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Campaign target removed";
+                    notifyModel.content = $"Contact {contactName} has been removed from campaign {dbCampaign.Name} by {modifyUser.Username}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                     return true;
                 }
                 else

@@ -112,7 +112,9 @@ namespace Backend.Repository
                 notifyModel.createdAt = DateTime.Now;
                 notifyModel.module = "deals";
                 notifyModel.moduleObjectId = newDeal.ID;
+                //notifyModel.
                 NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
+                NotificationManager.ReloadDashboardSale();
                 return true;
             }
             catch
@@ -206,6 +208,8 @@ namespace Backend.Repository
                 notifyModel.module = "deals";
                 notifyModel.moduleObjectId = dbDeal.ID;
                 NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+                NotificationManager.ReloadDashboardSale();
+
                 return true;
             }
             else
@@ -221,6 +225,8 @@ namespace Backend.Repository
             {
                 db.DEALs.Remove(dbDeal);
                 db.SaveChanges();
+                NotificationManager.ReloadDashboardSale();
+
                 return true;
             }
             else
@@ -256,6 +262,8 @@ namespace Backend.Repository
                         notifyModel.moduleObjectId = dbDeal.ID;
                         notifyModel.createdAt = DateTime.Now;
                         NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+                        NotificationManager.ReloadDashboardSale();
+
                         return true;
                     }
                     else
@@ -281,6 +289,8 @@ namespace Backend.Repository
                     notifyModel.moduleObjectId = dbDeal.ID;
                     notifyModel.createdAt = DateTime.Now;
                     NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+                    NotificationManager.ReloadDashboardSale();
+
                     return true;
                 }
             }
@@ -310,6 +320,8 @@ namespace Backend.Repository
                     notifyModel.moduleObjectId = dbDeal.ID;
                     notifyModel.createdAt = DateTime.Now;
                     NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+                    NotificationManager.ReloadDashboardSale();
+
                     return true;
                 }
                 else
@@ -441,6 +453,8 @@ namespace Backend.Repository
                 notifyModel.module = "deals";
                 notifyModel.moduleObjectId = dbDeal.ID;
                 NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+                NotificationManager.ReloadDashboardSale();
+
                 return true;
             }
             else

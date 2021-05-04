@@ -37,6 +37,12 @@ namespace Backend.SignalRHub
             return Groups.Remove(Context.ConnectionId, groupName);
         }
 
+        public static void ReloadDashboardSale()
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+            hubContext.Clients.All.reloadDashboardSale();
+        }
+
         public static void updateUnreadCount(int groupId)
         {
             var groupName = groupId.ToString();
@@ -73,6 +79,7 @@ namespace Backend.SignalRHub
 
         Task getUnreadCount(int unreadCount);
         Task pushNotification(NotificationApiModel notification);
+        Task reloadDashboardSale();
     }
 }
 

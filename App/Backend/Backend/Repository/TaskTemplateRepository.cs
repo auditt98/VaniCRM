@@ -167,7 +167,17 @@ namespace Backend.Repository
             newCall.StartTime = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
             db.CALLs.Add(newCall);
             db.SaveChanges();
-            
+
+            var owner = db.USERs.Find(newCall.CallOwner);
+            var creator = db.USERs.Find(createdUser);
+
+            var notifyModel = new NotificationApiModel();
+            notifyModel.title = "Call created";
+            notifyModel.content = $"Call {newTemplate.Title} has been created and assigned to you by {creator?.Username}.";
+            notifyModel.createdAt = DateTime.Now;
+            notifyModel.module = "calls";
+            notifyModel.moduleObjectId = newCall.ID;
+            NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
             return true;
         }
 
@@ -200,6 +210,16 @@ namespace Backend.Repository
                         newTagItem.CALL_ID = dbCall.ID;
                         db.TAG_ITEM.Add(newTagItem);
                         db.SaveChanges();
+
+                        var owner = db.USERs.Find(dbCall.CallOwner);
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Tag added";
+                        notifyModel.content = $"Tag {tagName} has been added to call {dbCall.TASK_TEMPLATE.Title }.";
+                        notifyModel.createdAt = DateTime.Now;
+                        notifyModel.module = "calls";
+                        notifyModel.moduleObjectId = dbCall.ID;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                         return true;
                     }
                     else
@@ -215,6 +235,16 @@ namespace Backend.Repository
                     tagItem.CALL_ID = dbCall.ID;
                     db.TAG_ITEM.Add(tagItem);
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbCall.CallOwner);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag added";
+                    notifyModel.content = $"Tag {tagName} has been added to call {dbCall.TASK_TEMPLATE.Title }.";
+                    notifyModel.createdAt = DateTime.Now;
+                    notifyModel.module = "calls";
+                    notifyModel.moduleObjectId = dbCall.ID;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                     return true;
                 }
             }
@@ -232,8 +262,19 @@ namespace Backend.Repository
                 var tagItem = dbCall.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
                 if (tagItem != null)
                 {
+                    var tagName = tagItem.TAG.Name;
                     db.TAG_ITEM.Remove(tagItem);
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbCall.CallOwner);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag removed";
+                    notifyModel.content = $"Tag {tagName} has been removed from call {dbCall.TASK_TEMPLATE.Title }.";
+                    notifyModel.createdAt = DateTime.Now;
+                    notifyModel.module = "calls";
+                    notifyModel.moduleObjectId = dbCall.ID;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                     return true;
                 }
                 else
@@ -320,6 +361,18 @@ namespace Backend.Repository
                     dbCall.LEAD_ID = apiModel.lead;
                 }
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(dbCall.CallOwner);
+                var creator = db.USERs.Find(dbCall.TASK_TEMPLATE.CreatedBy);
+                var modifyUser = db.USERs.Find(modifiedUser);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Call updated";
+                notifyModel.content = $"Call {dbCall.TASK_TEMPLATE.Title} has been updated by {modifyUser.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "calls";
+                notifyModel.moduleObjectId = dbCall.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                 return true;
             }
             else
@@ -334,10 +387,19 @@ namespace Backend.Repository
             if(dbCall != null)
             {
                 var template = dbCall.TASK_TEMPLATE;
+                var callTitle = template.Title;
+                var owner = db.USERs.Find(dbCall.CallOwner);
+                var creator = db.USERs.Find(dbCall.TASK_TEMPLATE.CreatedBy);
                 db.CALLs.Remove(dbCall);
                 db.SaveChanges();
                 db.TASK_TEMPLATE.Remove(template);
                 db.SaveChanges();
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Call removed";
+                notifyModel.content = $"Call {callTitle} has been removed.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                 return true;
             }
             else
@@ -392,6 +454,16 @@ namespace Backend.Repository
                         newTagItem.MEETING_ID = dbMeeting.ID;
                         db.TAG_ITEM.Add(newTagItem);
                         db.SaveChanges();
+
+                        var owner = db.USERs.Find(dbMeeting.Host);
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Tag added";
+                        notifyModel.content = $"Tag {tagName} has been added to meeting {dbMeeting.TASK_TEMPLATE.Title }.";
+                        notifyModel.createdAt = DateTime.Now;
+                        notifyModel.module = "meetings";
+                        notifyModel.moduleObjectId = dbMeeting.ID;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                         return true;
                     }
                     else
@@ -407,6 +479,15 @@ namespace Backend.Repository
                     tagItem.MEETING_ID = dbMeeting.ID;
                     db.TAG_ITEM.Add(tagItem);
                     db.SaveChanges();
+                    var owner = db.USERs.Find(dbMeeting.Host);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag added";
+                    notifyModel.content = $"Tag {tagName} has been added to meeting {dbMeeting.TASK_TEMPLATE.Title }.";
+                    notifyModel.createdAt = DateTime.Now;
+                    notifyModel.module = "meetings";
+                    notifyModel.moduleObjectId = dbMeeting.ID;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                     return true;
                 }
             }
@@ -424,8 +505,20 @@ namespace Backend.Repository
                 var tagItem = dbMeeting.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
                 if (tagItem != null)
                 {
+                    var tagName = tagItem.TAG.Name;
+
                     db.TAG_ITEM.Remove(tagItem);
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbMeeting.Host);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag removed";
+                    notifyModel.content = $"Tag {tagName} has been removed from meeting {dbMeeting.TASK_TEMPLATE.Title }.";
+                    notifyModel.createdAt = DateTime.Now;
+                    notifyModel.module = "meetings";
+                    notifyModel.moduleObjectId = dbMeeting.ID;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                     return true;
                 }
                 else
@@ -471,6 +564,17 @@ namespace Backend.Repository
             newMeeting.TASK_TEMPLATE = newTemplate;
             db.MEETINGs.Add(newMeeting);
             db.SaveChanges();
+
+            var owner = db.USERs.Find(newMeeting.Host);
+            var creator = db.USERs.Find(createdUser);
+
+            var notifyModel = new NotificationApiModel();
+            notifyModel.title = "Meeting created";
+            notifyModel.content = $"Meeting {newTemplate.Title} has been created and assigned you as host by {creator?.Username}.";
+            notifyModel.createdAt = DateTime.Now;
+            notifyModel.module = "meetings";
+            notifyModel.moduleObjectId = newMeeting.ID;
+            NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
             return true;
         }
     
@@ -497,6 +601,18 @@ namespace Backend.Repository
                 dbMeeting.FromDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.from);
                 dbMeeting.ToDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.to);
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(dbMeeting.Host);
+                var creator = db.USERs.Find(dbMeeting.TASK_TEMPLATE.CreatedBy);
+                var modifyUser = db.USERs.Find(modifiedUser);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Meeting updated";
+                notifyModel.content = $"Meeting {dbMeeting.TASK_TEMPLATE.Title} has been updated by {modifyUser.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "meetings";
+                notifyModel.moduleObjectId = dbMeeting.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                 return true;
             }
             else
@@ -511,10 +627,21 @@ namespace Backend.Repository
             if (dbMeeting != null)
             {
                 var template = dbMeeting.TASK_TEMPLATE;
+                var meetingTitle = template.Title;
+                var owner = db.USERs.Find(dbMeeting.Host);
+                var creator = db.USERs.Find(dbMeeting.TASK_TEMPLATE.CreatedBy);
+
                 db.MEETINGs.Remove(dbMeeting);
                 db.SaveChanges();
                 db.TASK_TEMPLATE.Remove(template);
                 db.SaveChanges();
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Meeting removed";
+                notifyModel.content = $"Meeting {meetingTitle} has been removed.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+
                 return true;
             }
             else
@@ -533,6 +660,7 @@ namespace Backend.Repository
             var dbMeeting = db.MEETINGs.Find(id);
             if (dbMeeting != null)
             {
+                var owner = db.USERs.Find(dbMeeting.Host);
                 if (apiModel.contactId != 0)
                 {
                     var participant = new MEETING_PARTICIPANT();
@@ -540,6 +668,14 @@ namespace Backend.Repository
                     participant.MEETING_ID = dbMeeting.ID;
                     db.MEETING_PARTICIPANT.Add(participant);
                     db.SaveChanges();
+                    
+                    var contactAdded = db.CONTACTs.Find(participant.CONTACT_ID);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Participant added";
+                    notifyModel.content = $"Contact {contactAdded.Name} has been added to meeting {dbMeeting.TASK_TEMPLATE.Title}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                 }
                 if(apiModel.leadId != 0)
                 {
@@ -548,6 +684,15 @@ namespace Backend.Repository
                     participant.MEETING_ID = dbMeeting.ID;
                     db.MEETING_PARTICIPANT.Add(participant);
                     db.SaveChanges();
+
+                    var leadAdded = db.LEADs.Find(participant.LEAD_ID);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Participant added";
+                    notifyModel.content = $"Lead {leadAdded.Name} has been added to meeting {dbMeeting.TASK_TEMPLATE.Title}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
+
                 }
                 if(apiModel.userId != 0)
                 {
@@ -556,6 +701,14 @@ namespace Backend.Repository
                     participant.MEETING_ID = dbMeeting.ID;
                     db.MEETING_PARTICIPANT.Add(participant);
                     db.SaveChanges();
+
+                    var userAdded = db.USERs.Find(participant.USER_ID);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Participant added";
+                    notifyModel.content = $"User {userAdded.Username} has been added to meeting {dbMeeting.TASK_TEMPLATE.Title}.";
+                    notifyModel.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                 }
                 return true;
             }
@@ -570,13 +723,22 @@ namespace Backend.Repository
             var dbMeeting = db.MEETINGs.Find(id);
             if (dbMeeting != null)
             {
+                var owner = db.USERs.Find(dbMeeting.Host);
+
                 if (apiModel.contactId != 0)
                 {
                     var participant = db.MEETING_PARTICIPANT.Where(c => c.CONTACT.ID == apiModel.contactId && c.MEETING.ID == dbMeeting.ID).FirstOrDefault();
                     if (participant != null)
                     {
+                        var contactName = participant.CONTACT.Name;
                         db.MEETING_PARTICIPANT.Remove(participant);
                         db.SaveChanges();
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Participant removed";
+                        notifyModel.content = $"Contact {contactName} has been removed from meeting {dbMeeting.TASK_TEMPLATE.Title}.";
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                     }
                     else
                     {
@@ -588,8 +750,15 @@ namespace Backend.Repository
                     var participant = db.MEETING_PARTICIPANT.Where(c => c.LEAD.ID == apiModel.leadId && c.MEETING.ID == dbMeeting.ID).FirstOrDefault();
                     if (participant != null)
                     {
+                        var leadName = participant.LEAD.Name;
                         db.MEETING_PARTICIPANT.Remove(participant);
                         db.SaveChanges();
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Participant removed";
+                        notifyModel.content = $"Lead {leadName} has been removed from meeting {dbMeeting.TASK_TEMPLATE.Title}.";
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                     }
                     else
                     {
@@ -601,8 +770,15 @@ namespace Backend.Repository
                     var participant = db.MEETING_PARTICIPANT.Where(c => c.USER.ID == apiModel.userId && c.MEETING.ID == dbMeeting.ID).FirstOrDefault();
                     if (participant != null)
                     {
+                        var username = participant.USER.Username;
                         db.MEETING_PARTICIPANT.Remove(participant);
                         db.SaveChanges();
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Participant removed";
+                        notifyModel.content = $"User {username} has been removed from meeting {dbMeeting.TASK_TEMPLATE.Title}.";
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                     }
                     else
                     {
@@ -658,6 +834,16 @@ namespace Backend.Repository
                         newTagItem.TASK_ID = dbTask.ID;
                         db.TAG_ITEM.Add(newTagItem);
                         db.SaveChanges();
+
+                        var owner = db.USERs.Find(dbTask.TaskOwner);
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Tag added";
+                        notifyModel.content = $"Tag {tagName} has been added to task {dbTask.TASK_TEMPLATE.Title }.";
+                        notifyModel.createdAt = DateTime.Now;
+                        notifyModel.module = "tasks";
+                        notifyModel.moduleObjectId = dbTask.ID;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                         return true;
                     }
                     else
@@ -673,6 +859,16 @@ namespace Backend.Repository
                     tagItem.TASK_ID = dbTask.ID;
                     db.TAG_ITEM.Add(tagItem);
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbTask.TaskOwner);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag added";
+                    notifyModel.content = $"Tag {tagName} has been added to task {dbTask.TASK_TEMPLATE.Title }.";
+                    notifyModel.createdAt = DateTime.Now;
+                    notifyModel.module = "tasks";
+                    notifyModel.moduleObjectId = dbTask.ID;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                     return true;
                 }
             }
@@ -690,8 +886,20 @@ namespace Backend.Repository
                 var tagItem = dbTask.TAG_ITEM.Where(c => c.TAG.ID == tagId).FirstOrDefault();
                 if (tagItem != null)
                 {
+                    var tagName = tagItem.TAG.Name;
+
                     db.TAG_ITEM.Remove(tagItem);
                     db.SaveChanges();
+
+                    var owner = db.USERs.Find(dbTask.TaskOwner);
+
+                    var notifyModel = new NotificationApiModel();
+                    notifyModel.title = "Tag removed";
+                    notifyModel.content = $"Tag {tagName} has been removed from meeting {dbTask.TASK_TEMPLATE.Title }.";
+                    notifyModel.createdAt = DateTime.Now;
+                    notifyModel.module = "tasks";
+                    notifyModel.moduleObjectId = dbTask.ID;
+                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
                     return true;
                 }
                 else
@@ -754,6 +962,16 @@ namespace Backend.Repository
             db.TASKs.Add(newTask);
             db.SaveChanges();
 
+            var owner = db.USERs.Find(newTask.TaskOwner);
+            var creator = db.USERs.Find(createdUser);
+
+            var notifyModel = new NotificationApiModel();
+            notifyModel.title = "Task created";
+            notifyModel.content = $"Task {newTemplate.Title} has been created and assigned to you by {creator?.Username}.";
+            notifyModel.createdAt = DateTime.Now;
+            notifyModel.module = "tasks";
+            notifyModel.moduleObjectId = newTask.ID;
+            NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
             return true;
         }
 
@@ -809,6 +1027,19 @@ namespace Backend.Repository
                     dbTask.LEAD_ID = apiModel.lead;
                 }
                 db.SaveChanges();
+
+                var owner = db.USERs.Find(dbTask.TaskOwner);
+                var creator = db.USERs.Find(dbTask.TASK_TEMPLATE.CreatedBy);
+                var modifyUser = db.USERs.Find(modifiedUser);
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Task updated";
+                notifyModel.content = $"Task {dbTask.TASK_TEMPLATE.Title} has been updated by {modifyUser.Username}.";
+                notifyModel.createdAt = DateTime.Now;
+                notifyModel.module = "tasks";
+                notifyModel.moduleObjectId = dbTask.ID;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+
                 return true;
             }
             else
@@ -823,10 +1054,20 @@ namespace Backend.Repository
             if (dbTask != null)
             {
                 var template = dbTask.TASK_TEMPLATE;
+                var taskTitle = template.Title;
+                var owner = db.USERs.Find(dbTask.TaskOwner);
+                var creator = db.USERs.Find(dbTask.TASK_TEMPLATE.CreatedBy);
+
                 db.TASKs.Remove(dbTask);
                 db.SaveChanges();
                 db.TASK_TEMPLATE.Remove(template);
                 db.SaveChanges();
+
+                var notifyModel = new NotificationApiModel();
+                notifyModel.title = "Task removed";
+                notifyModel.content = $"Task {taskTitle} has been removed.";
+                notifyModel.createdAt = DateTime.Now;
+                NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
                 return true;
             }
             else

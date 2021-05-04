@@ -31,5 +31,10 @@ namespace Backend.Extensions
             }
         }
 
+        public static void ReloadDashboardSale()
+        {
+            NotificationHub.ReloadDashboardSale();
+        }
+
     }
 }
