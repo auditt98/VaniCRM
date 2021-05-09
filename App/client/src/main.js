@@ -9,11 +9,13 @@ import '../public/css/font-awesome.min.css'
 import Popover from 'vue-js-popover'
 import VPopover from 'vue-js-popover'
 import InfiniteLoading from 'vue-infinite-loading';
-
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
 Vue.use(InfiniteLoading, { /* options */ });
 Vue.use(Popover)
 Vue.use(VPopover, { tooltip: true })
 
+Vue.component('apexchart', VueApexCharts)
 import { format, parseISO } from 'date-fns';
 import {DATE_FORMAT, DATE_TIME_FORMAT} from "@/config/config";
 import 'vue-select/dist/vue-select.css';

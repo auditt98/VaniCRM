@@ -333,6 +333,7 @@
     <Compile Include="Controllers\LeadsController.cs" />
     <Compile Include="Controllers\MeetingController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -401,6 +402,7 @@
     <Compile Include="Models\ApiModel\NoteApiModel.cs" />
     <Compile Include="Models\ApiModel\NotificationApiModel.cs" />
     <Compile Include="Models\ApiModel\PriorityApiModel.cs" />
+    <Compile Include="Models\ApiModel\ReportApiModel.cs" />
     <Compile Include="Models\ApiModel\TagApiModel.cs" />
     <Compile Include="Models\ApiModel\TaskTemplateApiModel.cs" />
     <Compile Include="Models\ApiModel\DashboardApiModel.cs" />
@@ -425,6 +427,7 @@
     <Compile Include="Repository\NoteRepository.cs" />
     <Compile Include="Repository\NotificationRepository.cs" />
     <Compile Include="Repository\PriorityRepository.cs" />
+    <Compile Include="Repository\ReportRepository.cs" />
     <Compile Include="Repository\TagRepository.cs" />
     <Compile Include="Repository\TaskTemplateRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
@@ -459,6 +462,7 @@
     <Compile Include="Services\LeadService.cs" />
     <Compile Include="Services\NoteService.cs" />
     <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\TagService.cs" />
     <Compile Include="Services\TaskService.cs" />
     <Compile Include="Services\TaskTemplateService.cs" />
