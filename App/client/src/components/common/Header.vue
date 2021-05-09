@@ -55,7 +55,7 @@
 
       </div>
     </div>
-    <div class="nav-item mx-auto order-last">
+    <div class="nav-item mx-auto order-last" v-if="currentUser">
       <img class="header-avatar m-auto" v-bind:src="currentUser.avatar">
 
 

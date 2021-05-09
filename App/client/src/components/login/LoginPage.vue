@@ -55,11 +55,19 @@
     </div>
     <ForgotPassModal
         v-show="isModalVisible"
-        @close="closeModal" @reset-success="showAlertModal()"
+        ref="forgot"
+        @close="closeModal"
+        @open-confirm="openConfirmModal()"
+        @reset-success="showAlertModal()"
     />
     <AlertModal
         v-show="isAlertModalVisible"
         @close="closeAlertModal"/>
+    <ConfirmModal
+        v-show="isConfirmModalVisible"
+        @confirm="confirmSendMail"
+        @close="closeConfirmModal"/>
+
   </div>
 </template>
 
@@ -69,10 +77,11 @@ import AlertModal from "@/components/common/modal/AlertModal";
 import {authenticationService} from "@/service/authentication.service";
 import router from "@/router";
 import VLoading from "@/components/common/VLoading";
+import ConfirmModal from "@/components/common/modal/ConfirmModal";
 
 export default {
   name: "LoginPage",
-  components: {VLoading, AlertModal, ForgotPassModal},
+  components: {ConfirmModal, VLoading, AlertModal, ForgotPassModal},
   data() {
     return {
       email: '',
@@ -81,6 +90,7 @@ export default {
       returnUrl: '/',
       isModalVisible: false,
       isAlertModalVisible: false,
+      isConfirmModalVisible: false,
       error: Array(String),
       loading: false
     };
@@ -113,11 +123,21 @@ export default {
         this.loading = false;
       });
     },
+    confirmSendMail() {
+      this.closeConfirmModal();
+      this.$refs['forgot'].sendRequest();
+    },
     showModal() {
       this.isModalVisible = true;
     },
     closeModal() {
       this.isModalVisible = false;
+    },
+    closeConfirmModal() {
+      this.isConfirmModalVisible = false;
+    },
+    openConfirmModal() {
+      this.isConfirmModalVisible = true;
     },
     showAlertModal() {
       this.closeModal();

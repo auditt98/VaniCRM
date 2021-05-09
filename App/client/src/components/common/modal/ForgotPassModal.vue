@@ -1,7 +1,8 @@
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop" role="dialog">
-      <div class="modal" ref="modal">
+      <div class="modal" ref="modal" style="position: relative">
+        <VLoading :loading="loading"/>
         <header class="modal-header">
           <slot name="header">
             <h5 class="text-center w-100">Forgot Password</h5>
@@ -17,7 +18,7 @@
         <footer class="modal-footer text-center">
           <slot name="footer">
             <span @click="close"><VButton :data="btnCancel"/></span>
-            <span @click="sendRequest()"><VButton :data="btnSend"/></span>
+            <span @click="openConfirm()"><VButton :data="btnSend"/></span>
           </slot>
         </footer>
       </div>
@@ -28,11 +29,13 @@
 <script>
 import VButton from "@/components/common/VButton";
 import {authenticationService} from "@/service/authentication.service";
+import VLoading from "@/components/common/VLoading";
 export default {
   name: "ForgotPassModal",
-  components: {VButton},
+  components: {VLoading, VButton},
   data () {
     return {
+      loading: false,
       btnCancel: {btnClass: 'btn-white px-3 mr-4 btn-modal', icon: '', text: 'Cancel'},
       btnSend: {btnClass: 'btn-red px-4 btn-modal', icon: '', text: 'Send'},
       email: '',
@@ -43,20 +46,26 @@ export default {
     close() {
       this.$emit('close');
     },
-    sendRequest() {
+    openConfirm() {
       this.error = '';
       if (!this.email) {
         this.error = 'error';
         return ;
       }
+      this.$emit('open-confirm');
+    },
+    sendRequest() {
+      this.loading = true;
       authenticationService.requestResetPass(this.email)
           .then(res => {
             console.log(res);
-            alert('Thanh cong');
             this.$emit('reset-success');
             this.email ='';
             this.error = '';
-          }).catch(err => alert(err));
+          }).catch(err => alert(err))
+      .finally(() => {
+        this.loading = false;
+      });
     },
   },
   created() {

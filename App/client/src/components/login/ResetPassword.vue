@@ -1,5 +1,6 @@
 <template>
   <div class="w-100 login-page">
+    <VLoading :loading="loading"/>
     <div class="row mx-0">
       <div class="col-sm-6 mx-auto pt-5">
         <div class="col-sm-12 m-auto">
@@ -33,11 +34,14 @@
 <script>
 import {authenticationService} from "@/service/authentication.service";
 import router from "@/router";
+import VLoading from "@/components/common/VLoading";
 
 export default {
   name: "ResetPassword",
+  components: {VLoading},
   data() {
     return {
+      loading: false,
       password: '',
       passwordConfirm: '',
       key: '',
@@ -60,10 +64,12 @@ export default {
         alert('Ko trung')
         return ;
       }
+      this.loading = true;
       authenticationService.updateNewPass(this.password, this.key)
           .then(
               (res) => {
                 if (res) {
+                  alert('Reset successfully!');
                   router.push('/login')
                 }
               },
@@ -71,7 +77,9 @@ export default {
                 console.log(error);
                 alert(error);
               }
-          );
+          ).finally(() => {
+        this.loading = true;
+      });
     }
   },
   created() {

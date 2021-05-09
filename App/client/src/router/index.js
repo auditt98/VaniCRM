@@ -114,7 +114,7 @@ const routes = [
         meta: { title: 'Update Group' }
     },
     {
-        path: '/reset-password',
+        path: '/reset_password',
         name: 'ResetPassword',
         component: () => import('../components/login/ResetPassword.vue'),
         meta: { title: 'Reset Password' }
