@@ -1,7 +1,7 @@
 <template>
   <div class="background-main">
 
-    <div class="col-sm-9 mx-auto mt-5">
+    <div class="col-sm-10 mx-auto mt-5">
       <VLoading :loading="loading"/>
       <TableInList :header-columns="columns"
                    :page-size="pageSize"

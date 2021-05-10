@@ -13,6 +13,11 @@ namespace Backend.Services
         public ChartReportApiModel GetAmountByStageReport()
         {
             return _reportRepository.GetAmountByStageReport();   
-        } 
+        }
+
+        public ChartReportApiModel GetTopSalesReport()
+        {
+            return _reportRepository.GetTopSalesReport();
+        }
     }
 }

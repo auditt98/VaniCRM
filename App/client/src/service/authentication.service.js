@@ -64,7 +64,8 @@ function getRefreshToken() {
         }}).then((res) => {
                 return res.text().then(text =>{
                     const data = text && JSON.parse(text);
-                    if(res.ok){
+                    console.log(data)
+                    if(data.status == "success"){
                         if(data.data && data.data.user){
                             let user = data.data.user;
                             localStorage.setItem('currentUser', JSON.stringify(user));
@@ -72,12 +73,13 @@ function getRefreshToken() {
                             return data.data.user;
                         }
                     } else{
+                        // console.log("logout")
                         return logout();
                     }
                 })
             }).catch((e) => {
                 console.log(e)
-                return null;
+                return logout();
             });
     // })
     

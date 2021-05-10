@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="chart-card">
-            <h6 class="p-4">AMOUNT BY STAGE</h6>
-            <apexcharts type="bar" :options="options" :series="series" :height="300" :chart="chart"></apexcharts>
+            <h6 class="p-4">TOP SALES HAVE HIGH TURNOVER</h6>
+            <apexcharts type="bar" :options="options" :series="series" :height="450" :chart="chart"></apexcharts>
         </div>
     </div>
 
@@ -10,6 +10,8 @@
 
 <style>
     .chart-card {
+        margin-top: 20px;
+        margin-bottom: 20px;
         background: white;
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
         border: 1px solid #e7e7e7;
@@ -31,15 +33,13 @@ export default {
       options: {
         plotOptions: {
             bar: {
-                distributed: true
+                distributed: true,
+                borderRadius: 8,
+                horizontal: true,
             }
         },
-        theme: {
-            mode: 'light', 
-            palette: 'palette1', 
-        },
         chart: {
-          id: 'amountByStage-report',
+          id: 'topsales-report',
         },
         xaxis: {
             type: 'category'
@@ -52,16 +52,16 @@ export default {
         },
         tooltip:{
             enabled: true,
-
         }
       },
       series: Array,
     };
   },
   mounted() {
-    reportService.getAmountByStageReport().then(res => {
+    reportService.getTopSalesReport().then(res => {
         if (res && res.data) {
-          this.series = [{'name': 'Amount', 'data': [...res.data.data]}];
+            console.log("Res", res)
+          this.series = [{'name': 'Amount' ,'data': [...res.data.data]}];
         }
       })
   },

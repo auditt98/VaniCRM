@@ -2,7 +2,7 @@
   <div class="background-main">
 
     <VLoading :loading="loading"/>
-    <div class="col-sm-9 mx-auto mt-5">
+    <div class="col-sm-10 mx-auto mt-5">
       <TableInList :header-columns="columns"
                    :page-size="pageSize"
                    :total-page="totalPage"
