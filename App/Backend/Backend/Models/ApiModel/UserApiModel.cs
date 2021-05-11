@@ -204,6 +204,7 @@ namespace Backend.Models.ApiModel
             public string phone { get; set; }
             public string email { get; set; }
             public string skype { get; set; }
+            public string avatar { get; set; }
         }
     }
 }
