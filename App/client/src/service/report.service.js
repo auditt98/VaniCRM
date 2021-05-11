@@ -6,6 +6,7 @@ import {fetchRetry} from "@/helper/fetchRetry";
 export const reportService = {
     getAmountByStageReport,
     getTopSalesReport,
+    getTopMarketingsReport,
 };
 
 function getAmountByStageReport() {
@@ -26,6 +27,17 @@ function getTopSalesReport() {
         }, reject =>{
             if(reject == "retry"){
                 return fetchRetry(`${config.apiUrl}/reports/top_sales`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
+}
+
+function getTopMarketingsReport() {
+    return fetch(`${config.apiUrl}/reports/top_marketings`, requestOptions.get())
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/reports/top_marketings`, requestOptions.get(), 2).then(handleResponse)
             }
         }) ;
 }

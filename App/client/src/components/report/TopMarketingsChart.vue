@@ -3,10 +3,9 @@
         <div class="chart-card">
             <vcl-code v-if="!loaded" style="padding: 20px;"></vcl-code>
             <div v-if="loaded">
-              <h6 class="p-4">AMOUNT BY STAGE</h6>
-              <apexcharts type="bar" :options="options" :series="series" :height="300" :chart="chart"></apexcharts>
+                <h6 class="p-4">HIGHEST MARKET-REACH MARKETERS</h6>
+                <apexcharts type="bar" :options="options" :series="series" :height="400" :chart="chart"></apexcharts>
             </div>
-
         </div>
     </div>
 
@@ -14,6 +13,8 @@
 
 <style>
     .chart-card {
+        margin-top: 20px;
+        margin-bottom: 20px;
         background: white;
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
         border: 1px solid #e7e7e7;
@@ -23,37 +24,38 @@
 </style>
 
 <script>
-import {VclCode} from 'vue-content-loading';
+import { VclCode} from 'vue-content-loading';
 import VueApexCharts from "vue-apexcharts";
 import {reportService} from "../../service/report.service.js"
 export default {
-  name: 'AmountByStageChart',
+  name: 'TopMarketingsChart',
   components: {
       apexcharts: VueApexCharts,
-      VclCode,
+      VclCode
   },
   data: function () {
     return {
       loaded: false,
       options: {
-        plotOptions: {
-            bar: {
-                distributed: true
+        theme: {
+            monochrome: {
+                enabled: true,
+                color: '#255aee',
+                shadeTo: 'light',
+                shadeIntensity: 0.65
             }
         },
-        theme: {
-            mode: 'light', 
-            palette: 'palette1', 
+        plotOptions: {
+            bar: {
+                distributed: true,
+                borderRadius: 8,
+            }
         },
         chart: {
-          id: 'amountByStage-report',
-          zoom: {
-            // enabled: true
-          }
+          id: 'topmarketings-report',
         },
         xaxis: {
-            type: 'category',
-            // tickPlacement: 'on'
+            type: 'category'
         },
         dataLabels: {
             enabled: false
@@ -62,16 +64,16 @@ export default {
             show: false
         },
         tooltip:{
-            // enabled: true,
+            enabled: true,
         }
       },
       series: Array,
     };
   },
   mounted() {
-    reportService.getAmountByStageReport().then(res => {
+    reportService.getTopMarketingsReport().then(res => {
         if (res && res.data) {
-          this.series = [{'name': 'Amount', 'data': [...res.data.data]}];
+          this.series = [{'name': 'Leads created + Converted Accounts' ,'data': [...res.data.data]}];
           this.loaded = true;
         }
       })

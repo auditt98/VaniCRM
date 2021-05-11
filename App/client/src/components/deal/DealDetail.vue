@@ -267,8 +267,8 @@ export default {
           mapValue(this.dataRightDetail, [
             this.deal.amount,
             this.deal.probability,
-            Math.ceil(Number(this.deal.amount ? this.deal.amount : 0) * Number(this.deal.probability ? this.deal.probability : 0) / 100),
-            getValueInArr(this.deal.stages, 'passed', 'name'),
+            Math.floor(Number(this.deal.amount ? this.deal.amount : 0) * Number(this.deal.probability ? this.deal.probability : 0) / 100),
+            getValueInArr(this.deal.stages, 'selected', 'name'),
             formatDate(this.deal.CreatedAt, DATE_TIME_FORMAT),
             this.deal.CreatedBy ? this.deal.CreatedBy.username : '',
             formatDate(this.deal.ModifiedAt, DATE_TIME_FORMAT),

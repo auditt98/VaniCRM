@@ -4,12 +4,15 @@
       <div class="ml-3 w-100">
         <h4><strong>Timeline</strong></h4>
         <div class="time-line-status">
-          <ul v-if="timelineStatus" class="timeline timeline-horizontal w-100">
+          <ul v-if="timelineStatus" class="timeline timeline-horizontal w-100" style="padding: 0;">
+            <span id="timeline-line" class="timeline-line" style="transform: scaleX(0.694995777027027) !important;"></span>
             <li v-for="(timeline, index) in timelineStatus" :key="index" class="timeline-item">
-              <div class="timeline-badge" :class="{'primary-bg': timeline.passed, 'primary' : !timeline.passed, 'stage-selected': timeline.selected}"></div>
+              <!-- <div class="timeline-badge" :class="{'primary-bg': timeline.passed, 'primary' : !timeline.passed, 'stage-selected': timeline.selected}"></div> -->
+              <div class="timeline-badge" :data-id="index" :id="timeline.selected ? 'current' : ''" :class="{'passed': timeline.passed, 'current': timeline.selected ,'future' : !(timeline.passed || timeline.selected)}"></div>
               <div class="timeline-text" :class="{'timeline-text-selected': timeline.selected}">
                 {{timeline.name}}
               </div>
+
             </li>
           </ul>
         </div>
@@ -19,10 +22,28 @@
 </template>
 
 <script>
+
 export default {
   name: "VTimeLine",
   props: {
     timelineStatus: Array
+  },
+  updated() {
+    this.calculateWidth();
+  },
+  created() {
+    window.addEventListener("resize", this.calculateWidth);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.calculateWidth);
+  },
+  methods: {
+    calculateWidth: function() {
+      var current = document.getElementById("current");
+      var timeline = document.getElementById("timeline-line");
+      var scaleFactor = (current.getBoundingClientRect().left - timeline.getBoundingClientRect().left) / timeline.offsetWidth;
+      timeline.style="transform: scaleX(" + scaleFactor + ")";
+    }
   },
   data: function () {
     return {
@@ -39,29 +60,43 @@ export default {
     }
   }
 }
+// let box = document.querySelector('time-line');
+// let width = box.offsetWidth;
+// let height = box.offsetHeight;
+// console.log(width, height)
 </script>
 
 <style scoped>
+.timeline-line{
+  width: 100%;
+  height:3px;
+  display: inline-block;
+  background-color: #D93915;
+  position: absolute;
+  top: 33%;
+  left: 0;
+  /* transform: scaleX(0.07); */
+  transform-origin: left center;
+  transition: transform .4s,-webkit-transform .4s;
+}
+
 .time-line {
   background: #FFFFFF;
   box-shadow: 0px -8px 10px rgba(255, 255, 255, 0.5), 0px 16px 24px rgba(55, 71, 79, 0.2);
   border-radius: 30px;
 }
-.stage-selected {
-  background-color: #D93915 !important;
-  
-}
 
 .time-line-status {
   display: inline-block;
   width: 100%;
-  overflow-y: auto;
+  overflow: hidden;
 }
 .timeline-horizontal {
   list-style: none;
   position: relative;
   display: inline-block;
 }
+
 .timeline:before {
   bottom: 0;
   position: absolute;
@@ -71,6 +106,8 @@ export default {
 }
 
 .timeline-horizontal:before {
+  background-color: #dfdfdf; 
+  transition: transform .4s,-webkit-transform .4s;
   height: 3px;
   top: 33%;
   right: 0;
@@ -90,6 +127,24 @@ export default {
   float: none !important;
   padding-left: 0px;
   vertical-align: bottom;
+  width: 15%;
+}
+
+
+.timeline .timeline-item .timeline-badge.current{
+  background-color: #D93915;
+  transform: scale(1.4);
+  transition: transform .4s,-webkit-transform .4s;
+}
+
+.timeline .timeline-item .timeline-badge.passed{
+  background-color: white;
+  border: 3px solid #D93915;
+}
+
+.timeline .timeline-item .timeline-badge.future{
+  background-color: white;
+  border: 3px solid #dfdfdf;
 }
 
 .timeline .timeline-item .timeline-badge.primary-bg {
@@ -133,6 +188,7 @@ export default {
 }
 
 .timeline-text-selected{
+  /* transform: scale(1.2); */
   font-weight: bold;
   color: #D93915;
 }

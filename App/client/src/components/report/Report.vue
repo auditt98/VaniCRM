@@ -12,7 +12,9 @@
                     <div class="col-sm-6">
                         <TopSalesChart />
                     </div>
-                    <div class="col-sm-5"></div> 
+                    <div class="col-sm-6">
+                        <TopMarketingsChart />
+                    </div> 
                 </div>
             </div>
             
@@ -25,6 +27,7 @@
 // import ApexCharts from 'apexcharts'
 import AmountByStageChart from "./AmountByStageChart.vue"
 import TopSalesChart from "./TopSalesChart.vue"
+import TopMarketingsChart from "./TopMarketingsChart.vue"
 // import {reportService} from "../../service/report.service.js"
 export default {
   name: 'Report',
@@ -33,7 +36,7 @@ export default {
       
     };
   },
-  components:{ AmountByStageChart, TopSalesChart},
+  components:{ AmountByStageChart, TopSalesChart, TopMarketingsChart},
   mounted() {
 
   },

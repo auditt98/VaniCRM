@@ -19,5 +19,10 @@ namespace Backend.Services
         {
             return _reportRepository.GetTopSalesReport();
         }
+
+        public ChartReportApiModel GetTopMarketingsReport()
+        {
+            return _reportRepository.GetTopMarketingsReport();
+        }
     }
 }

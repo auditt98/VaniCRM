@@ -72,6 +72,55 @@ namespace Backend.Repository
             return report;
         }
 
+        public ChartReportApiModel GetTopMarketingsReport()
+        {
+            var report = new ChartReportApiModel();
+            var dict = new Dictionary<USER, int>();
+            var leads = db.LEADs.ToList();
+            foreach(var lead in leads)
+            {
+                var createdUser = lead.CreatedUser;
+                if(createdUser != null)
+                {
+                    if (dict.ContainsKey(createdUser))
+                    {
+                        dict[createdUser] = dict[createdUser] + 1;
+                    }
+                    else
+                    {
+                        dict[createdUser] = 1;
+                    }
+                }
+            }
+
+            var convertedAccounts = db.ACCOUNTs.Where(c => c.ConvertFrom != 0).ToList();
+            foreach(var account in convertedAccounts)
+            {
+                var convertedUser = account.CreatedUser;
+                if (convertedUser != null)
+                {
+                    if (dict.ContainsKey(convertedUser))
+                    {
+                        dict[convertedUser] = dict[convertedUser] + 1;
+                    }
+                    else
+                    {
+                        dict[convertedUser] = 1;
+                    }
+                }
+            }
+
+            var ordered = dict.OrderByDescending(x => x.Value).Take(10);
+            foreach (var item in ordered)
+            {
+                var entry = new Data();
+                entry.x = item.Key.Username;
+                entry.y = item.Value;
+                report.data.Add(entry);
+            }
+            return report;
+        }
+
         public ChartReportApiModel GetTopSalesReport()
         {
             var report = new ChartReportApiModel();
