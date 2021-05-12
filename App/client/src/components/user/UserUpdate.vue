@@ -6,12 +6,12 @@
       <div class="row ">
         <div class="col-sm-8">
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
+        <div class="col-sm-4 d-flex justify-content-end">
           <router-link :to="{name : 'Users'}">
             <VButton :data="btnCancel"/>
           </router-link>
 
-          <span @click="save()"><VButton :data="btnSave"/></span>
+          <span @click="save()" class="ml-4"><VButton :data="btnSave"/></span>
         </div>
       </div>
       <div class="mt-3 row">

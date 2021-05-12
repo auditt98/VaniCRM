@@ -17,6 +17,9 @@
           </tbody>
           <tbody v-if="contacts && contacts.length > 0">
           <tr v-for="(item,index) in contacts" :key="index">
+            <th>
+              <img :src="item.avatar" style="width: 60px; height: 60px; border-radius: 50%"/>
+            </th>
             <th>{{ item.contactName }}</th>
             <th>{{ item.accountName }}</th>
             <th>{{ item.phone }}</th>
@@ -111,10 +114,11 @@
         keyword: null,
         loading: false,
         columns: [
+         {text: 'Avatar', style: 'width: 5%;'},
           {text: 'Contact Name', style: 'width: 20%'},
           {text: 'Account Name', style: 'width: 20%'},
           {text: 'Phone', style: 'width: 10%'},
-          {text: 'Email', style: 'width: 20%'},
+          {text: 'Email', style: 'width: 15%'},
           {text: 'Account Owner', style: 'width: 15%'},
           {text: 'Actions', style: 'width: 15%'},
         ],

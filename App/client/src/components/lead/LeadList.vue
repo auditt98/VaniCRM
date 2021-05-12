@@ -21,6 +21,9 @@
           <tbody v-if="leads && leads.length > 0">
           <tr v-for="(item,index) in leads" :key="index">
             <th>
+              <img :src="item.avatar" style="width: 60px; height: 60px; border-radius: 50%"/>
+            </th>
+            <th>
               {{ item.name }}
             </th>
             <th>{{ item.companyName }}</th>
@@ -132,9 +135,10 @@ export default {
   data: function () {
     return {
       columns: [
+        {text: 'Avatar', style: 'width: 5%;'},
         {text: 'Lead Name', style: 'width: 15%;'},
         {text: 'Company Name', style: 'width: 15%;'},
-        {text: 'Email', style: 'width: 15%'},
+        {text: 'Email', style: 'width: 10%'},
         {text: 'Phone', style: 'width: 10%;'},
         {text: 'Lead Source', style: 'width: 15%;'},
         {text: 'Lead Owner', style: 'width: 15%;'},

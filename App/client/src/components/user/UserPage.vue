@@ -5,11 +5,11 @@
     <div class="px-5 pt-3 m-0 background-main">
       <div class="row ">
         <div class="col-sm-8">
-          <router-link :to="{name: 'Users'}"><VButton :data="btnBack"/></router-link>
+          <router-link :to="{name: 'UserList'}"><VButton :data="btnBack"/></router-link>
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
-          <span @click="isModalVisible = true"><VButton :data="btnChangePass"/></span>
-          <span @click="deleteUser"><VButton :data="btnDelete"/></span>
+        <div class="col-sm-4 d-flex justify-content-end">
+          <span class="mr-4" @click="isModalVisible = true"><VButton :data="btnChangePass"/></span>
+          <span class="mr-4" @click="deleteUser"><VButton :data="btnDelete"/></span>
           <router-link :to="{name: 'UserUpdate', query: {id: user.id}}"><VButton :data="btnEdit"/></router-link>
         </div>
       </div>
@@ -25,7 +25,7 @@
             <BasicInfo :arr-left="dataLeftDetail" :arr-right="dataRightDetail" :title="'Basic Info'"/>
           </div>
           <div class="row mt-3" id="tasks">
-            <TableInDetail :header-columns="columns" :tags="tags" :title="'Tasks'"
+            <TableInDetail :header-columns="columns" :title="'Tasks'"
                            :page-config="{page: currentPageTask, pageSize: pageSizeTask, totalItems: totalItemTask, totalPage: totalPageTask}"
                             @page-size-change="onPageSizeChange($event, 'TASK')"
                             @go-to-page="goToPage($event, 'TASK')">
@@ -37,8 +37,8 @@
                       <td>{{t.status}}</td>
                       <td>{{t.startDate | formatDate}}</td>
                       <td>{{t.endDate | formatDate}}</td>
-                      <td class="pl-0">
-                        <VTag :data="{text: t.priotity, bgColor: 'rgb(222, 0, 80)'}"/>
+                      <td>
+                        <VTag :data="{text: t.priority, bgColor: getBgColor(t.priority)}"/>
                       </td>
                       <td>
                         <span class="mr-1"><img src="images/newspaper-line.png" alt=""></span>
@@ -296,8 +296,22 @@ export default {
         this.currentPageContact = Number(event);
         this.loadContacts();
       }
-    }
-
+    },
+    getBgColor(data) {
+      if (!data) {
+        return '';
+      }
+      if (data.toUpperCase() === 'HIGH') {
+        return '#F12B2C';
+      }
+      if (data.toUpperCase() === 'MEDIUM') {
+        return '#FEC400';
+      }
+      if (data.toUpperCase() === 'LOW') {
+        return '#29CC97';
+      }
+      return 'red';
+    },
   },
   created() {
     if (this.$route.query.id) {
