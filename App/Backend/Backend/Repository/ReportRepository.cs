@@ -34,42 +34,65 @@ namespace Backend.Repository
             qualified.x = "Qualified";
             qualified.y = qualifiedDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
-            
+            var qualifiedCount = new Data();
+            qualifiedCount.y = qualifiedDeals.Count();
+
             var valueProposition = new Data();
             valueProposition.x = "Value Proposition";
             valueProposition.y = valuePropositionDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
-            
+            var valuePropositionCount = new Data();
+            valuePropositionCount.y = valuePropositionDeals.Count();
+
             var findKeyContacts = new Data();
             findKeyContacts.x = "Find Key Contacts";
             findKeyContacts.y = findKeyContactsDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
+            var findKeyContactsCount = new Data();
+            findKeyContactsCount.y = findKeyContactsDeals.Count();
+
 
             var sendProposal = new Data();
             sendProposal.x = "Send Proposal";
             sendProposal.y = sendProposalDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
 
+            var sendProposalCount = new Data();
+            sendProposalCount.y = sendProposalDeals.Count();
+
             var review = new Data();
             review.x = "Review";
             review.y = reviewDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
+            var reviewCount = new Data();
+            reviewCount.y = reviewDeals.Count();
+
 
             var negotiate = new Data();
             negotiate.x = "Negotiate";
             negotiate.y = negotiateDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
+            var negotiateCount = new Data();
+            negotiateCount.y = negotiateDeals.Count();
+
 
             var won = new Data();
             won.x = "Won";
             won.y = wonDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
+            var wonCount = new Data();
+            wonCount.y = wonDeals.Count();
 
             var lost = new Data();
             lost.x = "Lost";
             lost.y = lostDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
+            var lostCount = new Data();
+            lostCount.y = lostDeals.Count();
+
+            report.labels.AddRange(new List<string> { "Qualified", "Value Proposition", "Find Key Contacts", "Send Proposal", "Review", "Negotiate", "Won", "Lost" });
             report.data.AddRange(new List<Data> { qualified, valueProposition, findKeyContacts, sendProposal, review, negotiate, won, lost });
+            report.data1.AddRange(new List<Data> { qualifiedCount, valuePropositionCount, findKeyContactsCount, sendProposalCount, reviewCount, negotiateCount, wonCount, lostCount });
             return report;
         }
 

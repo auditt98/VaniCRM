@@ -3,10 +3,12 @@
         <div class="container-fluid" style="margin-top: 30px;">
             <div class="px-3">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-7">
                         <AmountByStageChart />
                     </div>
-                    <div class="col-sm-5"></div> 
+                    <div class="col-sm-5">
+                        <DealsByStageChart />
+                    </div> 
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
@@ -34,6 +36,7 @@ import AmountByStageChart from "./AmountByStageChart.vue"
 import TopSalesChart from "./TopSalesChart.vue"
 import TopMarketingsChart from "./TopMarketingsChart.vue"
 import KeyAccountsChart from "./KeyAccountsChart.vue"
+import DealsByStageChart from "./DealsByStageChart.vue"
 // import {reportService} from "../../service/report.service.js"
 export default {
   name: 'Report',
@@ -42,7 +45,7 @@ export default {
       
     };
   },
-  components:{ AmountByStageChart, TopSalesChart, TopMarketingsChart, KeyAccountsChart},
+  components:{ AmountByStageChart, TopSalesChart, TopMarketingsChart, KeyAccountsChart, DealsByStageChart},
   mounted() {
 
   },

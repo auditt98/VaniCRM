@@ -27,7 +27,7 @@ import {VclCode} from 'vue-content-loading';
 import VueApexCharts from "vue-apexcharts";
 import {reportService} from "../../service/report.service.js"
 export default {
-  name: 'AmountByStageChart',
+  name: 'DealsByStageChart',
   components: {
       apexcharts: VueApexCharts,
       VclCode,
@@ -37,7 +37,7 @@ export default {
       reportName: "",
       loaded: false,
       chart: {
-          id: 'amountByStage-report',
+          id: 'dealByStage-report',
       },
       options: {
         plotOptions: {
@@ -47,7 +47,7 @@ export default {
         },
         theme: {
             mode: 'light', 
-            palette: 'palette1', 
+            palette: 'palette3', 
         },
         xaxis: {
             type: 'category',
@@ -69,13 +69,10 @@ export default {
   mounted() {
     reportService.getAmountByStageReport().then(res => {
         if (res && res.data) {
-          console.log(res.data)
-          //force update labels
           this.labels = res.data.labels;
           this.updateLabels();
-
-          this.series = [{'name': 'Amount', 'data': [...res.data.data]}];
-          this.reportName = res.data.reportName;
+          this.series = [{'name': 'Deals by stage', 'data': [...res.data.data]}];
+          this.reportName = "DEALS BY STAGE";
           this.loaded = true;
         }
       })

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="chart-card">
-            <vcl-code v-if="!loaded" style="padding-top: 20px;"></vcl-code>
+            <vcl-code v-if="!loaded" style="padding: 20px;"></vcl-code>
             <div v-if="loaded">
               <h6 class="p-4">{{reportName}}</h6>
               <apexcharts type="line" :options="options" :series="series" :chart="chart" :height="400"></apexcharts>
@@ -43,6 +43,9 @@ export default {
           }
       },
       options: {
+        legend:{
+          show: true,
+        },
         plotOptions: {
             bar: {
                 distributed: false,
@@ -111,9 +114,6 @@ export default {
             borderWidth: 0,
           }
         },
-        legend:{
-            show: false
-        },
         tooltip:{
             // enabled: true,
         }
@@ -141,7 +141,6 @@ export default {
       })
   },
   methods:{
-
     updateLabels(){
       this.options = {
         ...this.options,
