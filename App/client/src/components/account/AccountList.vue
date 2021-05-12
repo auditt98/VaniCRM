@@ -21,6 +21,9 @@
           <tbody v-if="accounts && accounts.length > 0">
           <tr v-for="(item,index) in accounts" :key="index">
             <th>
+              <img :src="item.avatar" style="width: 60px; height: 60px; border-radius: 50%"/>
+            </th>
+            <th>
                 {{ item.name }}
             </th>
             <th>{{ item.phone }}</th>
@@ -112,11 +115,12 @@ export default {
       keyword: '',
       loading: false,
       columns: [
+        {text: 'Avatar', style: 'width: 5%;'},
         {text: 'Account Name', style: 'width: 20%;'},
         {text: 'Phone', style: 'width: 15%;'},
         {text: 'Website', style: 'width: 15%'},
         {text: 'Account Owner', style: 'width: 15%;'},
-        {text: 'Action', style: 'width: 15%;'},
+        {text: 'Action', style: 'width: 10%;'},
       ],
       btnCreate: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Account'},
     };
