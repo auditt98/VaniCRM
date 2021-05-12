@@ -16,6 +16,11 @@
                         <TopMarketingsChart />
                     </div> 
                 </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <KeyAccountsChart />
+                    </div>
+                </div>
             </div>
             
         </div>
@@ -28,6 +33,7 @@
 import AmountByStageChart from "./AmountByStageChart.vue"
 import TopSalesChart from "./TopSalesChart.vue"
 import TopMarketingsChart from "./TopMarketingsChart.vue"
+import KeyAccountsChart from "./KeyAccountsChart.vue"
 // import {reportService} from "../../service/report.service.js"
 export default {
   name: 'Report',
@@ -36,7 +42,7 @@ export default {
       
     };
   },
-  components:{ AmountByStageChart, TopSalesChart, TopMarketingsChart},
+  components:{ AmountByStageChart, TopSalesChart, TopMarketingsChart, KeyAccountsChart},
   mounted() {
 
   },

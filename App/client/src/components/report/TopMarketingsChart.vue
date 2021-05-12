@@ -3,8 +3,8 @@
         <div class="chart-card">
             <vcl-code v-if="!loaded" style="padding: 20px;"></vcl-code>
             <div v-if="loaded">
-                <h6 class="p-4">HIGHEST MARKET-REACH MARKETERS</h6>
-                <apexcharts type="bar" :options="options" :series="series" :height="400" :chart="chart"></apexcharts>
+                <h6 class="p-4">{{reportName}}</h6>
+                <apexcharts type="bar" :options="options" :series="series" :height="450" :chart="chart"></apexcharts>
             </div>
         </div>
     </div>
@@ -35,7 +35,11 @@ export default {
   },
   data: function () {
     return {
+      reportName: "",
       loaded: false,
+      chart: {
+          id: 'topmarketings-report',
+      },
       options: {
         theme: {
             monochrome: {
@@ -50,9 +54,6 @@ export default {
                 distributed: true,
                 borderRadius: 8,
             }
-        },
-        chart: {
-          id: 'topmarketings-report',
         },
         xaxis: {
             type: 'category'
@@ -74,6 +75,7 @@ export default {
     reportService.getTopMarketingsReport().then(res => {
         if (res && res.data) {
           this.series = [{'name': 'Leads created + Converted Accounts' ,'data': [...res.data.data]}];
+          this.reportName = res.data.reportName;
           this.loaded = true;
         }
       })

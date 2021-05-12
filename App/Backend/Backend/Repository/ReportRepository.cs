@@ -17,6 +17,7 @@ namespace Backend.Repository
         public ChartReportApiModel GetAmountByStageReport()
         {
             var report = new ChartReportApiModel();
+            report.reportName = "AMOUNT BY STAGE";
             var deals = db.DEALs.Where(c => c.STAGE_HISTORY.Count > 0).ToList();
 
             //qualified deals
@@ -75,6 +76,7 @@ namespace Backend.Repository
         public ChartReportApiModel GetTopMarketingsReport()
         {
             var report = new ChartReportApiModel();
+            report.reportName = "HIGHEST MARKET-REACH MARKETERS";
             var dict = new Dictionary<USER, int>();
             var leads = db.LEADs.ToList();
             foreach(var lead in leads)
@@ -124,6 +126,7 @@ namespace Backend.Repository
         public ChartReportApiModel GetTopSalesReport()
         {
             var report = new ChartReportApiModel();
+            report.reportName = "TOP SALES HAVE HIGH TURNOVER";
             var dict = new Dictionary<USER, long>();
 
             var deals = db.DEALs.Where(c => c.STAGE_HISTORY.Count > 0).ToList();
@@ -153,5 +156,33 @@ namespace Backend.Repository
             }
             return report;
         }
+
+        public ChartReportApiModel GetKeyAccountsReport()
+        {
+            var report = new ChartReportApiModel();
+            report.reportName = "KEY ACCOUNTS";
+            var dict = new Dictionary<ACCOUNT, long>();
+
+            var ordered = db.ACCOUNTs.OrderByDescending(c => c.DEALs.Count).Take(10).ToList();
+            
+            foreach (var item in ordered)
+            {
+                //label
+                report.labels.Add(item.Name);
+
+                var numDealData = new Data();
+                numDealData.x = item.Name;
+                numDealData.y = item.DEALs.Count;
+                report.data.Add(numDealData);
+
+                var amountData = new Data();
+                amountData.x = item.Name;
+                amountData.y = item.DEALs.Aggregate(0, (long amount, DEAL next) =>
+                                                amount += next.Amount.Value);
+                report.data1.Add(amountData);
+            }
+            return report;
+        }
+
     }
 }

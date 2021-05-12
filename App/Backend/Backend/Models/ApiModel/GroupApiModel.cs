@@ -47,6 +47,12 @@ namespace Backend.Models.ApiModel
         }
     }
 
+    public class GroupLinkApiModel
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
+
     public class GroupBlankApiModel
     {
         public List<PermissionGroup> perms { get; set; }

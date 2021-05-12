@@ -7,6 +7,8 @@ export const reportService = {
     getAmountByStageReport,
     getTopSalesReport,
     getTopMarketingsReport,
+    getKeyAccountsReport,
+    
 };
 
 function getAmountByStageReport() {
@@ -38,6 +40,17 @@ function getTopMarketingsReport() {
         }, reject =>{
             if(reject == "retry"){
                 return fetchRetry(`${config.apiUrl}/reports/top_marketings`, requestOptions.get(), 2).then(handleResponse)
+            }
+        }) ;
+}
+
+function getKeyAccountsReport() {
+    return fetch(`${config.apiUrl}/reports/key_accounts`, requestOptions.get())
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/reports/key_accounts`, requestOptions.get(), 2).then(handleResponse)
             }
         }) ;
 }

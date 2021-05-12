@@ -3,7 +3,7 @@
         <div class="chart-card">
             <vcl-code v-if="!loaded" style="padding: 20px;"></vcl-code>
             <div v-if="loaded">
-              <h6 class="p-4">AMOUNT BY STAGE</h6>
+              <h6 class="p-4">{{reportName}}</h6>
               <apexcharts type="bar" :options="options" :series="series" :height="300" :chart="chart"></apexcharts>
             </div>
 
@@ -34,7 +34,14 @@ export default {
   },
   data: function () {
     return {
+      reportName: "",
       loaded: false,
+      chart: {
+          id: 'amountByStage-report',
+          zoom: {
+            // enabled: true
+          }
+      },
       options: {
         plotOptions: {
             bar: {
@@ -44,12 +51,6 @@ export default {
         theme: {
             mode: 'light', 
             palette: 'palette1', 
-        },
-        chart: {
-          id: 'amountByStage-report',
-          zoom: {
-            // enabled: true
-          }
         },
         xaxis: {
             type: 'category',
@@ -72,6 +73,7 @@ export default {
     reportService.getAmountByStageReport().then(res => {
         if (res && res.data) {
           this.series = [{'name': 'Amount', 'data': [...res.data.data]}];
+          this.reportName = res.data.reportName;
           this.loaded = true;
         }
       })

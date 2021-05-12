@@ -4,7 +4,7 @@
           <vcl-code v-if="!loaded" style="padding: 20px;"></vcl-code>
           <!-- <vcl-table></vcl-table> -->
           <div v-if="loaded">
-            <h6 class="p-4">TOP SALES HAVE HIGH TURNOVER</h6>
+            <h6 class="p-4">{{reportName}}</h6>
             <apexcharts type="bar" :options="options" :series="series" :height="450" :chart="chart"></apexcharts>
           </div>
             
@@ -39,7 +39,11 @@ export default {
   },
   data: function () {
     return {
+      reportName: "",
       loaded: false,
+      chart: {
+          id: 'topsales-report',
+      },
       options: {
         plotOptions: {
             bar: {
@@ -47,9 +51,6 @@ export default {
                 borderRadius: 8,
                 horizontal: true,
             }
-        },
-        chart: {
-          id: 'topsales-report',
         },
         xaxis: {
             type: 'category'
@@ -70,7 +71,9 @@ export default {
   mounted() {
     reportService.getTopSalesReport().then(res => {
         if (res && res.data) {
+          console.log(res.data.reportName)
           this.series = [{'name': 'Amount' ,'data': [...res.data.data]}];
+          this.reportName = res.data.reportName;
           this.loaded = true;
         }
       })

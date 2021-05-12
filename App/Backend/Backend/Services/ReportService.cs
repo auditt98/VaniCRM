@@ -24,5 +24,10 @@ namespace Backend.Services
         {
             return _reportRepository.GetTopMarketingsReport();
         }
+
+        public ChartReportApiModel GetKeyAccountsReport()
+        {
+            return _reportRepository.GetKeyAccountsReport();
+        }
     }
 }

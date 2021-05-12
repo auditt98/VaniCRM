@@ -8,12 +8,14 @@ namespace Backend.Models.ApiModel
     public class ReportApiModel
     {
         public string reportName { get; set; }
-        public string type { get; set; }
     }
 
-    public class ChartReportApiModel
+    public class ChartReportApiModel : ReportApiModel
     {
         public List<Data> data { get; set; }
+        public List<Data> data1 { get; set; }
+        public List<Data> data2 { get; set; }
+        public List<string> labels { get; set; }
         public class Data
         {
             public string x { get; set; }
@@ -22,6 +24,9 @@ namespace Backend.Models.ApiModel
         public ChartReportApiModel()
         {
             data = new List<Data>();
+            data1 = new List<Data>();
+            data2 = new List<Data>();
+            labels = new List<string>();
         }
     }
 
