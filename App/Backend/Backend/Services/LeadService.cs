@@ -27,7 +27,7 @@ namespace Backend.Services
             var apiModel = new LeadListApiModel();
             string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
 
-            apiModel.leads = dbLeads.leads.Select(c => new LeadListApiModel.LeadInfo() { id = c.ID, name = c.Name, companyName = c.CompanyName, email = c.Email, phone = c.Phone, leadSource = c.LEAD_SOURCE != null ? c.LEAD_SOURCE.Name : "", leadOwner = c.Owner?.FirstName + " " + c.Owner?.LastName, priority = c.PRIORITY != null ? c.PRIORITY.Name : "", avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : "" }).ToList();
+            apiModel.leads = dbLeads.leads.Select(c => new LeadListApiModel.LeadInfo() { id = c.ID, name = c.Name, companyName = c.CompanyName, email = c.Email, phone = c.Phone, leadSource = c.LEAD_SOURCE != null ? c.LEAD_SOURCE.Name : "", leadOwner = c.Owner?.FirstName + " " + c.Owner?.LastName, priority = c.PRIORITY != null ? c.PRIORITY.Name : "", avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : $"{StaticStrings.ServerHost}avatar?fileName=default.png" }).ToList();
             apiModel.pageInfo = dbLeads.p;
             return apiModel;
         }

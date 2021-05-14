@@ -135,7 +135,7 @@ namespace Backend.Services
             var apiModel = new UserListApiModel();
             string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
 
-            apiModel.users = dbUsers.users.Select(c => new UserListApiModel.UserInfo() { id = c.ID, username = c.Username, firstName = c.FirstName, lastName = c.LastName, email = c.Email, phone = c.Phone, skype = c.Skype, avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : "" }).ToList();
+            apiModel.users = dbUsers.users.Select(c => new UserListApiModel.UserInfo() { id = c.ID, username = c.Username, firstName = c.FirstName, lastName = c.LastName, email = c.Email, phone = c.Phone, skype = c.Skype, avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : $"{StaticStrings.ServerHost}avatar?fileName=default.png" }).ToList();
             apiModel.pageInfo = dbUsers.p;
             return apiModel;
         }

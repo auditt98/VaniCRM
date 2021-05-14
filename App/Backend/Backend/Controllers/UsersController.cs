@@ -413,6 +413,10 @@ namespace Backend.Controllers
                             //apiModel.avatar = $"data:{mime};base64,{img}";
                             apiModel.avatar = $"{StaticStrings.ServerHost}avatar?fileName={dbUser.Avatar}";
                         }
+                        else
+                        {
+                            apiModel.avatar = $"{StaticStrings.ServerHost}avatar?fileName=default.png";
+                        }
                         apiModel.id = dbUser.ID;
                         apiModel.username = dbUser.Username;
                         apiModel.lastName = dbUser.LastName;

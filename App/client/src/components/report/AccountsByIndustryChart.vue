@@ -4,7 +4,7 @@
             <vcl-code v-if="!loaded" style="padding: 20px;"></vcl-code>
             <div v-if="loaded">
               <h6 class="p-4">{{reportName}}</h6>
-              <apexcharts type="bar" :options="options" :series="series" :height="300" :chart="chart"></apexcharts>
+              <apexcharts type="treemap" :options="options" :series="series" :height="300" :chart="chart"></apexcharts>
             </div>
 
         </div>
@@ -27,7 +27,7 @@ import {VclCode} from 'vue-content-loading';
 import VueApexCharts from "vue-apexcharts";
 import {reportService} from "../../service/report.service.js"
 export default {
-  name: 'DealsByStageChart',
+  name: 'AccountsByIndustryChart',
   components: {
       apexcharts: VueApexCharts,
       VclCode,
@@ -37,27 +37,45 @@ export default {
       reportName: "",
       loaded: false,
       chart: {
-          id: 'dealByStage-report',
+          id: 'accountsByIndustry-report',
       },
       options: {
+        colors: [
+              '#3B93A5',
+              '#F7B844',
+              '#ADD8C7',
+              '#EC3C65',
+              '#CDD7B6',
+              '#C1F666',
+              '#D43F97',
+              '#1E5D8C',
+              '#421243',
+              '#7F94B0',
+              '#EF6537',
+              '#C0ADDB'
+        ],
         plotOptions: {
-            bar: {
-                distributed: true
+            treemap:{
+              // distributed: true,
+              enableShades: true,
             }
         },
         theme: {
             mode: 'light', 
-            palette: 'palette3', 
+            palette: 'palette1', 
         },
         xaxis: {
             type: 'category',
             // tickPlacement: 'on'
         },
         dataLabels: {
-            enabled: false
+            enabled: true,
+            formatter: function(text, op) {
+              return [text, op.value]
+            },
         },
         legend:{
-            show: false
+            show: false,
         },
         tooltip:{
             // enabled: true,
@@ -67,13 +85,21 @@ export default {
     };
   },
   mounted() {
-    reportService.getAmountByStageReport().then(res => {
+    reportService.getAccountsByIndustryReport().then(res => {
         if (res && res.data) {
-          this.labels = res.data.labels;
-          this.updateLabels();
-          this.series = [{'name': 'Deals by stage', 'data': [...res.data.data1]}];
-          this.reportName = "DEALS BY STAGE";
+          console.log(res.data)
+          this.reportName = res.data.reportName;
+          this.series = [{name:"Number of accounts", data: [...res.data.data]}]
+          console.log(this.series)
           this.loaded = true;
+          // var dataSeries = [];
+          // var results = [...res.data.data]
+          // results.forEach(element => dataSeries.push(element.y))
+          // this.labels = res.data.labels;
+          // this.updateLabels();
+          // console.log(dataSeries)
+          // console.log(this.labels)
+          // this.series = dataSeries;
         }
       })
   },

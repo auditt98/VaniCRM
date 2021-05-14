@@ -2,6 +2,16 @@ html, body{
     background-color: #FBFAFA !important;
 }
 
+tr:hover{
+    background-color: #f1f1f15e !important;
+}
+
+.chart-card {
+    background: white;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border: 1px solid #e7e7e7;
+    border-radius: 15px;
+}
 
 .under-line {
     background: #D93915;

@@ -35,6 +35,7 @@ namespace Backend.Repository
             qualified.y = qualifiedDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
             var qualifiedCount = new Data();
+            qualifiedCount.x = "Qualified";
             qualifiedCount.y = qualifiedDeals.Count();
 
             var valueProposition = new Data();
@@ -42,6 +43,7 @@ namespace Backend.Repository
             valueProposition.y = valuePropositionDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
             var valuePropositionCount = new Data();
+            valuePropositionCount.x = "Value Proposition";
             valuePropositionCount.y = valuePropositionDeals.Count();
 
             var findKeyContacts = new Data();
@@ -49,6 +51,7 @@ namespace Backend.Repository
             findKeyContacts.y = findKeyContactsDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
             var findKeyContactsCount = new Data();
+            findKeyContactsCount.x = "Find Key Contacts";
             findKeyContactsCount.y = findKeyContactsDeals.Count();
 
 
@@ -58,6 +61,7 @@ namespace Backend.Repository
                                                 amount += next.Amount.Value);
 
             var sendProposalCount = new Data();
+            sendProposalCount.x = "Send Proposal";
             sendProposalCount.y = sendProposalDeals.Count();
 
             var review = new Data();
@@ -65,6 +69,7 @@ namespace Backend.Repository
             review.y = reviewDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
             var reviewCount = new Data();
+            reviewCount.x = "Review";
             reviewCount.y = reviewDeals.Count();
 
 
@@ -73,6 +78,7 @@ namespace Backend.Repository
             negotiate.y = negotiateDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
             var negotiateCount = new Data();
+            negotiateCount.x = "Negotiate";
             negotiateCount.y = negotiateDeals.Count();
 
 
@@ -81,6 +87,7 @@ namespace Backend.Repository
             won.y = wonDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
             var wonCount = new Data();
+            wonCount.x = "Won";
             wonCount.y = wonDeals.Count();
 
             var lost = new Data();
@@ -88,6 +95,7 @@ namespace Backend.Repository
             lost.y = lostDeals.Aggregate(0, (long amount, DEAL next) =>
                                                 amount += next.Amount.Value);
             var lostCount = new Data();
+            lostCount.x = "Lost";
             lostCount.y = lostDeals.Count();
 
             report.labels.AddRange(new List<string> { "Qualified", "Value Proposition", "Find Key Contacts", "Send Proposal", "Review", "Negotiate", "Won", "Lost" });
@@ -207,5 +215,60 @@ namespace Backend.Repository
             return report;
         }
 
+        public ChartReportApiModel GetAccountsByIndustryReport()
+        {
+            var report = new ChartReportApiModel();
+            report.reportName = "ACCOUNTS BY INDUSTRY";
+            var accountCounts = db.ACCOUNTs.Count();
+            var accountsWithIndustry = db.ACCOUNTs.Where(c => c.INDUSTRY != null);
+            var dict = new Dictionary<INDUSTRY, long>();
+            var total = 0;
+            foreach(var account in accountsWithIndustry)
+            {
+                var industry = account.INDUSTRY;
+                if (industry != null)
+                {
+                    if (dict.ContainsKey(industry))
+                    {
+                        dict[industry] = dict[industry] + 1;
+                    }
+                    else
+                    {
+                        dict[industry] = 1;
+                    }
+                    total++;
+                }
+            }
+            var ordered = dict.OrderByDescending(c => c.Value).ToList();
+            foreach(var item in ordered)
+            {
+                var data = new Data();
+                data.x = item.Key.Name;
+                data.y = item.Value;
+                report.data.Add(data);
+            }
+
+            if(accountCounts - total > 0)
+            {
+                var data = new Data();
+                data.x = "Others";
+                data.y = accountCounts - total;
+                report.data.Add(data);
+            }
+
+            return report;
+
+        }
+    
+        public ChartReportApiModel GetRevenueComparisonReport()
+        {
+            var report = new ChartReportApiModel();
+            //get won deals
+            var deals = db.DEALs.Where(c => c.STAGE_HISTORY.Count > 0).ToList();
+            var wonDeals = deals.Where(c => c.STAGE_HISTORY.OrderByDescending(x => x.ModifiedAt).FirstOrDefault().STAGE_ID == (int)EnumStage.WON);
+            
+
+            return report;
+        }
     }
 }
