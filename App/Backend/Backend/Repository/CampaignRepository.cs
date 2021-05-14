@@ -205,7 +205,7 @@ namespace Backend.Repository
                 if (dbTag != null)
                 {
                     var tagItem = dbCampaign.TAG_ITEM.Where(c => c.TAG_ID == dbTag.ID).FirstOrDefault();
-                    if (tagItem != null)
+                    if (tagItem == null)
                     {
                         var newTagItem = new TAG_ITEM();
                         newTagItem.TAG_ID = dbTag.ID;
