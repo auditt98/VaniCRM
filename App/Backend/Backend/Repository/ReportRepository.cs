@@ -263,10 +263,73 @@ namespace Backend.Repository
         public ChartReportApiModel GetRevenueComparisonReport()
         {
             var report = new ChartReportApiModel();
+            report.reportName = "MONTHLY REVENUE COMPARE TO LAST YEAR";
             //get won deals
             var deals = db.DEALs.Where(c => c.STAGE_HISTORY.Count > 0).ToList();
-            var wonDeals = deals.Where(c => c.STAGE_HISTORY.OrderByDescending(x => x.ModifiedAt).FirstOrDefault().STAGE_ID == (int)EnumStage.WON);
-            
+            var wonDeals = deals.Where(c => c.STAGE_HISTORY.OrderByDescending(x => x.ModifiedAt).Where(x => x.ModifiedAt.Value.Year == DateTime.Now.Year || x.ModifiedAt.Value.Year == DateTime.Now.Year - 1).FirstOrDefault().STAGE_ID == (int)EnumStage.WON);
+            report.labels = new List<string> { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+            var lastYearDict = new Dictionary<int, long>();
+            var thisYearDict = new Dictionary<int, long>();
+            for(var i = 1; i < 13; i++)
+            {
+                lastYearDict.Add(i, 0);
+                thisYearDict.Add(i, 0);
+            }
+            foreach(var deal in wonDeals)
+            {
+                var wonDate = deal.STAGE_HISTORY.OrderByDescending(x => x.ModifiedAt).FirstOrDefault().ModifiedAt;
+                if (wonDate.Value.Year == DateTime.Now.Year)
+                {
+                    switch (wonDate.Value.Month)
+                    {
+                        case var i when (i >= 1 && i <= 12):
+                            if (thisYearDict.ContainsKey(i))
+                            {
+                                thisYearDict[i] += deal.Amount.Value;
+                            }
+                            else
+                            {
+                                thisYearDict.Add(i, deal.Amount.Value);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+                else if(wonDate.Value.Year == DateTime.Now.Year - 1)
+                {
+                    switch (wonDate.Value.Month)
+                    {
+                        case var i when (i >= 1 && i <= 12):
+                            if (lastYearDict.ContainsKey(i))
+                            {
+                                lastYearDict[i] += deal.Amount.Value;
+                            }
+                            else
+                            {
+                                lastYearDict.Add(i, deal.Amount.Value);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            var lastYearData = lastYearDict.OrderBy(c => c.Key);
+            var thisYearData = thisYearDict.OrderBy(c => c.Key);
+            foreach(var item in lastYearData)
+            {
+                var data = new Data();
+                data.y = item.Value;
+                report.data.Add(data);
+            }
+            foreach (var item in thisYearData)
+            {
+                var data = new Data();
+                data.y = item.Value;
+                report.data1.Add(data);
+            }
 
             return report;
         }

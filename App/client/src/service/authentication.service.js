@@ -73,7 +73,6 @@ function getRefreshToken() {
                             return data.data.user;
                         }
                     } else{
-                        // console.log("logout")
                         return logout();
                     }
                 })

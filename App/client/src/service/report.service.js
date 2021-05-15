@@ -9,6 +9,7 @@ export const reportService = {
     getTopMarketingsReport,
     getKeyAccountsReport,
     getAccountsByIndustryReport,
+    getRevenueComparisonReport,
 };
 
 function getAmountByStageReport() {
@@ -64,4 +65,15 @@ function getAccountsByIndustryReport() {
                 return fetchRetry(`${config.apiUrl}/reports/accounts_by_industry`, requestOptions.get(), 2).then(handleResponse)
             }
         }) ;
+}
+
+function getRevenueComparisonReport(){
+    return fetch(`${config.apiUrl}/reports/revenue_comparison`, requestOptions.get())
+    .then(handleResponse).then(resolve => {
+        return resolve
+    }, reject =>{
+        if(reject == "retry"){
+            return fetchRetry(`${config.apiUrl}/reports/revenue_comparison`, requestOptions.get(), 2).then(handleResponse)
+        }
+    });
 }

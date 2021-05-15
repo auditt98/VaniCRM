@@ -3,6 +3,7 @@
 
     <div class="px-5 pt-3 m-0 mb-3 background-main" style="position: relative">
       <VLoading v-if="isLoading"/>
+      
       <div class="row ">
         <div class="col-sm-9">
         </div>
@@ -64,7 +65,41 @@
             </template>
           </TableInDetail>
         </div>
+        <div class="row">
+          <div class="col-sm-12 basic-edit">
+            <h4 class="ml-2"><strong>Permissions</strong></h4>
+            <div class="row" style="margin-top: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-10">
+                <div v-for="item in permissions" :key="item.permissionGroupId">
+                  <collapsible :isOpen="true">
+                    <h5 slot="trigger" style="color: #D93915;">{{item.permissionGroupName}} <i-arrow-down size="15"/></h5>
+                    <h5 slot="closedTrigger" style="color: #D93915;">{{item.permissionGroupName}} <i-arrow-up size="15"/></h5>
+                    <table>
+                      <thead>
+                        <th>Permission Name</th>
+                        <th>Description</th>
+                        <th>Selected</th>
+                      </thead>
+                      <tbody>
+                        <tr v-for="{id, name, description} in item.permissions" :key="id">
+                          <td>{{name}}</td>
+                          <td>{{description}}</td>
+                          <td><input type="checkbox" :value="id" v-model="permissionSelected"></td>
+                        </tr>
 
+                      </tbody>
+                    </table>
+                  </collapsible>
+                  <div class="dropdown-divider" style="margin-bottom: 1.5rem"></div>
+                </div>
+              </div>
+              <div class="col-md-1"></div>
+            </div>
+            
+            
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -76,10 +111,21 @@ import TableInDetail from "@/components/common/table/TableInDetail";
 import VButton from "@/components/common/VButton";
 import {groupService} from "@/service/group.service";
 import VLoading from "@/components/common/VLoading";
+import 'vue-collapsible-component/lib/vue-collapsible.css';
+import Collapsible from 'vue-collapsible-component';
+import ArrowDown from 'vue-material-design-icons/ArrowDown.vue';
+import ArrowUp from 'vue-material-design-icons/ArrowUp.vue';
 
 export default {
   name: "GroupUpdate",
-  components: {VLoading, VButton, TableInDetail},
+  components: {
+    VLoading, 
+    VButton, 
+    TableInDetail,
+    "collapsible": Collapsible,
+    "i-arrow-down": ArrowDown,
+    "i-arrow-up": ArrowUp,
+  },
   methods: {
     save() {
       this.isCheck = true;
@@ -111,6 +157,7 @@ export default {
       this.permissions = [];
       groupService.getAllPermission()
           .then(res => {
+            console.log(res.data)
             if (res && res.data) {
               this.permissions = res.data.perms;
             }
@@ -177,5 +224,18 @@ export default {
 </script>
 
 <style scoped>
+  button:focus {
+    outline: none !important;
+  }
+
+  table thead th {
+   color: #9FA2B4;
+   border-bottom: 1px solid rgba(0,0,0, 0.1);
+   text-align: center;
+ }
+
+  table tbody tr {
+   text-align: center;
+ }
 
 </style>

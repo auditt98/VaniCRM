@@ -63,13 +63,22 @@ namespace Backend.Repository
                 newStageHistory.ModifiedBy = createdUser;
                 newStageHistory.ModifiedAt = DateTime.Now;
                 newStageHistory.STAGE_ID = apiModel.stage;
-                if(apiModel.stage == (int)EnumStage.LOST)
+                if (apiModel.closingDate != null)
+                {
+                    newDeal.ClosingDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.closingDate.Value);
+                }
+                if (apiModel.stage == (int)EnumStage.LOST)
                 {
                     newDeal.isLost = true;
+                    newDeal.ClosingDate = newStageHistory.ModifiedAt;
                 }
                 else
                 {
                     newDeal.isLost = false;
+                }
+                if(apiModel.stage == (int)EnumStage.WON)
+                {
+                    newDeal.ClosingDate = newStageHistory.ModifiedAt;
                 }
                 newDeal.STAGE_HISTORY.Add(newStageHistory);
                 if (apiModel.lostReason != 0)
@@ -82,10 +91,7 @@ namespace Backend.Repository
             {
                 newDeal.PRIORITY_ID = apiModel.priority;
             }
-            if(apiModel.closingDate != null)
-            {
-                newDeal.ClosingDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.closingDate.Value);
-            } 
+            
             newDeal.CreatedAt = DateTime.Now;
             newDeal.CreatedBy = createdUser;
             newDeal.ModifiedAt = DateTime.Now;
@@ -177,10 +183,16 @@ namespace Backend.Repository
                     if (apiModel.stage == (int)EnumStage.LOST)
                     {
                         dbDeal.isLost = true;
+                        dbDeal.ClosingDate = newStageHistory.ModifiedAt;
                     }
                     else
                     {
                         dbDeal.isLost = false;
+                        
+                    }
+                    if(apiModel.stage == (int)EnumStage.WON)
+                    {
+                        dbDeal.ClosingDate = newStageHistory.ModifiedAt;
                     }
                     dbDeal.STAGE_HISTORY.Add(newStageHistory);
                     if (apiModel.lostReason != 0)
@@ -434,11 +446,17 @@ namespace Backend.Repository
                 if (stageId == (int)EnumStage.LOST)
                 {
                     dbDeal.isLost = true;
+                    dbDeal.ClosingDate = newStageHistory.ModifiedAt;
                 }
                 else
                 {
                     dbDeal.isLost = false;
                 }
+                if(stageId == (int)EnumStage.WON)
+                {
+                    dbDeal.ClosingDate = newStageHistory.ModifiedAt;
+                }
+
                 db.STAGE_HISTORY.Add(newStageHistory);
                 db.SaveChanges();
 

@@ -1,6 +1,9 @@
 html, body{
     background-color: #FBFAFA !important;
 }
+button:focus {
+    outline: none !important;
+}
 
 tr:hover{
     background-color: #f1f1f15e !important;
