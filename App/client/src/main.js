@@ -10,6 +10,7 @@ import Popover from 'vue-js-popover'
 import VPopover from 'vue-js-popover'
 import InfiniteLoading from 'vue-infinite-loading';
 import VueApexCharts from 'vue-apexcharts'
+
 Vue.use(VueApexCharts)
 Vue.use(InfiniteLoading, { /* options */ });
 Vue.use(Popover)

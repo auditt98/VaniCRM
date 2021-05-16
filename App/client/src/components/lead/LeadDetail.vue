@@ -28,6 +28,7 @@
             <BasicInfo :arr-left="dataLeftDetail" :arr-right="dataRightDetail" :title="'Detail'"/>
           </div>
           <div class="row mt-3" id="description">
+            
             <BasicInfo :description="lead.description" :title="'Description'"/>
           </div>
           <div class="row mt-3" id="address">
@@ -53,7 +54,6 @@ import Note from "@/components/common/info/Note";
 import {formatDate, getValueInArr, mapValue} from "@/config/config";
 import {leadService} from "@/service/lead.service";
 import VLoading from "@/components/common/VLoading";
-
 export default {
   name: "LeadDetail",
   methods: {

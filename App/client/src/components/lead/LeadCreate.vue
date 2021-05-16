@@ -164,9 +164,10 @@
           </div>
         </div>
         <div class="row mt-3">
-          <div class="basic-edit">
+          <div class="basic-edit" style="height: fit-content;">
             <h4 class="ml-2"><strong>Description</strong></h4>
             <div class="row ml-2">
+              <!-- <vue-editor v-model.trim="lead.description" name="" id="" cols="25" rows="5"></vue-editor> -->
               <textarea v-model.trim="lead.description" name="" class="form-control" id="" cols="25" rows="5"></textarea>
             </div>
           </div>
@@ -188,7 +189,8 @@ import {getValueInArr} from "@/config/config";
 
 export default {
   name: "LeadUpdate",
-  components: {VLoading, VButton, },
+  components: {VLoading, VButton, 
+  },
   validations: {
     lead: {
       name: {

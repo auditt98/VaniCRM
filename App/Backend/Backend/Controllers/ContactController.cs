@@ -186,7 +186,7 @@ namespace Backend.Controllers
                     var userId = Convert.ToInt32(payload["id"]);
                     var owner = _contactService.FindOwnerId(id);
                     var collaborator = _contactService.FindCollaboratorId(id);
-                    if ((userId == owner) || (userId == collaborator) || (new AuthorizationService().SetPerm((int)EnumPermissions.CONTACT_MODIFY).Authorize(userId)))
+                    if ((userId == owner) || (userId == collaborator) || (new AuthorizationService().SetPerm((int)EnumPermissions.CONTACT_DELETE).Authorize(userId)))
                     {
                         var isUpdated = _contactService.Update(id, apiModel, Convert.ToInt32(userId));
                         if (isUpdated)

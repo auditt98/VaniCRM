@@ -27,7 +27,7 @@ namespace Backend.Services
             var dbContacts = _contactRepository.GetAllContacts(query, pageSize, currentPage);
             var apiModel = new ContactListApiModel();
             string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
-            apiModel.contacts = dbContacts.contacts.Select(c => new ContactListApiModel.ContactInfo() { id = c.ID, contactName = c.Name, accountName = c.ACCOUNT != null ? c.ACCOUNT.Name : "", email = c.Email, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName, avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : "" }).ToList();
+            apiModel.contacts = dbContacts.contacts.Select(c => new ContactListApiModel.ContactInfo() { id = c.ID, contactName = c.Name, accountName = c.ACCOUNT != null ? c.ACCOUNT.Name : "", email = c.Email, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName, avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : $"{StaticStrings.ServerHost}avatar?fileName=default.png" }).ToList();
             apiModel.pageInfo = dbContacts.p;
             return apiModel;
         }

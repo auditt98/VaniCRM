@@ -7,7 +7,9 @@
                    :page-size="pageSize"
                    :total-page="totalPage"
                    @go-to-page="goToPage"
-                   @search="search">
+                   @search="search"
+                   v-if="!loading"
+      >
         <template slot="button">
           <router-link :to="{name: 'UserCreate'}"><VButton :data="btnCreate"/></router-link>
         </template>
@@ -44,10 +46,12 @@ import TableInList from "@/components/common/table/TableInList";
 import {userService} from "@/service/user.service";
 import VButton from "@/components/common/VButton";
 import VLoading from "@/components/common/VLoading";
-
+// import {VclTable} from 'vue-content-loading';
 export default {
   name: "UserList",
-  components: {VLoading, VButton, TableInList},
+  components: {
+  VLoading, 
+  VButton, TableInList},
   methods: {
     goToPage(page) {
       this.currentPage = page;

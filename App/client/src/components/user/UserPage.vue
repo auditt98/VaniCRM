@@ -160,12 +160,18 @@ export default {
       userService.getById(this.user.id).then(res => {
         if (res && res.data) {
           this.user = res.data;
+          console.log(res.data)
+          var userGroup = this.user.groups.filter(element => {
+            return element.selected == true
+          })[0];
+          
+          console.log(userGroup)
           this.loadAccounts();
           this.loadContacts();
           this.loadLeads();
           this.loadTasks();
           mapValue(this.dataLeftDetail, [this.user.firstName, this.user.lastName, this.user.username, `<a href="mailto:${this.user.email}">${this.user.email}</a>`]);
-          mapValue(this.dataRightDetail, [this.user.skype, this.user.phone, formatDate(this.user.createdAt, 'dd/MM/yyyy HH:mm'), this.user.createdByName]);
+          mapValue(this.dataRightDetail, [this.user.skype, this.user.phone, formatDate(this.user.createdAt, 'dd/MM/yyyy HH:mm'), this.user.createdByName, userGroup.name]);
         } else {
           alert('Không có dữ liệu');
           this.$router.push('/users');
@@ -362,7 +368,8 @@ export default {
         {key: 'Skype Address', value: ''},
         {key: 'Phone Number', value: ''},
         {key: 'Created At', value: ''},
-        {key: 'Created By', value: ''}
+        {key: 'Created By', value: ''},
+        {key: 'Group', value: ''}
       ],
       leadOwnColumns: [
          'Name', 'Email', 'Phone', 'Website', 'Company Name', 'Skype'

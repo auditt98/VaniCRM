@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="chart-card">
-            <vcl-code v-if="!loaded" style="padding-top: 20px;"></vcl-code>
+            <vcl-code v-if="!loaded" style="padding: 20px;"></vcl-code>
             <div v-if="loaded">
               <h6 class="p-4">{{reportName}}</h6>
               <apexcharts type="line" :options="options" :series="series" :chart="chart" :height="400"></apexcharts>
@@ -38,11 +38,11 @@ export default {
       labels: Array,
       chart: {
           id: 'keyAccounts-report',
-          zoom: {
-            // enabled: true
-          }
       },
       options: {
+        legend:{
+          show: true,
+        },
         plotOptions: {
             bar: {
                 distributed: false,
@@ -111,9 +111,6 @@ export default {
             borderWidth: 0,
           }
         },
-        legend:{
-            show: false
-        },
         tooltip:{
             // enabled: true,
         }
@@ -132,7 +129,17 @@ export default {
           var countData = [...res.data.data];
           countData.forEach(element => countSeries.push(element.y))
           //force update labels
-          this.labels = res.data.labels;
+          console.log(res.data.labels)
+          this.labels = res.data.labels.map(function (text) {
+              if (text == null) {
+                  return "";
+              }
+              if (text.length <= 20) {
+                  return text;
+              }
+              text = text.substring(0, 20);
+              return text + "...";
+          });
           this.updateLabels();
           this.series = [{'name': 'Amount', type : 'column', 'data': amountSeries}, {'name': 'Number of deals', 'type': 'line', 'data': countSeries}];
           this.reportName = res.data.reportName;
@@ -141,7 +148,6 @@ export default {
       })
   },
   methods:{
-
     updateLabels(){
       this.options = {
         ...this.options,

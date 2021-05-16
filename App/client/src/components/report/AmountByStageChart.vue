@@ -38,9 +38,6 @@ export default {
       loaded: false,
       chart: {
           id: 'amountByStage-report',
-          zoom: {
-            // enabled: true
-          }
       },
       options: {
         plotOptions: {
@@ -72,6 +69,11 @@ export default {
   mounted() {
     reportService.getAmountByStageReport().then(res => {
         if (res && res.data) {
+          console.log(res.data)
+          //force update labels
+          this.labels = res.data.labels;
+          this.updateLabels();
+
           this.series = [{'name': 'Amount', 'data': [...res.data.data]}];
           this.reportName = res.data.reportName;
           this.loaded = true;
@@ -79,6 +81,14 @@ export default {
       })
   },
   methods:{
+    updateLabels(){
+      this.options = {
+        ...this.options,
+        ...{
+          labels: this.labels,
+        }
+      }
+    }
   }
 }
 </script>

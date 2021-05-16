@@ -205,5 +205,98 @@ namespace Backend.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("reports/accounts_by_industry")]
+        [ResponseType(typeof(ChartReportApiModel))]
+        public HttpResponseMessage GetAccountsByIndustryReport()
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.OK;
+                    responseData = ResponseFormat.Success;
+                    responseData.data = _reportService.GetAccountsByIndustryReport();
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpGet]
+        [Route("reports/revenue_comparison")]
+        [ResponseType(typeof(ChartReportApiModel))]
+        public HttpResponseMessage GetRevenueComparisonReport()
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.OK;
+                    responseData = ResponseFormat.Success;
+                    responseData.data = _reportService.GetRevenueComparisonReport();
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
     }
 }
