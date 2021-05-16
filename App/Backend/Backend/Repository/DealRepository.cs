@@ -81,9 +81,25 @@ namespace Backend.Repository
                     newDeal.ClosingDate = newStageHistory.ModifiedAt;
                 }
                 newDeal.STAGE_HISTORY.Add(newStageHistory);
-                if (apiModel.lostReason != 0)
+                if (!String.IsNullOrEmpty(apiModel.lostReason))
                 {
-                    newDeal.LOST_REASON_ID = apiModel.lostReason;
+                    //find lost reason
+                    var lostReason = db.LOST_REASON.Where(c => c.Reason.ToLower().Contains(apiModel.lostReason.ToLower())).FirstOrDefault();
+                    if (lostReason != null)
+                    {
+                        var newLostReason = new LOST_REASON();
+                        newLostReason.Reason = apiModel.lostReason;
+                        db.LOST_REASON.Add(newLostReason);
+                        newDeal.LOST_REASON = newLostReason;
+                        //newLostReason.DEALs.Add(newDeal);
+
+                    }
+                    else
+                    {
+                        newDeal.LOST_REASON_ID = lostReason.ID;
+                        //lostReason.DEALs.Add(newDeal);
+                    }
+                    //dbDeal.LOST_REASON_ID = apiModel.lostReason;
                 }
             }
             newDeal.Name = apiModel.name;
@@ -195,9 +211,24 @@ namespace Backend.Repository
                         dbDeal.ClosingDate = newStageHistory.ModifiedAt;
                     }
                     dbDeal.STAGE_HISTORY.Add(newStageHistory);
-                    if (apiModel.lostReason != 0)
+                    if (!String.IsNullOrEmpty(apiModel.lostReason))
                     {
-                        dbDeal.LOST_REASON_ID = apiModel.lostReason;
+                        //find lost reason
+                        var lostReason = db.LOST_REASON.Where(c => c.Reason.ToLower().Contains(apiModel.lostReason.ToLower())).FirstOrDefault();
+                        if(lostReason != null)
+                        {
+                            var newLostReason = new LOST_REASON();
+                            newLostReason.Reason = apiModel.lostReason;
+                            db.LOST_REASON.Add(newLostReason);
+                            dbDeal.LOST_REASON = newLostReason;
+                            //newLostReason.DEALs.Add(dbDeal);
+                        }
+                        else
+                        {
+                            dbDeal.LOST_REASON_ID = lostReason.ID;
+                            //lostReason.DEALs.Add(dbDeal);
+                        }
+                        //dbDeal.LOST_REASON_ID = apiModel.lostReason;
                     }
                 }
                 dbDeal.Name = apiModel.name;
@@ -590,6 +621,32 @@ namespace Backend.Repository
             {
                 return (null, null);
             }
+        }
+
+        public (IEnumerable<LOST_REASON> reasons, Pager p) GetLostReasons(string query = "", int pageSize = 0, int currentPage = 1)
+        {
+            var q = query.ToLower();
+            if (pageSize == 0)
+            {
+                pageSize = 10;
+            }
+            if (String.IsNullOrEmpty(q))
+            {
+                Pager pager = new Pager(db.LOST_REASON.Count(), currentPage, pageSize, 9999);
+                return (db.LOST_REASON.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+            }
+            var reasons = db.LOST_REASON.Where(c => c.Reason.ToLower().Contains(q)).OrderByDescending(c => c.ID);
+            if (reasons.Count() > 0)
+            {
+                Pager p = new Pager(reasons.Count(), currentPage, pageSize, 9999);
+
+                return (reasons.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+            }
+            else
+            {
+                return (reasons, null);
+            }
+
         }
     }
 }

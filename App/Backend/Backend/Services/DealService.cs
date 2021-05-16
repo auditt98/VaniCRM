@@ -94,7 +94,7 @@ namespace Backend.Services
             var apiModel = new DealBlankApiModel();
             apiModel.priorities = _priorityRepository.GetAllPriorities().Select(c => new PrioritySelectionApiModel() { id = c.ID, name = c.Name, selected = false }).ToList();
             apiModel.stages = _dealRepository.GetAllStages().Select(c => new StageLinkApiModel() { id = c.ID, name = c.Name, probability = c.Probability.GetValueOrDefault(), selected = false, passed = false }).ToList();
-            apiModel.lostReasons = _dealRepository.GetAllLostReason().Select(c => new LostReasonLinkApiModel() { id = c.ID, name = c.Reason, selected = false }).ToList();
+            apiModel.lostReasons = _dealRepository.GetAllLostReason().Select(c => new LostReasonLinkApiModel() { id = c.ID, reason = c.Reason, selected = false }).ToList();
             return apiModel;
         }
 
@@ -129,7 +129,7 @@ namespace Backend.Services
                 }
                 if(dbDeal.LOST_REASON != null)
                 {
-                    apiModel.lostReason = _dealRepository.GetAllLostReason().Select(c => new LostReasonLinkApiModel() { id = c.ID, name = c.Reason, selected = c.ID == dbDeal.LOST_REASON.ID }).ToList();
+                    apiModel.lostReason = new LostReasonLinkApiModel() { id = dbDeal.LOST_REASON.ID, reason = dbDeal.LOST_REASON.Reason };
                 }
                 apiModel.expectedRevenue = dbDeal.ExpectedRevenue.GetValueOrDefault();
                 apiModel.name = dbDeal.Name;
@@ -341,6 +341,15 @@ namespace Backend.Services
 
             }
             apiModel.pageInfo = dbCompetitors.p;
+            return apiModel;
+        }
+
+        public ReasonListApiModel GetLostReasons(string query = "", int pageSize = 0, int currentPage = 1)
+        {
+            var dbReasons = _dealRepository.GetLostReasons(query, pageSize, currentPage);
+            var apiModel = new ReasonListApiModel();
+            apiModel.reasons = dbReasons.reasons.Select(c => new ReasonListApiModel.ReasonInfo() { id = c.ID, reason = c.Reason}).ToList();
+            apiModel.pageInfo = dbReasons.p;
             return apiModel;
         }
     }

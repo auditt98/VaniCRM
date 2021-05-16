@@ -41,7 +41,7 @@ namespace Backend.Models.ApiModel
         public int stage { get; set; }
         public long amount { get; set; }
         public long expectedRevenue { get; set; }
-        public int lostReason { get; set; }
+        public string lostReason { get; set; }
         public string description { get; set; }
     }
 
@@ -62,7 +62,7 @@ namespace Backend.Models.ApiModel
         public AccountLinkApiModel account { get; set; }
         public ContactLinkApiModel contact { get; set; }
         public CampaignLinkApiModel campaign { get; set; }
-        public List<LostReasonLinkApiModel> lostReason { get; set; }
+        public LostReasonLinkApiModel lostReason { get; set; }
         public List<PrioritySelectionApiModel> priorities { get; set; }
         public long amount { get; set; }
         public int probability { get; set; }
@@ -92,7 +92,7 @@ namespace Backend.Models.ApiModel
     public class LostReasonLinkApiModel
     {
         public int id { get; set; }
-        public string name { get; set; }
+        public string reason { get; set; }
         public bool selected { get; set; }
     }
     

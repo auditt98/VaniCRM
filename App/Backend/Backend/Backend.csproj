@@ -402,6 +402,7 @@
     <Compile Include="Models\ApiModel\NoteApiModel.cs" />
     <Compile Include="Models\ApiModel\NotificationApiModel.cs" />
     <Compile Include="Models\ApiModel\PriorityApiModel.cs" />
+    <Compile Include="Models\ApiModel\ReasonApiModel.cs" />
     <Compile Include="Models\ApiModel\ReportApiModel.cs" />
     <Compile Include="Models\ApiModel\TagApiModel.cs" />
     <Compile Include="Models\ApiModel\TaskTemplateApiModel.cs" />

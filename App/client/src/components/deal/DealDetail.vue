@@ -260,7 +260,8 @@ export default {
             this.deal.account ? this.deal.account.name : '',
             this.deal.contact ? this.deal.contact.name : '',
             this.deal.campaign ? this.deal.campaign.name : '',
-            getValueInArr(this.deal.lostReason, 'selected', 'name'),
+            this.deal.lostReason ? this.deal.lostReason.reason : '',
+            // getValueInArr(this.deal.lostReason, 'selected', 'name'),
             getValueInArr(this.deal.priorities, 'selected', 'name'),
 
           ]);

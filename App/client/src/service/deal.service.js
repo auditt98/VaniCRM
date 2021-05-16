@@ -7,6 +7,7 @@ import {fetchRetry} from "@/helper/fetchRetry";
 
 export const dealService = {
     getAll,
+    getAllReasons,
     create,
     update,
     getById,
@@ -69,6 +70,17 @@ function getAll(q) {
         }, reject =>{
             if(reject == "retry"){
                 return fetchRetry(`${config.apiUrl}/deals?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
+}
+
+function getAllReasons(q) {
+    return fetch(`${config.apiUrl}/deals/lost_reasons?${buildQueryURI(q)}`, requestOptions.get())
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/deals/lost_reasons?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
             }
         });
 }

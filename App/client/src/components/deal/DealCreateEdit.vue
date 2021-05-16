@@ -92,13 +92,20 @@
                       <input type="text" v-model="deal.expectedRevenue">
                     </td>
                   </tr>
-                  <tr v-if="reasons">
+                  <tr>
                     <td><label for="Reason">Lost Reason</label></td>
                     <td>
+                      <vc-select id="Reason" label="reason" ref="reasonSelect"
+                                :filterable="false" :options="reasons" taggable
+                                @search="onSearchReasons"
+                                v-model="deal.lostReason">
+                      </vc-select>
+                    </td>
+                    <!-- <td>
                       <select class="form-control py-0 w-100" id="Reason" v-model="deal.lostReason">
                         <option v-for="(f, i) in reasons" :key="i" :value="f.id">{{ f.name }}</option>
                       </select>
-                    </td>
+                    </td> -->
                   </tr>
                   <tr v-if="priorities">
                     <td><label for="Priority">Priority</label></td>
@@ -157,10 +164,12 @@ export default {
           .then(res => {
             if (res && res.data) {
               this.deal = res.data;
+              console.log(res.data)
               this.deal.contact = res.data.contact ? {id: res.data.contact.id, contactName: res.data.contact.name} : null;
               this.deal.priority = getValueInArr(res.data.priorities, 'selected', 'id');
               this.deal.stage = getValueInArr(res.data.stages, 'selected', 'id');
-              this.deal.lostReason = getValueInArr(res.data.lostReason, 'selected', 'id');
+              this.deal.lostReason = res.data.lostReason ? {id: res.data.lostReason.id, reason: res.data.lostReason.reason} : null;
+              // this.deal.lostReason = getValueInArr(res.data.lostReason, 'selected', 'id');
               // this.mapRRule(this.deal.rrule);
             } else {
               alert('Không có dữ liệu');
@@ -188,6 +197,7 @@ export default {
       } else {
         dealService.update(this.mapTaskModel(), this.deal.id)
             .then(res => {
+              
               alert(res.message);
               this.$router.push('/deals/detail?id=' + this.deal.id);
             }).finally(() => {
@@ -196,6 +206,7 @@ export default {
       }
     },
     mapTaskModel() {
+      console.log("Lost reason: ",typeof this.deal.lostReason.reason !== 'undefined' ? this.deal.lostReason.reason : this.deal.lostReason ? this.deal.lostReason : null)
       return {
         name: this.deal.name,
         closingDate: this.deal.closingDate,
@@ -207,7 +218,7 @@ export default {
         stage: this.deal.stage,
         amount: this.deal.amount,
         expectedRevenue: this.deal.expectedRevenue,
-        lostReason: this.deal.lostReason,
+        lostReason: typeof this.deal.lostReason.reason !== 'undefined' ? this.deal.lostReason.reason : this.deal.lostReason ? this.deal.lostReason : null,
         description: this.deal.description
       };
     },
@@ -216,7 +227,7 @@ export default {
       dealService.loadAllObject()
           .then(res => {
             if (res && res.data && res.status === 'success') {
-              this.reasons = res.data.lostReasons;
+              // this.reasons = res.data.lostReasons;
               this.stages = res.data.stages;
               this.priorities = res.data.priorities;
             }
@@ -279,6 +290,21 @@ export default {
           this.campaigns = res.data.campaigns;
         }
       })
+    },
+
+    onSearchReasons(search) {
+      let query = {
+        currentPage: 1,
+        pageSize: 10
+      };
+      if (search && search.trim()) {
+        query['query'] = search;
+      }
+      dealService.getAllReasons(query).then(res => {
+        if (res && res.data) {
+          this.reasons = res.data.reasons;
+        }
+      })
     }
   },
   created() {
@@ -294,6 +320,7 @@ export default {
     this.onSearchCampaign(null);
     this.onSearchAccount(null);
     this.onSearchContact(null);
+    this.onSearchReasons(null);
   },
   data: function () {
     return {
@@ -307,7 +334,7 @@ export default {
         stage: 1,
         amount: 1,
         expectedRevenue: 0,
-        lostReason: 1,
+        lostReason: null,
         description: null,
         owner: null,
       },
