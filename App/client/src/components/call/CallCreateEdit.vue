@@ -7,7 +7,7 @@
         <div class="col-sm-8">
         </div>
         <div class="col-sm-4 d-flex justify-content-end">
-          <router-link :to="{name : '/'}">
+          <router-link :to="{name : 'TaskList'}">
             <VButton :data="btnCancel"/>
           </router-link>
 
@@ -316,12 +316,7 @@ export default {
         callService.create(this.mapModel())
             .then(res => {
               alert(res.message);
-              if (this.contactId) {
-                this.$router.push('/contacts/detail?id=' + this.contactId);
-              }
-              if (this.dealId) {
-                this.$router.push('/deals/detail?id=' + this.dealId);
-              }
+                this.$router.push('/tasks')
             }).finally(() => {
           this.loading = false;
         })
@@ -329,7 +324,7 @@ export default {
         callService.update(this.mapModel(), this.call.id)
             .then(res => {
               alert(res.message);
-              // this.$router.push('/calls/detail?i')
+                this.$router.push('/tasks')
             }).finally(() => {
           this.loading = false;
         })

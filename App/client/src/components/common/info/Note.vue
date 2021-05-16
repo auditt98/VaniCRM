@@ -41,6 +41,7 @@
 
                             <a :href="f.url"><img width="37" height="37" src="../../../assets/icon-download.png" alt="" style="margin-top: -7px; margin-right: -5px"></a>
                           </div>
+                          <!-- <img v-if="" style="width: 100%; height: 75px" :src="'https://localhost:44375/avatar?fileName=' + f.fileName" alt=""> -->
                       </div>
                       <p class="text-center">{{f.fileName}}</p>
                   </div>

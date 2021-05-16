@@ -22,7 +22,7 @@
         </div>
         <div class="col-sm-10">
           <div class="row">
-            <UserInfo ref="userInfo" @create-tag="createTag" :tags="account.tags" :image="account.avatar"
+            <UserInfo ref="userInfo" @create-tag="createTag" :tags="account.tags" :image="account.avatar" :is-show-avatar="true"
                       :title="'Account Name'" :title-detail="account.name"/>
           </div>
           <div class="row mt-3" id="basicInfo">

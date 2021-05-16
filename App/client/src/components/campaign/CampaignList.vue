@@ -74,7 +74,7 @@ export default {
       campaignService.remove(id).then(res => {
         if(res) {
           alert('Xóa thành công!');
-          this.loadAccounts(this.keyword);
+          this.loadCampaigns(this.keyword);
         }
       }).finally(() => {
         this.loading = false;
@@ -103,6 +103,7 @@ export default {
       campaignService.getAll(query).then(res => {
         if (res && res.data) {
           this.campaigns = res.data.campaigns;
+          this.campaigns = [...this.campaigns]
           this.totalPage = res.data.pageInfo.TotalPages;
         }
       }).catch(err => {

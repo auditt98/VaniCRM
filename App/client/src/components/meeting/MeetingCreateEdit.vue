@@ -228,6 +228,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
+                this.$router.push('/tasks')
               }
             })
             .catch(err => alert(err))
@@ -239,6 +240,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
+                this.$router.push('/tasks')
               }
             })
             .catch(err => alert(err))

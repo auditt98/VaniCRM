@@ -23,7 +23,7 @@
         <div class="col-sm-10">
           <div class="row">
             <UserInfo ref="userInfo" @create-tag="createTag" :tags="campaign.tags" :image="campaign.avatar"
-                      :title="'User'" :title-detail="'Username'"/>
+                      :title="'Campaign Name'" :title-detail="campaign.campaignName"/>
           </div>
           <div class="row mt-3" id="basicInfo">
             <BasicInfo :arr-left="dataLeftBaseInfo" :arr-right="[]" :title="'Basic Info'"/>
