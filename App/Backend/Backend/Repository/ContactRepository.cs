@@ -103,6 +103,7 @@ namespace Backend.Repository
             newContact.AddressDetail = apiModel.addressDetail;
             newContact.CreatedAt = DateTime.Now;
             newContact.CreatedBy = createdUser;
+            newContact.ModifiedAt = DateTime.Now;
             try
             {
                 db.CONTACTs.Add(newContact);

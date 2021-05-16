@@ -89,6 +89,7 @@ namespace Backend.Repository
             }
             newCampaign.CreatedAt = DateTime.Now;
             newCampaign.CreatedBy = createdUser;
+            newCampaign.ModifiedAt = DateTime.Now;
             newCampaign.Description = apiModel.description;
             newCampaign.EndDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.endDate);
             newCampaign.ExpectedResponse = apiModel.expectedResponse;

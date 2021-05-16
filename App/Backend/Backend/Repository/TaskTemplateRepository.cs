@@ -104,6 +104,7 @@ namespace Backend.Repository
             //create new template
             var newTemplate = new TASK_TEMPLATE();
             newTemplate.CreatedAt = DateTime.Now;
+            newTemplate.ModifiedAt = DateTime.Now;
             newTemplate.CreatedBy = createdUser;
             newTemplate.Description = apiModel.description;
             newTemplate.IsRepeat = apiModel.isReminder;
@@ -545,6 +546,7 @@ namespace Backend.Repository
             var newTemplate = new TASK_TEMPLATE();
             newTemplate.CreatedAt = DateTime.Now;
             newTemplate.CreatedBy = createdUser;
+            newTemplate.ModifiedAt = DateTime.Now;
             newTemplate.Description = apiModel.description;
             newTemplate.IsRepeat = apiModel.isRepeat;
             newTemplate.RRule = apiModel.rrule;
@@ -927,6 +929,7 @@ namespace Backend.Repository
             var newTemplate = new TASK_TEMPLATE();
             newTemplate.CreatedAt = DateTime.Now;
             newTemplate.CreatedBy = createdUser;
+            newTemplate.ModifiedAt = DateTime.Now;
             newTemplate.Description = apiModel.description;
             newTemplate.IsRepeat = apiModel.isReminder;
             newTemplate.RRule = apiModel.rrule;

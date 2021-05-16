@@ -41,7 +41,7 @@
             <Note ref="notes" @remove-note="removeNote" @submit="createNote" :notes="account.notes"/>
           </div>
           <div class="row mt-3" id="allContacts">
-            <TableInDetail :header-columns="contractColumns" :data="contactLst" :title="'All Contracts'"
+            <TableInDetail :header-columns="contractColumns" :data="contactLst" :title="'Contacts'"
                            :page-config="{page: currentPageContact, pageSize: pageSizeContact, totalItems: totalItemContact, totalPage: totalPageContact}"
                            @page-size-change="onPageSizeChange($event)"
                            @go-to-page="goToPage($event)">
@@ -104,6 +104,9 @@ export default {
       await accountService.loadContacts(query, this.account.id)
       .then(res => {
         if (res && res.data) {
+          console.log(res.data)
+          this.totalPageContact = res.data.pageInfo.TotalPages
+          this.totalItemContact = res.data.pageInfo.TotalItems
           this.contactLst = res.data.contacts;
         }
       })
@@ -236,7 +239,7 @@ export default {
         {id: '#bankingInformation', text: 'Banking Information'},
         {id: '#address', text: 'Address'},
         {id: '#notes', text: 'Notes'},
-        {id: '#contact', text: 'Contact'},
+        {id: '#allContacts', text: 'Contacts'},
       ],
       btnBack: {btnClass: 'btn-purple px-3', icon: 'fa-arrow-left', text: 'Back'},
       btnDelete: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Delete'},

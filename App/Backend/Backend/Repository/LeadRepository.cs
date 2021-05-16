@@ -117,6 +117,7 @@ namespace Backend.Repository
             newLead.Country = apiModel.country;
             newLead.CreatedAt = DateTime.Now;
             newLead.CreatedBy = createdUser;
+            newLead.ModifiedAt = DateTime.Now;
             newLead.Description = apiModel.description;
             newLead.Email = apiModel.email;
             newLead.Fax = apiModel.fax;

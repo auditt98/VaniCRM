@@ -80,6 +80,7 @@ namespace Backend.Repository
             newAccount.AddressDetail = apiModel.addressDetail;
             newAccount.CreatedAt = DateTime.Now;
             newAccount.CreatedBy = createdUser;
+            newAccount.ModifiedAt = DateTime.Now;
             if(apiModel.collaborator != 0)
             {
                 newAccount.AccountCollaborator = apiModel.collaborator;
