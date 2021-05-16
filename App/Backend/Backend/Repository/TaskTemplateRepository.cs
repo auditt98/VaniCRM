@@ -22,16 +22,24 @@ namespace Backend.Repository
         TagRepository _tagRepository = new TagRepository();
         //get user's tasks
 
-        public (List<TASK_TEMPLATE> tasks, Pager p) GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0)
+        public (List<TASK_TEMPLATE> tasks, Pager p) GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0, string status = "")
         {
             var dbUser = db.USERs.Find(userID);
             //var templates = dbUser.TaskTemplateCreated.ToList();
             //var templates = List<TASK_TEMPLATE>();
+            var dbStatus = db.TASK_STATUS.Where(c => c.Name.ToLower().Contains(status.ToLower())).FirstOrDefault();
+
             var templates = db.CALLs.Where(c => c.CallOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
             var tasks = db.TASKs.Where(c => c.TaskOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
             templates.AddRange(tasks);
             var meetingAsHost = db.MEETINGs.Where(c => c.Host == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
             templates.AddRange(meetingAsHost);
+
+            if (dbStatus != null)
+            {
+                templates = templates.Where(c => c.TASK_STATUS_ID == dbStatus.ID).ToList();
+            }
+
             foreach (var meeting in dbUser.MEETING_PARTICIPANT)
             {
                 templates.Add(meeting.MEETING.TASK_TEMPLATE);

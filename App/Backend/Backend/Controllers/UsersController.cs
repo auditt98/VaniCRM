@@ -954,7 +954,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("users/{id}/tasks")]
         [ResponseType(typeof(UserTaskApiModel))]
-        public HttpResponseMessage GetTasks([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
+        public HttpResponseMessage GetTasks([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "", [FromUri] string status="" )
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -988,7 +988,7 @@ namespace Backend.Controllers
                         var dbUser = db.USERs.Find(id);
                         if (dbUser != null)
                         {
-                            var taskTemplates = _taskTemplateService.GetUserTaskTemplate(dbUser.ID, query, currentPage, pageSize);
+                            var taskTemplates = _taskTemplateService.GetUserTaskTemplate(dbUser.ID, query, currentPage, pageSize, status);
                             var tasks = new List<UserDetailApiModel.T>();
                             foreach(var task in taskTemplates.tasks)
                             {
