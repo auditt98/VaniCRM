@@ -85,7 +85,7 @@ namespace Backend.Repository
                 {
                     //find lost reason
                     var lostReason = db.LOST_REASON.Where(c => c.Reason.ToLower().Contains(apiModel.lostReason.ToLower())).FirstOrDefault();
-                    if (lostReason != null)
+                    if (lostReason == null)
                     {
                         var newLostReason = new LOST_REASON();
                         newLostReason.Reason = apiModel.lostReason;
@@ -215,7 +215,7 @@ namespace Backend.Repository
                     {
                         //find lost reason
                         var lostReason = db.LOST_REASON.Where(c => c.Reason.ToLower().Contains(apiModel.lostReason.ToLower())).FirstOrDefault();
-                        if(lostReason != null)
+                        if(lostReason == null)
                         {
                             var newLostReason = new LOST_REASON();
                             newLostReason.Reason = apiModel.lostReason;
