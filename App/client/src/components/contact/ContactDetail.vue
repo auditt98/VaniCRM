@@ -22,7 +22,7 @@
         </div>
         <div class="col-sm-10">
           <div class="row">
-            <UserInfo ref="userInfo" @create-tag="createTag" :tags="contact.tags" :image="contact.avatar"
+            <UserInfo ref="userInfo" @create-tag="createTag" :tags="contact.tags" :image="contact.avatar" :is-show-avatar="true"
                       :title="'Contact Name'" :title-detail="contact.name"/>
           </div>
           <div class="row mt-3" id="basicInfo">
@@ -62,8 +62,8 @@
                   <td>{{ t.owner ? t.owner.username : '' }}</td>
                   <td>
                     <span class="action">
-                        <span @click="editTask(t.id)" class="mr-1"><img src="images/newspaper-line.png" alt=""></span>
-                        <span @click="deleteTask(t.id)"><img src="images/delete-bin-2-line.png" alt=""></span>
+                        <span @click="editTask(t.id)" class="mr-1"><img src="../../../public/images/newspaper-line.png" alt=""></span>
+                        <span @click="deleteTask(t.id)"><img src="../../../public/images/delete-bin-2-line.png" alt=""></span>
                     </span>
                   </td>
                 </tr>

@@ -69,7 +69,7 @@ export default {
           .then(
               (res) => {
                 if (res) {
-                  alert('Reset successfully!');
+                  alert('Updated successfully!');
                   router.push('/login')
                 }
               },

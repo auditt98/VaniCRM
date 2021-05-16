@@ -7,7 +7,7 @@
         <div class="col-sm-8">
         </div>
         <div class="col-sm-4 d-flex justify-content-end">
-          <router-link :to="{name : 'LeadList'}">
+          <router-link :to="{name: 'LeadDetail', query: {id: lead.id}}">
             <VButton :data="btnCancel"/>
           </router-link>
 
@@ -218,7 +218,11 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
-                this.$router.push('/leads')
+                if (this.campaignId) {
+                  this.$router.push('/campaigns/detail?id=' + this.campaignId);
+                } else {
+                  this.$router.push('/leads');
+                }
               }
             })
       } else {
@@ -294,6 +298,14 @@ export default {
     if (this.$route.query.id) {
       this.lead.id = this.$route.query.id;
       this.loadLead();
+    } else {
+      if (this.$route.query.accountId) {
+        this.accountId = Number(this.$route.query.accountId);
+        this.getAccountById();
+      } else if (this.$route.query.campaignId) {
+        this.campaignId = Number(this.$route.query.campaignId);
+        // this.getAccountById();
+      }
     }
     this.loadSelectList();
     this.onSearch(null);
@@ -322,6 +334,7 @@ export default {
         owner: null
       },
       loading: false,
+      campaignId: null,
       files: null,
       owners: [],
       industry: [],

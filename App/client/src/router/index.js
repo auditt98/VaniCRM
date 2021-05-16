@@ -105,13 +105,13 @@ const routes = [
         path: '/groups',
         name: 'GroupList',
         component: () => import('../components/group/GroupList.vue'),
-        meta: { title: 'List Group' }
+        meta: { title: 'List Group' , group: [3] }
     },
     {
         path: '/groups/update',
         name: 'GroupUpdate',
         component: () => import('../components/group/GroupUpdate.vue'),
-        meta: { title: 'Update Group' }
+        meta: { title: 'Update Group'  , group: [3]}
     },
     {
         path: '/reset_password',
@@ -128,25 +128,25 @@ const routes = [
         path: '/users',
         name: 'UserList',
         component: () => import('../components/user/UserList.vue'),
-        meta: { title: 'List User' }
+        meta: { title: 'List User' , group: [3]}
     },
     {
         path: '/users/create',
         name: 'UserCreate',
         component: () => import('../components/user/UserCreate.vue'),
-        meta: { title: 'Create User' }
+        meta: { title: 'Create User'  , group: [3]}
     },
     {
         path: '/users/update',
         name: 'UserUpdate',
         component: () => import('../components/user/UserUpdate.vue'),
-        meta: { title: 'Update User' }
+        meta: { title: 'Update User'  , group: [3]}
     },
     {
         path: '/users/page',
         name: 'UserPage',
         component: () => import('../components/user/UserPage.vue'),
-        meta: { title: 'User Page' }
+        meta: { title: 'User Page'  , group: [3]}
     },
     {
         path: '/leads/create',
