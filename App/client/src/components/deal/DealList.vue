@@ -77,7 +77,7 @@ export default {
       dealService.remove(id).then(res => {
         if(res) {
           alert('Xóa thành công!');
-          this.loadAccounts(this.keyword);
+          this.loadDeals(this.keyword);
         }
       }).finally(() => {
         this.loading = false;
@@ -107,6 +107,7 @@ export default {
       dealService.getAll(query).then(res => {
         if (res && res.data) {
           this.deals = res.data.deals;
+          this.deals = [...this.deals]
           this.totalPage = res.data.pageInfo.TotalPages;
         }
       }).catch(err => {
