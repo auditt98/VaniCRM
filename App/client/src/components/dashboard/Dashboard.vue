@@ -7,11 +7,11 @@
         <button class="btn btn-default" type="button">
           <i class="fa fa-search"></i>
         </button>
-        <input type="text" class="form-control" v-model="searchQuery" placeholder="Search" @change="filterList">
+        <input type="text" class="form-control" v-model="searchQuery" placeholder="Search">
       </div>
       <div class="testimonial-group">
       <div class="row flex-row flex-nowrap custom" v-if="type === 2">
-        <div class="col-1" v-for="item in items" :key="item.title" :data-id="item.id">
+        <div class="col-1" v-for="item in filteredDealsBySearchText" :key="item.title" :data-id="item.id">
           <div class="mb-3">
             <div class="card-header-text row justify-content-between">
               <p class="col-sm-10" :style="'color:' + item.color">{{item.title}}</p>
@@ -49,8 +49,8 @@
           >
             <!--                     @end="item.drag = false"-->
             <transition-group type="transition" :name="!item.drag ? 'flip-list' : null">
-              <div v-for="(element) in item.deals"
-                   :key="element.title">
+              <div v-for="(element, idx) in item.deals"
+                   :key="idx">
                 <DashboardCard :data="element"/>
               </div>
             </transition-group>
@@ -81,14 +81,14 @@
                 </div>
               </div>
             </div>
-            <draggable class="drag-scroll" :list="leads" v-bind="dragOptions"
+            <draggable class="drag-scroll" :list="filteredLeadsBySearchText" v-bind="dragOptions"
                        @start="leadDrag = true"
                        :scrollSensitivity="200"
                        :force-fallback="true"
             >
               <transition-group type="transition" :name="!leadDrag ? 'flip-list' : null">
-                <div v-for="(element) in leads"
-                     :key="element.title">
+                <div v-for="(element, idx) in filteredLeadsBySearchText"
+                     :key="idx">
                   <DashboardCard :data="element"/>
                 </div>
               </transition-group>
@@ -116,14 +116,14 @@
                 </div>
               </div>
             </div>
-            <draggable class="drag-scroll" :list="accounts" :move="checkMoveMar" v-bind="dragOptions"
+            <draggable class="drag-scroll" :list="filteredAccountsBySearchText" :move="checkMoveMar" v-bind="dragOptions"
                        @start="accountDrag = true"
                        :scrollSensitivity="200"
                        :force-fallback="true"
             >
               <transition-group type="transition" :name="!accountDrag ? 'flip-list' : null">
-                <div v-for="(element) in accounts"
-                     :key="element.title">
+                <div v-for="(element, idx) in filteredAccountsBySearchText"
+                     :key="idx">
                   <DashboardCard :data="element"/>
                 </div>
               </transition-group>
@@ -145,6 +145,8 @@ import {dealService} from "@/service/deal.service";
 import {leadService} from "@/service/lead.service";
 import {accountService} from "@/service/account.service";
 import VButton from "@/components/common/VButton";
+import _cloneDeep from 'lodash/cloneDeep'
+import _toLower from 'lodash/toLower'
 
 export default {
   name: "Dashboard",
@@ -178,9 +180,6 @@ export default {
     };
   },
   methods: {
-    filterList(){
-      console.log(this.searchQuery)
-    },
     openAdd(item, type) {
       if (type === 'DEAL') {
         item.deal.name = null;
@@ -355,6 +354,54 @@ export default {
         }
       })
     },
+    filterDealsBySearchText(items, searchText) {
+      if (this.type === 2 && items) {
+        if (!searchText) {
+          return items
+        }
+        let list = _cloneDeep(items)
+        const filteredList = []
+        list.forEach(item => {
+          const filteredDeal = item.deals.filter(deal => {
+            return _toLower(deal.title).includes(_toLower(searchText))
+              || _toLower(deal.title1).includes(_toLower(searchText))
+              || _toLower(deal.title2).includes(_toLower(searchText))
+          })
+          item.deals = filteredDeal
+          filteredList.push(item)
+        });
+        return filteredList
+      }
+      return []
+    },
+    filterAccountsBySearchText(items, searchText) {
+      if (this.type === 1 && items) {
+        if (!searchText) {
+          return items
+        }
+        const accounts = _cloneDeep(items)
+        return accounts.filter(account => {
+          return _toLower(account.title).includes(_toLower(searchText))
+          || _toLower(account.title1).includes(_toLower(searchText))
+          || _toLower(account.title2).includes(_toLower(searchText))
+        })
+      }
+      return []
+    },
+    filterLeadsBySearchText(items, searchText) {
+      if (this.type === 1 && items) {
+        if (!searchText) {
+          return items
+        }
+        const leads = _cloneDeep(items)
+        return leads.filter(lead => {
+          return _toLower(lead.title).includes(_toLower(searchText))
+          || _toLower(lead.title1).includes(_toLower(searchText))
+          || _toLower(lead.title2).includes(_toLower(searchText))
+        })
+      }
+      return []
+    }
   },
   computed: {
     dragOptions() {
@@ -364,6 +411,15 @@ export default {
         disabled: false,
         ghostClass: "ghost"
       };
+    },
+    filteredDealsBySearchText() {
+      return this.filterDealsBySearchText(this.items, this.searchQuery)
+    },
+    filteredAccountsBySearchText() {
+      return this.filterAccountsBySearchText(this.accounts, this.searchQuery)
+    },
+    filteredLeadsBySearchText() {
+      return this.filterLeadsBySearchText(this.leads, this.searchQuery)
     }
   },
   created() {
