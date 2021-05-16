@@ -31,8 +31,8 @@
           <div class="row mt-3" id="basicInfo">
             <BasicInfo :arr-left="dataLeftBaseInfo" :arr-right="[]" :title="'Basic Info'"/>
           </div>
-          <div class="row mt-3" id="detail">
-            <BasicInfo :arr-left="dataLeftDetail" :arr-right="dataRightDetail" :title="'Detail'"/>
+          <div class="row mt-3" id="details">
+            <BasicInfo :arr-left="dataLeftDetail" :arr-right="dataRightDetail" :title="'Details'"/>
           </div>
           <div class="row mt-3" id="description">
             <BasicInfo :description="deal.description" :title="'Description'"/>
@@ -40,8 +40,8 @@
           <div class="row mt-3" id="notes" v-if="deal.notes">
             <Note ref="notes" @remove-note="removeNote" @submit="createNote" :notes="deal.notes"/>
           </div>
-          <div class="row mt-3" id="competitor">
-            <TableInDetail :header-columns="competitorColumns" :title="'Competitor'"
+          <div class="row mt-3" id="competitors">
+            <TableInDetail :header-columns="competitorColumns" :title="'Competitors'"
                            :page-config="{page: currentPageCompetitor, pageSize: pageSizeCompetitor, totalItems: totalItemCompetitor, totalPage: totalPageCompetitor}"
                            @page-size-change="onPageSizeChange($event, 'COMPETITOR')"
                            @go-to-page="goToPage($event, 'COMPETITOR')">

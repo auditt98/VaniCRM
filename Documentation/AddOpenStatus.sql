@@ -1,0 +1,7 @@
+use CRM
+go
+SET IDENTITY_INSERT TASK_STATUS ON
+insert into [TASK_STATUS] (ID, Name) values (5, 'Open')
+go
+
+SET IDENTITY_INSERT TASK_STATUS OFF
