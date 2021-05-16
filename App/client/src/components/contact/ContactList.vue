@@ -89,6 +89,7 @@
         contactService.getAll(query).then(res => {
           if (res) {
             this.contacts = res.data.contacts;
+            this.contacts = [...this.contacts]
             this.totalPage = Number(res.data.pageInfo.TotalPages);
           }
         }).finally(() => {

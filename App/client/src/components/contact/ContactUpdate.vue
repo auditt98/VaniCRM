@@ -124,7 +124,7 @@
                   <tr>
                     <td><label for="Account">Account</label></td>
                     <td style="width: 80%">
-                      <vc-select id="Account" label="name" :filterable="false" :options="accounts"
+                      <vc-select id="Account" label="name" :filterable="false" :options="accounts" :class="{'select-disabled': accountId !== null}"
                                 @search="onSearchAccount"
                                 v-model="contact.account">
                       </vc-select>
@@ -226,6 +226,8 @@ export default {
                 alert(res.message);
                 if (this.accountId) {
                   this.$router.push('/accounts/detail?id=' + this.accountId);
+                } else if (this.campaignId) {
+                  this.$router.push('/campaigns/detail?id=' + this.campaignId);
                 } else {
                   this.$router.push('/contacts');
                 }
@@ -327,6 +329,9 @@ export default {
       if (this.$route.query.accountId) {
         this.accountId = Number(this.$route.query.accountId);
         this.getAccountById();
+      } else if (this.$route.query.campaignId) {
+        this.campaignId = Number(this.$route.query.campaignId);
+        // this.getAccountById();
       }
     }
     this.loadSelectList();
@@ -388,5 +393,13 @@ export default {
 .background-main {
   position: relative;
   min-height: 900px;
+}
+.select-disabled {
+  pointer-events: none;
+  color: #bfcbd9;
+  cursor: not-allowed;
+  background-image: none;
+  background-color: #eef1f6;
+  border-color: #d1dbe5;
 }
 </style>

@@ -93,7 +93,7 @@ export default {
       taskService.remove(id).then(res => {
         if(res) {
           alert('Xóa thành công!');
-          this.loadAccounts(this.keyword);
+          this.loadTasks(this.keyword);
         }
       }).finally(() => {
         this.loading = false;
@@ -122,6 +122,7 @@ export default {
       userService.getAllTasks(authenticationService.currentUserValue.id, query).then(res => {
         if (res && res.data) {
           this.tasks = res.data.tasks;
+          this.tasks = [...this.tasks]
           this.totalPage= Number(res.data.pageInfo.TotalPages);
           // this.totalItemTask = Number(res.data.pageInfo.TotalItems);
         }

@@ -33,7 +33,7 @@
       </div>
     </div>
 <!--    -->
-    <div class="nav-item mx-auto order-last dropdown">
+    <div class="nav-item mx-auto order-last dropdown"  v-if="[3].indexOf(currentUser.group) > -1">
       <a class="nav-link dropdown-toggle ml-3 mr-0" href="#" id="navbarDropdown9" role="button" data-toggle="dropdown"
          aria-haspopup="true" aria-expanded="false">
         <img src="../../assets/icon-settings.png" alt="">
@@ -61,6 +61,7 @@
 
     </div>
     <div class="collapse navbar-collapse" id="navbarNav">
+      <div> <img style="width:80px; height:80px" src="../../assets/CRM-01.png" alt=""></div>
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="javascript:void(0)" :class="{ 'active': isActive }" id="navbarDropdown1" role="button" data-toggle="dropdown"

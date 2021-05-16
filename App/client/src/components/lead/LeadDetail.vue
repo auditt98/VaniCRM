@@ -19,7 +19,7 @@
         </div>
         <div class="col-sm-10">
           <div class="row">
-            <UserInfo ref="userInfo" @create-tag="createTag" :tags="lead.tags" :image="lead.avatar" :title="'Lead'" :title-detail="lead.name"/>
+            <UserInfo ref="userInfo" @create-tag="createTag" :tags="lead.tags" :image="lead.avatar" :title="'Lead'" :title-detail="lead.name" :is-show-avatar="true"/>
           </div>
           <div class="row mt-3" id="basicInfo">
             <BasicInfo :arr-left="dataLeftBaseInfo" :arr-right="[]" :title="'Basic Info'"/>
@@ -142,7 +142,7 @@ export default {
       leadService.convertToAccount(this.lead.id)
           .then(res => {
             if (res && res.status === 'success') {
-              this.$router.push('/leads');
+              this.$router.push('/accounts');
             }
           })
     },

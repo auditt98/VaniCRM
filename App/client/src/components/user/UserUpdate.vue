@@ -203,7 +203,7 @@ export default {
             .then(res => {
               if (res) {
                 alert(res.message);
-                this.$router.push('/user-detail?id=' + this.user.id);
+                this.$router.push('/users/page?id=' + this.user.id);
               }
             }).finally(() => {
               this.loading = false;
