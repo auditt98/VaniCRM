@@ -42,7 +42,7 @@
             <th>
               <span class="action">
               <span @click="editItem(item.id, item.type)" class="mr-1"><img src="images/newspaper-line.png" alt=""></span>
-              <span @click="deleteItem(item.id)"><img src="images/delete-bin-2-line.png" alt=""></span>
+              <span @click="deleteItem(item.id, item.type)"><img src="images/delete-bin-2-line.png" alt=""></span>
             </span>
             </th>
           </tr>
@@ -85,12 +85,12 @@ export default {
       console.log(id, "- ", type)
       this.$router.push({path: '/' + type + '/detail', query : { id: id}});
     },
-    deleteItem(id) {
+    deleteItem(id, type) {
       if (!confirm("Xác nhận xóa!")) {
         return ;
       }
       this.loading = true;
-      taskService.remove(id).then(res => {
+      taskService.remove(id, type).then(res => {
         if(res) {
           alert('Xóa thành công!');
           this.loadTasks(this.keyword);

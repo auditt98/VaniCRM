@@ -87,8 +87,8 @@
                   <td>{{t.phone}}</td>
                   <td>{{t.website}}</td>
                   <td>{{t.taxCode}}</td>
-                  <td><input type="checkbox" name="isOwn" :checked="t.isOwner"></td>
-                  <td><input type="checkbox" name="isCollaborator" :checked="t.isCollaborator"></td>
+                  <td><input type="checkbox" name="isOwn" :checked="t.isOwner" @click="noClicking"></td>
+                  <td><input type="checkbox" name="isCollaborator" :checked="t.isCollaborator" @click="noClicking"></td>
                 </tr>
                 </tbody>
                 <tbody v-else>
@@ -110,8 +110,8 @@
                   <td>{{t.phone}}</td>
                   <td>{{t.mobile}}</td>
                   <td><a href="#">{{t.skype}}</a></td>
-                  <td><input type="checkbox" name="isOwn" :checked="t.isOwner"></td>
-                  <td><input type="checkbox" name="isCollaborator" :checked="t.isCollaborator"></td>
+                  <td><input type="checkbox" name="isOwn" :checked="t.isOwner" @click="noClicking"></td>
+                  <td><input type="checkbox" name="isCollaborator" :checked="t.isCollaborator" @click="noClicking"></td>
                 </tr>
                 </tbody>
                 <tbody v-else>
@@ -149,6 +149,9 @@ import VTag from "@/components/common/VTag";
 export default {
   name: "UserPage",
   methods: {
+    noClicking(event){
+      event.preventDefault();
+    },
     closeModal() {
       this.isModalVisible = false;
     },

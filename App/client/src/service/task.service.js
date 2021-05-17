@@ -35,8 +35,8 @@ function create(lead) {
         .then(handleResponse);
 }
 
-function remove(id) {
-    return fetch(`${config.apiUrl}/tasks/${id}`, requestOptions.delete())
+function remove(id, type) {
+    return fetch(`${config.apiUrl}/${type}/${id}`, requestOptions.delete())
         .then(handleResponse);
 }
 
