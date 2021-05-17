@@ -206,7 +206,7 @@ export default {
       }
     },
     mapTaskModel() {
-      console.log("Lost reason: ",typeof this.deal.lostReason.reason !== 'undefined' ? this.deal.lostReason.reason : this.deal.lostReason ? this.deal.lostReason : null)
+      console.log("Lost reason: ",this.deal.lostReason ? (typeof this.deal.lostReason.reason !== 'undefined' ? this.deal.lostReason.reason : this.deal.lostReason ? this.deal.lostReason : null) : null)
       return {
         name: this.deal.name,
         closingDate: this.deal.closingDate,
@@ -218,7 +218,7 @@ export default {
         stage: this.deal.stage,
         amount: this.deal.amount,
         expectedRevenue: this.deal.expectedRevenue,
-        lostReason: typeof this.deal.lostReason.reason !== 'undefined' ? this.deal.lostReason.reason : this.deal.lostReason ? this.deal.lostReason : null,
+        lostReason: this.deal.lostReason ? (typeof this.deal.lostReason.reason !== 'undefined' ? this.deal.lostReason.reason : this.deal.lostReason ? this.deal.lostReason : null) : null,
         description: this.deal.description
       };
     },
