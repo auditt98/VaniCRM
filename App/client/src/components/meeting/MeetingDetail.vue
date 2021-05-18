@@ -7,9 +7,9 @@
         <div class="col-sm-8">
           <router-link :to="{name: 'TaskList'}"><VButton :data="btnBack"/></router-link>
         </div>
-        <div class="col-sm-4 d-flex justify-content-between">
+        <div class="col-sm-4 d-flex justify-content-end">
           <span @click="remove"><VButton :data="btnDelete"/></span>
-          <router-link :to="{name: 'MeetingUpdate', query: {id: meeting.id}}"><VButton :data="btnEdit"/></router-link>
+          <router-link class="ml-5" :to="{name: 'MeetingUpdate', query: {id: meeting.id}}"><VButton :data="btnEdit"/></router-link>
         </div>
       </div>
       <div class="row mt-3">
