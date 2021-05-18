@@ -18,7 +18,7 @@
         </div>
         <div class="col-sm-10">
           <div class="row">
-            <UserInfo ref="userTags" :tags="call.tags" :image="'x'" :title="'Tags'" @create-tag="createTag" />
+            <UserInfo ref="userTags" :tags="call.tags" :title="'Tags'" @create-tag="createTag" />
           </div>
           <div class="row mt-3" id="basicInfo">
             <BasicInfo :arr-left="dataLeftBaseInfo" :arr-right="[]" :title="'Basic Info'"/>
