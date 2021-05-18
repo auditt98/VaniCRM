@@ -112,7 +112,7 @@
               <template slot="body">
                 <tbody v-if="taskLst && taskLst.length > 0">
                 <tr v-for="(t, i) in taskLst" :key="i">
-                  <td></td>
+                  <td>{{ t.title }}</td>
                   <td>{{ t.type }}</td>
                   <td>{{ t.status }}</td>
                   <td>{{ t.startDate | formatDate }}</td>
@@ -206,6 +206,7 @@ export default {
       await dealService.loadTasks(query, this.deal.id)
           .then(res => {
             if (res && res.data) {
+              console.log(res.data)
               this.taskLst = res.data.tasks;
               this.totalPageTask= Number(res.data.pageInfo.TotalPages);
               this.totalItemTask = Number(res.data.pageInfo.TotalItems);

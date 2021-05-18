@@ -953,7 +953,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("users/{id}/tasks")]
-        [ResponseType(typeof(UserTaskApiModel))]
+        [ResponseType(typeof(UserDetailApiModel.T))]
         public HttpResponseMessage GetTasks([FromUri] int id, [FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "", [FromUri] string status="" )
         {
             var response = new HttpResponseMessage();
