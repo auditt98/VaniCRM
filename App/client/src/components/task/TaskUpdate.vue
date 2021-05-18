@@ -11,7 +11,7 @@
             <VButton :data="btnCancel"/>
           </router-link>
 
-          <span  class="ml-5" @click="save()"><VButton :data="btnSave"/></span>
+          <span class="ml-5" @click="save()"><VButton :data="btnSave"/></span>
         </div>
       </div>
       <div class="mt-3">
