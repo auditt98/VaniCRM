@@ -1,14 +1,17 @@
 <template>
   <div class="w-100 ">
     <div class="user-info d-flex p-3">
+      <div class="user-info-avatar" v-if="isShowAvatar && !image">
+        <expandable-image style="background-color: rgba(0, 0, 0, 0.9); " :close-on-background-click='true' class="w-100" :src="'https://localhost:44375/avatar?fileName=default.png'" alt="" />
+      </div>
       <div class="user-info-avatar" v-if="image">
         <expandable-image style="background-color: rgba(0, 0, 0, 0.9); " :close-on-background-click='true' class="w-100" :src="image" alt="" />
       </div>
-      <div class="user-info-avatar" v-if="isShowAvatar && !image">
-        <!-- <img class="w-100" src="../../../assets/avatar-header.jpeg" alt=""> -->
+      <!-- <div class="user-info-avatar" v-if="isShowAvatar && !image">
+        <img class="w-100" src="../../../assets/avatar-header.jpeg" alt="">
         <img class="w-100" :src="'https://localhost:44375/avatar?fileName=default.png'" alt="">
-        <!-- https://localhost:44375/avatar?fileName=default.png -->
-      </div>
+        https://localhost:44375/avatar?fileName=default.png
+      </div> -->
       <div class="user-info-detail ml-3">
         <h4><strong v-if="title">{{title}}</strong> <small v-if="titleDetail"> - </small> <span v-if="titleDetail">{{titleDetail}}</span></h4>
         <p class="ml-3" v-if="tags">
