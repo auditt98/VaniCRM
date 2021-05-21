@@ -96,19 +96,11 @@ namespace Backend.Extensions
             if(!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(id))
             {
                 var aclRule = calendarService.Acl.List(id).Execute().Items.Where(c => c.Scope.Value == email).FirstOrDefault();
-                if (aclRule == null)
-                {
-                    var rule = new AclRule() { Role = "owner", Scope = new AclRule.ScopeData() { Type = "user", Value = email } };
-                    if (isAsync)
-                    {
-                        calendarService.Acl.Insert(rule, id).ExecuteAsync();
-                    }
-                    else
-                    {
-                        calendarService.Acl.Insert(rule, id).Execute();
+                var rule = new AclRule() { Role = "owner", Scope = new AclRule.ScopeData() { Type = "user", Value = email } };
+                var publicRule = new AclRule() { Role = "reader", Scope = new AclRule.ScopeData() { Type = "default" } };
+                var insObjectRule = calendarService.Acl.Insert(rule, id).Execute();
+                var insObjectPublicRule = calendarService.Acl.Insert(publicRule, id).Execute();
 
-                    }
-                }
             }
             return this;
         }
@@ -287,11 +279,19 @@ namespace Backend.Extensions
             return calendarService.Events.Get(calendarId, eventId).Execute().HtmlLink;
         }
 
-        public string Publish(string calendarId, string eventId, string htmlLink)
+        public string Publish(string calendarId, string htmlLink)
         {
-            var domain = "https://calendar.google.com/event?action=TEMPLATE&";
+            var eid = GetEid(htmlLink);
 
-            return "";
+            var publishLink = $"https://calendar.google.com/" + $"event?action=TEMPLATE&tmeid={eid}&tmsrc={calendarId}&scp=ALL";
+
+            return publishLink;
+        }
+    
+        public string GetEid(string htmlLink)
+        {
+            Uri link = new Uri(htmlLink);
+            return HttpUtility.UrlEncode(HttpUtility.ParseQueryString(link.Query).Get("eid")); 
         }
     }
 }

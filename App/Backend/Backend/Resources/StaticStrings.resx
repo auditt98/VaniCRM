@@ -120,6 +120,9 @@
   <data name="ClientHost" xml:space="preserve">
     <value>http://localhost:8080/</value>
   </data>
+  <data name="INVITED_MEETING" xml:space="preserve">
+    <value>You have been invited to a meeting</value>
+  </data>
   <data name="RESET_PASSWORD_TITLE" xml:space="preserve">
     <value>Password reset for VaniCRM</value>
   </data>

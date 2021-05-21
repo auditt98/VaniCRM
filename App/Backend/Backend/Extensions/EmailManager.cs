@@ -35,7 +35,7 @@ namespace Backend.Extensions
             this.Recipients = recipients;
         }
 
-        public EmailManager SendEmail(bool isResetPassword = false)
+        public EmailManager SendEmail()
         {
             var mailMessage = new MimeMessage();
             mailMessage.From.Add(new MailboxAddress("Vani CRM", "vanicrm.noreply@gmail.com"));

@@ -125,13 +125,13 @@ namespace Backend.Services
             {
                 var calendars = new GoogleCalendar();
                 var calendarId = calendars.AddCalendar(newDbUser.Email);
-                calendars.AddPeopleToAcl(email: newDbUser.Email ,id: calendarId, true);
+                calendars.AddPeopleToAcl(email: newDbUser.Email ,id: calendarId, false);
                 newDbUser.CalendarId = calendarId;
                 db.SaveChanges();
             }
             catch
             {
-                
+                throw;
             }
 
 

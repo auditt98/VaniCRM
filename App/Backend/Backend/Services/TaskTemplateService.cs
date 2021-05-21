@@ -265,7 +265,6 @@ namespace Backend.Services
                 {
                     apiModel.participants.users = userList.Select(c => new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }).ToList();
                 }
-
                 //var calId = _googleCalendar.GetId(dbMeeting.HostUser.Email);
                 //var eventId = dbMeeting.TASK_TEMPLATE.EventId;
                 //apiModel.link = _googleCalendar.GetHtmlLink(calId, eventId);

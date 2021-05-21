@@ -87,7 +87,15 @@ namespace Backend.Repository
                 var user = db.USERs.Find(id);
                 if(user != null)
                 {
-                    googleCalendar.DeleteCalendar(user.CalendarId);
+                    try
+                    {
+                        googleCalendar.DeleteCalendar(user.CalendarId);
+
+                    }
+                    catch
+                    {
+
+                    }
                     db.USERs.Remove(user);
                     return true;
                 }

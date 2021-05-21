@@ -70,6 +70,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have been invited to a meeting.
+        /// </summary>
+        internal static string INVITED_MEETING {
+            get {
+                return ResourceManager.GetString("INVITED_MEETING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password reset for VaniCRM.
         /// </summary>
         internal static string RESET_PASSWORD_TITLE {
