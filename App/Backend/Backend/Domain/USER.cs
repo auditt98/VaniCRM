@@ -75,6 +75,8 @@ namespace Backend.Domain
         [StringLength(32)]
         public string Skype { get; set; }
 
+        public string CalendarId { get; set; }
+
         public DateTime? CreatedAt { get; set; }
 
         public int? CreatedBy { get; set; }

@@ -8,7 +8,8 @@
           <router-link :to="{name: 'TaskList'}"><VButton :data="btnBack"/></router-link>
         </div>
         <div class="col-sm-4 d-flex justify-content-end">
-          <span @click="remove"><VButton :data="btnDelete"/></span>
+          
+          <span class="ml-5" @click="remove"><VButton :data="btnDelete"/></span>
           <router-link class="ml-5" :to="{name: 'MeetingUpdate', query: {id: meeting.id}}"><VButton :data="btnEdit"/></router-link>
         </div>
       </div>
@@ -117,6 +118,7 @@ export default {
       this.loading = true;
       meetingService.getById(this.meeting.id).then(res => {
         if (res && res.data) {
+          console.log(res.data)
           this.meeting = res.data;
           mapValue(this.dataLeftBaseInfo, [
             this.meeting.fromDate + ' - ' + this.meeting.toDate,
@@ -169,7 +171,7 @@ export default {
       if (!confirm('Xác nhận xóa')) {
         return ;
       }
-      meetingService.remove(this.meeting.id)
+      meetingService.remove(this.meeting.id, "meetings")
           .then(res => {
             if (res) {
               alert('Thành công');
@@ -229,6 +231,7 @@ export default {
         {id: '#notes', text: 'Notes'},
       ],
       btnBack: {btnClass: 'btn-purple px-3', icon: 'fa-arrow-left', text: 'Back'},
+      btnOpen: {btnClass: 'btn-white px-3', icon: 'fa-google', text: 'Open Calendar'},
       btnDelete: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Delete'},
       btnEdit: {btnClass: 'btn-red px-4', icon: 'fa-pencil', text: 'Edit'},
       btnAdd: {btnClass: 'btn-red px-4 color-white', icon: 'fa-plus-circle', text: 'Add'},

@@ -32,6 +32,9 @@ namespace Backend.Domain
         [StringLength(2000)]
         public string Description { get; set; }
 
+        [StringLength(2000)]
+        public string EventId { get; set; }
+
         public int? CreatedBy { get; set; }
 
         public DateTime? CreatedAt { get; set; }
@@ -45,6 +48,8 @@ namespace Backend.Domain
         public bool? IsCompleted { get; set; }
 
         public DateTime? DueDate { get; set; }
+
+        public DateTime? StartDate { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CALL> CALLs { get; set; }

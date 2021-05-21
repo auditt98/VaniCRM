@@ -46,7 +46,7 @@ export function hourToSecond(obj) {
     if (!obj['s']) {
         obj['s'] = 0;
     }
-    return Number(obj['h'] * 60 * 60 + obj['m'] * 60 + obj['s']);
+    return Number(obj['h']) * 60 * 60 + Number(obj['m']) * 60 + Number(obj['s']);
 }
 export function parseDate(s) {
     let b = s.split(/\D/);

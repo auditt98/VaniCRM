@@ -18,7 +18,7 @@ namespace Backend.Services
         MeetingValidator _meetingValidator = new MeetingValidator();
         TaskValidator _taskValidator = new TaskValidator();
         PriorityRepository _priorityRepository = new PriorityRepository();
-
+        GoogleCalendar googleCalendar = new GoogleCalendar();
         public (List<TASK_TEMPLATE> tasks, Pager pageInfo) GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0, string status = "")
         {
             return _taskTemplateRepository.GetUserTaskTemplate(userID, q, currentPage, pageSize, status);
@@ -121,6 +121,9 @@ namespace Backend.Services
                 }
                 apiModel.tags = dbCall.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
                 apiModel.notes = dbCall.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={c.USER.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
+                var calId = dbCall.Owner.CalendarId;
+                var eventId = dbCall.TASK_TEMPLATE.EventId;
+                apiModel.link = googleCalendar.GetHtmlLink(calId, eventId);
                 return apiModel;
             }
             else
@@ -262,6 +265,10 @@ namespace Backend.Services
                 {
                     apiModel.participants.users = userList.Select(c => new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }).ToList();
                 }
+
+                //var calId = _googleCalendar.GetId(dbMeeting.HostUser.Email);
+                //var eventId = dbMeeting.TASK_TEMPLATE.EventId;
+                //apiModel.link = _googleCalendar.GetHtmlLink(calId, eventId);
                 return apiModel;
             }
             else
@@ -382,8 +389,21 @@ namespace Backend.Services
                     apiModel.modifiedBy = new UserLinkApiModel() { id = dbTask.TASK_TEMPLATE.ModifiedUSer.ID, username = dbTask.TASK_TEMPLATE.ModifiedUSer.Username, email = dbTask.TASK_TEMPLATE.ModifiedUSer.Email };
 
                 }
+                if (dbTask.TASK_TEMPLATE.StartDate != null)
+                {
+                    apiModel.startDate = dbTask.TASK_TEMPLATE.StartDate.Value;
+                }
+                if (dbTask.TASK_TEMPLATE.DueDate != null)
+                {
+                    apiModel.dueDate = dbTask.TASK_TEMPLATE.DueDate.Value;
+                }
+
                 apiModel.tags = dbTask.TAG_ITEM.Select(c => new TagApiModel() { id = c.TAG.ID, name = c.TAG.Name }).ToList();
                 apiModel.notes = dbTask.TASK_TEMPLATE.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={c.USER.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();
+
+                var calId = dbTask.USER.CalendarId;
+                var eventId = dbTask.TASK_TEMPLATE.EventId;
+                apiModel.link = googleCalendar.GetHtmlLink(calId, eventId);
                 return apiModel;
             }
             else

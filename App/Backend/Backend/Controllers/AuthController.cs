@@ -33,6 +33,7 @@ namespace Backend.Controllers
         private UserService _userService = new UserService();
         private EmailManager _emailManager = new EmailManager();
         private HashManager _hashManager = new HashManager();
+        GoogleCalendar googleCalendar = new GoogleCalendar();
         /// <summary>
         /// Login an user
         /// 
@@ -111,7 +112,21 @@ namespace Backend.Controllers
                             }
                         };
                     }
-                    
+
+                    if (string.IsNullOrEmpty(dbUser.CalendarId))
+                    {
+                        try
+                        {
+                            var calId = googleCalendar.AddCalendar(dbUser.Email);
+                            googleCalendar.AddPeopleToAcl(dbUser.Email, calId, true);
+                            _userService.UpdateCalendarId(dbUser.Email, calId);
+                        }
+                        catch
+                        {
+
+                        }
+                        
+                    }
                     response.StatusCode = HttpStatusCode.OK;
                 }
                 else

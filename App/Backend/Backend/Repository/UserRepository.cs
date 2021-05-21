@@ -9,6 +9,7 @@ namespace Backend.Repository
     public class UserRepository
     {
         DatabaseContext db = new DatabaseContext();
+        GoogleCalendar googleCalendar = new GoogleCalendar();
         public IEnumerable<USER> GetAll()
         {
             return db.USERs.ToList();
@@ -86,6 +87,7 @@ namespace Backend.Repository
                 var user = db.USERs.Find(id);
                 if(user != null)
                 {
+                    googleCalendar.DeleteCalendar(user.CalendarId);
                     db.USERs.Remove(user);
                     return true;
                 }
@@ -97,6 +99,28 @@ namespace Backend.Repository
             catch
             {
                 throw;
+            }
+        }
+
+        public bool UpdateCalendarId(string email, string calendarId)
+        {
+            try
+            {
+                var user = db.USERs.Where(c => c.Email == email).FirstOrDefault();
+                if(user != null)
+                {
+                    user.CalendarId = calendarId;
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
 

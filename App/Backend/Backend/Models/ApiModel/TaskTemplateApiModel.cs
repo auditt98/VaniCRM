@@ -95,6 +95,7 @@ namespace Backend.Models.ApiModel
         public List<PrioritySelectionApiModel> priorities { get; set; }
 
         public int id { get; set; }
+        public string link { get; set; }
         public string title { get; set; }
         public int duration { get; set; }
         public DateTime startTime { get; set; }
@@ -159,6 +160,7 @@ namespace Backend.Models.ApiModel
             participants = new MeetingParticipant();
         }
         public int id { get; set; }
+        public string link { get; set; }
         public List<TagApiModel> tags { get; set; }
         public List<NoteApiModel> notes { get; set; }
         public DateTime createdAt { get; set; }
@@ -189,6 +191,7 @@ namespace Backend.Models.ApiModel
     public class TaskCreateApiModel
     {
         public string title { get; set; }
+        public DateTime startDate { get; set; }
         public DateTime dueDate { get; set; }
         public int contact { get; set; }
         public int lead { get; set; }
@@ -224,10 +227,12 @@ namespace Backend.Models.ApiModel
         public List<TaskStatus> statuses { get; set; }
 
         public int id { get; set; }
+        public string link { get; set; }
         public string title { get; set; }
         public bool isRepeat { get; set; }
         public string rrule { get; set; }
         public string description { get; set; }
+        public DateTime startDate { get; set; }
         public DateTime dueDate { get; set; }
     }
     

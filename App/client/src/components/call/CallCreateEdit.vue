@@ -311,7 +311,9 @@ export default {
       }
       const r = new RRule(rrule);
       this.call.rrule = r.toString();
+      console.log(this.duration)
       this.call.duration = hourToSecond(this.duration);
+      console.log(this.call.duration)
       if (!this.call.id) {
         callService.create(this.mapModel())
             .then(res => {

@@ -117,6 +117,7 @@ namespace Backend.Controllers
                 },
             };
             EventsResource.InsertRequest request = calendarService.Events.Insert(calEvent, id);
+            //calendarService.Events.List().Execute().Items.Where(c => c.)
             Event createdEvent = request.Execute();
             responseData = ResponseFormat.Success;
             responseData.data = createdEvent.HtmlLink;

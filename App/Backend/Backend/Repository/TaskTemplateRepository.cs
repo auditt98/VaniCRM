@@ -20,6 +20,7 @@ namespace Backend.Repository
     {
         DatabaseContext db = new DatabaseContext();
         TagRepository _tagRepository = new TagRepository();
+        GoogleCalendar _googleCalendar = new GoogleCalendar();
         //get user's tasks
 
         public (List<TASK_TEMPLATE> tasks, Pager p) GetUserTaskTemplate(int userID, string q = "", int currentPage = 1, int pageSize = 0, string status = "")
@@ -114,10 +115,9 @@ namespace Backend.Repository
             var startTime = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
             if(startTime != null)
             {
+                newTemplate.StartDate = startTime;
                 newTemplate.DueDate = startTime.Value.AddSeconds(apiModel.duration);
             }
-            //newTemplate.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
-            //newTemplate.DueDate = DateTime.Now.AddSeconds(apiModel.duration);
             if(apiModel.status != 0)
             {
                 newTemplate.TASK_STATUS_ID = apiModel.status;
@@ -179,6 +179,79 @@ namespace Backend.Repository
 
             var owner = db.USERs.Find(newCall.CallOwner);
             var creator = db.USERs.Find(createdUser);
+
+            try
+            {
+                if (owner != null)
+                {
+                    var extendedProperties = new Dictionary<string, string>();
+
+                    if (apiModel.relatedAccount != 0)
+                    {
+                        var account = db.ACCOUNTs.Find(apiModel.relatedAccount);
+                        if (account != null)
+                        {
+                            extendedProperties.Add("Account's Email", account.Email);
+                            extendedProperties.Add("Account's Name", account.Name);
+                            extendedProperties.Add("Account's Phone", account.Phone);
+                        }
+
+                    }
+                    if (apiModel.relatedCampaign != 0)
+                    {
+                        var campaign = db.CAMPAIGNs.Find(apiModel.relatedCampaign);
+                        if (campaign != null)
+                        {
+                            extendedProperties.Add("Campaign's Name", campaign.Name);
+                        }
+                    }
+                    if (apiModel.relatedDeal != 0)
+                    {
+                        var deal = db.DEALs.Find(apiModel.relatedDeal);
+                        if (deal != null)
+                        {
+                            extendedProperties.Add("Deal's Name", deal.Name);
+                            extendedProperties.Add("Deal's Amount", deal.Amount.ToString());
+                        }
+                    }
+                    if (apiModel.contact != 0)
+                    {
+                        var contact = db.CONTACTs.Find(apiModel.contact);
+                        if (contact != null)
+                        {
+                            extendedProperties.Add("Contact's Name", contact.Name);
+                            extendedProperties.Add("Contact's Phone", contact.Phone);
+                            extendedProperties.Add("Contact's Email", contact.Email);
+                            extendedProperties.Add("Contact's Skype", contact.Skype);
+                            extendedProperties.Add("Assistant's Name", contact.AssistantName);
+                            extendedProperties.Add("Assistant's Phone", contact.AssistantPhone);
+                        }
+
+                    }
+                    if (apiModel.lead != 0)
+                    {
+                        var lead = db.LEADs.Find(apiModel.lead);
+                        if (lead != null)
+                        {
+                            extendedProperties.Add("Lead's Name", lead.Name);
+                            extendedProperties.Add("Lead's Phone", lead.Phone);
+                            extendedProperties.Add("Lead's Email", lead.Email);
+                        }
+
+                    }
+
+                    var calendarId = owner.CalendarId;
+                    var calEvent = _googleCalendar.AddEvent(endDate: newTemplate.DueDate, startDate: startTime, calendarId: calendarId, description: newTemplate.Description, summary: "[Call] " + newTemplate.Title, rrule: newTemplate.RRule, recur: newTemplate.IsRepeat.Value, extendedProperties: extendedProperties);
+                    if (calEvent != null)
+                    {
+                        newTemplate.EventId = calEvent.Id;
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch
+            {
+            }
 
             var notifyModel = new NotificationApiModel();
             notifyModel.title = "Call created";
@@ -309,11 +382,9 @@ namespace Backend.Repository
                 dbCall.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
                 dbCall.TASK_TEMPLATE.ModifiedBy = modifiedUser;
                 dbCall.StartTime = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
+                dbCall.TASK_TEMPLATE.StartDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
+                dbCall.TASK_TEMPLATE.DueDate = dbCall.TASK_TEMPLATE.StartDate.Value.AddSeconds(apiModel.duration);
                 //dbCall.TASK_TEMPLATE.DueDate = dbCall.TASK_TEMPLATE.CreatedAt.Value
-                if (dbCall.TASK_TEMPLATE.CreatedAt.HasValue)
-                {
-                    dbCall.TASK_TEMPLATE.DueDate = dbCall.TASK_TEMPLATE.CreatedAt.Value.AddSeconds(apiModel.duration);
-                }
                 if(apiModel.status != 0)
                 {
                     dbCall.TASK_TEMPLATE.TASK_STATUS_ID = apiModel.status;
@@ -375,6 +446,77 @@ namespace Backend.Repository
                 var creator = db.USERs.Find(dbCall.TASK_TEMPLATE.CreatedBy);
                 var modifyUser = db.USERs.Find(modifiedUser);
 
+                try
+                {
+                    if (owner != null)
+                    {
+                        var extendedProperties = new Dictionary<string, string>();
+
+                        if (apiModel.relatedAccount != 0)
+                        {
+                            var account = db.ACCOUNTs.Find(apiModel.relatedAccount);
+                            if (account != null)
+                            {
+                                extendedProperties.Add("Account's Email", account.Email);
+                                extendedProperties.Add("Account's Name", account.Name);
+                                extendedProperties.Add("Account's Phone", account.Phone);
+                            }
+
+                        }
+                        if (apiModel.relatedCampaign != 0)
+                        {
+                            var campaign = db.CAMPAIGNs.Find(apiModel.relatedCampaign);
+                            if (campaign != null)
+                            {
+                                extendedProperties.Add("Campaign's Name", campaign.Name);
+                            }
+                        }
+                        if (apiModel.relatedDeal != 0)
+                        {
+                            var deal = db.DEALs.Find(apiModel.relatedDeal);
+                            if (deal != null)
+                            {
+                                extendedProperties.Add("Deal's Name", deal.Name);
+                                extendedProperties.Add("Deal's Amount", deal.Amount.ToString());
+                            }
+                        }
+                        if (apiModel.contact != 0)
+                        {
+                            var contact = db.CONTACTs.Find(apiModel.contact);
+                            if (contact != null)
+                            {
+                                extendedProperties.Add("Contact's Name", contact.Name);
+                                extendedProperties.Add("Contact's Phone", contact.Phone);
+                                extendedProperties.Add("Contact's Email", contact.Email);
+                                extendedProperties.Add("Contact's Skype", contact.Skype);
+                                extendedProperties.Add("Assistant's Name", contact.AssistantName);
+                                extendedProperties.Add("Assistant's Phone", contact.AssistantPhone);
+                            }
+
+                        }
+                        if (apiModel.lead != 0)
+                        {
+                            var lead = db.LEADs.Find(apiModel.lead);
+                            if (lead != null)
+                            {
+                                extendedProperties.Add("Lead's Name", lead.Name);
+                                extendedProperties.Add("Lead's Phone", lead.Phone);
+                                extendedProperties.Add("Lead's Email", lead.Email);
+                            }
+
+                        }
+
+                        var calendarId = owner.CalendarId;
+
+                        var calEvent = _googleCalendar.UpdateEvent(endDate: dbCall.TASK_TEMPLATE.DueDate, startDate: dbCall.TASK_TEMPLATE.StartDate, calendarId: calendarId, description: apiModel.description, summary: "[Call] " + apiModel.title, rrule: apiModel.rrule, recur: apiModel.isReminder, extendedProperties: extendedProperties, eventId: dbCall.TASK_TEMPLATE.EventId);
+
+                    }
+                }
+                catch
+                {
+                }
+
+
                 var notifyModel = new NotificationApiModel();
                 notifyModel.title = "Call updated";
                 notifyModel.content = $"Call {dbCall.TASK_TEMPLATE.Title} has been updated by {modifyUser.Username}.";
@@ -399,10 +541,20 @@ namespace Backend.Repository
                 var callTitle = template.Title;
                 var owner = db.USERs.Find(dbCall.CallOwner);
                 var creator = db.USERs.Find(dbCall.TASK_TEMPLATE.CreatedBy);
+                var eventId = template.EventId;
                 db.CALLs.Remove(dbCall);
                 db.SaveChanges();
                 db.TASK_TEMPLATE.Remove(template);
                 db.SaveChanges();
+
+                try
+                {
+                    _googleCalendar.DeleteEvent(calendarId: owner.CalendarId, eventId: eventId);
+                }
+                catch
+                {
+
+                }
 
                 var notifyModel = new NotificationApiModel();
                 notifyModel.title = "Call removed";
@@ -552,6 +704,7 @@ namespace Backend.Repository
             newTemplate.RRule = apiModel.rrule;
             newTemplate.Title = apiModel.title;
             newTemplate.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.to);
+            newTemplate.StartDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.from);
             if(apiModel.priority != 0)
             {
                 newTemplate.PRIORITY_ID = apiModel.priority;
@@ -559,6 +712,7 @@ namespace Backend.Repository
             db.TASK_TEMPLATE.Add(newTemplate);
             var newMeeting = new MEETING();
             newMeeting.FromDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.from);
+
             if(apiModel.host != 0)
             {
                 newMeeting.Host = apiModel.host;
@@ -577,6 +731,24 @@ namespace Backend.Repository
 
             var owner = db.USERs.Find(newMeeting.Host);
             var creator = db.USERs.Find(createdUser);
+
+            try
+            {
+                if (owner != null)
+                {
+                    //var calendarId = _googleCalendar.GetId(owner.Email);
+                    var calendarId = owner.CalendarId;
+                    var calEvent = _googleCalendar.AddEvent(endDate: newTemplate.DueDate, startDate: newTemplate.StartDate, calendarId: calendarId, description: newTemplate.Description, summary: "[Meeting] " + newTemplate.Title, rrule: newTemplate.RRule, recur: newTemplate.IsRepeat.Value, isAllDay: newMeeting.IsAllDay.Value, location: newMeeting.Location);
+                    if (calEvent != null)
+                    {
+                        newTemplate.EventId = calEvent.Id;
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch
+            {
+            }
 
             var notifyModel = new NotificationApiModel();
             notifyModel.title = "Meeting created";
@@ -600,6 +772,7 @@ namespace Backend.Repository
                 dbMeeting.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
                 dbMeeting.TASK_TEMPLATE.ModifiedBy = modifiedUser;
                 dbMeeting.TASK_TEMPLATE.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.to);
+                dbMeeting.TASK_TEMPLATE.StartDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.from);
                 if(apiModel.priority != 0)
                 {
                     dbMeeting.TASK_TEMPLATE.PRIORITY_ID = apiModel.priority;
@@ -615,6 +788,18 @@ namespace Backend.Repository
                 var owner = db.USERs.Find(dbMeeting.Host);
                 var creator = db.USERs.Find(dbMeeting.TASK_TEMPLATE.CreatedBy);
                 var modifyUser = db.USERs.Find(modifiedUser);
+
+                try
+                {
+                    if (owner != null)
+                    {
+                        var calendarId = owner.CalendarId;
+                        var calEvent = _googleCalendar.AddEvent(endDate: dbMeeting.TASK_TEMPLATE.DueDate, startDate: dbMeeting.TASK_TEMPLATE.StartDate, calendarId: calendarId, description: dbMeeting.TASK_TEMPLATE.Description, summary: "[Meeting] " + dbMeeting.TASK_TEMPLATE.Title, rrule: dbMeeting.TASK_TEMPLATE.RRule, recur: dbMeeting.TASK_TEMPLATE.IsRepeat.Value, isAllDay: dbMeeting.IsAllDay.Value, location: dbMeeting.Location);
+                    }
+                }
+                catch
+                {
+                }
 
                 var notifyModel = new NotificationApiModel();
                 notifyModel.title = "Meeting updated";
@@ -640,12 +825,20 @@ namespace Backend.Repository
                 var meetingTitle = template.Title;
                 var owner = db.USERs.Find(dbMeeting.Host);
                 var creator = db.USERs.Find(dbMeeting.TASK_TEMPLATE.CreatedBy);
-
+                var eventId = dbMeeting.TASK_TEMPLATE.EventId;
                 db.MEETINGs.Remove(dbMeeting);
                 db.SaveChanges();
                 db.TASK_TEMPLATE.Remove(template);
                 db.SaveChanges();
 
+                try
+                {
+                    _googleCalendar.DeleteEvent(eventId, owner.CalendarId);
+                }
+                catch
+                {
+
+                }
                 var notifyModel = new NotificationApiModel();
                 notifyModel.title = "Meeting removed";
                 notifyModel.content = $"Meeting {meetingTitle} has been removed.";
@@ -714,11 +907,21 @@ namespace Backend.Repository
 
                     var userAdded = db.USERs.Find(participant.USER_ID);
 
+                    var calId = userAdded.CalendarId;
+                    var calEvent = _googleCalendar.AddEvent(endDate: dbMeeting.TASK_TEMPLATE.DueDate, startDate: dbMeeting.TASK_TEMPLATE.StartDate, description: dbMeeting.TASK_TEMPLATE.Description, summary: "[Meeting] " + dbMeeting.TASK_TEMPLATE.Title, rrule: dbMeeting.TASK_TEMPLATE.RRule, recur: dbMeeting.TASK_TEMPLATE.IsRepeat.Value, isAllDay: dbMeeting.IsAllDay.Value, location: dbMeeting.Location, calendarId: calId);
+
                     var notifyModel = new NotificationApiModel();
                     notifyModel.title = "Participant added";
                     notifyModel.content = $"User {userAdded.Username} has been added to meeting {dbMeeting.TASK_TEMPLATE.Title}.";
                     notifyModel.createdAt = DateTime.Now;
                     NotificationManager.SendNotification(notifyModel, new List<USER> { owner });
+
+                    var notifyModel1 = new NotificationApiModel();
+                    notifyModel1.title = "Added to meeting";
+                    notifyModel1.content = $"You have been added to meeting {dbMeeting.TASK_TEMPLATE.Title}";
+                    notifyModel1.createdAt = DateTime.Now;
+                    NotificationManager.SendNotification(notifyModel1, new List<USER> { userAdded });
+
                 }
                 return true;
             }
@@ -934,6 +1137,7 @@ namespace Backend.Repository
             newTemplate.IsRepeat = apiModel.isReminder;
             newTemplate.RRule = apiModel.rrule;
             newTemplate.Title = apiModel.title;
+            newTemplate.StartDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startDate);
             newTemplate.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.dueDate);
             if(apiModel.status != 0)
             {
@@ -973,9 +1177,81 @@ namespace Backend.Repository
             db.TASKs.Add(newTask);
             db.SaveChanges();
 
+
             var owner = db.USERs.Find(newTask.TaskOwner);
             var creator = db.USERs.Find(createdUser);
+            try
+            {
+                if(owner != null)
+                {
+                    var extendedProperties = new Dictionary<string, string>();
 
+                    if (apiModel.relatedAccount != 0)
+                    {
+                        var account = db.ACCOUNTs.Find(apiModel.relatedAccount);
+                        if(account != null)
+                        {
+                            extendedProperties.Add("Account's Email", account.Email);
+                            extendedProperties.Add("Account's Name", account.Name);
+                            extendedProperties.Add("Account's Phone", account.Phone);
+                        }
+
+                    }
+                    if (apiModel.relatedCampaign != 0)
+                    {
+                        var campaign = db.CAMPAIGNs.Find(apiModel.relatedCampaign);
+                        if(campaign != null)
+                        {
+                            extendedProperties.Add("Campaign's Name", campaign.Name);
+                        }
+                    }
+                    if (apiModel.relatedDeal != 0)
+                    {
+                        var deal = db.DEALs.Find(apiModel.relatedDeal);
+                        if(deal != null)
+                        {
+                            extendedProperties.Add("Deal's Name", deal.Name);
+                            extendedProperties.Add("Deal's Amount", deal.Amount.ToString());
+                        }
+                    }
+                    if (apiModel.contact != 0)
+                    {
+                        var contact = db.CONTACTs.Find(apiModel.contact);
+                        if(contact != null)
+                        {
+                            extendedProperties.Add("Contact's Name", contact.Name);
+                            extendedProperties.Add("Contact's Phone", contact.Phone);
+                            extendedProperties.Add("Contact's Email", contact.Email);
+                            extendedProperties.Add("Contact's Skype", contact.Skype);
+                            extendedProperties.Add("Assistant's Name", contact.AssistantName);
+                            extendedProperties.Add("Assistant's Phone", contact.AssistantPhone);
+                        }
+
+                    }
+                    if (apiModel.lead != 0)
+                    {
+                        var lead = db.LEADs.Find(apiModel.lead);
+                        if(lead != null)
+                        {
+                            extendedProperties.Add("Lead's Name", lead.Name);
+                            extendedProperties.Add("Lead's Phone", lead.Phone);
+                            extendedProperties.Add("Lead's Email", lead.Email);
+                        }
+                       
+                    }
+
+                    var calendarId = owner.CalendarId;
+                    var calEvent = _googleCalendar.AddEvent(endDate: newTemplate.DueDate, startDate: newTemplate.StartDate, calendarId: calendarId, description: newTemplate.Description, summary:"[Task] " + newTemplate.Title, rrule: newTemplate.RRule, recur: newTemplate.IsRepeat.Value, extendedProperties: extendedProperties);
+                    if(calEvent != null)
+                    {
+                        newTemplate.EventId = calEvent.Id;
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch
+            {
+            }
             var notifyModel = new NotificationApiModel();
             notifyModel.title = "Task created";
             notifyModel.content = $"Task {newTemplate.Title} has been created and assigned to you by {creator?.Username}.";
@@ -997,6 +1273,7 @@ namespace Backend.Repository
                 dbTask.TASK_TEMPLATE.Title = apiModel.title;
                 dbTask.TASK_TEMPLATE.ModifiedAt = DateTime.Now;
                 dbTask.TASK_TEMPLATE.ModifiedBy = modifiedUser;
+                dbTask.TASK_TEMPLATE.StartDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startDate);
                 dbTask.TASK_TEMPLATE.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.dueDate);
                 if(apiModel.status != 0)
                 {
@@ -1043,6 +1320,75 @@ namespace Backend.Repository
                 var creator = db.USERs.Find(dbTask.TASK_TEMPLATE.CreatedBy);
                 var modifyUser = db.USERs.Find(modifiedUser);
 
+                try
+                {
+                    if (owner != null)
+                    {
+                        var extendedProperties = new Dictionary<string, string>();
+
+                        if (apiModel.relatedAccount != 0)
+                        {
+                            var account = db.ACCOUNTs.Find(apiModel.relatedAccount);
+                            if (account != null)
+                            {
+                                extendedProperties.Add("Account's Email", account.Email);
+                                extendedProperties.Add("Account's Name", account.Name);
+                                extendedProperties.Add("Account's Phone", account.Phone);
+                            }
+
+                        }
+                        if (apiModel.relatedCampaign != 0)
+                        {
+                            var campaign = db.CAMPAIGNs.Find(apiModel.relatedCampaign);
+                            if (campaign != null)
+                            {
+                                extendedProperties.Add("Campaign's Name", campaign.Name);
+                            }
+                        }
+                        if (apiModel.relatedDeal != 0)
+                        {
+                            var deal = db.DEALs.Find(apiModel.relatedDeal);
+                            if (deal != null)
+                            {
+                                extendedProperties.Add("Deal's Name", deal.Name);
+                                extendedProperties.Add("Deal's Amount", deal.Amount.ToString());
+                            }
+                        }
+                        if (apiModel.contact != 0)
+                        {
+                            var contact = db.CONTACTs.Find(apiModel.contact);
+                            if (contact != null)
+                            {
+                                extendedProperties.Add("Contact's Name", contact.Name);
+                                extendedProperties.Add("Contact's Phone", contact.Phone);
+                                extendedProperties.Add("Contact's Email", contact.Email);
+                                extendedProperties.Add("Contact's Skype", contact.Skype);
+                                extendedProperties.Add("Assistant's Name", contact.AssistantName);
+                                extendedProperties.Add("Assistant's Phone", contact.AssistantPhone);
+                            }
+
+                        }
+                        if (apiModel.lead != 0)
+                        {
+                            var lead = db.LEADs.Find(apiModel.lead);
+                            if (lead != null)
+                            {
+                                extendedProperties.Add("Lead's Name", lead.Name);
+                                extendedProperties.Add("Lead's Phone", lead.Phone);
+                                extendedProperties.Add("Lead's Email", lead.Email);
+                            }
+
+                        }
+
+                        var calendarId = owner.CalendarId;
+                        var calEvent = _googleCalendar.UpdateEvent(endDate: dbTask.TASK_TEMPLATE.DueDate, startDate: dbTask.TASK_TEMPLATE.StartDate, calendarId: calendarId, description: apiModel.description, summary: "[Task] " + apiModel.title, rrule: apiModel.rrule, recur: apiModel.isReminder, extendedProperties: extendedProperties, eventId: dbTask.TASK_TEMPLATE.EventId);
+                    }
+                }
+                catch
+                {
+                }
+
+
                 var notifyModel = new NotificationApiModel();
                 notifyModel.title = "Task updated";
                 notifyModel.content = $"Task {dbTask.TASK_TEMPLATE.Title} has been updated by {modifyUser.Username}.";
@@ -1068,12 +1414,20 @@ namespace Backend.Repository
                 var taskTitle = template.Title;
                 var owner = db.USERs.Find(dbTask.TaskOwner);
                 var creator = db.USERs.Find(dbTask.TASK_TEMPLATE.CreatedBy);
-
+                var eventId = dbTask.TASK_TEMPLATE.EventId;
                 db.TASKs.Remove(dbTask);
                 db.SaveChanges();
                 db.TASK_TEMPLATE.Remove(template);
                 db.SaveChanges();
 
+                try
+                {
+                    _googleCalendar.DeleteEvent(calendarId: owner.CalendarId, eventId: eventId );
+                }
+                catch
+                {
+                    throw;
+                }
                 var notifyModel = new NotificationApiModel();
                 notifyModel.title = "Task removed";
                 notifyModel.content = $"Task {taskTitle} has been removed.";

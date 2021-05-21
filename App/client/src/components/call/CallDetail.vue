@@ -8,7 +8,8 @@
           <router-link :to="{name: 'TaskList'}"><VButton :data="btnBack"/></router-link>
         </div>
         <div class="col-sm-4 d-flex justify-content-end">
-          <span @click="remove"><VButton :data="btnDelete"/></span>
+          <a :href="call.link" target="_blank"><VButton :data="btnOpen"/></a>
+          <span class="ml-5" @click="remove"><VButton :data="btnDelete"/></span>
           <router-link class="ml-5" :to="{name: 'CallUpdate', query: {id: call.id}}"><VButton :data="btnEdit"/></router-link>
         </div>
       </div>
@@ -129,7 +130,7 @@ export default {
       if (!confirm('Xác nhận xóa')) {
         return;
       }
-      callService.remove(this.call.id)
+      callService.remove(this.call.id, "calls")
           .then(res => {
             if (res) {
               alert('Thành công');
@@ -171,6 +172,7 @@ export default {
       ],
       btnBack: {btnClass: 'btn-purple px-3', icon: 'fa-arrow-left', text: 'Back'},
       btnDelete: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Delete'},
+      btnOpen: {btnClass: 'btn-white px-3', icon: 'fa-google', text: 'Open in Calendar'},
       btnEdit: {btnClass: 'btn-red px-4', icon: 'fa-pencil', text: 'Edit'},
       dataLeftBaseInfo: [
         {key: 'Call Type', value: 'Lead'},

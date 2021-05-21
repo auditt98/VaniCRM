@@ -28,6 +28,10 @@
                     <td><input class="form-control " type="text" v-model="task.title"></td>
                   </tr>
                   <tr>
+                    <td>Start Date</td>
+                    <td><input class="form-control " type="datetime-local" v-model="task.startDate"></td>
+                  </tr>
+                  <tr>
                     <td>Due Date</td>
                     <td><input class="form-control " type="datetime-local" v-model="task.dueDate"></td>
                   </tr>
@@ -229,6 +233,7 @@ export default {
       taskService.getById(this.task.id)
           .then(res => {
             if (res && res.data) {
+              console.log(res.data)
               this.task = res.data;
               if (res.data.duration) {
                 const times = new Date(res.data.duration * 1000).toISOString().substr(11, 8).split(':');
@@ -411,6 +416,7 @@ export default {
       return {
         title: this.task.title,
         dueDate: this.task.dueDate,
+        startDate: this.task.startDate,
         contact: this.task.contact ? this.task.contact.id : null,
         lead: this.task.lead ? this.task.lead.id : null,
         priority: this.task.priority,
@@ -421,7 +427,7 @@ export default {
         relatedCampaign: this.task.relatedCampaign ? this.task.relatedCampaign.id : null,
         description: this.task.description,
         rrule: this.task.rrule,
-        isReminder: this.task.isReminder
+        isReminder: this.task.isReminder,
       };
     },
     async getContactById() {
@@ -476,6 +482,7 @@ export default {
       task: {
         title: null,
         dueDate: null,
+        startDate: null,
         contact: null,
         lead: 0,
         priority: 0,

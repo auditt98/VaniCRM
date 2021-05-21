@@ -120,6 +120,21 @@ namespace Backend.Services
             newDbUser.Hash = _hashManager.Hash(user.Password);
             db.USERs.Add(newDbUser);
             db.SaveChanges();
+
+            try
+            {
+                var calendars = new GoogleCalendar();
+                var calendarId = calendars.AddCalendar(newDbUser.Email);
+                calendars.AddPeopleToAcl(email: newDbUser.Email ,id: calendarId, true);
+                newDbUser.CalendarId = calendarId;
+                db.SaveChanges();
+            }
+            catch
+            {
+                
+            }
+
+
             return newDbUser;
         }
 
@@ -138,6 +153,11 @@ namespace Backend.Services
             apiModel.users = dbUsers.users.Select(c => new UserListApiModel.UserInfo() { id = c.ID, username = c.Username, firstName = c.FirstName, lastName = c.LastName, email = c.Email, phone = c.Phone, skype = c.Skype, avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : $"{StaticStrings.ServerHost}avatar?fileName=default.png" }).ToList();
             apiModel.pageInfo = dbUsers.p;
             return apiModel;
+        }
+
+        public bool UpdateCalendarId(string email, string calendarId)
+        {
+            return _userRepository.UpdateCalendarId(email, calendarId);
         }
     }
 }

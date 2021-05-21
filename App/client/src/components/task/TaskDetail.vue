@@ -8,7 +8,8 @@
           <router-link :to="{name: 'TaskList'}"><VButton :data="btnBack"/></router-link>
         </div>
         <div class="col-sm-4 d-flex justify-content-end">
-          <span @click="remove"><VButton :data="btnDelete"/></span>
+          <a :href="task.link" target="_blank"><VButton :data="btnOpen"/></a>
+          <span class="ml-5" @click="remove"><VButton :data="btnDelete"/></span>
           <router-link class="ml-5" :to="{name: 'TaskUpdate', query: {id: task.id}}"><VButton :data="btnEdit"/></router-link>
         </div>
       </div>
@@ -18,7 +19,7 @@
         </div>
         <div class="col-sm-10">
           <div class="row">
-            <UserInfo ref="userTags" :tags="task.tags" :title="'Tags'" @create-tag="createTag" />
+            <UserInfo ref="userTags" :tags="task.tags" :title="task.title" @create-tag="createTag" />
           </div>
           <div class="row mt-3" id="basicInfo">
             <BasicInfo :arr-left="dataLeftBaseInfo" :arr-right="[]" :title="'Basic Info'"/>
@@ -63,6 +64,7 @@ export default {
           this.task = res.data;
           mapValue(this.dataLeftBaseInfo, [
             `<span class="text-danger">${getValueInArr(this.task.priorities, 'selected', 'name')}</span>`,
+            formatDate(this.task.startDate, DATE_TIME_FORMAT),
             formatDate(this.task.dueDate, DATE_TIME_FORMAT),
             `<span class="text-success">${getValueInArr(this.task.statuses, 'selected', 'name')}</span>`,
             this.task.contact ? this.task.contact.name : '',
@@ -71,6 +73,7 @@ export default {
           mapValue(this.dataLeftDetail, [
             this.task.owner ? this.task.owner.username : '',
             this.task.title,
+            formatDate(this.task.startDate, DATE_TIME_FORMAT),
             formatDate(this.task.dueDate, DATE_TIME_FORMAT),
             this.task.contact ? this.task.contact.name : '',
             this.task.relatedAccount ? this.task.relatedAccount.name : '',
@@ -81,7 +84,7 @@ export default {
           mapValue(this.dataRightDetail, [
             this.task.isRepeat,
             RRule.fromString(this.task.rrule).toText(),
-            'End ??',
+            // '',
             formatDate(this.task.createdAt, DATE_TIME_FORMAT),
             this.task.createdBy ? this.task.createdBy.username : '',
             this.task.modifiedBy ? this.task.modifiedBy.username : '',
@@ -125,7 +128,8 @@ export default {
       if (!confirm('Xác nhận xóa')) {
         return;
       }
-      taskService.remove(this.task.id)
+      console.log(this.task.id, "tasks")
+      taskService.remove(this.task.id, "tasks")
           .then(res => {
             if (res) {
               alert('Thành công');
@@ -166,10 +170,12 @@ export default {
         {id: '#notes', text: 'Notes'},
       ],
       btnBack: {btnClass: 'btn-purple px-3', icon: 'fa-arrow-left', text: 'Back'},
+      btnOpen: {btnClass: 'btn-white px-3', icon: 'fa-google', text: 'Open in Calendar'},
       btnDelete: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Delete'},
       btnEdit: {btnClass: 'btn-red px-4', icon: 'fa-pencil', text: 'Edit'},
       dataLeftBaseInfo: [
         {key: 'Priority', value: 'Lead'},
+        {key: 'Start Date', value: ''},
         {key: 'Due Date', value: ''},
         {key: 'Status', value: ''},
         {key: 'Contact Name', value: ''},
@@ -178,6 +184,7 @@ export default {
       dataLeftDetail: [
         {key: 'Task Owner', value: 'Lead'},
         {key: 'Title', value: ''},
+        {key: 'Start Date', value: ''},
         {key: 'Due Date', value: ''},
         {key: 'Contact ', value: ''},
         {key: 'Account', value: ''},
@@ -187,9 +194,9 @@ export default {
       dataRightDetail: [
         {key: 'Reminder', value: ''},
         {key: 'Repeat', value: ''},
-        {key: 'End', value: ''},
-        {key: 'Create At', value: ''},
-        {key: 'Create By', value: ''},
+        // {key: 'End', value: ''},
+        {key: 'Created At', value: ''},
+        {key: 'Created By', value: ''},
         {key: 'Modified By', value: ''},
         {key: 'Modified At', value: ''},
       ],
