@@ -47,7 +47,7 @@ namespace Backend.Extensions
                     mailMessage.Subject = Title;
 
                     var bodyBuilder = new BodyBuilder();
-                    bodyBuilder.HtmlBody = $"<h1 style='color: #D93915'>VaniCRM</h1><h2>{Title}</h2><br/><p>{Content}</p>";
+                    bodyBuilder.HtmlBody = $"<h1 style='color: #D93915'>CRM</h1><h2>{Title}</h2><br/><p>{Content}</p>";
                     bodyBuilder.TextBody = $"";
                     mailMessage.Body = bodyBuilder.ToMessageBody();
                     using (var smtpClient = new SmtpClient())

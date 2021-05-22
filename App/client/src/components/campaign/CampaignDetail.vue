@@ -38,7 +38,7 @@
             <Note ref="notes" @remove-note="removeNote" @submit="createNote" :notes="campaign.notes"/>
           </div>
           <div class="row mt-3" id="allContacts">
-            <TableInDetail :header-columns="contractColumns" :title="'All Contracts'"
+            <TableInDetail :header-columns="contractColumns" :title="'All Contacts'"
                            :page-config="{page: currentPageContact, pageSize: pageSizeContact, totalItems: totalItemContact, totalPage: totalPageContact}"
                            @page-size-change="onPageSizeChange($event, 'CONTACT')"
                            @go-to-page="goToPage($event, 'CONTACT')">

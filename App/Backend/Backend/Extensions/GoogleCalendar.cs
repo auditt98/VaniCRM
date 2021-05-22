@@ -12,6 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using Newtonsoft.Json;
 using Google.Apis.Calendar.v3.Data;
+using System.Threading.Tasks;
 
 namespace Backend.Extensions
 {
@@ -277,6 +278,11 @@ namespace Backend.Extensions
         public string GetHtmlLink(string calendarId, string eventId)
         {
             return calendarService.Events.Get(calendarId, eventId).Execute().HtmlLink;
+        }
+
+        public Task<Event> GetHtmlLinkAsync(string calendarId, string eventId)
+        {
+            return calendarService.Events.Get(calendarId, eventId).ExecuteAsync();
         }
 
         public string Publish(string calendarId, string htmlLink)

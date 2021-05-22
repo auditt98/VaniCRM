@@ -882,24 +882,26 @@ namespace Backend.Repository
                     {
                         var calendarId = dbMeeting.HostUser.CalendarId;
                         var eventId = dbMeeting.TASK_TEMPLATE.EventId;
-                        var htmlLink = _googleCalendar.GetHtmlLink(calendarId, eventId);
-                        var publishLink = _googleCalendar.Publish(calendarId, htmlLink);
+                        var htmlLink = _googleCalendar.GetHtmlLinkAsync(calendarId, eventId);
+                        htmlLink.ContinueWith((result) =>
+                        {
+                            var publishLink = _googleCalendar.Publish(calendarId, result.Result.HtmlLink);
+                            _emailManager.Recipients.Clear();
+                            _emailManager.Recipients.Add(contactAdded.Email);
+                            _emailManager.Title = StaticStrings.INVITED_MEETING;
+                            _emailManager.Content =
+                                $"<p>Our representative {owner.FirstName + " " + owner.LastName} has invited you to a meeting.</p>" +
+                                $"<h3>Meeting details:</h3>" +
+                                $"<ul>" +
+                                    $"<li>Meeting: {dbMeeting.TASK_TEMPLATE.Title}</li>" +
+                                    $"<li>From: {dbMeeting.TASK_TEMPLATE.StartDate.Value.ToUniversalTime()}</li>" +
+                                    $"<li>To: {dbMeeting.TASK_TEMPLATE.DueDate.Value.ToUniversalTime()}</li>" +
+                                    $"<li>Location: {dbMeeting.Location}</li>" +
+                                    $"<li>Host: {dbMeeting.HostUser.FirstName + " " + dbMeeting.HostUser.LastName}</li></ul>" +
 
-                        _emailManager.Recipients.Clear();
-                        _emailManager.Recipients.Add(contactAdded.Email);
-                        _emailManager.Title = StaticStrings.INVITED_MEETING;
-                        _emailManager.Content =
-                            $"<p>Our representative {owner.FirstName + " " + owner.LastName} has invited you to a meeting.</p>" +
-                            $"<h5>Meeting details:</h5>" +
-                            $"<ul>" +
-                                $"<li>Meeting: {dbMeeting.TASK_TEMPLATE.Title}</li>" +
-                                $"<li>From: {dbMeeting.TASK_TEMPLATE.StartDate.Value.ToUniversalTime()}</li>" +
-                                $"<li>To: {dbMeeting.TASK_TEMPLATE.DueDate.Value.ToUniversalTime()}</li>" +
-                                $"<li>Location: {dbMeeting.Location}</li>" +
-                                $"<li>Host: {dbMeeting.HostUser.FirstName + " " + dbMeeting.HostUser.LastName}</li>" +
-
-                            $"<a style='-webkit-appearance:button; -moz-appearance:button; appearance:button; text-decoration:none; background-color: #D93915; color: white; padding: 1em 1.5em; text-transform: uppercase;' href='{publishLink}'>Add event to calendar</a>";
-                        _emailManager.SendEmail();
+                                $"<div style='margin-top: 40px;'><a style='-webkit-appearance:button; -moz-appearance:button; appearance:button; text-decoration:none; background-color: white; color: #D93915; border: 1px solid #D93915; border-radius: 5px; padding: 1em 1.5em; text-transform: uppercase;' href='{publishLink}'>Add event to calendar</a></div>";
+                            _emailManager.SendEmail();
+                        });
                     }
                     catch
                     {
@@ -926,24 +928,26 @@ namespace Backend.Repository
                     {
                         var calendarId = dbMeeting.HostUser.CalendarId;
                         var eventId = dbMeeting.TASK_TEMPLATE.EventId;
-                        var htmlLink = _googleCalendar.GetHtmlLink(calendarId, eventId);
-                        var publishLink = _googleCalendar.Publish(calendarId, htmlLink);
+                        var htmlLink = _googleCalendar.GetHtmlLinkAsync(calendarId, eventId);
+                        htmlLink.ContinueWith((result) =>
+                        {
+                            var publishLink = _googleCalendar.Publish(calendarId, result.Result.HtmlLink);
+                            _emailManager.Recipients.Clear();
+                            _emailManager.Recipients.Add(leadAdded.Email);
+                            _emailManager.Title = StaticStrings.INVITED_MEETING;
+                            _emailManager.Content =
+                                $"<p>Our representative {owner.FirstName + " " + owner.LastName} has invited you to a meeting.</p>" +
+                                $"<h3>Meeting details:</h3>" +
+                                $"<ul>" +
+                                    $"<li>Meeting: {dbMeeting.TASK_TEMPLATE.Title}</li>" +
+                                    $"<li>From: {dbMeeting.TASK_TEMPLATE.StartDate.Value.ToUniversalTime()}</li>" +
+                                    $"<li>To: {dbMeeting.TASK_TEMPLATE.DueDate.Value.ToUniversalTime()}</li>" +
+                                    $"<li>Location: {dbMeeting.Location}</li>" +
+                                    $"<li>Host: {dbMeeting.HostUser.FirstName + " " + dbMeeting.HostUser.LastName}</li></ul>" +
 
-                        _emailManager.Recipients.Clear();
-                        _emailManager.Recipients.Add(leadAdded.Email);
-                        _emailManager.Title = StaticStrings.INVITED_MEETING;
-                        _emailManager.Content =
-                            $"<p>Our representative {owner.FirstName + " " + owner.LastName} has invited you to a meeting.</p>" +
-                            $"<h3>Meeting details:</h3>" +
-                            $"<ul>" +
-                                $"<li>Meeting: {dbMeeting.TASK_TEMPLATE.Title}</li>" +
-                                $"<li>From: {dbMeeting.TASK_TEMPLATE.StartDate.Value.ToUniversalTime()}</li>" +
-                                $"<li>To: {dbMeeting.TASK_TEMPLATE.DueDate.Value.ToUniversalTime()}</li>" +
-                                $"<li>Location: {dbMeeting.Location}</li>" +
-                                $"<li>Host: {dbMeeting.HostUser.FirstName + " " + dbMeeting.HostUser.LastName}</li></ul>" +
-
-                            $"<div style='margin-top: 40px;'><a style='-webkit-appearance:button; -moz-appearance:button; appearance:button; text-decoration:none; background-color: white; color: #D93915; padding: 1em 1.5em; text-transform: uppercase;' href='{publishLink}'>Add event to calendar</a></div>";
-                        _emailManager.SendEmail();
+                                $"<div style='margin-top: 40px;'><a style='-webkit-appearance:button; -moz-appearance:button; appearance:button; text-decoration:none; background-color: white; color: #D93915; border: 1px solid #D93915; border-radius: 5px; padding: 1em 1.5em; text-transform: uppercase;' href='{publishLink}'>Add event to calendar</a></div>";
+                            _emailManager.SendEmail();
+                        });
                     }
                     catch
                     {
