@@ -20,7 +20,19 @@ export const campaignService = {
     loadLeads,
     loadAllObject,
     sendEmail,
+    addContact,
+    addLead
 };
+
+function addLead(id, payload) {
+    return fetch(`${config.apiUrl}/campaigns/${id}/leads`, requestOptions.post(payload))
+        .then(handleResponse)
+}
+
+function addContact(id, payload) {
+    return fetch(`${config.apiUrl}/campaigns/${id}/contacts`, requestOptions.post(payload))
+        .then(handleResponse)
+}
 
 function loadContacts(q, id) {
     return fetch(`${config.apiUrl}/campaigns/${id}/contacts?${buildQueryURI(q)}`, requestOptions.get())

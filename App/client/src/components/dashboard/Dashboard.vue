@@ -22,19 +22,22 @@
             <p class="card-header-under-line w-100"></p>
             <div class="card add-campaign" v-if="item.isAdd">
               <div class="card-body p-2">
-                <input type="text" class="form-control mb-2" v-model.trim="item.deal.name">
+                <input type="text" class="form-control mb-2" placeholder="Enter deal name" v-model.trim="item.deal.name">
 
                 <div>
                   <vc-select label="name"
-                             :filterable="false" :options="accountSearchs"
-                             @search="onSearchAccount"
-                             v-model="item.deal.account">
-                  </vc-select>
+                    placeholder="Choose account"
+                    :filterable="false" :options="accountSearchs"
+                    @search="onSearchAccount"
+                    v-model="item.deal.account"
+                  />
                 </div>
 
                 <select class="form-control py-0 w-100 my-2" v-model="item.deal.priority">
+                  <option value="null" hidden disabled selected>Choose priority</option>
                   <option v-for="(f, i) in priorities" :key="i" :value="f.id">{{ f.name }}</option>
                 </select>
+                <input type="text" class="form-control mb-2" placeholder="Enter expected revenue" v-model.trim="item.deal.expectedRevenue">
                 <div class="d-flex justify-content-between">
                   <span @click="save(item, 'DEAL')"><VButton :data="btnEdit"/></span>
                   <span @click="item.isAdd = false"><VButton :data="btnCancel"/></span>
@@ -185,6 +188,7 @@ export default {
         item.deal.name = null;
         item.deal.account = null;
         item.deal.priority = null;
+        item.deal.expectedRevenue
       } else {
         item.name = null;
         item.email = null;
@@ -200,7 +204,8 @@ export default {
           name: item.deal.name,
           account: item.deal.account ? item.deal.account.id : null,
           priority: item.deal.priority,
-          stage: item.id
+          stage: item.id,
+          expectedRevenue: item.deal.expectedRevenue
         };
         dealService.create(deal)
             .then(res => {
@@ -521,7 +526,6 @@ i {
 /deep/ .vs__search {
   width: unset;
   border: none;
-  z-index: -1 !important;
 }
 
 /deep/ .vs--open .vs--single .vs__selected {

@@ -49,9 +49,7 @@
                            @page-size-change="onPageSizeChange($event, 'CONTACT')"
                            @go-to-page="goToPage($event, 'CONTACT')">
               <template slot="button">
-                <router-link class="mr-2" :to="{name: 'ContactCreate', query: {campaignId: campaign.id}}">
-                  <VButton :data="btnCreateContact"/>
-                </router-link>
+                <span @click="openContactModal"><VButton :data="btnCreateContact"/></span>
               </template>
               <template slot="body">
                 <tbody v-if="contactLst">
@@ -72,6 +70,11 @@
                 </tbody>
               </template>
             </TableInDetail>
+            <AddContactModal
+              ref="contactModal"
+              v-if="campaign.id && isOpenContactModal"
+              :campaign-id="Number(campaign.id)"
+              @close="closeContactModal"/>
           </div>
           <div class="row mt-3" id="allLeads">
             <TableInDetail :header-columns="leadColumns" :title="'Leads'"
@@ -79,9 +82,7 @@
                            @page-size-change="onPageSizeChange($event, 'LEAD')"
                            @go-to-page="goToPage($event, 'LEAD')">
               <template slot="button">
-                <router-link class="mr-2" :to="{name: 'LeadCreate', query: {campaignId: campaign.id}}">
-                  <VButton :data="btnCreateLead"/>
-                </router-link>
+                <span @click="openLeadModal"><VButton :data="btnCreateLead"/></span>
               </template>
               <template slot="body">
                 <tbody v-if="leadLst">
@@ -102,6 +103,11 @@
                 </tbody>
               </template>
             </TableInDetail>
+            <AddLeadModal
+              ref="leadModal"
+              v-if="campaign.id && isOpenLeadModal"
+              :campaign-id="Number(campaign.id)"
+              @close="closeLeadModal"/>
           </div>
 
         </div>
@@ -121,10 +127,26 @@ import {formatDate, getValueInArr, mapValue} from "@/config/config";
 import {campaignService} from "@/service/campaign.service";
 import VLoading from "@/components/common/VLoading";
 import TableInDetail from "@/components/common/table/TableInDetail";
+import AddContactModal from "@/components/common/modal/AddContactModal";
+import AddLeadModal from "@/components/common/modal/AddLeadModal";
 
 export default {
   name: "LeadDetail",
   methods: {
+    openContactModal() {
+      this.isOpenContactModal = true;
+    },
+    closeContactModal() {
+      this.loadCampaign();
+      this.isOpenContactModal = false;
+    },
+    openLeadModal() {
+      this.isOpenLeadModal = true;
+    },
+    closeLeadModal() {
+      this.loadCampaign();
+      this.isOpenLeadModal = false;
+    },
     scrollTo(element) {
       this.$scrollTo(element);
     },
@@ -183,7 +205,6 @@ export default {
           });
     },
     createNote(event) {
-      console.log(event)
       let formData = new FormData();
       formData.append("body", event.text);
       if (event.files && event.files.length > 0) {
@@ -257,7 +278,6 @@ export default {
         currentPage: this.currentPageLead,
         pageSize: this.pageSizeLead
       };
-      console.log(this.campaign.id)
       campaignService.loadLeads(query, this.campaign.id).then(res => {
         if (res && res.data) {
           this.leadLst = res.data.leads;
@@ -299,6 +319,8 @@ export default {
   },
   data: function () {
     return {
+      isOpenContactModal: false,
+      isOpenLeadModal: false,
       campaign: {},
       loading: false,
       contactLst: [],
@@ -349,11 +371,11 @@ export default {
       pageSizeLead: 1,
       totalItemLead: 0,
       totalPageLead:0,
-      btnCreateContact: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Contact'},
-      btnCreateLead: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Lead'},
+      btnCreateContact: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Add Contact'},
+      btnCreateLead: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Add Lead'},
     }
   },
-  components: {TableInDetail, VLoading, Note, BasicInfo, UserInfo, MenuLeft, VButton}
+  components: {TableInDetail, VLoading, Note, BasicInfo, UserInfo, MenuLeft, VButton, AddContactModal, AddLeadModal}
 }
 </script>
 
