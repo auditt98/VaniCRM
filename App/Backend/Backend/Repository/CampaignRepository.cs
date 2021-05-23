@@ -1,6 +1,7 @@
 ﻿using Backend.Domain;
 using Backend.Extensions;
 using Backend.Models.ApiModel;
+using Backend.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -291,83 +292,97 @@ namespace Backend.Repository
             }
         }
         
-        public bool AddContact(int id, CampaignUpdateContactApiModel apiModel, int modifiedUser)
+        public (bool isAdded, string message) AddContact(int id, int contactId, int modifiedUser)
         {
             var dbCampaign = db.CAMPAIGNs.Find(id);
             if (dbCampaign != null)
             {
-                var contact = dbCampaign.CAMPAIGN_TARGET.Where(c => c.CONTACT.ID == apiModel.id).FirstOrDefault();
-                if(contact != null)
+                var dbContact = db.CONTACTs.Find(contactId);
+                if(dbContact != null)
                 {
-                    return false;
+                    var contact = dbCampaign.CAMPAIGN_TARGET.Where(c => c.CONTACT_ID == dbContact.ID).FirstOrDefault();
+                    if(contact != null)
+                    {
+                        return (false, "Duplicate contact");
+                    }
+                    else
+                    {
+                        var newTarget = new CAMPAIGN_TARGET();
+                        newTarget.CAMPAIGN_ID = dbCampaign.ID;
+                        newTarget.CONTACT_ID = contactId;
+                        db.CAMPAIGN_TARGET.Add(newTarget);
+                        dbCampaign.ModifiedAt = DateTime.Now;
+                        dbCampaign.ModifiedBy = modifiedUser;
+                        db.SaveChanges();
+
+                        var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                        var creator = db.USERs.Find(dbCampaign.CreatedBy);
+                        var modifyUser = db.USERs.Find(modifiedUser);
+                        var contactAdded = db.CONTACTs.Find(contactId);
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Campaign target added";
+                        notifyModel.content = $"Contact {contactAdded.Name} has been added to campaign {dbCampaign.Name} by {modifyUser.Username}.";
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+                        return (true, SuccessMessages.CONTACT_ADDED);
+                    }
                 }
                 else
                 {
-                    var newTarget = new CAMPAIGN_TARGET();
-                    newTarget.CAMPAIGN_ID = dbCampaign.ID;
-                    newTarget.CONTACT_ID = apiModel.id;
-                    db.CAMPAIGN_TARGET.Add(newTarget);
-                    dbCampaign.ModifiedAt = DateTime.Now;
-                    dbCampaign.ModifiedBy = modifiedUser;
-                    db.SaveChanges();
-
-                    var owner = db.USERs.Find(dbCampaign.CampaignOwner);
-                    var creator = db.USERs.Find(dbCampaign.CreatedBy);
-                    var modifyUser = db.USERs.Find(modifiedUser);
-                    var contactAdded = db.CONTACTs.Find(apiModel.id);
-
-                    var notifyModel = new NotificationApiModel();
-                    notifyModel.title = "Campaign target added";
-                    notifyModel.content = $"Contact {contactAdded.Name} has been added to campaign {dbCampaign.Name} by {modifyUser.Username}.";
-                    notifyModel.createdAt = DateTime.Now;
-                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
-                    return true;
+                    return (false, "Can't find contact");
                 }
-
             }
             else
             {
-                return false;
+                return (false, "Can't find campaign");
             }
         }
 
-        public bool AddLead(int id, CampaignUpdateLeadApiModel apiModel, int modifiedUser)
+        public (bool isAdded, string message) AddLead(int id, int leadId, int modifiedUser)
         {
             var dbCampaign = db.CAMPAIGNs.Find(id);
             if (dbCampaign != null)
             {
-                var lead = dbCampaign.CAMPAIGN_TARGET.Where(c => c.LEAD.ID == apiModel.id).FirstOrDefault();
-                if (lead != null)
+                var dbLead = db.LEADs.Find(leadId);
+                if (dbLead != null)
                 {
-                    return false;
+                    var lead = dbCampaign.CAMPAIGN_TARGET.Where(c => c.LEAD_ID == dbLead.ID).FirstOrDefault();
+                    if (lead != null)
+                    {
+                        return (false, "Duplicate lead");
+                    }
+                    else
+                    {
+                        var newTarget = new CAMPAIGN_TARGET();
+                        newTarget.CAMPAIGN_ID = dbCampaign.ID;
+                        newTarget.LEAD_ID = leadId;
+                        db.CAMPAIGN_TARGET.Add(newTarget);
+                        dbCampaign.ModifiedAt = DateTime.Now;
+                        dbCampaign.ModifiedBy = modifiedUser;
+                        db.SaveChanges();
+
+                        var owner = db.USERs.Find(dbCampaign.CampaignOwner);
+                        var creator = db.USERs.Find(dbCampaign.CreatedBy);
+                        var modifyUser = db.USERs.Find(modifiedUser);
+                        var leadAdded = db.LEADs.Find(leadId);
+
+                        var notifyModel = new NotificationApiModel();
+                        notifyModel.title = "Campaign target added";
+                        notifyModel.content = $"Lead {leadAdded.Name} has been added to campaign {dbCampaign.Name} by {modifyUser.Username}.";
+                        notifyModel.createdAt = DateTime.Now;
+                        NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
+                        return (true, SuccessMessages.LEAD_ADDED);
+                    }
                 }
                 else
                 {
-                    var newTarget = new CAMPAIGN_TARGET();
-                    newTarget.CAMPAIGN_ID = dbCampaign.ID;
-                    newTarget.LEAD_ID = apiModel.id;
-                    db.CAMPAIGN_TARGET.Add(newTarget);
-                    dbCampaign.ModifiedAt = DateTime.Now;
-                    dbCampaign.ModifiedBy = modifiedUser;
-                    db.SaveChanges();
-
-                    var owner = db.USERs.Find(dbCampaign.CampaignOwner);
-                    var creator = db.USERs.Find(dbCampaign.CreatedBy);
-                    var modifyUser = db.USERs.Find(modifiedUser);
-                    var leadAdded = db.LEADs.Find(apiModel.id);
-
-                    var notifyModel = new NotificationApiModel();
-                    notifyModel.title = "Campaign target added";
-                    notifyModel.content = $"Lead {leadAdded.Name} has been added to campaign {dbCampaign.Name} by {modifyUser.Username}.";
-                    notifyModel.createdAt = DateTime.Now;
-                    NotificationManager.SendNotification(notifyModel, new List<USER> { owner, creator });
-                    return true;
+                    return (false, "Can't find lead");
                 }
-
             }
             else
             {
-                return false;
+                return (false, "Can't find campaign");
             }
         }
 

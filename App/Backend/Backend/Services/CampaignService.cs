@@ -81,14 +81,14 @@ namespace Backend.Services
             return _campaignRepository.RemoveTag(id, tagId);
         }
 
-        public bool AddContact(int id, CampaignUpdateContactApiModel apiModel, int modifiedUser)
+        public (bool isAdded, string message) AddContact(int id, int contactId, int modifiedUser)
         {
-            return _campaignRepository.AddContact(id, apiModel, modifiedUser);
+            return _campaignRepository.AddContact(id, contactId, modifiedUser);
         }
 
-        public bool AddLead(int id, CampaignUpdateLeadApiModel apiModel, int modifiedUser)
+        public (bool isAdded, string message) AddLead(int id, int leadId, int modifiedUser)
         {
-            return _campaignRepository.AddLead(id, apiModel, modifiedUser);
+            return _campaignRepository.AddLead(id, leadId, modifiedUser);
         }
 
         public bool DeleteLead(int id, int leadId, int modifiedUser)

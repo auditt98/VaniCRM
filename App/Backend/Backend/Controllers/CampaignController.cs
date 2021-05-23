@@ -670,7 +670,7 @@ namespace Backend.Controllers
         [HttpPost]
         [Route("campaigns/{id}/contacts")]
         [ResponseType(typeof(ResponseFormat))]
-        public HttpResponseMessage AddContact([FromUri] int id, [FromBody] CampaignUpdateContactApiModel apiModel)
+        public HttpResponseMessage AddContact([FromUri] int id, [FromBody] CampaignAddContactApiModel contact)
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -704,8 +704,8 @@ namespace Backend.Controllers
 
                     if ((userId == campaignOwner) || (new AuthorizationService().SetPerm((int)EnumPermissions.CAMPAIGN_DELETE).Authorize(userId)))
                     {
-                        var isAdded = _campaignService.AddContact(id, apiModel, userId);
-                        if (isAdded)
+                        var result = _campaignService.AddContact(id, contact.contactId, userId);
+                        if (result.isAdded)
                         {
                             response.StatusCode = HttpStatusCode.OK;
                             responseData = ResponseFormat.Success;
@@ -715,7 +715,7 @@ namespace Backend.Controllers
                         {
                             response.StatusCode = HttpStatusCode.InternalServerError;
                             responseData = ResponseFormat.Fail;
-                            responseData.message = ErrorMessages.SOMETHING_WRONG;
+                            responseData.message = result.message;
                         }
                     }
                     else
@@ -740,7 +740,7 @@ namespace Backend.Controllers
         [HttpPost]
         [Route("campaigns/{id}/leads")]
         [ResponseType(typeof(ResponseFormat))]
-        public HttpResponseMessage AddLead([FromUri] int id, [FromBody] CampaignUpdateLeadApiModel apiModel)
+        public HttpResponseMessage AddLead([FromUri] int id, [FromBody] CampaignAddLeadApiModel lead)
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -774,8 +774,8 @@ namespace Backend.Controllers
 
                     if ((userId == campaignOwner) || (new AuthorizationService().SetPerm((int)EnumPermissions.CAMPAIGN_DELETE).Authorize(userId)))
                     {
-                        var isAdded = _campaignService.AddLead(id, apiModel, userId);
-                        if (isAdded)
+                        var result = _campaignService.AddLead(id, lead.leadId, userId);
+                        if (result.isAdded)
                         {
                             response.StatusCode = HttpStatusCode.OK;
                             responseData = ResponseFormat.Success;
@@ -785,7 +785,7 @@ namespace Backend.Controllers
                         {
                             response.StatusCode = HttpStatusCode.InternalServerError;
                             responseData = ResponseFormat.Fail;
-                            responseData.message = ErrorMessages.SOMETHING_WRONG;
+                            responseData.message = result.message;
                         }
                     }
                     else

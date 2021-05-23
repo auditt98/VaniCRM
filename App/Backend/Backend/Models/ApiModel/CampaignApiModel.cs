@@ -24,6 +24,16 @@ namespace Backend.Models.ApiModel
 
     }
 
+    public class CampaignAddContactApiModel
+    {
+        public int contactId { get; set; }
+    }
+
+    public class CampaignAddLeadApiModel
+    {
+        public int leadId { get; set; }
+    }
+
     public class CampaignStatus
     {
         public int id { get; set; }
