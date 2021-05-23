@@ -28,6 +28,8 @@ namespace Backend.Domain
 
         public DateTime? ClosingDate { get; set; }
 
+        public DateTime? ExpectedClosingDate { get; set; }
+
         public int? DealOwner { get; set; }
 
         public long? Amount { get; set; }
