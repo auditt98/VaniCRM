@@ -427,3 +427,39 @@ i {
   ::-webkit-scrollbar-thumb:hover {
     background-color: #a8bbbf;
   }
+
+
+  .ql-font span[data-value="Roboto"]::before {
+    font-family: "Roboto";
+    content: "Roboto" !important;
+  }
+
+  .ql-font span[data-value="Arial"]::before {
+    font-family: "Arial";
+    content: "Arial" !important;
+  }
+
+  .ql-font span[data-value="times-new-roman"]::before {
+    font-family: "Times New Roman";
+    content: "Times New Roman" !important;
+  }
+  
+  .ql-font span[data-value="Verdana"]::before {
+    font-family: "Verdana";
+    content: "Verdana" !important;
+  }
+  
+  .ql-font span[data-value="Helvetica"]::before {
+    font-family: "Helvetica";
+    content: "Helvetica" !important;
+  }
+  
+  .ql-font span[data-value="Tahoma"]::before {
+    font-family: "Tahoma";
+    content: "Tahoma" !important;
+  }
+
+  .ql-font span[data-value="trebuchet-ms"]::before {
+    font-family: "Trebuchet MS";
+    content: "Trebuchet MS" !important;
+  }

@@ -90,7 +90,7 @@ export default {
   border: 0px;
   background-color: white !important;
   /* color: rgba(0,0,0, 0.3); */
-  padding-left: 2rem;
+  /* padding-left: 2rem; */
 }
 
 td {

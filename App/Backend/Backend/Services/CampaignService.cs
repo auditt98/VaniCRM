@@ -123,6 +123,7 @@ namespace Backend.Services
                 }
                 apiModel.id = dbCampaign.ID;
                 apiModel.description = dbCampaign.Description;
+                apiModel.emailTitle = dbCampaign.EmailTitle;
                 apiModel.startDate = dbCampaign.StartDate.GetValueOrDefault();
                 apiModel.endDate = dbCampaign.EndDate.GetValueOrDefault();
                 apiModel.expectedResponse = dbCampaign.ExpectedResponse.GetValueOrDefault();
@@ -131,7 +132,6 @@ namespace Backend.Services
                 apiModel.types = _campaignRepository.GetAllCampaignTypes().Select(c => new CampaignType() { id = c.ID, name = c.Name, selected = dbCampaign.CAMPAIGN_TYPE != null ? c.ID == dbCampaign.CAMPAIGN_TYPE.ID : false }).ToList();
 
                 apiModel.statuses = _campaignRepository.GetAllCampaignStatuses().Select(c => new CampaignStatus() { id = c.ID, name = c.Name, selected = dbCampaign.CAMPAIGN_STATUS != null ? c.ID == dbCampaign.CAMPAIGN_STATUS.ID : false }).ToList();
-
                 if(dbCampaign.Owner != null)
                 {
                     apiModel.owner = new UserLinkApiModel() { id = dbCampaign.Owner.ID, username = dbCampaign.Owner.Username, email = dbCampaign.Owner.Email };
@@ -175,19 +175,27 @@ namespace Backend.Services
             emailManager.Recipients = new List<string>();
             foreach (var target in campaign.CAMPAIGN_TARGET)
             {
-                if (target.LEAD_ID != 0)
+                if (target.LEAD_ID != null)
                 {
-                    if (!string.IsNullOrEmpty(target.LEAD.Email))
+                    if(target.LEAD_ID != 0)
                     {
-                        emailManager.Recipients.Add(target.LEAD.Email);
+                        if (!string.IsNullOrEmpty(target.LEAD.Email))
+                        {
+                            emailManager.Recipients.Add(target.LEAD.Email);
+                        }
                     }
+                    
                 }
-                else if (target.CONTACT_ID != 0)
+                else if (target.CONTACT_ID != null)
                 {
-                    if (!string.IsNullOrEmpty(target.CONTACT.Email))
+                    if(target.CONTACT_ID != 0)
                     {
-                        emailManager.Recipients.Add(target.CONTACT.Email);
+                        if (!string.IsNullOrEmpty(target.CONTACT.Email))
+                        {
+                            emailManager.Recipients.Add(target.CONTACT.Email);
+                        }
                     }
+                    
                 }
             }
 

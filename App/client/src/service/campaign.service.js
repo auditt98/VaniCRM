@@ -18,7 +18,8 @@ export const campaignService = {
     removeTag,
     loadContacts,
     loadLeads,
-    loadAllObject
+    loadAllObject,
+    sendEmail,
 };
 
 function loadContacts(q, id) {
@@ -54,13 +55,18 @@ function getAll(q) {
         })
 }
 
-function create(lead) {
-    return fetch(`${config.apiUrl}/campaigns`, requestOptions.post(lead))
+function create(campaign) {
+    return fetch(`${config.apiUrl}/campaigns`, requestOptions.post(campaign))
         .then(handleResponse);
 }
 
 function remove(id) {
     return fetch(`${config.apiUrl}/campaigns/${id}`, requestOptions.delete())
+        .then(handleResponse);
+}
+
+function sendEmail(id) {
+    return fetch(`${config.apiUrl}/campaigns/${id}/send_email`, requestOptions.post())
         .then(handleResponse);
 }
 

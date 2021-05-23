@@ -10,6 +10,7 @@
           </router-link>
         </div>
         <div class="col-sm-4 d-flex justify-content-end">
+          <span @click="sendEmail"><VButton :data="btnSend"/></span>
           <span @click="remove"><VButton :data="btnDelete"/></span>
           <router-link class="ml-4" :to="{name: 'CampaignUpdate', query: {id: campaign.id}}">
             <VButton :data="btnEdit"/>
@@ -32,7 +33,7 @@
             <BasicInfo :arr-left="dataLeftDetail" :arr-right="dataRightDetail" :title="'Detail'"/>
           </div>
           <div class="row mt-3" id="description">
-            <BasicInfo :description="campaign.description" :isEmail="true" :title="'Email'"/>
+            <BasicInfo :description="campaign.description" :emailTitle="campaign.emailTitle" :isEmail="true" :title="'Email'"/>
           </div>
 
           <!-- <div class="row mt-3" id="email">
@@ -198,6 +199,14 @@ export default {
         }
       }).catch(err => alert(err))
     },
+    sendEmail(){
+      campaignService.sendEmail(this.campaign.id).then(res =>{
+        if(res){
+          alert(res.message);
+        }
+      })
+    },
+
     remove() {
       if (!confirm('Xác nhận xóa')) {
         return;
@@ -237,6 +246,7 @@ export default {
           this.totalItemContact = Number(res.data.pageInfo.TotalItems);
         }
       }).finally(() => {
+        // console.log()
         this.loading = false;
       })
     },
@@ -300,8 +310,9 @@ export default {
         {id: '#notes', text: 'Notes'},
         {id: '#Contact', text: 'Contact'},
       ],
+      btnSend: {btnClass: 'btn-white px-3', icon: 'fa-paper-plane', text: 'Send Email'},
       btnBack: {btnClass: 'btn-purple px-3', icon: 'fa-arrow-left', text: 'Back'},
-      btnDelete: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Delete'},
+      btnDelete: {btnClass: 'btn-white px-3 ml-4', icon: 'fa-times', text: 'Delete'},
       btnEdit: {btnClass: 'btn-red px-4', icon: 'fa-pencil', text: 'Edit'},
       dataLeftBaseInfo: [
         {key: 'Campaigns Owner', value: 'Lead'},

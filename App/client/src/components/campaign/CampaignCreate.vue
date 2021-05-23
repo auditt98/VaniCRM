@@ -96,8 +96,23 @@
         <div class="row mt-3">
           <div class="basic-edit">
             <h4 class="ml-2"><strong>Email Content</strong></h4>
-            <div class="row ml-2">
-              <vue-editor v-model.trim="campaign.description" name="" class="" style="width: 100%; height: 100%" id="" cols="25" rows="5"></vue-editor>
+            <div class="row email-row-border">
+              <div class="col-sm-1 text-right email-row" style="border: 0px;">From:</div>
+                <input class="col-sm-11 email-row-disabled"  value="vanicrm.noreply@gmail.com" disabled>
+            </div>
+            <div class="row email-row-border">
+              <div class="col-sm-1 text-right email-row" style="border: 0px;">Subject:</div>
+              <input class="col-sm-11 email-row" v-model.trim="campaign.emailTitle" >
+            </div>
+            <div class="row mt-4" style="">
+              <vue-editor 
+                :editorOptions="editorSettings" 
+                :editor-toolbar="customToolbar" 
+                :placeholder="'Email body'"
+                v-model.trim="campaign.description" name="" class="" 
+                style="width: 100%; height: 100%; border-top: 0px;" id="" cols="25" rows="5"
+                
+              ></vue-editor>
               <!-- <textarea v-model.trim="campaign.description" name="" class="form-control" id="" cols="25" rows="5"></textarea> -->
             </div>
           </div>
@@ -108,11 +123,31 @@
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor";
+import { VueEditor, Quill} from "vue2-editor";
 import VButton from "@/components/common/VButton";
 import {userService} from "@/service/user.service";
 import {campaignService} from "@/service/campaign.service";
 import {getValueInArr} from "@/config/config";
+
+var AlignStyle = Quill.import('attributors/style/align');
+
+var FontStyle = Quill.import("attributors/style/font");
+var fontList = ["Arial", "Roboto", "times-new-roman", "Verdana", "Helvetica", "Tahoma", "trebuchet-ms", "sans-serif", "monospace", "serif"];
+FontStyle.whitelist = fontList;
+Quill.register(FontStyle, true);
+Quill.register(AlignStyle, true);
+
+var toolbarOptions = [ 
+          [{'font': fontList }],
+          [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+          ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript       // outdent/indent                    // text direction
+          [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+          [{ 'align': [] }],
+          ['clean']     
+      ]
 
 export default {
   name: "CampaignCreate",
@@ -193,7 +228,13 @@ export default {
       owners: [],
       btnCancel: {btnClass: 'btn-white px-3', icon: 'fa-times', text: 'Cancel'},
       btnSave: {btnClass: 'btn-red px-4', icon: 'fa-floppy-o', text: 'Save'},
-
+      customToolbar: toolbarOptions,
+      editorSettings: {
+        formats: {
+          Font: true,
+          Align: true,
+        }
+      },
     }
   }
 }
@@ -206,5 +247,34 @@ export default {
 }
 /deep/ .vs--open .vs--single .vs__selected {
   position: unset;
+}
+
+.email-row-disabled{
+  margin-top: 10px; 
+  margin-bottom: 10px; 
+  background-color: white !important;
+  color: rgba(0,0,0, 0.5);
+  /* padding-left: 2rem; */
+  border: 0px;
+
+}
+
+.email-row-border{
+    border-top: 0px;
+    border-left: 0px; 
+    border-right: 0px; 
+    border-bottom: 1px solid rgba(0,0,0,0.1); 
+}
+
+.email-row{
+  margin-top: 10px; 
+  margin-bottom: 10px; 
+  border: 0px;
+  background-color: white !important;
+  /* color: rgba(0,0,0, 0.3); */
+}
+
+textarea:focus, input:focus{
+    outline: none;
 }
 </style>
