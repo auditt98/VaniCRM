@@ -232,6 +232,15 @@ namespace Backend.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Emails sent successfully..
+        /// </summary>
+        internal static string EMAIL_SENT {
+            get {
+                return ResourceManager.GetString("EMAIL_SENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Group successfully created..
         /// </summary>
         internal static string GROUP_CREATED {

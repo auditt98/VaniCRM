@@ -9,5 +9,9 @@ add ExpectedClosingDate datetime
 go
 
 alter table [CAMPAIGN]
+add EmailTitle nvarchar(2000)
+go
+
+alter table [CAMPAIGN]
 alter column Description nvarchar(max)
 go

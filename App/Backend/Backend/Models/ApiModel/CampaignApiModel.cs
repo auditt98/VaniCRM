@@ -58,6 +58,7 @@ namespace Backend.Models.ApiModel
         public int type { get; set; }
         public int status { get; set; }
         public string description { get; set; }
+        public string emailTitle { get; set; }
     }
 
     public class CampaignDetailApiModel
@@ -83,6 +84,7 @@ namespace Backend.Models.ApiModel
         public int expectedResponse { get; set; }
         public int numberSent { get; set; }
         public string description { get; set; }
+        public string emailTitle { get; set; }
 
     }
 

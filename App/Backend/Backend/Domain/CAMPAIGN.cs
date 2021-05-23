@@ -28,6 +28,9 @@ namespace Backend.Domain
 
         public string Description { get; set; }
 
+        [StringLength(2000)]
+        public string EmailTitle { get; set; }
+
         public int? CampaignOwner { get; set; }
 
         public DateTime? StartDate { get; set; }

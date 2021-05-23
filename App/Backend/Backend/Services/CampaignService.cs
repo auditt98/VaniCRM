@@ -1,4 +1,5 @@
-﻿using Backend.Models.ApiModel;
+﻿using Backend.Extensions;
+using Backend.Models.ApiModel;
 using Backend.Repository;
 using Backend.Resources;
 using Backend.Validators;
@@ -162,6 +163,36 @@ namespace Backend.Services
             leads.leads = dbLeads.leads.Select(c => new LeadListApiModel.LeadInfo() { id = c.ID, companyName = c.CompanyName, email = c.Email, leadOwner = c.Owner?.Username, leadSource = c.LEAD_SOURCE?.Name, name = c.Name, phone = c.Phone, priority = c.PRIORITY?.Name}).ToList();
             leads.pageInfo = dbLeads.p;
             return leads;
+        }
+
+        public (bool isSent, string error) SendEmail(int id)
+        {
+            var campaign = _campaignRepository.GetOne(id);
+            
+            var emailManager = new EmailManager();
+            emailManager.Title = campaign.EmailTitle;
+            emailManager.Content = campaign.Description;
+            emailManager.Recipients = new List<string>();
+            foreach (var target in campaign.CAMPAIGN_TARGET)
+            {
+                if (target.LEAD_ID != 0)
+                {
+                    if (!string.IsNullOrEmpty(target.LEAD.Email))
+                    {
+                        emailManager.Recipients.Add(target.LEAD.Email);
+                    }
+                }
+                else if (target.CONTACT_ID != 0)
+                {
+                    if (!string.IsNullOrEmpty(target.CONTACT.Email))
+                    {
+                        emailManager.Recipients.Add(target.CONTACT.Email);
+                    }
+                }
+            }
+
+            var result = emailManager.SendBatch();
+            return (result.isSent, result.error);
         }
     }
 }

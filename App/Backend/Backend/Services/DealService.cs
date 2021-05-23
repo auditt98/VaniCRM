@@ -151,7 +151,7 @@ namespace Backend.Services
                 apiModel.CreatedBy = new UserLinkApiModel() { id = dbDeal.CreatedUser.ID, username = dbDeal.CreatedUser.Username, email = dbDeal.CreatedUser.Email };
                 apiModel.ModifiedAt = dbDeal.ModifiedAt.GetValueOrDefault();
                 apiModel.ModifiedBy = new UserLinkApiModel() { id = dbDeal.ModifiedUser?.ID, username = dbDeal.ModifiedUser?.Username, email = dbDeal.ModifiedUser?.Email };
-
+                apiModel.description = dbDeal.Description;
 
                 //notes
                 apiModel.notes = dbDeal.NOTEs.Select(c => new NoteApiModel() { id = c.ID, avatar = $"{StaticStrings.ServerHost}avatar?fileName={c.USER?.Avatar}", body = c.NoteBody, createdAt = c.CreatedAt.GetValueOrDefault(), createdBy = new UserLinkApiModel() { id = c.USER.ID, username = c.USER.Username, email = c.USER.Email }, files = c.FILEs.Select(f => new FileApiModel() { id = f.ID, fileName = f.FileName, size = f.FileSize.Value.ToString() + " KB", url = StaticStrings.ServerHost + "files/" + f.ID }).ToList() }).ToList();

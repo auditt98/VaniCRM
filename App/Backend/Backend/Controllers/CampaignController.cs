@@ -1127,5 +1127,78 @@ namespace Backend.Controllers
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
             return response;
         }
+
+        [HttpPost]
+        [Route("campaigns/{id}/send_email")]
+        [ResponseType(typeof(ResponseFormat))]
+        public HttpResponseMessage SendEmail([FromUri] int id)
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            //AuthorizationService _authorizationService = new AuthorizationService().SetPerm((int)EnumPermissions.LEAD_DELETE);
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    var userId = Convert.ToInt32(payload["id"]);
+                    var campaignOwner = _campaignService.FindOwnerId(id);
+
+                    if ((userId == campaignOwner) || (new AuthorizationService().SetPerm((int)EnumPermissions.CAMPAIGN_DELETE).Authorize(userId)))
+                    {
+                        //var isAdded = _campaignService.AddContact(id, apiModel, userId);
+                        var result = _campaignService.SendEmail(id);
+                        if (result.isSent)
+                        {
+                            response.StatusCode = HttpStatusCode.OK;
+                            responseData = ResponseFormat.Success;
+                            responseData.message = SuccessMessages.EMAIL_SENT;
+                        }
+                        else
+                        {
+                            response.StatusCode = HttpStatusCode.InternalServerError;
+                            responseData = ResponseFormat.Fail;
+                            responseData.message = result.error;
+                        }
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.UNAUTHORIZED;
+                    }
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+
     }
 }

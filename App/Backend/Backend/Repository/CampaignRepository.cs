@@ -97,6 +97,7 @@ namespace Backend.Repository
             newCampaign.Name = apiModel.campaignName;
             newCampaign.NumberSent = apiModel.numberSent;
             newCampaign.StartDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startDate);
+            newCampaign.EmailTitle = apiModel.emailTitle;
             try
             {
                 db.CAMPAIGNs.Add(newCampaign);
@@ -143,6 +144,7 @@ namespace Backend.Repository
                     dbCampaign.CAMPAIGN_TYPE_ID = apiModel.type;
                 }
                 dbCampaign.Description = apiModel.description;
+                dbCampaign.EmailTitle = apiModel.emailTitle;
                 dbCampaign.EndDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.endDate);
                 dbCampaign.ExpectedResponse = apiModel.expectedResponse;
                 dbCampaign.ExpectedRevenue = apiModel.expectedRevenue;

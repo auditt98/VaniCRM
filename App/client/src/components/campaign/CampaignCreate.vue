@@ -95,9 +95,10 @@
         </div>
         <div class="row mt-3">
           <div class="basic-edit">
-            <h4 class="ml-2"><strong>Description</strong></h4>
+            <h4 class="ml-2"><strong>Email Content</strong></h4>
             <div class="row ml-2">
-              <textarea v-model.trim="campaign.description" name="" class="form-control" id="" cols="25" rows="5"></textarea>
+              <vue-editor v-model.trim="campaign.description" name="" class="" style="width: 100%; height: 100%" id="" cols="25" rows="5"></vue-editor>
+              <!-- <textarea v-model.trim="campaign.description" name="" class="form-control" id="" cols="25" rows="5"></textarea> -->
             </div>
           </div>
         </div>
@@ -107,7 +108,7 @@
 </template>
 
 <script>
-
+import { VueEditor } from "vue2-editor";
 import VButton from "@/components/common/VButton";
 import {userService} from "@/service/user.service";
 import {campaignService} from "@/service/campaign.service";
@@ -115,7 +116,7 @@ import {getValueInArr} from "@/config/config";
 
 export default {
   name: "CampaignCreate",
-  components: {VButton, },
+  components: {VButton, 'vue-editor': VueEditor,},
   methods: {
     save() {
       this.campaign.owner = this.campaign.owner ? this.campaign.owner.id : null;

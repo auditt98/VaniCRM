@@ -32,8 +32,13 @@
             <BasicInfo :arr-left="dataLeftDetail" :arr-right="dataRightDetail" :title="'Detail'"/>
           </div>
           <div class="row mt-3" id="description">
-            <BasicInfo :description="campaign.description" :title="'Description'"/>
+            <BasicInfo :description="campaign.description" :isEmail="true" :title="'Email'"/>
           </div>
+
+          <!-- <div class="row mt-3" id="email">
+            <BasicInfo :description="campaign.description"  :title="'Email'"/>
+          </div> -->
+
           <div class="row mt-3" id="notes" v-if="campaign.notes">
             <Note ref="notes" @remove-note="removeNote" @submit="createNote" :notes="campaign.notes"/>
           </div>
@@ -127,6 +132,7 @@ export default {
       this.loading = true;
       campaignService.getById(this.campaign.id).then(res => {
         if (res && res.data) {
+          console.log(res.data)
           this.campaign = res.data;
           this.loadContacts();
           this.loadLeads();
@@ -150,10 +156,10 @@ export default {
             this.campaign.numberSent,
             getValueInArr(this.campaign.types, 'selected', 'name'),
             getValueInArr(this.campaign.statuses, 'selected', 'name'),
-            this.campaign.CreatedBy ? this.campaign.CreatedBy.username : '',
-            formatDate(this.campaign.CreatedAt, 'dd/MM/yyyy HH:mm'),
-            this.campaign.ModifiedBy ? this.campaign.ModifiedBy.username : '',
-            formatDate(this.campaign.ModifiedAt, 'dd/MM/yyyy HH:mm'),
+            this.campaign.createdBy ? this.campaign.createdBy.username : '',
+            formatDate(this.campaign.createdAt, 'dd/MM/yyyy HH:mm'),
+            this.campaign.modifiedBy ? this.campaign.modifiedBy.username : '',
+            formatDate(this.campaign.modifiedAt, 'dd/MM/yyyy HH:mm'),
           ]);
 
         } else {
@@ -290,7 +296,7 @@ export default {
       dataMenuLeft: [
         {id: '#basicInfo', text: 'Basic Info'},
         {id: '#detail', text: 'Detail'},
-        {id: '#description', text: 'Description'},
+        {id: '#description', text: 'Email'},
         {id: '#notes', text: 'Notes'},
         {id: '#Contact', text: 'Contact'},
       ],
