@@ -48,11 +48,12 @@ namespace Backend.Repository
             {
                 pageSize = 10;
             }
-            
+
+
             if (String.IsNullOrEmpty(q))
             {
                 Pager pager = new Pager(db.LEADs.Count(), currentPage, pageSize, 9999);
-                var results1 = new List<LEAD>();
+                var results1 = db.LEADs.ToList();
                 if (sort != null)
                 {
                     foreach (var s in sort)
@@ -126,7 +127,7 @@ namespace Backend.Repository
                             }
                         }
                     }
-                    return (results1.Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
+                    return (results1.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
                 }
 
                 return (db.LEADs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
