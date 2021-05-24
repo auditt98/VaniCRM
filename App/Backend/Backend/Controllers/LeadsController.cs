@@ -23,7 +23,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("leads")]
         [ResponseType(typeof(LeadListApiModel))]
-        public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
+        public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "", [FromUri] List<string> sort = null)
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -59,7 +59,7 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        var leads = _leadService.GetLeadList(query, pageSize, currentPage);
+                        var leads = _leadService.GetLeadList(query, pageSize, currentPage, sort);
                         responseData.data = leads;
                     }
                     else

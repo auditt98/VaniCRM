@@ -21,13 +21,15 @@ namespace Backend.Services
         TagRepository _tagRepository = new TagRepository();
         TagService _tagService = new TagService();
 
-        public LeadListApiModel GetLeadList(string query = "", int pageSize = 0, int currentPage = 1)
+        public LeadListApiModel GetLeadList(string query = "", int pageSize = 0, int currentPage = 1, List<string> sort = null)
         {
-            var dbLeads = _leadRepository.GetAllLeads(query, pageSize, currentPage);
+            var dbLeads = _leadRepository.GetAllLeads(query, pageSize, currentPage, sort);
             var apiModel = new LeadListApiModel();
             string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
 
             apiModel.leads = dbLeads.leads.Select(c => new LeadListApiModel.LeadInfo() { id = c.ID, name = c.Name, companyName = c.CompanyName, email = c.Email, phone = c.Phone, leadSource = c.LEAD_SOURCE != null ? c.LEAD_SOURCE.Name : "", leadOwner = c.Owner?.FirstName + " " + c.Owner?.LastName, priority = c.PRIORITY != null ? c.PRIORITY.Name : "", avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : $"{StaticStrings.ServerHost}avatar?fileName=default.png" }).ToList();
+
+            
             apiModel.pageInfo = dbLeads.p;
             return apiModel;
         }
