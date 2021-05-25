@@ -15,30 +15,120 @@ namespace Backend.Repository
         DatabaseContext db = new DatabaseContext();
         TagRepository _tagRepository = new TagRepository();
         
-        public (IEnumerable<DEAL> deals, Pager p) GetAllDeals(string query = "", int pageSize = 0, int currentPage = 1)
+        public (IEnumerable<DEAL> deals, Pager p) GetAllDeals(string query = "", int pageSize = 0, int currentPage = 1, List<string> sort = null)
         {
             var q = query.ToLower();
             if (pageSize == 0)
             {
                 pageSize = 10;
             }
+
+            var searchResult = db.DEALs.ToList();
+
+            Pager page;
+
             if (String.IsNullOrEmpty(q))
             {
-                Pager pager = new Pager(db.DEALs.Count(), currentPage, pageSize, 9999);
-                return (db.DEALs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
-            }
-            var deals = db.DEALs.Where(c => c.Name.ToLower().Contains(q) || c.PRIORITY.Name.ToLower().Contains(q) || c.ACCOUNT.Name.ToLower().Contains(q)).OrderByDescending(c => c.ID);
-            if (deals.Count() > 0)
-            {
-                Pager p = new Pager(deals.Count(), currentPage, pageSize, 9999);
-
-                return (deals.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+                page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
             }
             else
             {
-                return (deals, null);
+                long res;
+                searchResult = searchResult.Where(c => (c.Name != null && c.Name.ToLower().Contains(q)) || (c.PRIORITY != null && c.PRIORITY.Name.ToLower().Contains(q)) || (c.ACCOUNT != null && c.ACCOUNT.Name.ToLower().Contains(q)) || (c.Amount != null && long.TryParse(q, out res) == true && res == c.Amount) || (c.Owner != null && c.Owner.Username != null && c.Owner.Username.ToLower().Contains(q))).ToList();
+                if (searchResult.Count() > 0)
+                {
+                    page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
+                }
+                else
+                {
+                    page = new Pager(0, currentPage, pageSize, 9999);
+                }
             }
 
+            var sortResult = searchResult.OrderBy(c => 1);
+
+
+            if (sort != null)
+            {
+                if (sort.Count() > 0)
+                {
+                    foreach (var sortQuery in sort)
+                    {
+                        if (sortQuery.Contains("desc."))
+                        {
+                            var s = sortQuery.Replace("desc.", "");
+                            switch (s)
+                            {
+                                case "name":
+                                    sortResult = sortResult.ThenByDescending(c => c.Name);
+                                    break;
+                                case "expectedDate":
+                                    sortResult = sortResult.ThenByDescending(c => c.ExpectedClosingDate);
+                                    break;
+                                case "amount":
+                                    sortResult = sortResult.ThenByDescending(c => c.Amount);
+                                    break;
+                                case "priority":
+                                    sortResult = sortResult.ThenByDescending(c => c.PRIORITY_ID);
+                                    break;
+                                case "accountName":
+                                    sortResult = sortResult.ThenByDescending(c => c.ACCOUNT?.Name ?? string.Empty);
+                                    break;
+                                case "owner":
+                                    sortResult = sortResult.ThenByDescending(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                                    break;
+                            }
+                        }
+                        else if (sortQuery.Contains("asc."))
+                        {
+                            var s = sortQuery.Replace("asc.", "");
+                            switch (s)
+                            {
+                                case "name":
+                                    sortResult = sortResult.ThenBy(c => c.Name);
+                                    break;
+                                case "expectedDate":
+                                    sortResult = sortResult.ThenBy(c => c.ExpectedClosingDate);
+                                    break;
+                                case "amount":
+                                    sortResult = sortResult.ThenBy(c => c.Amount);
+                                    break;
+                                case "priority":
+                                    sortResult = sortResult.ThenBy(c => c.PRIORITY_ID);
+                                    break;
+                                case "accountName":
+                                    sortResult = sortResult.ThenBy(c => c.ACCOUNT?.Name ?? string.Empty);
+                                    break;
+                                case "owner":
+                                    sortResult = sortResult.ThenBy(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenBy(c => c.ID);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            sortResult = sortResult.ThenByDescending(c => c.ID);
+                        }
+                    }
+                }
+                else
+                {
+                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                }
+            }
+            else
+            {
+                sortResult = sortResult.ThenByDescending(c => c.ID);
+            }
+
+            //Take
+            var takeResult = sortResult.Skip((currentPage - 1) * pageSize).Take(pageSize);
+            return (takeResult, page);
         }
 
         public bool Create(DealCreateApiModel apiModel, int createdUser)

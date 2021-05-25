@@ -27,7 +27,7 @@ namespace Backend.Repository
 
             if (String.IsNullOrEmpty(q))
             {
-                page = new Pager(db.LEADs.Count(), currentPage, pageSize, 9999);
+                page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
             }
             else
             {

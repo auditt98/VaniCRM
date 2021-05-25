@@ -18,9 +18,9 @@ namespace Backend.Services
         CompetitorValidator _competitorValidator = new CompetitorValidator();
         PriorityRepository _priorityRepository = new PriorityRepository();
 
-        public DealListApiModel GetDealList(string query = "", int pageSize = 0, int currentPage = 1)
+        public DealListApiModel GetDealList(string query = "", int pageSize = 0, int currentPage = 1, List<string> sort = null)
         {
-            var dbDeals = _dealRepository.GetAllDeals(query, pageSize, currentPage);
+            var dbDeals = _dealRepository.GetAllDeals(query, pageSize, currentPage, sort);
             var apiModel = new DealListApiModel();
             //var temp = dbDeals.Select(c => new DealListApiModel.DealInfo() { id = c.ID, name = c.Name, expectedDate = c.ClosingDate.GetValueOrDefault(), amount = c.Amount.GetValueOrDefault(), accountName = c.ACCOUNT.Name, priority = c.PRIORITY.Name});
             var results = new List<DealListApiModel.DealInfo>();
