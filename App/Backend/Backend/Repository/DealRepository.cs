@@ -147,7 +147,11 @@ namespace Backend.Repository
             newDeal.DealOwner = apiModel.owner != 0 ? apiModel.owner : createdUser;
             newDeal.Description = apiModel.description;
             newDeal.ExpectedRevenue = apiModel.expectedRevenue;
-            if(apiModel.stage != 0)
+            if(apiModel.expectedClosingDate != null)
+            {
+                newDeal.ExpectedClosingDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.expectedClosingDate.Value);
+            }
+            if (apiModel.stage != 0)
             {
                 var newStageHistory = new STAGE_HISTORY();
                 newStageHistory.ModifiedBy = createdUser;
@@ -269,6 +273,10 @@ namespace Backend.Repository
                 {
 
                     dbDeal.ClosingDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.closingDate.Value);
+                }
+                if (apiModel.expectedClosingDate != null)
+                {
+                    dbDeal.ExpectedClosingDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.expectedClosingDate.Value);
                 }
                 if (apiModel.contact != 0)
                 {

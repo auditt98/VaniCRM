@@ -29,11 +29,11 @@ namespace Backend.Services
                 var dealInfo = new DealListApiModel.DealInfo();
                 dealInfo.id = deal.ID;
                 dealInfo.name = deal.Name;
-                dealInfo.expectedDate = deal.ClosingDate.GetValueOrDefault();
+                dealInfo.expectedDate = deal.ExpectedClosingDate.GetValueOrDefault();
                 dealInfo.amount = deal.Amount.GetValueOrDefault();
                 dealInfo.accountName = deal.ACCOUNT != null ? deal.ACCOUNT.Name : "";
                 dealInfo.priority = deal.PRIORITY != null ? deal.PRIORITY.Name : "";
-                dealInfo.owner = deal.Owner.FirstName + " " + deal.Owner.LastName;
+                dealInfo.owner = deal.Owner != null ? deal.Owner.Username : "";
                 if(deal.STAGE_HISTORY.Count > 0)
                 {
                     var stageHistory = deal.STAGE_HISTORY.MaxBy(c => c.ModifiedAt).FirstOrDefault();
@@ -108,6 +108,7 @@ namespace Backend.Services
                 apiModel.id = dbDeal.ID;
                 apiModel.amount = dbDeal.Amount.GetValueOrDefault();
                 apiModel.closingDate = dbDeal.ClosingDate.GetValueOrDefault();
+                apiModel.expectedClosingDate = dbDeal.ExpectedClosingDate.GetValueOrDefault();
                 apiModel.CreatedAt = dbDeal.CreatedAt.GetValueOrDefault();
                 if(dbDeal.CreatedUser != null)
                 {

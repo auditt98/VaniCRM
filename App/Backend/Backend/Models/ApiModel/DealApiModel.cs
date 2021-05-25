@@ -34,6 +34,7 @@ namespace Backend.Models.ApiModel
         public string name { get; set; }
         public int owner { get; set; }
         public DateTime? closingDate { get; set; }
+        public DateTime? expectedClosingDate { get; set; }
         public int account { get; set; }
         public int contact { get; set; }
         public int campaign { get; set; }
@@ -58,6 +59,7 @@ namespace Backend.Models.ApiModel
         public int id { get; set; }
         public string name { get; set; }
         public DateTime closingDate { get; set; }
+        public DateTime expectedClosingDate { get; set; }
 
         public AccountLinkApiModel account { get; set; }
         public ContactLinkApiModel contact { get; set; }

@@ -37,11 +37,51 @@
                   <div class="note-comment-file-item col-3 pl-0" v-for="(f, index) in note.files" :key="index">
                       <div class="file-image">
                           <div class="file-image-header text-right">
-                            <img src="../../../assets/eye-line.png" alt="">
+                            <!-- <img src="../../../assets/eye-line.png" alt=""> -->
 
                             <a :href="f.url"><img width="37" height="37" src="../../../assets/icon-download.png" alt="" style="margin-top: -7px; margin-right: -5px"></a>
                           </div>
-                          <!-- <img v-if="" style="width: 100%; height: 75px" :src="'https://localhost:44375/avatar?fileName=' + f.fileName" alt=""> -->
+                          <div v-if="imgExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" :src="'https://localhost:44375/avatar?fileName=' + f.fileName" alt="">
+                          </div>
+                          <div v-else-if="docExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/doc.png" alt="">
+                          </div>
+                          <div v-else-if="xmlExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/xml.png" alt="">
+                          </div>
+                          <div v-else-if="pdfExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/pdf.png" alt="">
+                          </div>
+                          <div v-else-if="xlsExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/xls.png" alt="">
+                          </div>
+                          <div v-else-if="pptExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/ppt.png" alt="">
+                          </div>
+                          <div v-else-if="sqlExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/sql.png" alt="">
+                          </div>
+                          <div v-else-if="txtExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/txt.png" alt="">
+                          </div>
+                          <div v-else-if="jsExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/js.png" alt="">
+                          </div>
+                          <div v-else-if="zipExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/zip.png" alt="">
+                          </div>
+                          <div v-else-if="htmlExt.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/html.png" alt="">
+                          </div>
+                          <div v-else-if="mp4Ext.includes(f.fileName.split('.').pop())">
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/mp4.png" alt="">
+                          </div>
+                          <div v-else>
+                            <img style="width: 100%; height: 13vh;" src="../../../assets/file.png" alt="">
+                          </div>
+
+                          <!-- <img style="width: 100%; height: 75px;" :src="'https://localhost:44375/avatar?fileName=' + f.fileName" alt=""> -->
                       </div>
                       <p class="text-center">{{f.fileName}}</p>
                   </div>
@@ -70,6 +110,19 @@ export default {
   data() {
     return {
       files: [],
+      docExt: ['doc', 'docm', 'docx'],
+      pptExt: ['ppt', 'pptm', 'pptx'],
+      pdfExt: ['pdf'],
+      xmlExt: ['xml'],
+      csvExt: ['csv'],
+      sqlExt: ['sql'],
+      xlsExt: ['xls', 'xlsx'],
+      txtExt: ['txt'],
+      jsExt: ['js'],
+      zipExt: ['rar', '7z', 'zip', 'tar', 'iso', 'ISO'],
+      imgExt: ['png', 'jpg', 'jpeg', 'tiff', 'tif'],
+      htmlExt: ['html', 'htm'],
+      mp4Ext: ['mp4'],
       text: '',
       loading: false
     }
@@ -167,10 +220,11 @@ i {
   word-break: break-all;
 }
 .note-comment-file-list .file-image {
-  background: #FFFFFF;
+  background: #fafafa;
   border: 1px solid #000000;
   box-sizing: border-box;
-  height: 100px;
+  /* height: 100px; */
+  height: fit-content;
 }
 .note-comment-file-list .file-image img {
   vertical-align: top;

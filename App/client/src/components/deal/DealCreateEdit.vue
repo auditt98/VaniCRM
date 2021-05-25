@@ -65,6 +65,10 @@
                       </vc-select>
                     </td>
                   </tr>
+                  <tr>
+                    <td>Expected Closing Date</td>
+                    <td><input class="form-control " type="date" v-model="deal.expectedClosingDate"></td>
+                  </tr>
                   </tbody>
                 </table>
               </div>
@@ -143,7 +147,7 @@ import {accountService} from "@/service/account.service";
 import {campaignService} from "@/service/campaign.service";
 import {contactService} from "@/service/contact.service";
 import {userService} from "@/service/user.service";
-import {getValueInArr} from "@/config/config";
+import {formatDate, getValueInArr} from "@/config/config";
 import VLoading from "@/components/common/VLoading";
 import {required} from "vuelidate/lib/validators";
 
@@ -164,7 +168,8 @@ export default {
           .then(res => {
             if (res && res.data) {
               this.deal = res.data;
-              console.log(res.data)
+              // console.log(res.data)
+              this.deal.expectedClosingDate = formatDate(this.deal.expectedClosingDate, 'yyyy-MM-dd') ;
               this.deal.contact = res.data.contact ? {id: res.data.contact.id, contactName: res.data.contact.name} : null;
               this.deal.priority = getValueInArr(res.data.priorities, 'selected', 'id');
               this.deal.stage = getValueInArr(res.data.stages, 'selected', 'id');
@@ -206,9 +211,10 @@ export default {
       }
     },
     mapTaskModel() {
-      console.log("Lost reason: ",this.deal.lostReason ? (typeof this.deal.lostReason.reason !== 'undefined' ? this.deal.lostReason.reason : this.deal.lostReason ? this.deal.lostReason : null) : null)
+      // console.log("Lost reason: ",this.deal.lostReason ? (typeof this.deal.lostReason.reason !== 'undefined' ? this.deal.lostReason.reason : this.deal.lostReason ? this.deal.lostReason : null) : null)
       return {
         name: this.deal.name,
+        expectedClosingDate: this.deal.expectedClosingDate,
         closingDate: this.deal.closingDate,
         account: this.deal.account ? this.deal.account.id : null,
         contact: this.deal.contact ? this.deal.contact.id : null,
@@ -327,6 +333,7 @@ export default {
       deal: {
         name: null,
         closingDate: null,
+        expectedClosingDate: null,
         account: null,
         contact: null,
         campaign: null,

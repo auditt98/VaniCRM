@@ -246,6 +246,7 @@ export default {
       dealService.getById(this.deal.id).then(res => {
         if (res && res.data) {
           this.deal = res.data;
+          console.log(res.data);
           this.loadTaskByDeal();
           this.loadCompetitorByDeal();
           this.loadHistoriesByDeal();
@@ -258,6 +259,7 @@ export default {
             this.deal.name,
             this.deal.owner ? this.deal.owner.username : '',
             formatDate(this.deal.closingDate, DATE_TIME_FORMAT),
+            formatDate(this.deal.expectedClosingDate, DATE_TIME_FORMAT),
             this.deal.account ? this.deal.account.name : '',
             this.deal.contact ? this.deal.contact.name : '',
             this.deal.campaign ? this.deal.campaign.name : '',
@@ -407,6 +409,7 @@ export default {
         {key: 'Deal Name', value: 'Lead'},
         {key: 'Deal Owner', value: 's'},
         {key: 'Closing Date', value: 's'},
+        {key: 'Expected Closing Date', value: 's'},
         {key: 'Account', value: 's'},
         {key: 'Contact', value: 's'},
         {key: 'Campaign', value: 's'},
