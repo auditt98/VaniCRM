@@ -8,6 +8,10 @@ namespace Backend.Extensions
 
     public class Pager
     {
+        public Pager()
+        {
+
+        }
         public Pager(
             int totalItems,
             int currentPage = 1,

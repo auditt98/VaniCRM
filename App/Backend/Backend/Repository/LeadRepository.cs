@@ -49,182 +49,117 @@ namespace Backend.Repository
                 pageSize = 10;
             }
 
+            //Search and build paging
+            var searchResult = db.LEADs.ToList();
+
+            Pager page;
 
             if (String.IsNullOrEmpty(q))
             {
-                Pager pager = new Pager(db.LEADs.Count(), currentPage, pageSize, 9999);
-                var results1 = db.LEADs.ToList();
-                if (sort != null)
-                {
-                    foreach (var s in sort)
-                    {
-                        if (s.Contains("desc."))
-                        {
-                            if (s.Contains("name"))
-                            {
-                                results1 = db.LEADs.OrderByDescending(c => c.Name).ToList();
-                            }
-                            else if (s.Contains("companyName"))
-                            {
-                                results1 = db.LEADs.OrderByDescending(c => c.CompanyName).ToList();
-                            }
-                            else if (s.Contains("email"))
-                            {
-                                results1 = db.LEADs.OrderByDescending(c => c.Email).ToList();
-
-                            }
-                            else if (s.Contains("phone"))
-                            {
-                                results1 = db.LEADs.OrderByDescending(c => c.Phone).ToList();
-
-                            }
-                            else if (s.Contains("leadSource"))
-                            {
-                                results1 = db.LEADs.OrderByDescending(c => c.LEAD_SOURCE.Name).ToList();
-                            }
-                            else if (s.Contains("leadOwner"))
-                            {
-                                results1 = db.LEADs.OrderByDescending(c => c.Owner.Username).ToList();
-
-                            }
-                            else if (s.Contains("priority"))
-                            {
-                                results1 = db.LEADs.OrderByDescending(c => c.PRIORITY.Name).ToList();
-                            }
-                        }
-                        else if(s.Contains("asc."))
-                        {
-                            if (s.Contains("name"))
-                            {
-                                results1 = db.LEADs.OrderBy(c => c.Name).ToList();
-                            }
-                            else if (s.Contains("companyName"))
-                            {
-                                results1 = db.LEADs.OrderBy(c => c.CompanyName).ToList();
-                            }
-                            else if (s.Contains("email"))
-                            {
-                                results1 = db.LEADs.OrderBy(c => c.Email).ToList();
-
-                            }
-                            else if (s.Contains("phone"))
-                            {
-                                results1 = db.LEADs.OrderBy(c => c.Phone).ToList();
-
-                            }
-                            else if (s.Contains("leadSource"))
-                            {
-                                results1 = db.LEADs.OrderBy(c => c.LEAD_SOURCE.Name).ToList();
-                            }
-                            else if (s.Contains("leadOwner"))
-                            {
-                                results1 = db.LEADs.OrderBy(c => c.Owner.Username).ToList();
-
-                            }
-                            else if (s.Contains("priority"))
-                            {
-                                results1 = db.LEADs.OrderBy(c => c.PRIORITY.Name).ToList();
-                            }
-                        }
-                    }
-                    return (results1.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
-                }
-
-                return (db.LEADs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
-            }
-
-            var leads = db.LEADs.Where(c => c.Name.ToLower().Contains(q) || c.CompanyName.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q) || c.LEAD_SOURCE.Name.ToLower().Contains(q) || c.PRIORITY.Name.ToLower().Contains(q)).OrderByDescending(c => c.ID);
-
-
-            Pager p = null;
-            if(leads.Count() > 0)
-            {
-                p = new Pager(leads.Count(), currentPage, pageSize, 9999);
-            }
-
-            var results2 = new List<LEAD>();
-            if (sort != null)
-            {
-                foreach (var s in sort)
-                {
-                    if (s.Contains("desc."))
-                    {
-                        if (s.Contains("name"))
-                        {
-                            results2 = leads.OrderByDescending(c => c.Name).ToList();
-                        }
-                        else if (s.Contains("companyName"))
-                        {
-                            results2 = leads.OrderByDescending(c => c.CompanyName).ToList();
-                        }
-                        else if (s.Contains("email"))
-                        {
-                            results2 = leads.OrderByDescending(c => c.Email).ToList();
-
-                        }
-                        else if (s.Contains("phone"))
-                        {
-                            results2 = leads.OrderByDescending(c => c.Phone).ToList();
-
-                        }
-                        else if (s.Contains("leadSource"))
-                        {
-                            results2 = leads.OrderByDescending(c => c.LEAD_SOURCE.Name).ToList();
-                        }
-                        else if (s.Contains("leadOwner"))
-                        {
-                            results2 = leads.OrderByDescending(c => c.Owner.Username).ToList();
-
-                        }
-                        else if (s.Contains("priority"))
-                        {
-                            results2 = leads.OrderByDescending(c => c.PRIORITY.Name).ToList();
-                        }
-                    }
-                    else if (s.Contains("asc."))
-                    {
-                        if (s.Contains("name"))
-                        {
-                            results2 = leads.OrderBy(c => c.Name).ToList();
-                        }
-                        else if (s.Contains("companyName"))
-                        {
-                            results2 = leads.OrderBy(c => c.CompanyName).ToList();
-                        }
-                        else if (s.Contains("email"))
-                        {
-                            results2 = leads.OrderBy(c => c.Email).ToList();
-
-                        }
-                        else if (s.Contains("phone"))
-                        {
-                            results2 = leads.OrderBy(c => c.Phone).ToList();
-
-                        }
-                        else if (s.Contains("leadSource"))
-                        {
-                            results2 = leads.OrderBy(c => c.LEAD_SOURCE.Name).ToList();
-                        }
-                        else if (s.Contains("leadOwner"))
-                        {
-                            results2 = leads.OrderBy(c => c.Owner.Username).ToList();
-
-                        }
-                        else if (s.Contains("priority"))
-                        {
-                            results2 = leads.OrderBy(c => c.PRIORITY.Name).ToList();
-                        }
-                    }
-                }
-
-                return (results2.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(), p);
                 
+                page = new Pager(db.LEADs.Count(), currentPage, pageSize, 9999);
             }
             else
             {
-                results2 = leads.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-                return (results2, p);
+                searchResult = searchResult.Where(c => (c.Name != null && c.Name.ToLower().Contains(q)) || (c.CompanyName != null && c.CompanyName.ToLower().Contains(q)) || (c.Email != null && c.Email.ToLower().Contains(q)) || ( c.Phone != null && c.Phone.Contains(q)) || (c.LEAD_SOURCE != null && c.LEAD_SOURCE.Name.ToLower().Contains(q)) || (c.PRIORITY != null && c.PRIORITY.Name.ToLower().Contains(q))).ToList();
+                if(searchResult.Count() > 0)
+                {
+                    page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
+                }
+                else
+                {
+                    page = new Pager(0, currentPage, pageSize, 9999);
+                }
             }
+
+            //Sort
+            var sortResult = searchResult.OrderBy(c => 1);
+
+
+            if(sort != null)
+            {
+                if(sort.Count() > 0)
+                {
+                    foreach(var sortQuery in sort)
+                    {
+                        if (sortQuery.Contains("desc."))
+                        {
+                            var s = sortQuery.Replace("desc.", "");
+                            switch (s)
+                            {
+                                case "name":
+                                    sortResult = sortResult.ThenByDescending(c => c.Name);
+                                    break;
+                                case "companyName":
+                                    sortResult = sortResult.ThenByDescending(c => c.CompanyName);
+                                    break;
+                                case "email":
+                                    sortResult = sortResult.ThenByDescending(c => c.Email);
+                                    break;
+                                case "phone":
+                                    sortResult = sortResult.ThenByDescending(c => c.Phone);
+                                    break;
+                                case "leadSource":
+                                    sortResult = sortResult.ThenByDescending(c => c.LEAD_SOURCE?.Name ?? string.Empty);
+                                    break;
+                                case "leadOwner":
+                                    sortResult = sortResult.ThenByDescending(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                case "priority":
+                                    sortResult = sortResult.ThenByDescending(c => c.PRIORITY?.ID ?? 0);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                                    break;
+                            }
+                            
+
+                        } else if (sortQuery.Contains("asc."))
+                        {
+                            var s = sortQuery.Replace("asc.", "");
+                            switch (s)
+                            {
+                                case "name":
+                                    sortResult = sortResult.ThenBy(c => c.Name);
+                                    break;
+                                case "companyName":
+                                    sortResult = sortResult.ThenBy(c => c.CompanyName);
+                                    break;
+                                case "email":
+                                    sortResult = sortResult.ThenBy(c => c.Email);
+                                    break;
+                                case "phone":
+                                    sortResult = sortResult.ThenBy(c => c.Phone);
+                                    break;
+                                case "leadSource":
+                                    sortResult = sortResult.ThenBy(c => c.LEAD_SOURCE?.Name ?? string.Empty);
+                                    break;
+                                case "leadOwner":
+                                    sortResult = sortResult.ThenBy(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                case "priority":
+                                    sortResult = sortResult.ThenBy(c => c.PRIORITY?.ID ?? 0);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            sortResult = sortResult.ThenByDescending(c => c.ID);
+                        }
+                    }
+                }
+                else
+                {
+                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                }
+            }
+
+            //Take
+            var takeResult = sortResult.Skip((currentPage - 1) * pageSize).Take(pageSize);
+            return (takeResult, page);
         }
 
         public IEnumerable<LEAD_SOURCE> GetAllLeadSources()

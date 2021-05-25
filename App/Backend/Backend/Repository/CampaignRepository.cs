@@ -15,7 +15,7 @@ namespace Backend.Repository
         TagRepository _tagRepository = new TagRepository();
 
 
-        public (IEnumerable<CAMPAIGN> campaigns, Pager p) GetAllCampaigns(string query = "", int pageSize = 0, int currentPage = 1)
+        public (IEnumerable<CAMPAIGN> campaigns, Pager p) GetAllCampaigns(string query = "", int pageSize = 0, int currentPage = 1, List<string> sort = null)
         {
             var q = query.ToLower();
 
@@ -24,22 +24,106 @@ namespace Backend.Repository
                 pageSize = 10;
             }
 
+            var searchResult = db.CAMPAIGNs.ToList();
+            Pager page;
+
             if (String.IsNullOrEmpty(q))
             {
-                Pager pager = new Pager(db.CAMPAIGNs.Count(), currentPage, pageSize, 9999);
-                return (db.CAMPAIGNs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
-            }
-            var campaigns = db.CAMPAIGNs.Where(c => c.Name.ToLower().Contains(q) || c.CAMPAIGN_TYPE.Name.ToLower().Contains(q)).OrderByDescending(c => c.ID);
-            if (campaigns.Count() > 0)
-            {
-                Pager p = new Pager(campaigns.Count(), currentPage, pageSize, 9999);
+                page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
 
-                return (campaigns.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
             }
             else
             {
-                return (campaigns, null);
+                searchResult = searchResult.Where(c => (c.Name != null && c.Name.ToLower().Contains(q) || (c.CAMPAIGN_TYPE != null && c.CAMPAIGN_TYPE.Name.ToLower().Contains(q)))).ToList();
+                if (searchResult.Count() > 0)
+                {
+                    page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
+                }
+                else
+                {
+                    page = new Pager(0, currentPage, pageSize, 9999);
+                }
+
             }
+
+            var sortResult = searchResult.OrderBy(c => 1);
+
+            if (sort != null)
+            {
+                if (sort.Count() > 0)
+                {
+                    foreach (var sortQuery in sort)
+                    {
+                        if (sortQuery.Contains("desc."))
+                        {
+                            var s = sortQuery.Replace("desc.", "");
+                            switch (s)
+                            {
+                                case "name":
+                                    sortResult = sortResult.ThenByDescending(c => c.Name);
+                                    break;
+                                case "type":
+                                    sortResult = sortResult.ThenByDescending(c => c.CAMPAIGN_TYPE?.Name ?? string.Empty);
+                                    break;
+                                case "status":
+                                    sortResult = sortResult.ThenByDescending(c => c.CAMPAIGN_STATUS?.Name ?? string.Empty);
+                                    break;
+                                case "startDate":
+                                    sortResult = sortResult.ThenByDescending(c => c.StartDate);
+                                    break;
+                                case "endDate":
+                                    sortResult = sortResult.ThenByDescending(c => c.EndDate);
+                                    break;
+                                case "owner":
+                                    sortResult = sortResult.ThenByDescending(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                                    break;
+                            }
+                        }
+                        else if (sortQuery.Contains("asc."))
+                        {
+                            var s = sortQuery.Replace("asc.", "");
+                            switch (s)
+                            {
+                                case "name":
+                                    sortResult = sortResult.ThenBy(c => c.Name);
+                                    break;
+                                case "type":
+                                    sortResult = sortResult.ThenBy(c => c.CAMPAIGN_TYPE?.Name ?? string.Empty);
+                                    break;
+                                case "status":
+                                    sortResult = sortResult.ThenBy(c => c.CAMPAIGN_STATUS?.Name ?? string.Empty);
+                                    break;
+                                case "startDate":
+                                    sortResult = sortResult.ThenBy(c => c.StartDate);
+                                    break;
+                                case "endDate":
+                                    sortResult = sortResult.ThenBy(c => c.EndDate);
+                                    break;
+                                case "owner":
+                                    sortResult = sortResult.ThenBy(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            sortResult = sortResult.ThenByDescending(c => c.ID);
+                        }
+                    }
+                }
+                else
+                {
+                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                }
+            }
+
+            var takeResult = sortResult.Skip((currentPage - 1) * pageSize).Take(pageSize);
+            return (takeResult, page);
         }
 
         //public IEnumerable<CAMPAIGN> GetAllCampaigns(string query = "", int pageSize = 0, int currentPage = 1)
