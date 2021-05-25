@@ -127,6 +127,10 @@ namespace Backend.Repository
                     sortResult = sortResult.ThenByDescending(c => c.ID);
                 }
             }
+            else
+            {
+                sortResult = sortResult.ThenByDescending(c => c.ID);
+            }
 
             var takeResult = sortResult.Skip((currentPage - 1) * pageSize).Take(pageSize);
             return (takeResult, page);

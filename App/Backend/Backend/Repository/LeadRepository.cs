@@ -56,7 +56,6 @@ namespace Backend.Repository
 
             if (String.IsNullOrEmpty(q))
             {
-                
                 page = new Pager(db.LEADs.Count(), currentPage, pageSize, 9999);
             }
             else
@@ -155,6 +154,10 @@ namespace Backend.Repository
                 {
                     sortResult = sortResult.ThenByDescending(c => c.ID);
                 }
+            }
+            else
+            {
+                sortResult = sortResult.ThenByDescending(c => c.ID);
             }
 
             //Take

@@ -35,29 +35,112 @@ namespace Backend.Repository
             return result;
         }
 
-        public (IEnumerable<CONTACT> contacts, Pager p) GetAllContacts(string query = "", int pageSize = 0, int currentPage = 1)
+        public (IEnumerable<CONTACT> contacts, Pager p) GetAllContacts(string query = "", int pageSize = 0, int currentPage = 1, List<string> sort = null)
         {
             var q = query.ToLower();
             if (pageSize == 0)
             {
                 pageSize = 10;
             }
+
+            var searchResult = db.CONTACTs.ToList();
+            Pager page;
+
+
             if (String.IsNullOrEmpty(q))
             {
-                Pager pager = new Pager(db.CONTACTs.Count(), currentPage, pageSize, 9999);
-                return (db.CONTACTs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
-            }
-            var contacts = db.CONTACTs.Where(c => c.Name.ToLower().Contains(q) || c.ACCOUNT.Name.ToLower().Contains(q) || c.Email.ToLower().Contains(q) || c.Phone.Contains(q)).OrderByDescending(c => c.ID);
-            if (contacts.Count() > 0)
-            {
-                Pager p = new Pager(contacts.Count(), currentPage, pageSize, 9999);
-
-                return (contacts.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
+                page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
             }
             else
             {
-                return (contacts, null);
+                searchResult = searchResult.Where(c => (c.Name != null && c.Name.ToLower().Contains(q)) || (c.ACCOUNT != null && c.ACCOUNT.Name.ToLower().Contains(q)) || (c.Email != null && c.Email.ToLower().Contains(q)) || (c.Phone != null && c.Phone.Contains(q)) || (c.Owner != null && c.Owner.Username != null && c.Owner.Username.ToLower().Contains(q))).ToList();
+                if (searchResult.Count() > 0)
+                {
+                    page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
+                }
+                else
+                {
+                    page = new Pager(0, currentPage, pageSize, 9999);
+                }
+
             }
+
+            var sortResult = searchResult.OrderBy(c => 1);
+
+            if (sort != null)
+            {
+                if (sort.Count() > 0)
+                {
+                    foreach (var sortQuery in sort)
+                    {
+                        if (sortQuery.Contains("desc."))
+                        {
+                            var s = sortQuery.Replace("desc.", "");
+                            switch (s)
+                            {
+                                case "contactName":
+                                    sortResult = sortResult.ThenByDescending(c => c.Name);
+                                    break;
+                                case "accountName":
+                                    sortResult = sortResult.ThenByDescending(c => c.ACCOUNT?.Name ?? string.Empty);
+                                    break;
+                                case "email":
+                                    sortResult = sortResult.ThenByDescending(c => c.Email ?? string.Empty);
+                                    break;
+                                case "phone":
+                                    sortResult = sortResult.ThenByDescending(c => c.Phone ?? string.Empty);
+                                    break;
+                                case "owner":
+                                    sortResult = sortResult.ThenByDescending(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                                    break;
+                            }
+                        }
+                        else if (sortQuery.Contains("asc."))
+                        {
+                            var s = sortQuery.Replace("asc.", "");
+                            switch (s)
+                            {
+                                case "contactName":
+                                    sortResult = sortResult.ThenBy(c => c.Name);
+                                    break;
+                                case "accountName":
+                                    sortResult = sortResult.ThenBy(c => c.ACCOUNT?.Name ?? string.Empty);
+                                    break;
+                                case "email":
+                                    sortResult = sortResult.ThenBy(c => c.Email ?? string.Empty);
+                                    break;
+                                case "phone":
+                                    sortResult = sortResult.ThenBy(c => c.Phone ?? string.Empty);
+                                    break;
+                                case "owner":
+                                    sortResult = sortResult.ThenBy(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            sortResult = sortResult.ThenByDescending(c => c.ID);
+                        }
+                    }
+                }
+                else
+                {
+                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                }
+            }
+            else
+            {
+                sortResult = sortResult.ThenByDescending(c => c.ID);
+            }
+
+            var takeResult = sortResult.Skip((currentPage - 1) * pageSize).Take(pageSize);
+            return (takeResult, page);
         }
 
         public CONTACT GetOne(int id)

@@ -38,7 +38,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("users")]
         [ResponseType(typeof(UserListApiModel))]
-        public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
+        public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "", [FromUri] List<string> sort = null)
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -75,7 +75,7 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        var users = _userService.GetUserList(query, pageSize, currentPage);
+                        var users = _userService.GetUserList(query, pageSize, currentPage, sort);
                         responseData.data = users;
                     }
                     else

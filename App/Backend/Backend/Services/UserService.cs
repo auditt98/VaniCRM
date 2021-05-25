@@ -144,9 +144,9 @@ namespace Backend.Services
             return users;
         }
 
-        public UserListApiModel GetUserList(string query = "", int pageSize = 0, int currentPage = 1)
+        public UserListApiModel GetUserList(string query = "", int pageSize = 0, int currentPage = 1, List<string> sort = null)
         {
-            var dbUsers = _userRepository.GetAllUsers(query, pageSize, currentPage);
+            var dbUsers = _userRepository.GetAllUsers(query, pageSize, currentPage, sort);
             var apiModel = new UserListApiModel();
             string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
 

@@ -24,7 +24,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("groups")]
         [ResponseType(typeof(GroupListApiModel))]
-        public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "")
+        public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "", [FromUri] List<string> sort = null)
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -60,7 +60,7 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        responseData.data = _groupService.GetGroupList(query, pageSize, currentPage);
+                        responseData.data = _groupService.GetGroupList(query, pageSize, currentPage, sort);
                     }
                     else
                     {

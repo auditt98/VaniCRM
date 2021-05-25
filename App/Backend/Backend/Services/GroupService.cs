@@ -13,10 +13,10 @@ namespace Backend.Services
         private GroupRepository _groupRepository = new GroupRepository();
         private DatabaseContext db = new DatabaseContext();
         public GroupValidator _groupValidator = new GroupValidator();
-        public GroupListApiModel GetGroupList(string query = "", int pageSize = 0, int currentPage = 1)
+        public GroupListApiModel GetGroupList(string query = "", int pageSize = 0, int currentPage = 1, List<string> sort = null)
         {
             var apiModel = new GroupListApiModel();
-            var dbGroups = _groupRepository.GetAllGroups(query, pageSize, currentPage);
+            var dbGroups = _groupRepository.GetAllGroups(query, pageSize, currentPage, sort);
             apiModel.groups = dbGroups.groups.Select(c => new GroupListApiModel.GroupInfo() { id = c.ID, groupName = c.Name, numberOfPermissions = c.PERMISSIONs.Count, numberOfUsers = c.USERs.Count }).ToList();
             apiModel.pageInfo = dbGroups.p;
             return apiModel;
