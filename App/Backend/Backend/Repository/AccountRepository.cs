@@ -34,7 +34,7 @@ namespace Backend.Repository
             return result;
         }
 
-        public (IEnumerable<ACCOUNT> accounts, Pager p) GetAllAccounts(string query = "", int pageSize = 0, int currentPage = 1)
+        public (IEnumerable<ACCOUNT> accounts, Pager p) GetAllAccounts(string query = "", int pageSize = 0, int currentPage = 1, List<string> sort = null)
         {
             var q = query.ToLower();
             if (pageSize == 0)
@@ -42,22 +42,94 @@ namespace Backend.Repository
                 pageSize = 10;
             }
 
+            var searchResult = db.ACCOUNTs.ToList();
+            Pager page;
+
             if (String.IsNullOrEmpty(q))
             {
-                Pager pager = new Pager(db.ACCOUNTs.Count(), currentPage, pageSize, 9999);
-                return (db.ACCOUNTs.OrderByDescending(c => c.ID).Skip((currentPage - 1) * pageSize).Take(pageSize), pager);
-            }
-            var accounts = db.ACCOUNTs.Where(c => c.Name.ToLower().Contains(q) || c.Phone.Contains(q)).OrderByDescending(c => c.ID);
-            if (accounts.Count() > 0)
-            {
-                Pager p = new Pager(accounts.Count(), currentPage, pageSize, 9999);
+                page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
 
-                return (accounts.Skip((currentPage - 1) * pageSize).Take(pageSize), p);
             }
             else
             {
-                return (accounts, null);
+                searchResult = searchResult.Where(c => (c.Name != null && c.Name.ToLower().Contains(q)) || (c.Phone != null && c.Phone.ToLower().Contains(q)) || (c.Website != null && c.Website.ToLower().Contains(q)) || (c.Owner != null && c.Owner.Username.ToLower().Contains(q)) ).ToList();
+                if (searchResult.Count() > 0)
+                {
+                    page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
+                }
+                else
+                {
+                    page = new Pager(0, currentPage, pageSize, 9999);
+                }
+
             }
+
+            var sortResult = searchResult.OrderBy(c => 1);
+
+            if (sort != null)
+            {
+                if (sort.Count() > 0)
+                {
+                    foreach (var sortQuery in sort)
+                    {
+                        if (sortQuery.Contains("desc."))
+                        {
+                            var s = sortQuery.Replace("desc.", "");
+                            switch (s)
+                            {
+                                case "name":
+                                    sortResult = sortResult.ThenByDescending(c => c.Name);
+                                    break;
+                                case "phone":
+                                    sortResult = sortResult.ThenByDescending(c => c.Phone ?? string.Empty);
+                                    break;
+                                case "website":
+                                    sortResult = sortResult.ThenByDescending(c => c.Website ?? string.Empty);
+                                    break;
+                                case "owner":
+                                    sortResult = sortResult.ThenByDescending(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                                    break;
+                            }
+                        }
+                        else if (sortQuery.Contains("asc."))
+                        {
+                            var s = sortQuery.Replace("asc.", "");
+                            switch (s)
+                            {
+                                case "name":
+                                    sortResult = sortResult.ThenBy(c => c.Name);
+                                    break;
+                                case "phone":
+                                    sortResult = sortResult.ThenBy(c => c.Phone ?? string.Empty);
+                                    break;
+                                case "website":
+                                    sortResult = sortResult.ThenBy(c => c.Website ?? string.Empty);
+                                    break;
+                                case "owner":
+                                    sortResult = sortResult.ThenBy(c => c.Owner?.Username ?? string.Empty);
+                                    break;
+                                default:
+                                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            sortResult = sortResult.ThenByDescending(c => c.ID);
+                        }
+                    }
+                }
+                else
+                {
+                    sortResult = sortResult.ThenByDescending(c => c.ID);
+                }
+            }
+
+            var takeResult = sortResult.Skip((currentPage - 1) * pageSize).Take(pageSize);
+            return (takeResult, page);
         }
 
         public bool Create(AccountCreateApiModel apiModel, int createdUser)

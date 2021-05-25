@@ -23,12 +23,12 @@ namespace Backend.Services
 
         }
 
-        public AccountListApiModel GetAccountList(string query = "", int pageSize = 0, int currentPage = 1)
+        public AccountListApiModel GetAccountList(string query = "", int pageSize = 0, int currentPage = 1, List<string> sort = null)
         {
-            var dbAccounts = _accountRepository.GetAllAccounts(query, pageSize, currentPage);
+            var dbAccounts = _accountRepository.GetAllAccounts(query, pageSize, currentPage, sort);
             var apiModel = new AccountListApiModel();
             string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
-            apiModel.accounts = dbAccounts.accounts.Select(c => new AccountListApiModel.AccountInfo() { id = c.ID, name = c.Name, website = c.Website, phone = c.Phone, owner = c.Owner.FirstName + " " + c.Owner.LastName, avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : $"{StaticStrings.ServerHost}avatar?fileName=default.png" }).ToList();
+            apiModel.accounts = dbAccounts.accounts.Select(c => new AccountListApiModel.AccountInfo() { id = c.ID, name = c.Name, website = c.Website, phone = c.Phone, owner = c.Owner.Username, avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : $"{StaticStrings.ServerHost}avatar?fileName=default.png" }).ToList();
             apiModel.pageInfo = dbAccounts.p;
             return apiModel;
         }

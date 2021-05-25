@@ -34,7 +34,7 @@ namespace Backend.Repository
             }
             else
             {
-                searchResult = searchResult.Where(c => (c.Name != null && c.Name.ToLower().Contains(q) || (c.CAMPAIGN_TYPE != null && c.CAMPAIGN_TYPE.Name.ToLower().Contains(q)))).ToList();
+                searchResult = searchResult.Where(c => (c.Name != null && c.Name.ToLower().Contains(q)) || (c.CAMPAIGN_TYPE != null && c.CAMPAIGN_TYPE.Name.ToLower().Contains(q))).ToList();
                 if (searchResult.Count() > 0)
                 {
                     page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);
