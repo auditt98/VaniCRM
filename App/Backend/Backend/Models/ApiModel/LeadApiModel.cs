@@ -40,6 +40,7 @@ namespace Backend.Models.ApiModel
             public string priority { get; set; }
             public string avatar { get; set; }
             public string leadStatus { get; set; }
+            public bool isConverted { get; set; }
 
         }
     }
