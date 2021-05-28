@@ -176,11 +176,12 @@ namespace Backend.Controllers
                             //grab a new jwt token
                             var JwtToken = JwtTokenManager.GenerateJwtToken(user);
                             //grab a new refresh token
-                            var RefreshToken = JwtTokenManager.GenerateRefreshToken();
+                            //var RefreshToken = JwtTokenManager.GenerateRefreshToken();
                             //store new value for token
-                            dbToken.Token = RefreshToken;
+                            //dbToken.Token = RefreshToken;
                             db.SaveChanges();
-                            response.Headers.Add("set-cookie", $"refreshTokenData=refreshToken={RefreshToken}&seriesIdentifier={dbUser.ID}&tokenIdentifier={dbToken.ID}; path=/; SameSite=None; Secure; max-age=2592000");
+                            //response.Headers.Add("set-cookie", $"refreshTokenData=refreshToken={RefreshToken}&seriesIdentifier={dbUser.ID}&tokenIdentifier={dbToken.ID}; path=/; SameSite=None; Secure; max-age=2592000");
+                            response.Headers.Add("set-cookie", $"refreshTokenData=refreshToken={c_refreshToken}&seriesIdentifier={dbUser.ID}&tokenIdentifier={dbToken.ID}; path=/; SameSite=None; Secure; max-age=2592000");
                             //build response data
                             responseData = ResponseFormat.Success;
 
