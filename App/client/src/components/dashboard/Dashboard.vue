@@ -76,7 +76,7 @@
                   <input type="text" class="form-control mb-2" v-model.trim="lead.name" placeholder="Name">
                   <input type="email" class="form-control mb-2" v-model.trim="lead.email" placeholder="Email">
                   <input type="text" class="form-control mb-2" v-model.trim="lead.phone" placeholder="Phone">
-
+                  <input type="text" class="form-control mb-2" v-model.trim="lead.companyName" placeholder="Company Name">
                   <div class="d-flex justify-content-between">
                     <span @click="save(lead, 'LEAD')"><VButton :data="btnEdit"/></span>
                     <span @click="lead.isAdd = false"><VButton :data="btnCancel"/></span>
@@ -85,9 +85,10 @@
               </div>
             </div>
             <draggable class="drag-scroll" :list="filteredLeadsBySearchText" v-bind="dragOptions"
-                       @start="leadDrag = true"
-                       :scrollSensitivity="200"
-                       :force-fallback="true"
+              @start="leadDrag = true"
+              :scrollSensitivity="200"
+              :force-fallback="true"
+              @change="dragDashboardMarketing($event)"
             >
               <transition-group type="transition" :name="!leadDrag ? 'flip-list' : null">
                 <div v-for="(element, idx) in filteredLeadsBySearchText"
@@ -132,6 +133,27 @@
               </transition-group>
             </draggable>
           </div>
+          <!-- <div class="col-3" :data-id="3">
+            <div class="mb-3">
+              <div class="card-header-text row justify-content-between">
+                <p class="col-sm-10" :style="'color:#D93915'">Deals</p>
+              </div>
+              <p class="card-header-under-line w-100"></p>
+            </div>
+            <draggable class="drag-scroll" :list="filteredLeadsBySearchText" v-bind="dragOptions"
+                       @start="leadDrag = true"
+                       :scrollSensitivity="200"
+                       :force-fallback="true"
+                     @change="dragDashboardMarketing($event)"
+            >
+              <transition-group type="transition" :name="!leadDrag ? 'flip-list' : null">
+                <div v-for="(element, idx) in filteredLeadsBySearchText"
+                     :key="idx">
+                  <DashboardCard :data="element"/>
+                </div>
+              </transition-group>
+            </draggable>
+          </div> -->
         </div>
       </div>
     </div>
@@ -168,7 +190,8 @@ export default {
         isAdd: false,
         name: null,
         email: null,
-        phone: null
+        phone: null,
+        companyName: null,
       },
       account: {
         isAdd: false,
@@ -183,12 +206,22 @@ export default {
     };
   },
   methods: {
+    dragDashboardMarketing(event){
+      if (event.removed) {
+        leadService.convertToAccount(event.removed.element.id)
+      }
+    },
     openAdd(item, type) {
       if (type === 'DEAL') {
         item.deal.name = null;
         item.deal.account = null;
         item.deal.priority = null;
         item.deal.expectedRevenue
+      } else if (type === 'LEAD') {
+        item.companyName = null
+        item.name = null;
+        item.email = null;
+        item.phone = null;
       } else {
         item.name = null;
         item.email = null;
@@ -308,7 +341,7 @@ export default {
           this.leads = res.data.leads.map((d) => {
             return {
               id: d.id, title: d.name, type: 1, tags: [],title1: d.phone, title2: d.email,
-              routeName: 'LeadDetail'
+              routeName: 'LeadDetail', isConverted: d.isConverted, companyName: d.companyName
             }
           });
         }
@@ -395,14 +428,15 @@ export default {
     },
     filterLeadsBySearchText(items, searchText) {
       if (this.type === 1 && items) {
-        if (!searchText) {
-          return items
-        }
         const leads = _cloneDeep(items)
+        if (!searchText) {
+          return leads.filter(lead => !lead.isConverted)
+        }
         return leads.filter(lead => {
-          return _toLower(lead.title).includes(_toLower(searchText))
+          return (_toLower(lead.title).includes(_toLower(searchText))
           || _toLower(lead.title1).includes(_toLower(searchText))
-          || _toLower(lead.title2).includes(_toLower(searchText))
+          || _toLower(lead.title2).includes(_toLower(searchText)))
+          && !lead.isConverted
         })
       }
       return []

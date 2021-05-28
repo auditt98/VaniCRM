@@ -119,7 +119,7 @@ export default {
       if (!confirm('Xác nhân')) {
         return ;
       }
-      campaignService.addLead(this.campaignId, {id: lead.id}).then((res) => alert(res.message))
+      campaignService.addLead(this.campaignId, {leadId: lead.id}).then((res) => alert(res.message))
     },
     close() {
       this.$emit('close');
