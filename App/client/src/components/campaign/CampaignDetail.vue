@@ -54,13 +54,9 @@
               <template slot="body">
                 <tbody v-if="contactLst">
                 <tr v-for="(t, i) in contactLst" :key="i">
-                  <td>{{ t.name }}</td>
+                  <td>{{ t.contactName }}</td>
                   <td><a :href="'mailto:'+t.email">{{ t.email }}</a></td>
                   <td>{{ t.phone }}</td>
-                  <td>{{ t.mobile }}</td>
-                  <td><a href="#">{{ t.skype }}</a></td>
-                  <td><input type="checkbox" name="isOwn" :checked="t.isOwner"></td>
-                  <td><input type="checkbox" name="isCollaborator" :checked="t.isCollaborator"></td>
                 </tr>
                 </tbody>
                 <tbody v-else>
@@ -90,10 +86,6 @@
                   <td>{{ t.name }}</td>
                   <td><a :href="'mailto:'+t.email">{{ t.email }}</a></td>
                   <td>{{ t.phone }}</td>
-                  <td>{{ t.mobile }}</td>
-                  <td><a href="#">{{ t.skype }}</a></td>
-                  <td><input type="checkbox" name="isOwn" :checked="t.isOwner"></td>
-                  <td><input type="checkbox" name="isCollaborator" :checked="t.isCollaborator"></td>
                 </tr>
                 </tbody>
                 <tbody v-else>
@@ -361,8 +353,8 @@ export default {
         {key: 'Modified By', value: ''}
       ],
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-      contractColumns: ['Contract Name', 'Email', 'Phone', 'Mobile', 'Skype'],
-      leadColumns: ['Lead Name', 'Email', 'Phone', 'Mobile', 'Skype'],
+      contractColumns: ['Contact Name', 'Email', 'Phone'],
+      leadColumns: ['Name', 'Email', 'Phone'],
       currentPageContact: 1,
       pageSizeContact: 5,
       totalItemContact: 0,
