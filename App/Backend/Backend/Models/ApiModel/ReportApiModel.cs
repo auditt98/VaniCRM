@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Backend.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,23 @@ namespace Backend.Models.ApiModel
     public class ReportApiModel
     {
         public string reportName { get; set; }
+    }
+
+    public class ExportablesApiModel
+    {
+        public List<Exportables> exportables { get; set; }
+        public Pager pageInfo { get; set; }
+
+        public class Exportables
+        {
+            public string name { get; set; }
+            public string url { get; set; }
+            public Exportables(string name, string url)
+            {
+                this.name = name;
+                this.url = url;
+            }
+        }
     }
 
     public class ChartReportApiModel : ReportApiModel

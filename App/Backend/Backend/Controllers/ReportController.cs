@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -17,6 +18,8 @@ namespace Backend.Controllers
     public class ReportController : ApiController
     {
         public ReportService _reportService = new ReportService();
+        public FileService _fileService = new FileService();
+
         [HttpGet]
         [Route("reports/amount_by_stage")]
         [ResponseType(typeof(ChartReportApiModel))]
@@ -296,6 +299,159 @@ namespace Backend.Controllers
             }
             var json = JsonConvert.SerializeObject(responseData);
             response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpGet]
+        [Route("reports/exportables")]
+        [ResponseType(typeof(ExportablesApiModel))]
+        public HttpResponseMessage GetExportables([FromUri] int currentPage = 1, [FromUri] int pageSize = 0)
+        {
+            var response = new HttpResponseMessage();
+            ResponseFormat responseData = new ResponseFormat();
+            IEnumerable<string> headerValues;
+            if (Request.Headers.TryGetValues("Authorization", out headerValues))
+            {
+                string jwt = headerValues.FirstOrDefault();
+                //validate jwt
+                var payload = JwtTokenManager.ValidateJwtToken(jwt);
+
+                if (payload.ContainsKey("error"))
+                {
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_EXPIRED;
+                    }
+                    if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
+                    {
+                        response.StatusCode = HttpStatusCode.Forbidden;
+                        responseData = ResponseFormat.Fail;
+                        responseData.message = ErrorMessages.TOKEN_INVALID;
+                    }
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.OK;
+                    responseData = ResponseFormat.Success;
+                    responseData.data = _reportService.GetExportables(currentPage, pageSize);
+                }
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.UNAUTHORIZED;
+            }
+            var json = JsonConvert.SerializeObject(responseData);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
+        [HttpGet]
+        [Route("reports/exportables/{name}")]
+        public HttpResponseMessage GetPdf([FromUri] string name)
+        {
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            if (!String.IsNullOrEmpty(name))
+            {
+
+                switch (name)
+                {
+                    case "leads":
+                        {
+                            //responseData.data = _reportService.Get
+                            var reportName = "PotentialCustomerReport_" + DateTime.Now.ToString("dd'-'MM'-'yyyy") + ".pdf";
+                            var pdfManager = new PdfManager(reportName);
+                            var fileName = pdfManager.GenerateLeadsReport().fileName;
+                            var results = _fileService.GetFile(fileName);
+                            if (results.file != null)
+                            {
+                                response.StatusCode = HttpStatusCode.OK;
+                                response.Content = results.file;
+                                response.Content.Headers.ContentType = new MediaTypeHeaderValue(results.mimeType);
+                                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                                {
+                                    FileName = results.fileName
+                                };
+                            }
+                            else
+                            {
+                                response.StatusCode = HttpStatusCode.Gone;
+                                ResponseFormat responseData = ResponseFormat.Fail;
+                                responseData.message = ErrorMessages.SOMETHING_WRONG;
+                                var json = JsonConvert.SerializeObject(responseData);
+                                response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                            }
+                            break;
+                        }
+                    case "accounts":
+                        {
+                            //responseData.data = _reportService.Get
+                            var reportName = "CustomerReport_" + DateTime.Now.ToString("dd'-'MM'-'yyyy") + ".pdf";
+                            var pdfManager = new PdfManager(reportName);
+                            var fileName = pdfManager.GenerateAccountsReport().fileName;
+                            var results = _fileService.GetFile(fileName);
+                            if (results.file != null)
+                            {
+                                response.StatusCode = HttpStatusCode.OK;
+                                response.Content = results.file;
+                                response.Content.Headers.ContentType = new MediaTypeHeaderValue(results.mimeType);
+                                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                                {
+                                    FileName = results.fileName
+                                };
+                            }
+                            else
+                            {
+                                response.StatusCode = HttpStatusCode.Gone;
+                                ResponseFormat responseData = ResponseFormat.Fail;
+                                responseData.message = ErrorMessages.SOMETHING_WRONG;
+                                var json = JsonConvert.SerializeObject(responseData);
+                                response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                            }
+                            break;
+                        }
+                    case "deals":
+                        break;
+                    case "revenue":
+                        break;
+                    case "campaigns":
+                        break;
+                    default:
+                        break;
+                }
+                //var results = _fileService.GetAvatar(name);
+                //if (results.file != null)
+                //{
+                //    response.StatusCode = HttpStatusCode.OK;
+                //    response.Content = results.file;
+                //    response.Content.Headers.ContentType = new MediaTypeHeaderValue(results.mimeType);
+                //    response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                //    {
+                //        FileName = results.fileName
+                //    };
+                //}
+                //else
+                //{
+                //    response.StatusCode = HttpStatusCode.Gone;
+                //    ResponseFormat responseData = ResponseFormat.Fail;
+                //    responseData.message = ErrorMessages.SOMETHING_WRONG;
+                //    var json = JsonConvert.SerializeObject(responseData);
+                //    response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                //}
+
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                ResponseFormat responseData = ResponseFormat.Fail;
+                responseData.message = ErrorMessages.INVALID_BODY;
+                var json = JsonConvert.SerializeObject(responseData);
+                response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            }
             return response;
         }
     }

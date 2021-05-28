@@ -409,6 +409,10 @@ i {
     caret-color: #e57373 !important;
 }
 
+.text-primary{
+    color: #D93915 !important;
+}
+
 ::-webkit-scrollbar {
     width: 20px;
   }

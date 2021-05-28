@@ -40,6 +40,9 @@ export default {
           id: 'dealByStage-report',
       },
       options: {
+        chart:{
+          id: "DealsByStage-" + new Date(Date.now()).toLocaleDateString()
+        },
         plotOptions: {
             bar: {
                 distributed: true

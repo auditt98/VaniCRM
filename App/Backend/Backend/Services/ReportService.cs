@@ -1,5 +1,6 @@
 ﻿using Backend.Models.ApiModel;
 using Backend.Repository;
+using Backend.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,5 +40,30 @@ namespace Backend.Services
         {
             return _reportRepository.GetRevenueComparisonReport();
         }
+
+        public ExportablesApiModel GetExportables(int currentPage = 1, int pageSize = 10)
+        {
+            if(pageSize == 0)
+            {
+                pageSize = 10;
+            }
+            if(currentPage == 0)
+            {
+                currentPage = 1;
+            }
+            var exportables = new ExportablesApiModel();
+            List<ExportablesApiModel.Exportables> list = new List<ExportablesApiModel.Exportables>();
+            list.Add(new ExportablesApiModel.Exportables("Potential Customers Report", $"{StaticStrings.ServerHost}reports/exportables/leads"));
+            list.Add(new ExportablesApiModel.Exportables("Customers Report", $"{StaticStrings.ServerHost}reports/exportables/accounts"));
+            list.Add(new ExportablesApiModel.Exportables("Deals Report", $"{StaticStrings.ServerHost}reports/exportables/deals"));
+            list.Add(new ExportablesApiModel.Exportables("Revenue Report", $"{StaticStrings.ServerHost}reports/exportables/revenue"));
+            list.Add(new ExportablesApiModel.Exportables("Campaign Report", $"{StaticStrings.ServerHost}reports/exportables/campaigns"));
+            exportables.exportables = list.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            exportables.pageInfo = new Extensions.Pager(list.Count(), currentPage, pageSize, 99999);
+
+            return exportables;
+        }
+
+        //public 
     }
 }

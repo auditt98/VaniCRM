@@ -1,4 +1,4 @@
-import { config} from "@/config/config";
+import {buildQueryURI, config} from "@/config/config";
 import {requestOptions} from "@/helper/request-options";
 import {handleResponse} from "@/helper/handle-response";
 import {fetchRetry} from "@/helper/fetchRetry";
@@ -10,7 +10,19 @@ export const reportService = {
     getKeyAccountsReport,
     getAccountsByIndustryReport,
     getRevenueComparisonReport,
+    getExportables,
 };
+
+function getExportables(q) {
+    return fetch(`${config.apiUrl}/reports/exportables?${buildQueryURI(q)}`, requestOptions.get())
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/reports/exportables?${buildQueryURI(q)}`, requestOptions.get(), 2).then(handleResponse)
+            }
+        });
+}
 
 function getAmountByStageReport() {
     return fetch(`${config.apiUrl}/reports/amount_by_stage`, requestOptions.get())

@@ -45,6 +45,9 @@ export default {
           id: 'topsales-report',
       },
       options: {
+        chart:{
+          id: "TopSales-" + new Date(Date.now()).toLocaleDateString()
+        },
         plotOptions: {
             bar: {
                 distributed: true,
@@ -71,7 +74,6 @@ export default {
   mounted() {
     reportService.getTopSalesReport().then(res => {
         if (res && res.data) {
-          console.log(res.data.reportName)
           this.series = [{'name': 'Amount' ,'data': [...res.data.data]}];
           this.reportName = res.data.reportName;
           this.loaded = true;

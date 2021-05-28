@@ -40,6 +40,9 @@ export default {
           id: 'revenueComparison-report',
       },
       options: {
+        chart:{
+          id: "RevenueComparison-" + new Date(Date.now()).toLocaleDateString()
+        },
         plotOptions: {
             bar: {
                 distributed: false
@@ -65,7 +68,6 @@ export default {
   mounted() {
     reportService.getRevenueComparisonReport().then(res => {
         if (res && res.data) {
-          console.log(res.data)
           this.reportName = res.data.reportName;
           var lastYearSeries = [];
           var lastYearData = [...res.data.data];

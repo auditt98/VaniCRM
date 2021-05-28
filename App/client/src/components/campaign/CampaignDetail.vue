@@ -155,8 +155,8 @@ export default {
       this.loading = true;
       campaignService.getById(this.campaign.id).then(res => {
         if (res && res.data) {
-          console.log(res.data)
           this.campaign = res.data;
+          console.log(this.campaign.notes)
           this.loadContacts();
           this.loadLeads();
           mapValue(this.dataLeftBaseInfo, [

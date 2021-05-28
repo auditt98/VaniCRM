@@ -40,6 +40,9 @@ export default {
           id: 'accountsByIndustry-report',
       },
       options: {
+        chart:{
+          id: "AccountsByIndustry-" + new Date(Date.now()).toLocaleDateString()
+        },
         colors: [
               '#3B93A5',
               '#F7B844',
@@ -87,19 +90,9 @@ export default {
   mounted() {
     reportService.getAccountsByIndustryReport().then(res => {
         if (res && res.data) {
-          console.log(res.data)
           this.reportName = res.data.reportName;
           this.series = [{name:"Number of accounts", data: [...res.data.data]}]
-          console.log(this.series)
           this.loaded = true;
-          // var dataSeries = [];
-          // var results = [...res.data.data]
-          // results.forEach(element => dataSeries.push(element.y))
-          // this.labels = res.data.labels;
-          // this.updateLabels();
-          // console.log(dataSeries)
-          // console.log(this.labels)
-          // this.series = dataSeries;
         }
       })
   },

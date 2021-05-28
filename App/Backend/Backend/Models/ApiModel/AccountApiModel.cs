@@ -16,6 +16,7 @@ namespace Backend.Models.ApiModel
             public string name { get; set; }
             public string phone { get; set; }
             public string website { get; set; }
+            public string email { get; set; }
             public string owner { get; set; }
             public string avatar { get; set; }
         }

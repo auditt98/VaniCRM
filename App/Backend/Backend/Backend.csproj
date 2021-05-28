@@ -418,6 +418,7 @@
     <Compile Include="Extensions\HashManager.cs" />
     <Compile Include="Extensions\JwtTokenManager.cs" />
     <Compile Include="Extensions\NotificationManager.cs" />
+    <Compile Include="Extensions\PdfManager.cs" />
     <Compile Include="Extensions\PermsAttribute.cs" />
     <Compile Include="Extensions\ResponseFormat.cs" />
     <Compile Include="Extensions\Pager.cs" />
@@ -557,6 +558,7 @@
     <Content Include="Scripts\jquery.signalR-2.4.1.js" />
     <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Uploads\logo.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -571,6 +573,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Uploads\times.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\uploads\" />

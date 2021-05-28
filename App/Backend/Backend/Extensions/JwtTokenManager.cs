@@ -33,6 +33,7 @@ namespace Backend.Extensions
                                   .AddClaim("id", user.ID)
                                   .AddClaim("email", user.Email)
                                   .ExpirationTime(DateTime.Now.AddHours(2))
+                                  //.ExpirationTime(DateTime.Now.AddMinutes(2))
                                   .Encode();
             return token;
         }

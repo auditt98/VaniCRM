@@ -40,6 +40,9 @@ export default {
           id: 'keyAccounts-report',
       },
       options: {
+        chart:{
+          id: "KeyAccounts-" + new Date(Date.now()).toLocaleDateString()
+        },
         legend:{
           show: true,
         },
@@ -129,7 +132,6 @@ export default {
           var countData = [...res.data.data];
           countData.forEach(element => countSeries.push(element.y))
           //force update labels
-          console.log(res.data.labels)
           this.labels = res.data.labels.map(function (text) {
               if (text == null) {
                   return "";

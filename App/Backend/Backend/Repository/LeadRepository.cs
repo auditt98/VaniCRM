@@ -449,7 +449,14 @@ namespace Backend.Repository
                     {
                         var newAccount = new ACCOUNT();
                         var newContact = new CONTACT();
-                        newAccount.Name = dbLead.CompanyName;
+                        if (!String.IsNullOrEmpty(dbLead.CompanyName))
+                        {
+                            newAccount.Name = dbLead.CompanyName;
+                        }
+                        else
+                        {
+                            newAccount.Name = dbLead.Name;
+                        }
                         newAccount.Website = dbLead.Website;
                         newAccount.Email = dbLead.Email;
                         newAccount.AnnualRevenue = dbLead.AnnualRevenue;

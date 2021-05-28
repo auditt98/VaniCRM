@@ -39,6 +39,7 @@ namespace Backend.Models.ApiModel
             public string leadOwner { get; set; }
             public string priority { get; set; }
             public string avatar { get; set; }
+            public string leadStatus { get; set; }
 
         }
     }

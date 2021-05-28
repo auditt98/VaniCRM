@@ -8,7 +8,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <style>
@@ -31,7 +30,7 @@ export default {
   name: 'TopMarketingsChart',
   components: {
       apexcharts: VueApexCharts,
-      VclCode
+      VclCode,
   },
   data: function () {
     return {
@@ -41,6 +40,9 @@ export default {
           id: 'topmarketings-report',
       },
       options: {
+        chart:{
+          id: "TopMarketings-" + new Date(Date.now()).toLocaleDateString()
+        },
         theme: {
             monochrome: {
                 enabled: true,

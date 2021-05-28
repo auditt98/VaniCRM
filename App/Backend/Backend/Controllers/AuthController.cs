@@ -267,8 +267,12 @@ namespace Backend.Controllers
                 t_series = cookieState["tokenIdentifier"];
                 var temp = int.Parse(t_series);
                 var token = db.REFRESH_TOKEN.Find(temp);
-                db.REFRESH_TOKEN.Remove(token);
-                db.SaveChanges();
+                if(token != null)
+                {
+                    db.REFRESH_TOKEN.Remove(token);
+                    db.SaveChanges();
+                }
+                
                 //cookie.Expires = DateTime.Now.AddDays(-10);
                 //response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
                 response.Headers.Add("set-cookie", $"refreshTokenData=1; path=/; SameSite=None; Secure; max-age=-1");

@@ -40,6 +40,9 @@ export default {
           id: 'amountByStage-report',
       },
       options: {
+        chart:{
+          id: "AmountByStage-" + new Date(Date.now()).toLocaleDateString()
+        },
         plotOptions: {
             bar: {
                 distributed: true
@@ -69,7 +72,6 @@ export default {
   mounted() {
     reportService.getAmountByStageReport().then(res => {
         if (res && res.data) {
-          console.log(res.data)
           //force update labels
           this.labels = res.data.labels;
           this.updateLabels();

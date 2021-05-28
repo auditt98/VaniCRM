@@ -28,7 +28,7 @@ namespace Backend.Services
             var dbAccounts = _accountRepository.GetAllAccounts(query, pageSize, currentPage, sort);
             var apiModel = new AccountListApiModel();
             string targetFolder = HttpContext.Current.Server.MapPath("~/Uploads");
-            apiModel.accounts = dbAccounts.accounts.Select(c => new AccountListApiModel.AccountInfo() { id = c.ID, name = c.Name, website = c.Website, phone = c.Phone, owner = c.Owner.Username, avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : $"{StaticStrings.ServerHost}avatar?fileName=default.png" }).ToList();
+            apiModel.accounts = dbAccounts.accounts.Select(c => new AccountListApiModel.AccountInfo() { id = c.ID, name = c.Name, email = c.Email ,website = c.Website, phone = c.Phone, owner = c.Owner.Username, avatar = c.Avatar != null ? $"{StaticStrings.ServerHost}avatar?fileName={c.Avatar}" : $"{StaticStrings.ServerHost}avatar?fileName=default.png" }).ToList();
             apiModel.pageInfo = dbAccounts.p;
             return apiModel;
         }
