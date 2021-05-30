@@ -107,7 +107,6 @@ export default {
       reportService.getExportables(query).then(res => {
           if (res) {
             this.items = res.data.exportables;
-            console.log(res.data);
             this.totalPage = Number(res.data.pageInfo.TotalPages);
             this.totalItems = Number(res.data.pageInfo.TotalItems);
           }
@@ -119,9 +118,6 @@ export default {
       this.keyword = '';
       this.loadItems();
     },
-    downloadExportable(url){
-        console.log(url);
-    }
   },
   created() {
     this.loadItems();

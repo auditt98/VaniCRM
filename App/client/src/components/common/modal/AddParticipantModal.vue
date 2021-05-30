@@ -142,7 +142,7 @@ export default {
             if (res && res.data) {
               this.meeting = res.data;
             } else {
-              alert('Không có dữ liệu');
+              alert('No data found');
               this.$router.push('/');
             }
           }).finally(() => {
@@ -153,7 +153,7 @@ export default {
       if (!item.id) {
         return ;
       }
-      if (!confirm('Xác nhân')) {
+      if (!confirm('Are you sure?')) {
         return ;
       }
       const body = {

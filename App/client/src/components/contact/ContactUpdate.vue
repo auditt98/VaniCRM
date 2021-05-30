@@ -197,7 +197,7 @@ export default {
     async save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        alert('loi')
+        alert('Failed')
         return;
       }
       this.loading = true;
@@ -248,7 +248,7 @@ export default {
               this.contact.birthday = formatDate(this.contact.birthday, 'yyyy-MM-dd') ;
               this.contact.priority = getValueInArr(res.data.priorities, 'selected', 'id');
             } else {
-              alert('Không có dữ liệu');
+              alert('No data found');
               this.$router.push('/');
             }
           }).finally(() => {
@@ -273,9 +273,7 @@ export default {
     upload() {
       let formData = new FormData();
       formData.append("file", this.files);
-      contactService.changeAvatar(formData, this.contact.id).then(res => {
-        console.log(res);
-      }).catch(err => alert(err))
+      contactService.changeAvatar(formData, this.contact.id).then().catch(err => alert(err))
     },
     onSearch(search) {
       let query = {

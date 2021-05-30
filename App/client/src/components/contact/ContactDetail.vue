@@ -106,13 +106,13 @@ export default {
       this.$router.push({path: '/tasks/update', query : { id: id}});
     },
     deleteTask(id) {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;
       taskService.remove(id).then(res => {
         if(res) {
-          alert('Xóa thành công!');
+          alert('Deleted successfully!');
           this.loadTaskByContact();
         }
       }).finally(() => {
@@ -175,14 +175,14 @@ export default {
           ]);
 
         } else {
-          alert('Không có dữ liệu');
+          alert('No data found');
           this.$router.push('/contacts');
         }
       }).catch(err => alert(err))
           .finally(() => this.loading = false);
     },
     removeNote(noteId) {
-      if (!confirm('Xác nhận xóa!')) {
+      if (!confirm('Are you sure to delete?!')) {
         return;
       }
       contactService.removeNote(this.contact.id, noteId)
@@ -202,32 +202,32 @@ export default {
       }
       contactService.createNote(formData, this.contact.id).then(res => {
         if (res && res.status === 'success') {
-          alert('Thành công!');
+          alert('Successfully!');
           this.$refs.notes.clear();
           this.loadContact();
         }
       }).catch(err => alert(err))
     },
     remove() {
-      if (!confirm('Xác nhận xóa')) {
+      if (!confirm('Are you sure to delete?')) {
         return;
       }
       contactService.remove(this.contact.id)
           .then(res => {
             if (res) {
-              alert('Thành công');
+              alert('Successfully');
               this.$router.push('/accounts')
             }
           })
     },
     createTag(event) {
-      if (!confirm('Xác nhận!')) {
+      if (!confirm('Are you sure?!')) {
         return;
       }
       contactService.createTag({name: event}, this.contact.id)
           .then(res => {
             if (res) {
-              alert('Thành công!');
+              alert('Successfully!');
               this.$refs.userInfo.closeModal();
               this.loadContact();
             }

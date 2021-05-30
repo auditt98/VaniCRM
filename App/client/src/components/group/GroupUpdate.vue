@@ -157,7 +157,6 @@ export default {
       this.permissions = [];
       groupService.getAllPermission()
           .then(res => {
-            console.log(res.data)
             if (res && res.data) {
               this.permissions = res.data.perms;
             }

@@ -116,7 +116,7 @@ export default {
         })
     },
     addItem(lead) {
-      if (!confirm('Xác nhân')) {
+      if (!confirm('Are you sure?')) {
         return ;
       }
       campaignService.addLead(this.campaignId, {leadId: lead.id}).then((res) => alert(res.message))

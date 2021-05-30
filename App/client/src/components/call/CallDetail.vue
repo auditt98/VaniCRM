@@ -99,8 +99,7 @@ export default {
       }).finally(() => this.loading = false);
     },
     removeNote(noteId) {
-      console.log(noteId)
-      if (!confirm('Xác nhận xóa!')) {
+      if (!confirm('Are you sure to delete?!')) {
         return;
       }
       callService.removeNote(this.call.id, noteId)
@@ -120,32 +119,32 @@ export default {
       }
       callService.createNote(formData, this.call.id).then(res => {
         if (res && res.status === 'success') {
-          alert('Thành công!');
+          alert('Successfully!');
           this.$refs.notes.clear();
           this.loadCall();
         }
       }).catch(err => alert(err))
     },
     remove() {
-      if (!confirm('Xác nhận xóa')) {
+      if (!confirm('Are you sure to delete?')) {
         return;
       }
       callService.remove(this.call.id, "calls")
           .then(res => {
             if (res) {
-              alert('Thành công');
+              alert('Successfully');
               this.$router.push('/')
             }
           })
     },
     createTag(event) {
-      if (!confirm('Xác nhận!')) {
+      if (!confirm('Are you sure?!')) {
         return ;
       }
       callService.createTag({name: event}, this.call.id)
           .then(res => {
             if (res) {
-              alert('Thành công!');
+              alert('Successfully!');
               this.$refs['userTags'].closeModal();
               this.loadCall();
             }

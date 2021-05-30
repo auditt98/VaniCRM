@@ -116,7 +116,7 @@ export default {
         })
     },
     addItem(contact) {
-      if (!confirm('Xác nhân')) {
+      if (!confirm('Are you sure?')) {
         return ;
       }
       campaignService.addContact(this.campaignId, {id: contact.id}).then((res) => alert(res.message))

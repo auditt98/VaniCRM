@@ -91,14 +91,13 @@ export default {
             formatDate(this.task.modifiedAt, DATE_TIME_FORMAT),
           ]);
         } else {
-          alert('Không có dữ liệu');
+          alert('No data found');
           this.$router.push('/tasks');
         }
       }).finally(() => this.loading = false);
     },
     removeNote(noteId) {
-      console.log(noteId)
-      if (!confirm('Xác nhận xóa!')) {
+      if (!confirm('Are you sure to delete?!')) {
         return;
       }
       taskService.removeNote(this.task.id, noteId)
@@ -118,33 +117,32 @@ export default {
       }
       taskService.createNote(formData, this.task.id).then(res => {
         if (res && res.status === 'success') {
-          alert('Thành công!');
+          alert('Successfully!');
           this.$refs.notes.clear();
           this.loadTask();
         }
       }).catch(err => alert(err))
     },
     remove() {
-      if (!confirm('Xác nhận xóa')) {
+      if (!confirm('Are you sure to delete?')) {
         return;
       }
-      console.log(this.task.id, "tasks")
       taskService.remove(this.task.id, "tasks")
           .then(res => {
             if (res) {
-              alert('Thành công');
+              alert('Successfully');
               this.$router.push('/')
             }
           })
     },
     createTag(event) {
-      if (!confirm('Xác nhận!')) {
+      if (!confirm('Are you sure?!')) {
         return ;
       }
       taskService.createTag({name: event}, this.task.id)
           .then(res => {
             if (res) {
-              alert('Thành công!');
+              alert('Successfully!');
               this.$refs['userTags'].closeModal();
               this.loadTask();
             }

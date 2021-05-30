@@ -104,7 +104,6 @@ export default {
       await accountService.loadContacts(query, this.account.id)
       .then(res => {
         if (res && res.data) {
-          console.log(res.data)
           this.totalPageContact = res.data.pageInfo.TotalPages
           this.totalItemContact = res.data.pageInfo.TotalItems
           this.contactLst = res.data.contacts;
@@ -160,7 +159,7 @@ export default {
           .finally(() => this.loading = false);
     },
     removeNote(noteId) {
-      if (!confirm('Xác nhận xóa!')) {
+      if (!confirm('Are you sure to delete?!')) {
         return;
       }
       accountService.removeNote(this.account.id, noteId)
@@ -180,32 +179,32 @@ export default {
       }
       accountService.createNote(formData, this.account.id).then(res => {
         if (res && res.status === 'success') {
-          alert('Thành công!');
+          alert('Successfully!');
           this.$refs.notes.clear();
           this.loadAccount();
         }
       }).catch(err => alert(err))
     },
     remove() {
-      if (!confirm('Xác nhận xóa')) {
+      if (!confirm('Are you sure to delete?')) {
         return;
       }
       accountService.remove(this.account.id)
           .then(res => {
             if (res) {
-              alert('Thành công');
+              alert('Successfully');
               this.$router.push('/accounts')
             }
           })
     },
     createTag(event) {
-      if (!confirm('Xác nhận!')) {
+      if (!confirm('Are you sure?!')) {
         return;
       }
       accountService.createTag({name: event}, this.account.id)
           .then(res => {
             if (res) {
-              alert('Thành công!');
+              alert('Successfully!');
               this.$refs.userInfo.closeModal();
               this.loadAccount();
             }

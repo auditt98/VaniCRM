@@ -281,7 +281,7 @@ export default {
               this.call.purpose = getValueInArr(res.data.purposes, 'selected', 'id');
               this.mapRRule(this.call.rrule);
             } else {
-              alert('Không có dữ liệu');
+              alert('No data found');
               this.$router.push('/');
             }
           }).finally(() => {
@@ -291,11 +291,11 @@ export default {
     save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        alert('loi')
+        alert('Failed')
         return;
       }
       if (this.call.contact && this.call.lead) {
-        alert('Loi');
+        alert('Failed');
         return;
       }
       this.loading = true;
@@ -311,9 +311,7 @@ export default {
       }
       const r = new RRule(rrule);
       this.call.rrule = r.toString();
-      console.log(this.duration)
       this.call.duration = hourToSecond(this.duration);
-      console.log(this.call.duration)
       if (!this.call.id) {
         callService.create(this.mapModel())
             .then(res => {

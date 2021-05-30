@@ -73,7 +73,7 @@
             <router-link v-if="[3, 1].indexOf(currentUser.group) > -1" :to="{ name: 'DashboardMarketing'}" class="nav-link">Dashboard Marketing</router-link>
           </div>
         </li>
-        <li class="nav-item">
+        <li v-if="userRoleId !== 2"  class="nav-item">
           <router-link active-class="active" :to="{ name: 'LeadList'}" class="nav-link">Leads</router-link>
         </li>
         <li class="nav-item">
@@ -82,7 +82,7 @@
         <li class="nav-item">
           <router-link active-class="active" :to="{ name: 'AccountList'}" class="nav-link">Accounts</router-link>
         </li>
-        <li class="nav-item">
+        <li v-if="userRoleId !== 1" class="nav-item">
           <router-link active-class="active" :to="{ name: 'DealList'}" class="nav-link">Deals</router-link>
         </li>
         <li class="nav-item">
@@ -144,14 +144,12 @@ export default {
       if(notification.module != null){
         this.$router.push({ path: notification.module + '/detail', query: { id: notification.moduleObjectId } }).catch(() =>{});
       }
-      // console.log(notification);
     },
     logout() {
-          proxy.invoke('Leave', authenticationService.currentUserValue.id).done(() => {
-            console.log("left")
-          }).fail(function (error) {
-              console.log('Error: ' + error);
-            });
+          proxy.invoke('Leave', authenticationService.currentUserValue.id).done()
+          .fail(function (error) {
+            console.log('Error: ' + error);
+          });
       authenticationService.logout(null);
     },
     infiniteHandler($state){
@@ -211,6 +209,9 @@ export default {
     isActive() {
       return this.$route.name === 'DashboardSale' || this.$route.name === 'DashboardMarketing';
     },
+    userRoleId() {
+      return JSON.parse(window.localStorage.getItem('currentUser')).group;
+    }
   }
 }
 </script>
