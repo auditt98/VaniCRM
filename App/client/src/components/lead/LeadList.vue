@@ -81,13 +81,13 @@ export default {
       this.$router.push({path: '/leads/detail', query : { id: id}});
     },
     deleteItem(id) {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;
       leadService.remove(id).then(res => {
         if(res) {
-          alert('Xóa thành công!');
+          alert('Deleted successfully!');
           this.loadLeads(this.keyword);
         }
       }).finally(() => {

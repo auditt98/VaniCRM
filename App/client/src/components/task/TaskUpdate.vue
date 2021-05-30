@@ -233,7 +233,6 @@ export default {
       taskService.getById(this.task.id)
           .then(res => {
             if (res && res.data) {
-              console.log(res.data)
               this.task = res.data;
               if (res.data.duration) {
                 const times = new Date(res.data.duration * 1000).toISOString().substr(11, 8).split(':');
@@ -247,7 +246,7 @@ export default {
               this.task.status = getValueInArr(res.data.statuses, 'selected', 'id');
               this.mapRRule(this.task.rrule);
             } else {
-              alert('Không có dữ liệu');
+              alert('No data found');
               this.$router.push('/tasks');
             }
           }).finally(() => {
@@ -257,11 +256,11 @@ export default {
     save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        alert('loi')
+        alert('Failed')
         return;
       }
       if (this.task.contact && this.task.lead) {
-        alert('Loi');
+        alert('Failed');
         return;
       }
       this.loading = true;

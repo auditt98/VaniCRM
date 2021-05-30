@@ -61,7 +61,7 @@ export default {
       this.$router.push({path: '/groups/update', query : { id: id}});
     },
     remove(id) {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return ;
       }
       groupService.remove(id).then(res => {

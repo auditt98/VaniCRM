@@ -2,7 +2,6 @@ import {authenticationService} from "@/service/authentication.service";
 import {getters, } from "@/helper/observable";
 export function handleResponse(response) {
     return response.text().then(async text => {
-        console.log("handle response", " ", response.ok, " ", response.status)
         const data = text && JSON.parse(text);
         //if there is an error 
         if (!response.ok) {
@@ -12,7 +11,6 @@ export function handleResponse(response) {
                 // console.log("Outside of getRefreshToken", getters.isRefreshing())
                 
                 if(getters.isRefreshing()){
-                    console.log("waiting")
                     // const intervalId = setInterval(() => {
                     //     // if the state indicates that there is no refresh token request anymore, it clears the time interval and retries the failed API call with updated token data
                     //     if (!getters.isRefreshing()) {

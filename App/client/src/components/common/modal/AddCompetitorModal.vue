@@ -109,7 +109,7 @@ export default {
     save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        alert('loi')
+        alert('Failed')
         return;
       }
       this.loading = true;

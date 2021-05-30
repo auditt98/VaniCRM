@@ -287,8 +287,6 @@ router.beforeEach((to, from, next) => {
         if (!currentUser) {
             return next({path: '/login', query: {returnUrl: to.path}});
         }
-        console.log(authorize.group)
-        console.log(currentUser.group)
         if (authorize.group.length && !authorize.group.includes(currentUser.group)) {
             if (to.name === 'DashboardSale' && currentUser.group === 1) {
                 return next({name: 'DashboardMarketing'});

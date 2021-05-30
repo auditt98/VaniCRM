@@ -177,7 +177,7 @@ export default {
               // this.deal.lostReason = getValueInArr(res.data.lostReason, 'selected', 'id');
               // this.mapRRule(this.deal.rrule);
             } else {
-              alert('Không có dữ liệu');
+              alert('No data found');
               this.$router.push('/');
             }
           }).finally(() => {
@@ -187,7 +187,7 @@ export default {
     save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        alert('loi')
+        alert('Failed')
         return;
       }
       this.loading = true;

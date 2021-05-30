@@ -80,7 +80,6 @@ export default {
   methods:
       {
         loadTasks() {
-          // console.log(new Date())
           this.tasks = [];
           this.loading = true;
           let query = {

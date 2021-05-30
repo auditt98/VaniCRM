@@ -144,11 +144,9 @@ export default {
       let formData = new FormData();
       formData.append("file", this.files);
       userService.updateAvatar(formData, 1).then(res => {
-        console.log(res);
       }).catch(err => alert(err))
     },*/
     save() {
-      console.log(this.user)
       this.isValidate = true;
       this.passwordError= '';
       this.emailError= '';
@@ -161,10 +159,10 @@ export default {
 
       if (this.user.Password.length < 6 || !this.validateEmail()) {
         if (this.user.Password.length < 6) {
-          this.passwordError= 'Password phải lớn hơn 6 ký tự.';
+          this.passwordError= 'Password length gretter than 6.';
         }
         if (!this.validateEmail()) {
-          this.emailError= 'Email  không đúng định dạng.';
+          this.emailError= 'Email invalid format.';
         }
         return ;
       }
@@ -173,10 +171,10 @@ export default {
         this.loading = true;
         userService.create(userCreate).then(res => {
           if(res) {
-            alert('Thanh cong');
+            alert('Succesfully');
             router.push('/users');
           } else {
-            alert('That bai');
+            alert('Failed');
           }
         }).catch(err=> {
           alert(err);
@@ -184,7 +182,7 @@ export default {
           this.loading = false;
         })
       } else {
-        alert("Lỗi user đã tồn tại");
+        alert("User existed");
       }
     },
     loadGroups() {
@@ -196,7 +194,7 @@ export default {
           this.groups = res.data.groups;
         }
       }).catch(() => {
-        alert('LOAD_GROUP: Có lỗi xảy ra');
+        alert('LOAD_GROUP: Error occured');
       }).finally(() => {
         this.loading = false;
       })

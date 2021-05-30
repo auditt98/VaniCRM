@@ -9,7 +9,7 @@
                         <span @click="openExportables"><VButton :data="btnExport"/></span>
                     </div>
                 </div>
-                <div class="row">
+                <div v-if="userRoleId !==1" class="row">
                     <div class="col-sm-7">
                         <AmountByStageChart />
                     </div>
@@ -18,10 +18,10 @@
                     </div> 
                 </div>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div v-if="userRoleId !== 1" :class="userRoleId === 2 ? 'col-sm-12' : 'col-sm-6'">
                         <TopSalesChart />
                     </div>
-                    <div class="col-sm-6">
+                    <div v-if="userRoleId !== 2" :class="userRoleId === 1 ? 'col-sm-12' : 'col-sm-6'">
                         <TopMarketingsChart />
                     </div> 
                 </div>
@@ -35,7 +35,7 @@
                         <AccountsByIndustryChart />
                     </div>
                 </div>
-                <div class="row">
+                <div v-if="userRoleId === 3" class="row">
                     <div class="col-sm-12">
                         <RevenueComparisonChart />
                     </div>
@@ -78,8 +78,10 @@ export default {
         VButton,
         ExportablesModal,
     },
-  mounted() {
-
+  computed: {
+    userRoleId() {
+      return JSON.parse(window.localStorage.getItem('currentUser')).group;
+    }
   },
   methods:{
       openExportables(){

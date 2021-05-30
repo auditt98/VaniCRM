@@ -118,7 +118,6 @@ export default {
       this.loading = true;
       meetingService.getById(this.meeting.id).then(res => {
         if (res && res.data) {
-          console.log(res.data)
           this.meeting = res.data;
           mapValue(this.dataLeftBaseInfo, [
             this.meeting.fromDate + ' - ' + this.meeting.toDate,
@@ -141,7 +140,7 @@ export default {
           .finally(() => this.loading = false);
     },
     removeNote(noteId) {
-      if (!confirm('Xác nhận xóa!')) {
+      if (!confirm('Are you sure to delete?!')) {
         return ;
       }
       meetingService.removeNote(this.meeting.id, noteId)
@@ -161,32 +160,32 @@ export default {
       }
       meetingService.createNote(formData, this.meeting.id).then(res => {
         if (res && res.status === 'success') {
-          alert('Thành công!');
+          alert('Successfully!');
           this.$refs.notes.clear();
           this.loadMeeting();
         }
       }).catch(err => alert(err))
     },
     remove() {
-      if (!confirm('Xác nhận xóa')) {
+      if (!confirm('Are you sure to delete?')) {
         return ;
       }
       meetingService.remove(this.meeting.id, "meetings")
           .then(res => {
             if (res) {
-              alert('Thành công');
+              alert('Successfully');
               this.$router.push('/')
             }
           })
     },
     createTag(event) {
-      if (!confirm('Xác nhận!')) {
+      if (!confirm('Are you sure?!')) {
         return ;
       }
       meetingService.createTag({name: event}, this.meeting.id)
           .then(res => {
             if (res) {
-              alert('Thành công!');
+              alert('Successfully!');
               this.closeModal();
               this.loadMeeting();
             }

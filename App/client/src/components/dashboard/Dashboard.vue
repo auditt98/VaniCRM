@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="p-4 my-0">
       <VLoading :loading="loading"/>
       <div class="dashboard-search form-group col-md-8 input-group mx-auto mb-5">
@@ -84,7 +83,7 @@
                 </div>
               </div>
             </div>
-            <draggable class="drag-scroll" :list="filteredLeadsBySearchText" v-bind="dragOptions"
+            <draggable class="drag-scroll" :list="filteredLeadsBySearchText" :move="checkMoveLead" v-bind="dragOptions"
               @start="leadDrag = true"
               :scrollSensitivity="200"
               :force-fallback="true"
@@ -133,30 +132,79 @@
               </transition-group>
             </draggable>
           </div>
-          <!-- <div class="col-3" :data-id="3">
+          <div class="col-3" :data-id="3">
             <div class="mb-3">
               <div class="card-header-text row justify-content-between">
                 <p class="col-sm-10" :style="'color:#D93915'">Deals</p>
               </div>
               <p class="card-header-under-line w-100"></p>
             </div>
-            <draggable class="drag-scroll" :list="filteredLeadsBySearchText" v-bind="dragOptions"
-                       @start="leadDrag = true"
-                       :scrollSensitivity="200"
-                       :force-fallback="true"
-                     @change="dragDashboardMarketing($event)"
+            <draggable class="drag-scroll" :list="filteredDeals" :move="checkMoveDeal" v-bind="dragOptions"
+              @start="dealDrag = true"
+              :scrollSensitivity="200"
+              :force-fallback="true"
+              @change="dragDeal($event)"
             >
-              <transition-group type="transition" :name="!leadDrag ? 'flip-list' : null">
-                <div v-for="(element, idx) in filteredLeadsBySearchText"
+              <transition-group type="transition" :name="!dealDrag ? 'flip-list' : null">
+                <div v-for="(element, idx) in filteredDeals"
                      :key="idx">
                   <DashboardCard :data="element"/>
                 </div>
               </transition-group>
             </draggable>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
+    <template v-if="showModal">
+      <transition name="modal">
+        <div class="modal-mask">
+          <div class="modal-wrapper">
+            <div class="modal-container">
+              <div class="modal-header">
+                Convert Account to Lead
+              </div>
+
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-4">
+                    <div class="mb-2">
+                      <p>Account Name:</p>
+                    </div>
+                    <div class="mb-2">
+                      <p>Deal Name:</p>
+                    </div>
+                    <div class="mb-2">
+                      <p>Owner:</p>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="mb-2">
+                      <p>{{convertDealData.title}}</p>
+                    </div>
+                    <div class="mb-2">
+                      <input type="text" class="form-control" v-model="convertDealData.dealName" placeholder="Deal Name">
+                    </div>
+                    <div class="mb-2">
+                      <vc-select id="Owner" label="username"
+                        :filterable="false" :options="owners"
+                        @search="onSearchUser"
+                        v-model="convertDealData.owner">
+                      </vc-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex" style="justify-content: flex-end;">
+                <span @click="convertDeal" class="mr-4"><VButton :data="btnEdit"/></span>
+                <span @click="cancelConvertDeal"><VButton :data="btnCancel"/></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </template>
   </div>
 </template>
 
@@ -172,6 +220,7 @@ import {accountService} from "@/service/account.service";
 import VButton from "@/components/common/VButton";
 import _cloneDeep from 'lodash/cloneDeep'
 import _toLower from 'lodash/toLower'
+import {userService} from "@/service/user.service";
 
 export default {
   name: "Dashboard",
@@ -184,6 +233,7 @@ export default {
       items: [],
       leads: [],
       accounts: [],
+      deals: [],
       priorities: [],
       accountSearchs: [],
       lead: {
@@ -201,14 +251,39 @@ export default {
       },
       leadDrag: false,
       accountDrag: false,
+      dealDrag: false,
+      showModal: false,
+      convertDealData: {},
+      owners: [],
       btnCancel: {btnClass: 'btn-white px-3', icon: '', text: 'CANCEL'},
       btnEdit: {btnClass: 'btn-red px-4', icon: '', text: 'CREATE'},
     };
   },
   methods: {
+    onSearchUser(search) {
+      let query = {
+        currentPage: 1,
+        pageSize: 10
+      };
+      if (search) {
+        query['query'] = search;
+      }
+      userService.getAll(query).then(res => {
+        if (res) {
+          this.owners = res.data.users;
+        }
+      })
+    },
     dragDashboardMarketing(event){
       if (event.removed) {
         leadService.convertToAccount(event.removed.element.id)
+      }
+    },
+    dragDeal(event) {
+      if (event.added) {
+        this.showModal = true
+        this.onSearchUser()
+        this.convertDealData = event.added.element
       }
     },
     openAdd(item, type) {
@@ -293,10 +368,19 @@ export default {
       }
       return true;
     },
+    checkMoveLead: function (evt) {
+      if (evt.relatedContext && evt.relatedContext.element && (evt.relatedContext.element.type === 2)) {
+        return true;
+      }
+      return false;
+    },
     checkMoveMar: function (evt) {
-        if (evt.relatedContext && evt.relatedContext.element && (evt.relatedContext.element.type === 2)) {
+        if (evt.relatedContext && evt.relatedContext.element && (evt.relatedContext.element.type === 3)) {
           return true;
         }
+      return false;
+    },
+    checkMoveDeal: function () {
       return false;
     },
     loadListDashboardSale() {
@@ -363,6 +447,26 @@ export default {
                 return {
                   id: d.id, title: d.name, type: 2, tags: [],title1: d.phone, title2: d.website,
                   routeName: 'AccountDetail'
+                }
+              });
+            }
+          }).finally(() => {
+        this.loading = false;
+      })
+    },
+    async loadDeals() {
+      this.deals = [];
+      this.loading = true;
+      const q = {
+        currentPage: 1,
+        pageSize: 10
+      };
+      await dealService.getAll(q)
+          .then(res => {
+            if (res && res.data) {
+              this.deals = res.data.deals.map((d) => {
+                return {
+                  id: d.id, title: d.name, title1: d.accountName, title2: d.owner, type: 3, routeName: 'DealDetail'
                 }
               });
             }
@@ -440,6 +544,39 @@ export default {
         })
       }
       return []
+    },
+    filterDeals(items, searchText) {
+      if (this.type === 1 && items) {
+        const deals = _cloneDeep(items)
+        if (!searchText) {
+          return deals
+        }
+        return deals.filter(deal => {
+          return _toLower(deal.title).includes(_toLower(searchText))
+          || _toLower(deal.title1).includes(_toLower(searchText))
+          || _toLower(deal.title2).includes(_toLower(searchText))
+        })
+      }
+      return []
+    },
+    convertDeal() {
+      const payload = {
+        stage: 1,
+        account: this.convertDealData.id,
+        name: this.convertDealData.dealName,
+        owner: this.convertDealData.owner.id
+      }
+      dealService.create(payload)
+        .then(() => {
+          this.showModal = false
+          this.loadAccounts();
+          this.loadDeals();
+        })
+    },
+    cancelConvertDeal() {
+      this.showModal = false
+      this.loadAccounts();
+      this.loadDeals();
     }
   },
   computed: {
@@ -459,6 +596,9 @@ export default {
     },
     filteredLeadsBySearchText() {
       return this.filterLeadsBySearchText(this.leads, this.searchQuery)
+    },
+    filteredDeals() {
+      return this.filterDeals(this.deals, this.searchQuery)
     }
   },
   created() {
@@ -467,6 +607,7 @@ export default {
       this.type = 1;
       this.loadLeads();
       this.loadAccounts();
+      this.loadDeals();
     } else {
       this.type = 2;
       this.loadListDashboardSale();
@@ -588,4 +729,59 @@ select.form-control {
   max-height: 600px;
   overflow-y: auto;
 }
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 500px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
 </style>

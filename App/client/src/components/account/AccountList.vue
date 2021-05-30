@@ -59,13 +59,13 @@ export default {
       this.$router.push({path: '/accounts/detail', query : { id: id}});
     },
     deleteItem(id) {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;
       accountService.remove(id).then(res => {
         if(res) {
-          alert('Xóa thành công!');
+          alert('Deleted successfully!');
           this.loadAccounts(this.keyword);
         }
       }).finally(() => {

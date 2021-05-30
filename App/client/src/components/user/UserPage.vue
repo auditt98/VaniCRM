@@ -163,12 +163,10 @@ export default {
       userService.getById(this.user.id).then(res => {
         if (res && res.data) {
           this.user = res.data;
-          console.log(res.data)
           var userGroup = this.user.groups.filter(element => {
             return element.selected == true
           })[0];
           
-          console.log(userGroup)
           this.loadAccounts();
           this.loadContacts();
           this.loadLeads();
@@ -176,20 +174,20 @@ export default {
           mapValue(this.dataLeftDetail, [this.user.firstName, this.user.lastName, this.user.username, `<a href="mailto:${this.user.email}">${this.user.email}</a>`]);
           mapValue(this.dataRightDetail, [this.user.skype, this.user.phone, formatDate(this.user.createdAt, 'dd/MM/yyyy HH:mm'), this.user.createdByName, userGroup.name]);
         } else {
-          alert('Không có dữ liệu');
+          alert('No data found');
           this.$router.push('/users');
         }
       }).catch(err => alert(err))
       .finally(() => this.loading = false);
     },
     deleteUser() {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;
       userService.remove(this.user.id).then(res => {
         if(res) {
-          alert('Xóa thành công!');
+          alert('Deleted successfully!');
           this.$router.push('/users');
         }
       }).finally(() => {
