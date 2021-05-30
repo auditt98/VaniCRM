@@ -351,7 +351,7 @@ namespace Backend.Controllers
 
         [HttpGet]
         [Route("reports/exportables/{name}")]
-        public HttpResponseMessage GetPdf([FromUri] string name)
+        public HttpResponseMessage GetPdf([FromUri] string name, [FromUri] DateTime? fromDate = null, [FromUri] DateTime? toDate = null)
         {
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
 
@@ -415,11 +415,86 @@ namespace Backend.Controllers
                             break;
                         }
                     case "deals":
-                        break;
+                        {
+                            var reportName = "DealsReport_" + DateTime.Now.ToString("dd'-'MM'-'yyyy") + ".pdf";
+                            var pdfManager = new PdfManager(reportName);
+                            var fileName = pdfManager.GenerateDealsReport(fromDate, toDate).fileName;
+                            var results = _fileService.GetFile(fileName);
+                            if (results.file != null)
+                            {
+                                response.StatusCode = HttpStatusCode.OK;
+                                response.Content = results.file;
+                                response.Content.Headers.ContentType = new MediaTypeHeaderValue(results.mimeType);
+                                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                                {
+                                    FileName = results.fileName
+                                };
+                            }
+                            else
+                            {
+                                response.StatusCode = HttpStatusCode.Gone;
+                                ResponseFormat responseData = ResponseFormat.Fail;
+                                responseData.message = ErrorMessages.SOMETHING_WRONG;
+                                var json = JsonConvert.SerializeObject(responseData);
+                                response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                            }
+                            break;
+                        }
                     case "revenue":
-                        break;
+                        {
+                            var reportName = "RevenueReport_" + DateTime.Now.ToString("dd'-'MM'-'yyyy") + ".pdf";
+                            var pdfManager = new PdfManager(reportName);
+                            var fileName = pdfManager.GenerateRevenueReport(fromDate, toDate).fileName;
+                            var results = _fileService.GetFile(fileName);
+                            if (results.file != null)
+                            {
+                                response.StatusCode = HttpStatusCode.OK;
+                                response.Content = results.file;
+                                response.Content.Headers.ContentType = new MediaTypeHeaderValue(results.mimeType);
+                                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                                {
+                                    FileName = results.fileName
+                                };
+                            }
+                            else
+                            {
+                                response.StatusCode = HttpStatusCode.Gone;
+                                ResponseFormat responseData = ResponseFormat.Fail;
+                                responseData.message = ErrorMessages.SOMETHING_WRONG;
+                                var json = JsonConvert.SerializeObject(responseData);
+                                response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                            }
+                            break;
+                        }
+
                     case "campaigns":
-                        break;
+                        {
+                            //responseData.data = _reportService.Get
+                            var reportName = "CampaignReport_" + DateTime.Now.ToString("dd'-'MM'-'yyyy") + ".pdf";
+                            var pdfManager = new PdfManager(reportName);
+                            var fileName = pdfManager.GenerateCampaignsReport().fileName;
+                            var results = _fileService.GetFile(fileName);
+                            if (results.file != null)
+                            {
+                                response.StatusCode = HttpStatusCode.OK;
+                                response.Content = results.file;
+                                response.Content.Headers.ContentType = new MediaTypeHeaderValue(results.mimeType);
+                                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                                {
+                                    FileName = results.fileName
+                                };
+                            }
+                            else
+                            {
+                                response.StatusCode = HttpStatusCode.Gone;
+                                ResponseFormat responseData = ResponseFormat.Fail;
+                                responseData.message = ErrorMessages.SOMETHING_WRONG;
+                                var json = JsonConvert.SerializeObject(responseData);
+                                response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                            }
+                            break;
+                        }
+
                     default:
                         break;
                 }

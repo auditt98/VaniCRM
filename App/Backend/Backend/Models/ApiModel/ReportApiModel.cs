@@ -20,10 +20,12 @@ namespace Backend.Models.ApiModel
         {
             public string name { get; set; }
             public string url { get; set; }
-            public Exportables(string name, string url)
+            public bool isSupportDate { get; set; }
+            public Exportables(string name, string url, bool isSupportDate)
             {
                 this.name = name;
                 this.url = url;
+                this.isSupportDate = isSupportDate;
             }
         }
     }

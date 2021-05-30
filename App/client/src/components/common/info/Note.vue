@@ -37,12 +37,13 @@
                   <div class="note-comment-file-item col-3 pl-0" v-for="(f, index) in note.files" :key="index">
                       <div class="file-image">
                           <div class="file-image-header text-right">
-                            <!-- <img src="../../../assets/eye-line.png" alt=""> -->
+                            <img @click="showExpandable(f.fileName)" src="../../../assets/eye-line.png" style="cursor: pointer;" alt="">
 
                             <a :href="f.url"><img width="37" height="37" src="../../../assets/icon-download.png" alt="" style="margin-top: -7px; margin-right: -5px"></a>
                           </div>
                           <div v-if="imgExt.includes(f.fileName.split('.').pop())">
-                            <img style="width: 100%; height: 13vh;" :src="'https://localhost:44375/avatar?fileName=' + f.fileName" alt="">
+                            <expandable-image :id="f.fileName" style="width: 100%; height: 13vh; background-color: rgba(255, 255, 255, 0.9)" :close-on-background-click='true' class="w-100" :src="'https://localhost:44375/avatar?fileName=' + f.fileName" alt="" />
+                            <!-- <img style="width: 100%; height: 13vh;" :src="'https://localhost:44375/avatar?fileName=' + f.fileName" alt=""> -->
                           </div>
                           <div v-else-if="docExt.includes(f.fileName.split('.').pop())">
                             <img style="width: 100%; height: 13vh;" src="../../../assets/doc.png" alt="">
@@ -83,7 +84,10 @@
 
                           <!-- <img style="width: 100%; height: 75px;" :src="'https://localhost:44375/avatar?fileName=' + f.fileName" alt=""> -->
                       </div>
-                      <p class="text-center">{{f.fileName}}</p>
+                      <div class="text-center ttip">
+                        {{ trimText(f.fileName) }}
+                        <span class="ttip-text">{{f.fileName}}</span>
+                      </div>
                   </div>
                 </div>
                 <p class="note-comment-time">{{note.createdAt | formatDate}} - {{note.createdBy.username}}</p>
@@ -109,6 +113,7 @@ export default {
   },
   data() {
     return {
+      isShowExpandable: false,
       files: [],
       docExt: ['doc', 'docm', 'docx'],
       pptExt: ['ppt', 'pptm', 'pptx'],
@@ -128,6 +133,18 @@ export default {
     }
   },
   methods : {
+    trimText(fileName){
+      if(fileName.length > 15){
+        return fileName.slice(0, 12) + "..."
+      }
+    },
+    showExpandable(fileName){
+      var element = document.getElementById(fileName);
+      if(element){
+        element.click();
+      }
+      // console.log(element);
+    },
     removeNote(id) {
       console.log(id)
       this.$emit('remove-note', id);
@@ -160,6 +177,31 @@ export default {
 </script>
 
 <style scoped>
+
+.ttip .ttip-text{
+  visibility: hidden;
+  width: 500px;
+  height: fit-content;
+  background-color: #333;
+  /* color: #ff9c9c; */
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  top: 100%;
+  left: 50%;
+  margin-left: -250px; /* Use half of the width (120/2 = 60), to center the tooltip */
+  /* Position the tooltip */
+  font-family: "Segoe UI";
+  position: absolute;
+  z-index: 1;
+}
+
+.ttip:hover .ttip-text {
+  visibility: visible;
+}
+
 .note {
   background: #FFFFFF;
   box-shadow: 0px -8px 16px rgba(255, 255, 255, 0.4), 0px 16px 24px rgba(55, 71, 79, 0.16);
@@ -198,6 +240,14 @@ export default {
   margin-top: 5px;
 }
 
+.expandable-image.expanded{
+  height: 100% !important;
+  background: rgba( 0, 0, 0, 0.93 ) !important;
+}
+
+.expandable-image img{
+  height: 13vh !important;
+}
 
 .note-comment-text {
   color: #2D3436;

@@ -15,6 +15,8 @@ namespace Backend.Models.ApiModel
             public int id { get; set; }
             public string name { get; set; }
             public DateTime expectedDate { get; set; }
+            public DateTime createdAt { get; set; }
+            public DateTime endOn { get; set; }
             public long amount { get; set; }
             public string stage { get; set; }
             public string priority { get; set; }

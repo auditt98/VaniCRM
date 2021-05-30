@@ -2,6 +2,8 @@ import {BehaviorSubject} from "rxjs";
 import {config} from "@/config/config";
 import {requestOptions} from "@/helper/request-options";
 import {handleResponse} from "@/helper/handle-response";
+import {getters, mutations} from "@/helper/observable";
+
 import router from "@/router";
 // import { resolve } from "core-js/fn/promise";
 
@@ -59,6 +61,8 @@ function requestResetPass(email) {
 
 function getRefreshToken() {
     // return new Promise(() => {
+        mutations.setIsRefreshing(true);
+        console.log("Set is refresh token: ",getters.isRefreshing())
         return fetch(`${config.apiUrl + 'refresh_token'}`, {method: "GET", credentials: 'include', headers: {
             'Content-Type': 'application/json'
         }}).then((res) => {
@@ -70,6 +74,7 @@ function getRefreshToken() {
                             let user = data.data.user;
                             localStorage.setItem('currentUser', JSON.stringify(user));
                             currentUserSubject.next(user);
+                            mutations.setIsRefreshing(false);
                             return data.data.user;
                         }
                     } else{

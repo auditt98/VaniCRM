@@ -205,6 +205,7 @@ namespace Backend.Models.ApiModel
             public string email { get; set; }
             public string skype { get; set; }
             public string avatar { get; set; }
+            public bool isAdmin { get; set; }
         }
     }
 }

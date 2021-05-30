@@ -53,11 +53,11 @@ namespace Backend.Services
             }
             var exportables = new ExportablesApiModel();
             List<ExportablesApiModel.Exportables> list = new List<ExportablesApiModel.Exportables>();
-            list.Add(new ExportablesApiModel.Exportables("Potential Customers Report", $"{StaticStrings.ServerHost}reports/exportables/leads"));
-            list.Add(new ExportablesApiModel.Exportables("Customers Report", $"{StaticStrings.ServerHost}reports/exportables/accounts"));
-            list.Add(new ExportablesApiModel.Exportables("Deals Report", $"{StaticStrings.ServerHost}reports/exportables/deals"));
-            list.Add(new ExportablesApiModel.Exportables("Revenue Report", $"{StaticStrings.ServerHost}reports/exportables/revenue"));
-            list.Add(new ExportablesApiModel.Exportables("Campaign Report", $"{StaticStrings.ServerHost}reports/exportables/campaigns"));
+            list.Add(new ExportablesApiModel.Exportables("Potential Customers Report", $"{StaticStrings.ServerHost}reports/exportables/leads", false));
+            list.Add(new ExportablesApiModel.Exportables("Customers Report", $"{StaticStrings.ServerHost}reports/exportables/accounts", false));
+            list.Add(new ExportablesApiModel.Exportables("Deals Report", $"{StaticStrings.ServerHost}reports/exportables/deals", true));
+            list.Add(new ExportablesApiModel.Exportables("Revenue Report", $"{StaticStrings.ServerHost}reports/exportables/revenue", true));
+            list.Add(new ExportablesApiModel.Exportables("Campaign Report", $"{StaticStrings.ServerHost}reports/exportables/campaigns", false));
             exportables.exportables = list.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             exportables.pageInfo = new Extensions.Pager(list.Count(), currentPage, pageSize, 99999);
 

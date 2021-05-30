@@ -8,6 +8,7 @@ using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
+using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using System;
@@ -276,7 +277,186 @@ namespace Backend.Extensions
             document.Close();
             return this;
         }
-    
-    
+
+        public PdfManager GenerateDealsReport(DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            DealService _dealService = new DealService();
+            FileInfo file = new FileInfo(pdfDestination);
+            var fontDestination = System.IO.Path.Combine(targetFolder, "times.ttf");
+            //document settings
+            pdfDoc = new PdfDocument(new PdfWriter(pdfDestination));
+            pdfDoc.SetDefaultPageSize(PageSize.A4);
+            document = new Document(pdfDoc, PageSize.A4, false).SetFontSize(12);
+            //set header
+            PdfFont font = PdfFontFactory.CreateFont(fontDestination, PdfEncodings.IDENTITY_H, true);
+            PdfFont bold = PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD);
+
+            Paragraph docHeader = new Paragraph("Deals Report").SetTextAlignment(TextAlignment.CENTER)
+            .SetFontSize(headerFontSize).SetFont(bold);
+            //set logo
+            Image logo = new Image(ImageDataFactory
+            .Create(logoFile))
+            .SetTextAlignment(TextAlignment.LEFT).SetHeight(60).SetWidth(60);
+
+            document.Add(logo);
+            document.Add(docHeader);
+
+            if (fromDate != null && toDate != null)
+            {
+                var fromTo = new Paragraph("From " + fromDate.Value.ToString("D") + " to " + toDate.Value.ToString("D")).SetTextAlignment(TextAlignment.RIGHT).SetMarginRight(30);
+                document.Add(fromTo);
+            }
+
+            var currentItem = 1;
+            Table table = new Table(UnitValue.CreatePercentArray(9), false).SetFont(font);
+            table.SetWidth(UnitValue.CreatePercentValue(100));
+            table.SetFixedLayout();
+
+            List<string> headers = new List<string> { "No.", "Deal's Name", "Expected Closing Date", "Actual Closing Date", "Created Date", "Amount", "Stage", "Customer's Name", "Owner" };
+
+            foreach(var header in headers)
+            {
+                var newHeaderCell = new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).SetTextRenderingMode(PdfCanvasConstants.TextRenderingMode.FILL_STROKE).SetStrokeWidth(0.3f).SetStrokeColor(DeviceGray.BLACK).Add(new Paragraph(header));
+                table.AddHeaderCell(newHeaderCell);
+            }
+
+            var dealList = _dealService.GetDealList(pageSize: 99999, currentPage: 1, sort: new List<string> { "asc.name" });
+
+            dealList.deals = dealList.deals.Where(c => c.createdAt.CompareTo(new DateTime(1, 1, 1)) != 0 || c.endOn.CompareTo(new DateTime(1, 1, 1)) != 0 || c.expectedDate.CompareTo(new DateTime(1, 1, 1)) != 0).ToList();
+            if(fromDate != null && toDate != null)
+            {
+                dealList.deals = dealList.deals.Where(c => (c.createdAt >= fromDate && c.createdAt <= toDate) || (c.endOn >= fromDate && c.endOn <= toDate) || (c.expectedDate >= fromDate && c.expectedDate <= toDate)).ToList();
+            }
+
+            foreach (var deal in dealList.deals)
+            {
+                var x = deal.expectedDate.CompareTo(new DateTime(1, 1, 1)) != 0;
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(currentItem.ToString())));
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.name ?? "")));
+
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.expectedDate.CompareTo(new DateTime(1, 1, 1)) != 0 ? deal.expectedDate.ToString("dd'/'MM'/'yyyy") : "")));
+
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.endOn.CompareTo(new DateTime(1, 1, 1)) != 0 ? deal.endOn.ToString("dd'/'MM'/'yyyy") : "")));
+
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.createdAt.CompareTo(new DateTime(1, 1, 1)) != 0 ? deal.createdAt.ToString("dd'/'MM'/'yyyy") : "")));
+
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.amount.ToString() ?? "" )));
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.stage ?? "")));
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.accountName ?? "")));
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.owner ?? "")));
+                currentItem++;
+            }
+
+            document.Add(table);
+
+            document.Add(new Paragraph(new Text("\n")));
+
+            var dateSignature = new Paragraph("Hanoi, " + DateTime.Now.ToString("D")).SetTextAlignment(TextAlignment.RIGHT).SetMarginRight(30);
+            document.Add(dateSignature);
+            document.Add(new Paragraph(new Text("\n\n")));
+            document.Add(new Paragraph(new Text("Signature: ________________________")).SetTextAlignment(TextAlignment.RIGHT).SetMarginRight(0));
+
+
+            int numberOfPages = pdfDoc.GetNumberOfPages();
+            for (int i = 1; i <= numberOfPages; i++)
+            {
+                document.ShowTextAligned(new Paragraph(String
+                   .Format(i.ToString())),
+                    559, PageSize.A4.GetBottom() + 20, i, TextAlignment.RIGHT,//806
+                    VerticalAlignment.BOTTOM, 0);
+            }
+            document.Close();
+            return this;
+        }
+
+        public PdfManager GenerateRevenueReport(DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            DealService _dealService = new DealService();
+            FileInfo file = new FileInfo(pdfDestination);
+            var fontDestination = System.IO.Path.Combine(targetFolder, "times.ttf");
+            //document settings
+            pdfDoc = new PdfDocument(new PdfWriter(pdfDestination));
+            pdfDoc.SetDefaultPageSize(PageSize.A4);
+            document = new Document(pdfDoc, PageSize.A4, false).SetFontSize(12);
+            //set header
+            PdfFont font = PdfFontFactory.CreateFont(fontDestination, PdfEncodings.IDENTITY_H, true);
+            PdfFont bold = PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLD);
+
+            Paragraph docHeader = new Paragraph("Revenue Report").SetTextAlignment(TextAlignment.CENTER)
+            .SetFontSize(headerFontSize).SetFont(bold);
+            //set logo
+            Image logo = new Image(ImageDataFactory
+            .Create(logoFile))
+            .SetTextAlignment(TextAlignment.LEFT).SetHeight(60).SetWidth(60);
+
+            document.Add(logo);
+            document.Add(docHeader);
+
+            if (fromDate != null && toDate != null)
+            {
+                var fromTo = new Paragraph("From " + fromDate.Value.ToString("D") + " to " + toDate.Value.ToString("D")).SetTextAlignment(TextAlignment.RIGHT).SetMarginRight(30);
+                document.Add(fromTo);
+            }
+
+            var currentItem = 1;
+            Table table = new Table(UnitValue.CreatePercentArray(6), false).SetFont(font);
+            table.SetWidth(UnitValue.CreatePercentValue(100));
+            table.SetFixedLayout();
+
+            List<string> headers = new List<string> { "No.", "Deal's Name", "Closing Date", "Amount", "Customer's Name", "Owner" };
+
+            foreach (var header in headers)
+            {
+                var newHeaderCell = new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).SetTextRenderingMode(PdfCanvasConstants.TextRenderingMode.FILL_STROKE).SetStrokeWidth(0.3f).SetStrokeColor(DeviceGray.BLACK).Add(new Paragraph(header));
+                table.AddHeaderCell(newHeaderCell);
+            }
+
+            var dealList = _dealService.GetDealList(pageSize: 99999, currentPage: 1, sort: new List<string> { "asc.name" });
+
+            dealList.deals = dealList.deals.Where(c => c.createdAt.CompareTo(new DateTime(1, 1, 1)) != 0 || c.endOn.CompareTo(new DateTime(1, 1, 1)) != 0 || c.expectedDate.CompareTo(new DateTime(1, 1, 1)) != 0).ToList();
+            if (fromDate != null && toDate != null)
+            {
+                dealList.deals = dealList.deals.Where(c => (c.endOn >= fromDate && c.endOn <= toDate) && (c.stage == "Won")).ToList();
+            }
+
+            foreach (var deal in dealList.deals)
+            {
+                var x = deal.expectedDate.CompareTo(new DateTime(1, 1, 1)) != 0;
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(currentItem.ToString())));
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.name ?? "")));
+
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.endOn.CompareTo(new DateTime(1, 1, 1)) != 0 ? deal.endOn.ToString("dd'/'MM'/'yyyy") : "")));
+
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.amount.ToString() ?? "")));
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.accountName ?? "")));
+                table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph(deal.owner ?? "")));
+                currentItem++;
+            }
+            long totalAmount = dealList.deals.Aggregate((long) 0 , (total, next) => total += next.amount, res => res);
+
+            table.AddCell(new Cell(1, 3).SetTextAlignment(TextAlignment.CENTER).SetFontSize(fontSize).Add(new Paragraph("Sum")));
+            table.AddCell(new Cell(1, 1).SetTextAlignment(TextAlignment.CENTER).SetBorderRight(Border.NO_BORDER).SetFontSize(fontSize).Add(new Paragraph(totalAmount.ToString())));
+            table.AddCell(new Cell(1, 2).SetTextAlignment(TextAlignment.CENTER).SetBorderLeft(Border.NO_BORDER).SetFontSize(fontSize).Add(new Paragraph("")));
+            document.Add(table);
+
+            document.Add(new Paragraph(new Text("\n")));
+
+            var dateSignature = new Paragraph("Hanoi, " + DateTime.Now.ToString("D")).SetTextAlignment(TextAlignment.RIGHT).SetMarginRight(30);
+            document.Add(dateSignature);
+            document.Add(new Paragraph(new Text("\n\n")));
+            document.Add(new Paragraph(new Text("Signature: ________________________")).SetTextAlignment(TextAlignment.RIGHT).SetMarginRight(0));
+
+
+            int numberOfPages = pdfDoc.GetNumberOfPages();
+            for (int i = 1; i <= numberOfPages; i++)
+            {
+                document.ShowTextAligned(new Paragraph(String
+                   .Format(i.ToString())),
+                    559, PageSize.A4.GetBottom() + 20, i, TextAlignment.RIGHT,//806
+                    VerticalAlignment.BOTTOM, 0);
+            }
+            document.Close();
+            return this;
+        }
     }
 }

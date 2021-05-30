@@ -467,3 +467,7 @@ i {
     font-family: "Trebuchet MS";
     content: "Trebuchet MS" !important;
   }
+
+  .expandable-image img{
+      height: inherit !important;
+  }

@@ -20,8 +20,10 @@
                 <tbody v-if="items && items.length > 0">
                 <tr v-for="(t, i) in items" :key="i">
                   <td>{{t.name}}</td>
+                  <td><input type="date" v-model="t.fromDate" v-if="t.isSupportDate"/></td>
+                  <td><input type="date" v-model="t.toDate" v-if="t.isSupportDate"/></td>
                   <td>
-                    <a :href="t.url"><i class="fa fa-download text-primary"></i></a>
+                    <a :href="getHref(t.url, t.fromDate, t.toDate)" ><i class="fa fa-download text-primary"></i></a>
                   </td>
                 </tr>
                 </tbody>
@@ -66,7 +68,10 @@ export default {
       totalPage: 0,
       keyword: '',
       columns: [
-          'Report Name', 'Action'
+          'Report Name', 
+          'From Date',
+          'To Date',
+          'Action'
       ],
       btnCancel: {btnClass: 'btn-white px-3 mr-4', icon: 'fa-times', text: 'Close'},
     }
@@ -78,6 +83,13 @@ export default {
     }
   },
   methods: {
+    getHref(url, fromDate, toDate){
+      if(fromDate != undefined && toDate != undefined){
+        return url + '?fromDate=' + fromDate + '&toDate=' + toDate
+      } else{
+        return url
+      }
+    },
     close() {
       this.$emit('close');
     },

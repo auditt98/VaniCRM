@@ -29,7 +29,9 @@ namespace Backend.Services
                 var dealInfo = new DealListApiModel.DealInfo();
                 dealInfo.id = deal.ID;
                 dealInfo.name = deal.Name;
+                dealInfo.createdAt = deal.CreatedAt.GetValueOrDefault();
                 dealInfo.expectedDate = deal.ExpectedClosingDate.GetValueOrDefault();
+                dealInfo.endOn = deal.ClosingDate.GetValueOrDefault();
                 dealInfo.amount = deal.Amount.GetValueOrDefault();
                 dealInfo.accountName = deal.ACCOUNT != null ? deal.ACCOUNT.Name : "";
                 dealInfo.priority = deal.PRIORITY != null ? deal.PRIORITY.Name : "";
