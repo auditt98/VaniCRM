@@ -9,6 +9,7 @@
         </h5>
         <p class="card-text">{{data.title1}}</p>
         <p class="card-text">{{data.title2}}</p>
+        <p v-if="data.companyName" class="card-text">{{data.companyName}}</p>
         <span v-if="data.tags" class="d-flex flex-wrap">
           <a v-for="tag in data.tags" :key="tag.tagID" class="col" href="javascript:void(0)" >{{tag.tagName}}</a>
         </span>

@@ -7,7 +7,7 @@
         <div class="col-sm-8">
         </div>
         <div class="col-sm-4 d-flex justify-content-end">
-          <router-link :to="{name : 'LeadList'}">
+          <router-link :to="{name : 'AccountList'}">
             <VButton :data="btnCancel"/>
           </router-link>
 

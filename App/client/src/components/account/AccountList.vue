@@ -110,7 +110,7 @@ export default {
     return {
       accounts: Array,
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 5,
       totalPage: 0,
       keyword: '',
       loading: false,
