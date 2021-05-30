@@ -275,23 +275,36 @@ namespace Backend.Extensions
             return this;
         }
 
-        public string GetHtmlLink(string calendarId, string eventId)
+        public string GetHtmlLink(string calendarId = "", string eventId = "")
         {
-            return calendarService.Events.Get(calendarId, eventId).Execute().HtmlLink;
+            try
+            {
+                return calendarService.Events.Get(calendarId, eventId).Execute().HtmlLink;
+            }
+            catch { return ""; }
         }
 
-        public Task<Event> GetHtmlLinkAsync(string calendarId, string eventId)
+        public Task<Event> GetHtmlLinkAsync(string calendarId = "", string eventId = "")
         {
+            
             return calendarService.Events.Get(calendarId, eventId).ExecuteAsync();
         }
 
-        public string Publish(string calendarId, string htmlLink)
+        public string Publish(string calendarId = "", string htmlLink = "")
         {
-            var eid = GetEid(htmlLink);
+            try
+            {
+                var eid = GetEid(htmlLink);
 
-            var publishLink = $"https://calendar.google.com/" + $"event?action=TEMPLATE&tmeid={eid}&tmsrc={calendarId}&scp=ALL";
+                var publishLink = $"https://calendar.google.com/" + $"event?action=TEMPLATE&tmeid={eid}&tmsrc={calendarId}&scp=ALL";
 
-            return publishLink;
+                return publishLink;
+            }
+            catch
+            {
+                return "";
+            }
+            
         }
     
         public string GetEid(string htmlLink)

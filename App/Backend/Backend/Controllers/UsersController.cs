@@ -1015,6 +1015,10 @@ namespace Backend.Controllers
                                     t.type = "calls";
                                     var call = task.CALLs.FirstOrDefault();
                                     t.id = call.ID;
+                                    if(task.TASK_STATUS != null)
+                                    {
+                                        t.status = task.TASK_STATUS.Name;
+                                    }
                                     if (call.TASK_TEMPLATE.CreatedAt.HasValue)
                                     {
                                         t.startDate = call.TASK_TEMPLATE.CreatedAt.Value;
@@ -1052,6 +1056,10 @@ namespace Backend.Controllers
                                     t.type = "meetings";
                                     var meeting = task.MEETINGs.FirstOrDefault();
                                     t.id = meeting.ID;
+                                    if (task.TASK_STATUS != null)
+                                    {
+                                        t.status = task.TASK_STATUS.Name;
+                                    }
                                     if (meeting.TASK_TEMPLATE.CreatedAt.HasValue)
                                     {
                                         t.startDate = meeting.TASK_TEMPLATE.CreatedAt.Value;
@@ -1067,6 +1075,12 @@ namespace Backend.Controllers
                                     t.type = "tasks";
                                     var taskT = task.TASKs.FirstOrDefault();
                                     t.id = taskT.ID;
+
+                                    if (task.TASK_STATUS != null)
+                                    {
+                                        t.status = task.TASK_STATUS.Name;
+                                    }
+
                                     if (taskT.TASK_TEMPLATE.CreatedAt.HasValue)
                                     {
                                         t.startDate = taskT.TASK_TEMPLATE.CreatedAt.Value;

@@ -33,7 +33,7 @@ namespace Backend.Repository
             }
             else
             {
-                searchResult = searchResult.Where(c => (c.Username != null && c.Username.ToLower().Contains(q)) || (c.FirstName != null && c.FirstName.ToLower().Contains(q)) || (c.LastName != null && c.LastName.ToLower().Contains(q)) || (c.Phone != null || c.Phone.ToLower().Contains(q)) || (c.Email != null && c.Email.ToLower().Contains(q)) || (c.Skype != null && c.Skype.ToLower().Contains(q))).ToList();
+                searchResult = searchResult.Where(c => (c.Username != null && c.Username.ToLower().Contains(q)) || (c.FirstName != null && c.FirstName.ToLower().Contains(q)) || (c.LastName != null && c.LastName.ToLower().Contains(q)) || (c.Phone != null && c.Phone.ToLower().Contains(q)) || (c.Email != null && c.Email.ToLower().Contains(q)) || (c.Skype != null && c.Skype.ToLower().Contains(q))).ToList();
                 if (searchResult.Count() > 0)
                 {
                     page = new Pager(searchResult.Count(), currentPage, pageSize, 9999);

@@ -385,9 +385,12 @@ namespace Backend.Repository
                 dbCall.TASK_TEMPLATE.ModifiedBy = modifiedUser;
                 dbCall.StartTime = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
                 dbCall.TASK_TEMPLATE.StartDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime);
-                dbCall.TASK_TEMPLATE.DueDate = dbCall.TASK_TEMPLATE.StartDate.Value.AddSeconds(apiModel.duration);
+                if(DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime) != null)
+                {
+                    dbCall.TASK_TEMPLATE.DueDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.startTime).Value.AddSeconds(apiModel.duration);
+                }
                 //dbCall.TASK_TEMPLATE.DueDate = dbCall.TASK_TEMPLATE.CreatedAt.Value
-                if(apiModel.status != 0)
+                if (apiModel.status != 0)
                 {
                     dbCall.TASK_TEMPLATE.TASK_STATUS_ID = apiModel.status;
 
