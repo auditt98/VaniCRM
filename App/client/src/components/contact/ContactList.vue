@@ -64,13 +64,13 @@
         this.loadContacts(keyword, sortQueries);
       },
       deleteContact(id) {
-        if (!confirm("Xác nhận xóa!")) {
+        if (!alert('Are you sure to delete?')) {
           return ;
         }
         this.loading = true;
         contactService.remove(id).then(res => {
           if(res) {
-            alert('Xóa thành công!');
+            alert('Deleted successfully!');
             this.loadContacts(this.keyword);
           }
         }).finally(() => {

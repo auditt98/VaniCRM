@@ -198,7 +198,7 @@ export default {
     async save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        alert('loi')
+        alert('Failed')
         return;
       }
       this.loading = true;
@@ -245,9 +245,7 @@ export default {
     upload() {
       let formData = new FormData();
       formData.append("file", this.files);
-      accountService.changeAvatar(formData, this.account.id).then(res => {
-        console.log(res)
-      }).catch(err => alert(err))
+      accountService.changeAvatar(formData, this.account.id).then().catch(err => alert(err))
     },
     onSearch(search) {
       let query = {

@@ -8,7 +8,7 @@
           <router-link :to="{name: 'LeadList'}"><VButton :data="btnBack"/></router-link>
         </div>
         <div class="col-sm-4 d-flex justify-content-end">
-          <span @click="convertToAccount"><VButton :data="btnConvert"/></span>
+          <span v-if="!isConverted" @click="convertToAccount"><VButton :data="btnConvert"/></span>
           <span class="ml-4" @click="remove"><VButton :data="btnDelete"/></span>
           <router-link class="ml-4" :to="{name: 'LeadUpdate', query: {id: lead.id}}"><VButton :data="btnEdit"/></router-link>
         </div>
@@ -54,8 +54,21 @@ import Note from "@/components/common/info/Note";
 import {formatDate, getValueInArr, mapValue} from "@/config/config";
 import {leadService} from "@/service/lead.service";
 import VLoading from "@/components/common/VLoading";
+import _get from 'lodash/get'
 export default {
   name: "LeadDetail",
+  computed: {
+    isConverted() {
+      const leadDetail = _get(this.lead, 'status') || []
+      let isConverted = false
+      leadDetail.forEach(deal => {
+        if(deal.selected) {
+          isConverted = true
+        }
+      });
+      return isConverted
+    }
+  },
   methods: {
     scrollTo(element) {
       this.$scrollTo(element);
@@ -102,15 +115,14 @@ export default {
              this.lead.addressDetail,
           ]);
         } else {
-          alert('Không có dữ liệu');
+          alert('No data found');
           this.$router.push('/leads');
         }
       }).catch(()=> {})
           .finally(() => this.loading = false);
     },
     removeNote(noteId) {
-      console.log(noteId)
-      if (!confirm('Xác nhận xóa!')) {
+      if (!confirm('Are you sure to delete?!')) {
         return ;
       }
       leadService.removeNote(this.lead.id, noteId)
@@ -136,7 +148,7 @@ export default {
       }).catch(err => alert(err))
     },
     convertToAccount() {
-      if (!confirm('Xác nhận chuyển')) {
+      if (!confirm('Are you sure?')) {
         return ;
       }
       leadService.convertToAccount(this.lead.id)
@@ -147,7 +159,7 @@ export default {
           })
     },
     remove() {
-      if (!confirm('Xác nhận xóa')) {
+      if (!confirm('Are you sure to delete?')) {
         return ;
       }
       leadService.remove(this.lead.id)
@@ -158,7 +170,7 @@ export default {
       })
     },
     createTag(event) {
-      // if (!confirm('Xác nhận!')) {
+      // if (!confirm('Are you sure?!')) {
       //   return ;
       // }
       leadService.createTag({name: event}, this.lead.id)

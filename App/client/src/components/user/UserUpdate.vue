@@ -191,7 +191,7 @@ export default {
     save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        alert('loi')
+        alert('Failed')
         return;
       }
       if (this.user.id) {
@@ -234,9 +234,7 @@ export default {
     async upload() {
       let formData = new FormData();
       formData.append("file", this.files);
-      await userService.changeAvatar(formData, this.user.id).then(res => {
-        console.log(res)
-      }).catch(err => alert(err))
+      await userService.changeAvatar(formData, this.user.id).then().catch(err => alert(err))
     },
     loadTasks() {
       this.loading = true;
@@ -311,7 +309,6 @@ export default {
     },
     goToPage(event, type) {
       if (type === 'TASK') {
-        console.log(event)
         this.currentPageTask = Number(event);
         // this.loadTasks();
       }
@@ -323,7 +320,7 @@ export default {
       this.loadUser();
     } else {
 
-      alert('Không có dữ liệu');
+      alert('No data found');
     }
   },
   data: function () {

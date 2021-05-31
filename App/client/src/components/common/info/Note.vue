@@ -143,10 +143,8 @@ export default {
       if(element){
         element.click();
       }
-      // console.log(element);
     },
     removeNote(id) {
-      console.log(id)
       this.$emit('remove-note', id);
     },
     upload(event) {

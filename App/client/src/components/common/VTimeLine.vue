@@ -63,7 +63,6 @@ export default {
 // let box = document.querySelector('time-line');
 // let width = box.offsetWidth;
 // let height = box.offsetHeight;
-// console.log(width, height)
 </script>
 
 <style scoped>

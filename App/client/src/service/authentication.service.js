@@ -68,7 +68,6 @@ function getRefreshToken() {
         }}).then((res) => {
                 return res.text().then(text =>{
                     const data = text && JSON.parse(text);
-                    console.log(data)
                     if(data.status == "success"){
                         if(data.data && data.data.user){
                             let user = data.data.user;

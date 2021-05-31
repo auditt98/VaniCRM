@@ -93,17 +93,16 @@ export default {
       return 'red';
     },
     editItem(id, type) {
-      console.log(id, "- ", type)
       this.$router.push({path: '/' + type + '/detail', query : { id: id}});
     },
     deleteItem(id, type) {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;
       taskService.remove(id, type).then(res => {
         if(res) {
-          alert('Xóa thành công!');
+          alert('Deleted successfully!');
           this.loadTasks(this.keyword);
         }
       }).finally(() => {

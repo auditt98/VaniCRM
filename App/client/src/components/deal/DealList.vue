@@ -71,13 +71,13 @@ export default {
       this.$router.push({path: '/deals/detail', query : { id: id}});
     },
     deleteItem(id) {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;
       dealService.remove(id).then(res => {
         if(res) {
-          alert('Xóa thành công!');
+          alert('Deleted successfully!');
           this.loadDeals(this.keyword, this.sortQueries);
         }
       }).finally(() => {

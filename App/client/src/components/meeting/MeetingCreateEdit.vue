@@ -206,7 +206,7 @@ export default {
     save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        alert('loi')
+        alert('Failed')
         return;
       }
       this.loading = true;
@@ -261,7 +261,7 @@ export default {
               this.meeting.priority = getValueInArr(res.data.priorities, 'selected', 'id');
               this.mapRRule(this.meeting.rrule);
             } else {
-              alert('Không có dữ liệu');
+              alert('No data found');
               this.$router.push('/');
             }
           }).finally(() => {

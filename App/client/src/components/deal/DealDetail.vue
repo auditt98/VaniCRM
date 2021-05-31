@@ -185,13 +185,13 @@ export default {
       this.$router.push({path: '/tasks/update', query: {id: id}});
     },
     deleteTask(id) {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return;
       }
       this.loading = true;
       taskService.remove(id).then(res => {
         if (res) {
-          alert('Xóa thành công!');
+          alert('Deleted successfully!');
           this.loadTaskByDeal();
         }
       }).finally(() => {
@@ -206,7 +206,6 @@ export default {
       await dealService.loadTasks(query, this.deal.id)
           .then(res => {
             if (res && res.data) {
-              console.log(res.data)
               this.taskLst = res.data.tasks;
               this.totalPageTask= Number(res.data.pageInfo.TotalPages);
               this.totalItemTask = Number(res.data.pageInfo.TotalItems);
@@ -246,7 +245,6 @@ export default {
       dealService.getById(this.deal.id).then(res => {
         if (res && res.data) {
           this.deal = res.data;
-          console.log(res.data);
           this.loadTaskByDeal();
           this.loadCompetitorByDeal();
           this.loadHistoriesByDeal();
@@ -280,14 +278,14 @@ export default {
           ]);
 
         } else {
-          alert('Không có dữ liệu');
+          alert('No data found');
           this.$router.push('/deals');
         }
       }).catch(err => alert(err))
           .finally(() => this.loading = false);
     },
     removeNote(noteId) {
-      if (!confirm('Xác nhận xóa!')) {
+      if (!confirm('Are you sure to delete?!')) {
         return;
       }
       dealService.removeNote(this.deal.id, noteId)
@@ -307,32 +305,32 @@ export default {
       }
       dealService.createNote(formData, this.deal.id).then(res => {
         if (res && res.status === 'success') {
-          alert('Thành công!');
+          alert('Successfully!');
           this.$refs.notes.clear();
           this.loadDeal();
         }
       }).catch(err => alert(err))
     },
     remove() {
-      if (!confirm('Xác nhận xóa')) {
+      if (!confirm('Are you sure to delete?')) {
         return;
       }
       dealService.remove(this.deal.id)
           .then(res => {
             if (res) {
-              alert('Thành công');
+              alert('Successfully');
               this.$router.push('/accounts')
             }
           })
     },
     createTag(event) {
-      if (!confirm('Xác nhận!')) {
+      if (!confirm('Are you sure?!')) {
         return;
       }
       dealService.createTag({name: event}, this.deal.id)
           .then(res => {
             if (res) {
-              alert('Thành công!');
+              alert('Successfully!');
               this.$refs.userInfo.closeModal();
               this.loadDeal();
             }

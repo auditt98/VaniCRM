@@ -148,7 +148,6 @@ export default {
       campaignService.getById(this.campaign.id).then(res => {
         if (res && res.data) {
           this.campaign = res.data;
-          console.log(this.campaign.notes)
           this.loadContacts();
           this.loadLeads();
           mapValue(this.dataLeftBaseInfo, [
@@ -178,15 +177,14 @@ export default {
           ]);
 
         } else {
-          alert('Không có dữ liệu');
+          alert('No data found');
           this.$router.push('/campaigns');
         }
       }).catch(err => alert(err))
           .finally(() => this.loading = false);
     },
     removeNote(noteId) {
-      console.log(noteId)
-      if (!confirm('Xác nhận xóa!')) {
+      if (!confirm('Are you sure to delete?!')) {
         return;
       }
       campaignService.removeNote(this.campaign.id, noteId)
@@ -206,7 +204,7 @@ export default {
       }
       campaignService.createNote(formData, this.campaign.id).then(res => {
         if (res && res.status === 'success') {
-          alert('Thành công!');
+          alert('Successfully!');
           this.$refs.notes.clear();
           this.loadCampaign();
         }
@@ -221,25 +219,25 @@ export default {
     },
 
     remove() {
-      if (!confirm('Xác nhận xóa')) {
+      if (!confirm('Are you sure to delete?')) {
         return;
       }
       campaignService.remove(this.campaign.id)
           .then(res => {
             if (res) {
-              alert('Thành công');
+              alert('Successfully');
               this.$router.push('/campaigns')
             }
           })
     },
     createTag(event) {
-      if (!confirm('Xác nhận!')) {
+      if (!confirm('Are you sure?!')) {
         return;
       }
       campaignService.createTag({name: event}, this.campaign.id)
           .then(res => {
             if (res) {
-              alert('Thành công!');
+              alert('Successfully!');
               this.$refs.userInfo.closeModal();
               this.loadCampaign();
             }
@@ -259,7 +257,6 @@ export default {
           this.totalItemContact = Number(res.data.pageInfo.TotalItems);
         }
       }).finally(() => {
-        // console.log()
         this.loading = false;
       })
     },

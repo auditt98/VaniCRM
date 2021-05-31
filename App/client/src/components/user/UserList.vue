@@ -68,13 +68,13 @@ export default {
       this.$router.push({path: '/users/page', query : { id: id}});
     },
     deleteUser(id) {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;
       userService.remove(id).then(res => {
         if(res) {
-          alert('Xóa thành công!');
+          alert('Deleted successfully!');
           this.loadUsers(this.keyword, this.sortQueries);
         }
       }).finally(() => {

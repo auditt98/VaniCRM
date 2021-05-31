@@ -68,13 +68,13 @@ export default {
       this.$router.push({path: '/campaigns/detail', query : { id: id}});
     },
     deleteItem(id) {
-      if (!confirm("Xác nhận xóa!")) {
+      if (!alert('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;
       campaignService.remove(id).then(res => {
         if(res) {
-          alert('Xóa thành công!');
+          alert('Deleted successfully!');
           this.loadCampaigns(this.keyword);
         }
       }).finally(() => {

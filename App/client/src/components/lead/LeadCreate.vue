@@ -209,7 +209,7 @@ export default {
     async save() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        alert('loi')
+        alert('Failed')
         return;
       }
       if (!this.lead.id) {
@@ -258,9 +258,7 @@ export default {
     upload() {
       let formData = new FormData();
       formData.append("file", this.files);
-      leadService.changeAvatar(formData, this.lead.id).then(res => {
-        console.log(res)
-      }).catch(err => alert(err))
+      leadService.changeAvatar(formData, this.lead.id).then().catch(err => alert(err))
     },
     loadSelectList() {
       this.loading = true;
