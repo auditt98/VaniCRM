@@ -8,6 +8,7 @@
                    :total-page="totalPage"
                    @go-to-page="goToPage"
                    @search="search"
+                   :isSortable="true"
       >
         <template slot="button">
           <router-link to="/campaigns/create"><VButton :data="btnCreate"/></router-link>
@@ -82,14 +83,15 @@ export default {
     },
     goToPage(page) {
       this.currentPage = page;
-      this.loadCampaigns(this.keyword);
+      this.loadCampaigns(this.keyword, this.sortQueries);
     },
-    search(keyword, pageSize) {
+    search(keyword, pageSize, sortQueries) {
       this.currentPage = 1;
       this.pageSize = Number(pageSize);
-      this.loadCampaigns(keyword);
+      this.sortQueries = sortQueries;
+      this.loadCampaigns(keyword, sortQueries);
     },
-    loadCampaigns(keyword) {
+    loadCampaigns(keyword,  sortQueries) {
       this.loading = true;
       this.keyword = keyword;
       this.groups = [];
@@ -97,6 +99,9 @@ export default {
         currentPage: this.currentPage,
         pageSize: this.pageSize
       };
+      if(sortQueries !== undefined && sortQueries.length > 0){
+        query['sort'] = sortQueries
+      }
       if (keyword) {
         query['query'] = this.keyword;
       }
@@ -121,15 +126,16 @@ export default {
   data: function () {
     return {
       columns: [
-        {text: 'Campaigns Name', style: 'width: 20%;'},
-        {text: 'Type', style: 'width: 15%;'},
-        {text: 'Status', style: 'width: 10%'},
-        {text: 'Start Date', style: 'width: 15%;'},
-        {text: 'End Date', style: 'width: 15%;'},
-        {text: 'Campaigns Owner', style: 'width: 15%;'},
+        {text: 'Campaigns Name', style: 'width: 20%;', sortable: true, ascSort: Boolean, objectName: "name", isSorting: Boolean},
+        {text: 'Type', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "type", isSorting: Boolean},
+        {text: 'Status', style: 'width: 10%', sortable: true, ascSort: Boolean, objectName: "status", isSorting: Boolean},
+        {text: 'Start Date', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "startDate", isSorting: Boolean},
+        {text: 'End Date', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "endDate", isSorting: Boolean},
+        {text: 'Campaigns Owner', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "owner", isSorting: Boolean},
         {text: 'Action', style: 'width: 20%;'},
       ],
       loading: false,
+      sortQueries: Array,
       campaigns: Array,
       keyword: '',
       pageSize: 5,

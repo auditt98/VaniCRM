@@ -7,7 +7,9 @@
                    :page-size="pageSize"
                    :total-page="totalPage"
                    @go-to-page="goToPage"
-                   @search="search">
+                   @search="search"
+                   :isSortable="true"
+      >
         <template slot="button">
           <router-link :to="{name: 'ContactCreate'}"><VButton :data="btnCreate"/></router-link>
         </template>
@@ -53,12 +55,13 @@
     methods: {
       goToPage(page) {
         this.currentPage = page;
-        this.loadContacts(this.keyword);
+        this.loadContacts(this.keyword, this.sortQueries);
       },
-      search(keyword, pageSize) {
+      search(keyword, pageSize, sortQueries) {
         this.currentPage = 1;
         this.pageSize = Number(pageSize);
-        this.loadContacts(keyword);
+        this.sortQueries = sortQueries;
+        this.loadContacts(keyword, sortQueries);
       },
       deleteContact(id) {
         if (!confirm("Xác nhận xóa!")) {
@@ -75,7 +78,7 @@
         });
       }
       ,
-      loadContacts(keyword) {
+      loadContacts(keyword, sortQueries) {
         this.loading = true;
         this.keyword = keyword;
         this.contacts = [];
@@ -83,6 +86,9 @@
           currentPage: this.currentPage,
           pageSize: this.pageSize
         };
+        if(sortQueries !== undefined && sortQueries.length > 0){
+        query['sort'] = sortQueries
+        }
         if (keyword) {
           query['query'] = this.keyword;
         }
@@ -108,6 +114,7 @@
     },
     data: function () {
       return {
+        sortQueries: Array,
         contacts: Array,
         currentPage: Number,
         pageSize: Number,
@@ -116,11 +123,11 @@
         loading: false,
         columns: [
          {text: 'Avatar', style: 'width: 5%;'},
-          {text: 'Contact Name', style: 'width: 20%'},
-          {text: 'Account Name', style: 'width: 20%'},
-          {text: 'Phone', style: 'width: 10%'},
-          {text: 'Email', style: 'width: 15%'},
-          {text: 'Account Owner', style: 'width: 15%'},
+          {text: 'Contact Name', style: 'width: 20%', sortable: true, ascSort: Boolean, objectName: "contactName", isSorting: Boolean},
+          {text: 'Account Name', style: 'width: 20%', sortable: true, ascSort: Boolean, objectName: "accountName", isSorting: Boolean},
+          {text: 'Phone', style: 'width: 10%', sortable: true, ascSort: Boolean, objectName: "phone", isSorting: Boolean},
+          {text: 'Email', style: 'width: 15%', sortable: true, ascSort: Boolean, objectName: "email", isSorting: Boolean},
+          {text: 'Account Owner', style: 'width: 15%', sortable: true, ascSort: Boolean, objectName: "owner", isSorting: Boolean},
           {text: 'Actions', style: 'width: 15%'},
         ],
         btnCreate: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Contact'},

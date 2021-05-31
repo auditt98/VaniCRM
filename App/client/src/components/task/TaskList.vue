@@ -8,7 +8,14 @@
                    :total-page="totalPage"
                    @go-to-page="goToPage"
                    @search="search"
+                   @inputchange="inputchange"
       >
+        <template slot="extraButton">
+            <button class="btn btn-light btn-purple mr-3" @click="filterOpen()">
+              <i class="fa fa-filter" aria-hidden="true"></i> Open tasks
+            </button>
+
+        </template>
         <template slot="button">
           <div class="d-flex justify-content-between">
             <router-link to="/tasks/create"><VButton :data="btnCreateTask"/></router-link>
@@ -30,6 +37,7 @@
             <th>{{ item.endDate | formatDate }}</th>
             
             <th><VTag :data="{text: item.priority, bgColor: getBgColor(item.priority)}"/></th>
+            <th><VTag :data="{text: item.status, bgColor: getBgColor(item.status)}"/></th>
             <th>{{item.lead ? item.lead.name : ''}}</th>
             <th>{{item.contact ? item.contact.name : ''}}</th>
             <!-- <th>{{item.relatedAccount ? item.relatedAccount.name : ''}}</th> -->
@@ -79,6 +87,9 @@ export default {
       if (data.toUpperCase() === 'MEDIUM') {
         return '#29CC97';
       }
+      if (data.toUpperCase() === 'OPEN') {
+        return '#29CC97';
+      }
       return 'red';
     },
     editItem(id, type) {
@@ -103,12 +114,22 @@ export default {
       this.currentPage = page;
       this.loadTasks(this.keyword);
     },
+    inputchange(keyword, pageSize){
+      console.log(keyword)
+      this.keyword = keyword;
+      this.pageSize = Number(pageSize)
+    },
     search(keyword, pageSize) {
       this.currentPage = 1;
       this.pageSize = Number(pageSize);
       this.loadTasks(keyword);
     },
-    loadTasks(keyword) {
+    filterOpen(){
+      this.loadTasks(this.keyword, "Open")
+      // console.log(this.keyword, "Open");      //this.loadTasks()
+    },
+    loadTasks(keyword, status) {
+      console.log(status)
       this.tasks = [];
       this.loading = true;
       this.keyword = keyword;
@@ -118,6 +139,9 @@ export default {
       };
       if (keyword) {
         query['query'] = this.keyword;
+      }
+      if(status){
+        query['status'] = status;
       }
       userService.getAllTasks(authenticationService.currentUserValue.id, query).then(res => {
         if (res && res.data) {
@@ -153,17 +177,18 @@ export default {
       keyword: '',
       loading: false,
       columns: [
-        {text: 'Title', style: 'width: 20%;'},
+        {text: 'Title', style: 'width: 15%;'},
         {text: 'Type', style: 'width: 10%;'},
         {text: 'Start Date', style: 'width: 10%'},
         {text: 'End Date', style: 'width: 10%;'},
         {text: 'Priority', style: 'width: 10%'},
+        {text: 'Status', style: 'width: 10%'},
         {text: 'Lead', style: 'width: 10%'},
         {text: 'Contact', style: 'width: 10%'},
         // {text: 'Related Account', style: 'width: 10%'},
         // {text: 'Related Campaign', style: 'width: 10%'},
         // {text: 'Related Deal', style: 'width: 10%'},
-        {text: 'Action', style: 'width: 10%'}
+        {text: 'Action', style: 'width: 5%'}
       ],
       btnCreateTask: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Task'},
       btnCreateCall: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Call'},

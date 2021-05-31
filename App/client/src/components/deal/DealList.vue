@@ -8,6 +8,7 @@
                    :total-page="totalPage"
                    @go-to-page="goToPage"
                    @search="search"
+                   :isSortable="true"
       >
         <template slot="button">
           <router-link to="/deals/create"><VButton :data="btnCreate"/></router-link>
@@ -77,7 +78,7 @@ export default {
       dealService.remove(id).then(res => {
         if(res) {
           alert('Xóa thành công!');
-          this.loadDeals(this.keyword);
+          this.loadDeals(this.keyword, this.sortQueries);
         }
       }).finally(() => {
         this.loading = false;
@@ -85,15 +86,15 @@ export default {
     },
     goToPage(page) {
       this.currentPage = page;
-      this.loadDeals(this.keyword);
-
+      this.loadDeals(this.keyword, this.sortQueries);
     },
-    search(keyword, pageSize) {
+    search(keyword, pageSize, sortQueries) {
       this.currentPage = 1;
       this.pageSize = Number(pageSize);
-      this.loadDeals(keyword);
+      this.sortQueries = sortQueries;
+      this.loadDeals(keyword, sortQueries);
     },
-    loadDeals(keyword) {
+    loadDeals(keyword, sortQueries) {
       this.loading = true;
       this.keyword = keyword;
       this.deals = [];
@@ -101,6 +102,9 @@ export default {
         currentPage: this.currentPage,
         pageSize: this.pageSize
       };
+      if(sortQueries !== undefined && sortQueries.length > 0){
+        query['sort'] = sortQueries
+      }
       if (keyword) {
         query['query'] = this.keyword;
       }
@@ -125,15 +129,16 @@ export default {
   data: function () {
     return {
       columns: [
-        {text: 'Deal Name', style: 'width: 15%;'},
-        {text: 'Closing Date', style: 'width: 15%;'},
-        {text: 'Amount', style: 'width: 10%'},
+        {text: 'Deal Name', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "name", isSorting: Boolean},
+        {text: 'Expected Closing Date', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "expectedDate", isSorting: Boolean},
+        {text: 'Amount', style: 'width: 10%', sortable: true, ascSort: Boolean, objectName: "amount", isSorting: Boolean},
         {text: 'Stage', style: 'width: 10%;'},
-        {text: 'Priority', style: 'width: 10%;'},
-        {text: 'Account Name', style: 'width: 15%;'},
-        {text: 'Deal Owner', style: 'width: 15%;'},
+        {text: 'Priority', style: 'width: 10%;', sortable: true, ascSort: Boolean, objectName: "priority", isSorting: Boolean},
+        {text: 'Account Name', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "accountName", isSorting: Boolean},
+        {text: 'Deal Owner', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "owner", isSorting: Boolean},
         {text: 'Action', style: 'width: 15%;'},
       ],
+      sortQueries: Array,
       deals: Array,
       keyword: '',
       pageSize: 5,

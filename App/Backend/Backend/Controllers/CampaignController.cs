@@ -24,7 +24,7 @@ namespace Backend.Controllers
         [HttpGet]
         [Route("campaigns")]
         [ResponseType(typeof(CampaignListApiModel))]
-        public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "",[FromUri] List<string> sort = null)
+        public HttpResponseMessage Get([FromUri] int currentPage = 1, [FromUri] int pageSize = 0, [FromUri] string query = "",[FromUri] string sort = "")
         {
             var response = new HttpResponseMessage();
             ResponseFormat responseData = new ResponseFormat();
@@ -60,7 +60,9 @@ namespace Backend.Controllers
                     {
                         response.StatusCode = HttpStatusCode.OK;
                         responseData = ResponseFormat.Success;
-                        var campaigns = _campaignService.GetCampaignList(query, pageSize, currentPage, sort);
+                        var sortQ = new List<string>();
+                        sortQ = sort.Split(',').ToList();
+                        var campaigns = _campaignService.GetCampaignList(query, pageSize, currentPage, sortQ);
                         responseData.data = campaigns;
                     }
                     else

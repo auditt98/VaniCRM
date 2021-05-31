@@ -8,6 +8,7 @@
                    :total-page="totalPage"
                    @go-to-page="goToPage"
                    @search="search"
+                   :isSortable="true"
       >
         <template slot="button">
           <router-link to="/leads/create"><VButton :data="btnCreate"/></router-link>
@@ -96,15 +97,15 @@ export default {
     },
     goToPage(page) {
       this.currentPage = page;
-      this.loadLeads(this.keyword);
-
+      this.loadLeads(this.keyword, this.sortQueries);
     },
-    search(keyword, pageSize) {
+    search(keyword, pageSize, sortQueries) {
       this.currentPage = 1;
       this.pageSize = Number(pageSize);
-      this.loadLeads(keyword);
+      this.sortQueries = sortQueries;
+      this.loadLeads(keyword, sortQueries);
     },
-    loadLeads(keyword) {
+    loadLeads(keyword, sortQueries) {
       this.loading = true;
       this.keyword = keyword;
       this.groups = [];
@@ -112,6 +113,9 @@ export default {
         currentPage: this.currentPage,
         pageSize: this.pageSize
       };
+      if(sortQueries !== undefined && sortQueries.length > 0){
+        query['sort'] = sortQueries
+      }
       if (keyword) {
         query['query'] = this.keyword;
       }
@@ -136,15 +140,16 @@ export default {
     return {
       columns: [
         {text: 'Avatar', style: 'width: 5%;'},
-        {text: 'Lead Name', style: 'width: 15%;'},
-        {text: 'Company Name', style: 'width: 15%;'},
-        {text: 'Email', style: 'width: 10%'},
-        {text: 'Phone', style: 'width: 10%;'},
-        {text: 'Lead Source', style: 'width: 15%;'},
-        {text: 'Lead Owner', style: 'width: 15%;'},
-        {text: 'Priority', style: 'width: 5%;'},
+        {text: 'Lead Name', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "name", isSorting: Boolean},
+        {text: 'Company Name', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "companyName", isSorting: Boolean},
+        {text: 'Email', style: 'width: 10%', sortable: true, ascSort: Boolean, objectName: "email", isSorting: Boolean},
+        {text: 'Phone', style: 'width: 10%;', sortable: true, ascSort: Boolean, objectName: "phone", isSorting: Boolean},
+        {text: 'Lead Source', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "leadSource", isSorting: Boolean},
+        {text: 'Lead Owner', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "leadOwner", isSorting: Boolean},
+        {text: 'Priority', style: 'width: 5%;', sortable: true, ascSort: Boolean, objectName: "priority", isSorting: Boolean},
         {text: 'Action', style: 'width: 10%;'},
       ],
+      sortQueries: Array,
       leads: Array,
       keyword: '',
       pageSize: 5,

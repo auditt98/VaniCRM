@@ -8,6 +8,7 @@
                    :total-page="totalPage"
                    @go-to-page="goToPage"
                    @search="search"
+                   :isSortable="true"
                    v-if="!loading"
       >
         <template slot="button">
@@ -55,12 +56,13 @@ export default {
   methods: {
     goToPage(page) {
       this.currentPage = page;
-      this.loadUsers(this.keyword);
+      this.loadUsers(this.keyword, this.sortQueries);
     },
-    search(keyword, pageSize) {
+    search(keyword, pageSize, sortQueries) {
       this.currentPage = 1;
       this.pageSize = Number(pageSize);
-      this.loadUsers(keyword);
+      this.sortQueries = sortQueries;
+      this.loadUsers(keyword, this.sortQueries);
     },
     editUser(id) {
       this.$router.push({path: '/users/page', query : { id: id}});
@@ -73,14 +75,14 @@ export default {
       userService.remove(id).then(res => {
         if(res) {
           alert('Xóa thành công!');
-          this.loadUsers(this.keyword);
+          this.loadUsers(this.keyword, this.sortQueries);
         }
       }).finally(() => {
         this.loading = false;
       });
     }
     ,
-    loadUsers(keyword) {
+    loadUsers(keyword, sortQueries) {
       this.loading = true;
       this.keyword = keyword;
       this.users = [];
@@ -88,6 +90,9 @@ export default {
         currentPage: this.currentPage,
         pageSize: this.pageSize
       };
+      if(sortQueries !== undefined && sortQueries.length > 0){
+        query['sort'] = sortQueries
+      }
       if (keyword) {
         query['query'] = this.keyword;
       }
@@ -110,18 +115,19 @@ export default {
   data: function () {
     return {
       users: Array,
+      sortQueries: Array,
       currentPage: Number,
       pageSize: Number,
       totalPage: 1,
       keyword: null,
       loading: false,
       columns: [
-        {text: 'Username', style: 'width: 15%;'},
-        {text: 'First Name', style: 'width: 15%;'},
-        {text: 'Last Name', style: 'width: 15%'},
-        {text: 'Phone', style: 'width: 10%;'},
-        {text: 'Email', style: 'width: 15%;'},
-        {text: 'Skype', style: 'width: 15%;'},
+        {text: 'Username', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "username", isSorting: Boolean},
+        {text: 'First Name', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "firstName", isSorting: Boolean},
+        {text: 'Last Name', style: 'width: 15%', sortable: true, ascSort: Boolean, objectName: "lastName", isSorting: Boolean},
+        {text: 'Phone', style: 'width: 10%;', sortable: true, ascSort: Boolean, objectName: "phone", isSorting: Boolean},
+        {text: 'Email', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "email", isSorting: Boolean},
+        {text: 'Skype', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "skype", isSorting: Boolean},
         {text: 'Action', style: 'width: 15%;'},
       ],
       btnCreate: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create User'},

@@ -21,6 +21,7 @@ export const accountService = {
 };
 
 function getAll(q) {
+    console.log(buildQueryURI(q))
     return fetch(`${config.apiUrl}/accounts?${buildQueryURI(q)}`, requestOptions.get())
         .then(handleResponse).then(resolve => {
             return resolve

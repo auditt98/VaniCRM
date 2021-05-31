@@ -498,25 +498,6 @@ namespace Backend.Controllers
                     default:
                         break;
                 }
-                //var results = _fileService.GetAvatar(name);
-                //if (results.file != null)
-                //{
-                //    response.StatusCode = HttpStatusCode.OK;
-                //    response.Content = results.file;
-                //    response.Content.Headers.ContentType = new MediaTypeHeaderValue(results.mimeType);
-                //    response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                //    {
-                //        FileName = results.fileName
-                //    };
-                //}
-                //else
-                //{
-                //    response.StatusCode = HttpStatusCode.Gone;
-                //    ResponseFormat responseData = ResponseFormat.Fail;
-                //    responseData.message = ErrorMessages.SOMETHING_WRONG;
-                //    var json = JsonConvert.SerializeObject(responseData);
-                //    response.Content = new StringContent(json, Encoding.UTF8, "application/json");
-                //}
 
             }
             else

@@ -30,7 +30,7 @@ namespace Backend.Repository
             var dbUser = db.USERs.Find(userID);
             //var templates = dbUser.TaskTemplateCreated.ToList();
             //var templates = List<TASK_TEMPLATE>();
-            var dbStatus = db.TASK_STATUS.Where(c => c.Name.ToLower().Contains(status.ToLower())).FirstOrDefault();
+            
 
             var templates = db.CALLs.Where(c => c.CallOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
             var tasks = db.TASKs.Where(c => c.TaskOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
@@ -38,11 +38,15 @@ namespace Backend.Repository
             var meetingAsHost = db.MEETINGs.Where(c => c.Host == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
             templates.AddRange(meetingAsHost);
 
-            if (dbStatus != null)
-            {
-                templates = templates.Where(c => c.TASK_STATUS_ID == dbStatus.ID).ToList();
-            }
 
+            if (!string.IsNullOrEmpty(status))
+            {
+                var dbStatus = db.TASK_STATUS.Where(c => c.Name == status).FirstOrDefault();
+                if(dbStatus != null)
+                {
+                    templates = templates.Where(c => c.TASK_STATUS_ID == dbStatus.ID).ToList();
+                }
+            }
             foreach (var meeting in dbUser.MEETING_PARTICIPANT)
             {
                 templates.Add(meeting.MEETING.TASK_TEMPLATE);

@@ -7,6 +7,7 @@
                    :total-page="totalPage"
                    @go-to-page="goToPage"
                    @search="search"
+                   :isSortable="true"
       >
         <template slot="button">
           <router-link to="/groups/update"><VButton :data="btnCreate"/></router-link>
@@ -50,12 +51,13 @@ export default {
   methods: {
     goToPage(page) {
       this.currentPage = page;
-      this.loadGroups(this.keyword);
+      this.loadGroups(this.keyword, this.sortQueries);
     },
-    search(keyword, pageSize) {
+    search(keyword, pageSize, sortQueries) {
       this.currentPage = 1;
       this.pageSize = Number(pageSize);
-      this.loadGroups(keyword);
+      this.sortQueries = sortQueries;
+      this.loadGroups(keyword, sortQueries);
     },
     edit(id) {
       this.$router.push({path: '/groups/update', query : { id: id}});
@@ -71,13 +73,16 @@ export default {
       });
     }
     ,
-    loadGroups(keyword) {
+    loadGroups(keyword, sortQueries) {
       this.keyword = keyword;
       this.groups = [];
       let query = {
         currentPage: this.currentPage,
         pageSize: this.pageSize
       };
+      if(sortQueries !== undefined && sortQueries.length > 0){
+        query['sort'] = sortQueries
+      }
       if (keyword) {
         query['query'] = this.keyword;
       }
@@ -100,13 +105,14 @@ export default {
   data: function () {
     return {
       groups: Array,
+      sortQueries: Array,
       keyword: '',
       pageSize: 5,
       totalPage: 5,
       columns: [
-        {text: 'Group Name', style: 'width: 25%;'},
-        {text: 'Number Of Users', style: 'width: 25%;'},
-        {text: 'Number Of Permission', style: 'width: 25%'},
+        {text: 'Group Name', style: 'width: 25%;', sortable: true, ascSort: Boolean, objectName: "groupName", isSorting: Boolean},
+        {text: 'Number Of Users', style: 'width: 25%;', sortable: true, ascSort: Boolean, objectName: "numberOfUsers", isSorting: Boolean},
+        {text: 'Number Of Permission', style: 'width: 25%', sortable: true, ascSort: Boolean, objectName: "numberOfPermissions", isSorting: Boolean},
         {text: 'Action', style: 'width: 25%;'},
       ],
       btnCreate: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Group'},

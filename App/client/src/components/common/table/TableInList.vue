@@ -3,18 +3,23 @@
     <div class="row">
       <div class="form-group col-md-4 input-group mb-3 pl-0">
         <div class="btn-search">
-          <input type="text" class="form-control" placeholder="Search" v-model="keyword">
+          <input type="text" class="form-control" placeholder="Search" v-model="keyword" @keyup="inputChangeHandler()">
           <i class="fa fa-search"></i>
         </div>
       </div>
       <div class="col-sm-4">
-        <button class="btn btn-light btn-purple mr-3" @click="search()">
+        <button class="btn btn-light btn-purple mr-3" style="cursor: pointer;" @click="search()">
           <i class="fa fa-search mr-2"></i>
           Search
         </button>
-        <button class="btn btn-light btn-purple" :class="{'btn-disable' : !keyword}" @click="clear()">
+        <slot name="extraButton"></slot>
+        <button class="btn btn-light btn-purple mr-3" :class="{'btn-disable' : !keyword && !tblSorting}" @click="clear()">
           <img width="22" src="../../../assets/clear_all.png" alt="" class="mr-1">
           Clear
+        </button>
+        <button class="btn btn-light btn-purple" v-show="isSortable" :class="{'btn-disable' : !tblSorting}" @click="clearSort()">
+          <img width="22" src="../../../assets/clear_sort.png" alt="" class="mr-1">
+          Clear sort
         </button>
       </div>
       <div class="col-sm-4 text-right">
@@ -25,7 +30,15 @@
       <table class="table mb-0">
         <thead>
         <tr v-if="headerColumns">
-          <th v-for="(col, index) in headerColumns" :key="index" :style="col.style" scope="col">{{col.text}}</th>
+          <th v-for="(col, index) in headerColumns" :key="index" :style="col.style" scope="col">
+            <div @click="sort(col, index)" class="noselect">
+              {{col.text}}
+              <span v-if="col.sortable">
+                <span class="arrow-up" :class="{'sort-asc' :  col.ascSort != undefined && col.ascSort == true && col.isSorting == true}"></span>
+                <span class="arrow-down" :class="{'sort-desc' : col.ascSort != undefined && col.ascSort == false && col.isSorting == true}"></span>
+              </span>
+            </div>
+          </th>
         </tr>
         </thead>
         <slot name="body"></slot>
@@ -73,17 +86,23 @@ export default {
   components: {VPagination},
   data: () => {
     return {
+      sortQueries: [],
       currentPage: 1,
       size: 5,
-      keyword: ''
+      keyword: '',
+      tblSorting: Boolean,
     }
   },
   props: {
     totalPage: Number,
+    isSortable: Boolean,
     pageSize: Number,
     headerColumns: {
       type: Array,
-      required: false
+      required: false,
+      sortable: false,
+      ascSort: Boolean,
+      objectName: "",
     }
   },
   created() {
@@ -96,12 +115,54 @@ export default {
     },
     search() {
       this.currentPage = 1;
-      this.$emit('search', this.keyword, this.size);
+      var flatten = this.sortQueries.flatMap(value => [value.objectName])
+      this.$emit('search', this.keyword, this.size, flatten);
     },
     clear() {
       this.keyword = null;
       this.size = this.pageSize;
-      this.search();
+      this.clearSort();
+      // this.search();
+    },
+    inputChangeHandler(){
+      this.$emit('inputchange', this.keyword, this.size)
+    },
+    clearSort(){
+      this.tblSorting = false;
+      this.headerColumns.forEach(element => {
+        element.isSorting = false;
+        element.ascSort = Boolean;
+        this.sortQueries = [];
+        this.search()
+        // this.$emit('search', this.keyword, this.size);
+      });
+    },
+    sort(col, index){
+      col.isSorting = true;
+      this.tblSorting = true;
+      if(col.ascSort != undefined){
+        col.ascSort = !col.ascSort
+        //look for object that has index property
+        let obj = this.sortQueries.find(x => x.index == index)
+        //if there is none, push it into the array, else change objectName then emit the request
+        if(col.ascSort){
+          if(obj === undefined){
+            obj = {index: index, objectName: "asc." + col.objectName}
+            this.sortQueries.push(obj)
+          } else{
+            obj.objectName = "asc." + col.objectName
+          }
+        } else{
+          if(obj === undefined){
+            obj = {index: index, objectName: "desc." + col.objectName}
+            this.sortQueries.push(obj)
+          } else{
+            obj.objectName = "desc." + col.objectName
+          }
+        }
+        var flatten = this.sortQueries.flatMap(value => [value.objectName])
+        this.$emit('search', this.keyword, this.size, flatten);
+      }
     },
     onChange(event) {
       this.size = event.target.value;
@@ -178,4 +239,50 @@ export default {
    cursor: unset !important;
    pointer-events: none;
  }
+
+ .arrow-up {
+  width: 0; 
+  height: 0; 
+  position: absolute;
+  margin-left: 15px;
+  top: 79px;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #ccc;
+  /* border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  
+  border-bottom: 5px solid black; */
+}
+
+.arrow-down {
+  width: 0; 
+  height: 0; 
+  position: absolute;
+  margin-left: 15px;
+  /* left: px; */
+  top: 90px;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+  
+  border-top: 7px solid #ccc;
+}
+
+.sort-asc{
+  border-bottom: 7px solid #D93915 !important;
+}
+
+.sort-desc{
+  border-top: 7px solid #D93915 !important;
+}
+
+.noselect{
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 </style>

@@ -8,6 +8,7 @@
                    :total-page="totalPage"
                    @go-to-page="goToPage"
                    @search="search"
+                   :isSortable="true"
       >
         <template slot="button">
           <router-link to="/accounts/create"><VButton :data="btnCreate"/></router-link>
@@ -66,7 +67,7 @@ export default {
       accountService.remove(id).then(res => {
         if(res) {
           alert('Xóa thành công!');
-          this.loadAccounts(this.keyword);
+          this.loadAccounts(this.keyword, this.sortQueries);
         }
       }).finally(() => {
         this.loading = false;
@@ -74,14 +75,15 @@ export default {
     },
     goToPage(page) {
       this.currentPage = page;
-      this.loadAccounts(this.keyword);
+      this.loadAccounts(this.keyword, this.sortQueries);
     },
-    search(keyword, pageSize) {
+    search(keyword, pageSize, sortQueries) {
       this.currentPage = 1;
       this.pageSize = Number(pageSize);
-      this.loadAccounts(keyword);
+      this.sortQueries = sortQueries;
+      this.loadAccounts(keyword, sortQueries);
     },
-    loadAccounts(keyword) {
+    loadAccounts(keyword, sortQueries) {
       this.accounts = [];
       this.loading = true;
       this.keyword = keyword;
@@ -89,6 +91,9 @@ export default {
         currentPage: this.currentPage,
         pageSize: this.pageSize
       };
+      if(sortQueries !== undefined && sortQueries.length > 0){
+        query['sort'] = sortQueries
+      }
       if (keyword) {
         query['query'] = this.keyword;
       }
@@ -109,6 +114,7 @@ export default {
   data: function () {
     return {
       accounts: Array,
+      sortQueries: Array,
       currentPage: 1,
       pageSize: 5,
       totalPage: 0,
@@ -116,10 +122,10 @@ export default {
       loading: false,
       columns: [
         {text: 'Avatar', style: 'width: 5%;'},
-        {text: 'Account Name', style: 'width: 20%;'},
-        {text: 'Phone', style: 'width: 15%;'},
-        {text: 'Website', style: 'width: 15%'},
-        {text: 'Account Owner', style: 'width: 15%;'},
+        {text: 'Account Name', style: 'width: 20%;', sortable: true, ascSort: Boolean, objectName: "name", isSorting: Boolean},
+        {text: 'Phone', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "phone", isSorting: Boolean},
+        {text: 'Website', style: 'width: 15%',  sortable: true, ascSort: Boolean, objectName: "website", isSorting: Boolean},
+        {text: 'Account Owner', style: 'width: 15%;', sortable: true, ascSort: Boolean, objectName: "owner", isSorting: Boolean},
         {text: 'Action', style: 'width: 10%;'},
       ],
       btnCreate: {btnClass: 'btn-red px-4', icon: 'fa-plus', text: 'Create Account'},
