@@ -96,7 +96,7 @@ export default {
       this.$router.push({path: '/' + type + '/detail', query : { id: id}});
     },
     deleteItem(id, type) {
-      if (!alert('Are you sure to delete?')) {
+      if (!confirm('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;

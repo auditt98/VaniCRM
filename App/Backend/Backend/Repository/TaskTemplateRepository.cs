@@ -30,15 +30,26 @@ namespace Backend.Repository
             var dbUser = db.USERs.Find(userID);
             //var templates = dbUser.TaskTemplateCreated.ToList();
             //var templates = List<TASK_TEMPLATE>();
+            List<TASK_TEMPLATE> templates;
+            List<TASK_TEMPLATE> tasks;
+            List<TASK_TEMPLATE> meetings;
+                if(dbUser.GROUP_ID == 3)
+                {
+                    templates = db.CALLs.Where(c => c.CallOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID || (c.TASK_TEMPLATE.TASK_STATUS != null && c.TASK_TEMPLATE.TASK_STATUS.Name == "Open")).Select(c => c.TASK_TEMPLATE).ToList();
+                    tasks = db.TASKs.Where(c => c.TaskOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID || (c.TASK_TEMPLATE.TASK_STATUS != null && c.TASK_TEMPLATE.TASK_STATUS.Name == "Open")).Select(c => c.TASK_TEMPLATE).ToList();
+                    templates.AddRange(tasks);
+                    var meetingAsHost = db.MEETINGs.Where(c => c.Host == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
+                    templates.AddRange(meetingAsHost);
+                }
+                else
+                {
+                    templates = db.CALLs.Where(c => c.CallOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
+                    tasks = db.TASKs.Where(c => c.TaskOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
+                    templates.AddRange(tasks);
+                    var meetingAsHost = db.MEETINGs.Where(c => c.Host == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
+                    templates.AddRange(meetingAsHost);
+                }
             
-
-            var templates = db.CALLs.Where(c => c.CallOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
-            var tasks = db.TASKs.Where(c => c.TaskOwner == dbUser.ID || c.TASK_TEMPLATE.CreatedBy == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
-            templates.AddRange(tasks);
-            var meetingAsHost = db.MEETINGs.Where(c => c.Host == dbUser.ID).Select(c => c.TASK_TEMPLATE).ToList();
-            templates.AddRange(meetingAsHost);
-
-
             if (!string.IsNullOrEmpty(status))
             {
                 var dbStatus = db.TASK_STATUS.Where(c => c.Name == status).FirstOrDefault();

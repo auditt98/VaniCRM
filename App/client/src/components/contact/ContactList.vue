@@ -64,7 +64,7 @@
         this.loadContacts(keyword, sortQueries);
       },
       deleteContact(id) {
-        if (!alert('Are you sure to delete?')) {
+        if (!confirm('Are you sure to delete?')) {
           return ;
         }
         this.loading = true;
