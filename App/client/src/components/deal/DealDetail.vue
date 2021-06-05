@@ -319,7 +319,7 @@ export default {
           .then(res => {
             if (res) {
               alert('Successfully');
-              this.$router.push('/accounts')
+              this.$router.push('/deals')
             }
           })
     },

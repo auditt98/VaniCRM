@@ -7,7 +7,7 @@
           <i class="fa fa-search"></i>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div :class="{'col-sm-6' : isSortable, 'col-sm-4': !isSortable}" >
         <button class="btn btn-light btn-purple mr-3" style="cursor: pointer;" @click="search()">
           <i class="fa fa-search mr-2"></i>
           Search
@@ -22,7 +22,7 @@
           Clear sort
         </button>
       </div>
-      <div class="col-sm-4 text-right">
+      <div class="text-right" :class="{'col-sm-2' : isSortable, 'col-sm-4': !isSortable}">
         <slot name="button"></slot>
       </div>
     </div>
@@ -210,6 +210,7 @@ export default {
    border: none;
    text-align: center;
  }
+
  table tr {
    line-height: 40px;
  }
@@ -244,11 +245,11 @@ export default {
   width: 0; 
   height: 0; 
   position: absolute;
-  margin-left: 15px;
+  margin-left: 5px;
   top: 79px;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-bottom: 7px solid #ccc;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #ccc;
   /* border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   
@@ -259,21 +260,21 @@ export default {
   width: 0; 
   height: 0; 
   position: absolute;
-  margin-left: 15px;
+  margin-left: 5px;
   /* left: px; */
   top: 90px;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
   
-  border-top: 7px solid #ccc;
+  border-top: 6px solid #ccc;
 }
 
 .sort-asc{
-  border-bottom: 7px solid #D93915 !important;
+  border-bottom: 6px solid #D93915 !important;
 }
 
 .sort-desc{
-  border-top: 7px solid #D93915 !important;
+  border-top: 6px solid #D93915 !important;
 }
 
 .noselect{

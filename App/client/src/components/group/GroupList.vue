@@ -15,7 +15,7 @@
         <template slot="body">
           <tbody v-if="!groups || groups.length === 0">
           <tr>
-            <td colspan="4" class="text-center">Không có dữ liệu</td>
+            <td colspan="4" class="text-center">No data available :)</td>
           </tr>
           </tbody>
           <tbody v-if="groups && groups.length > 0">

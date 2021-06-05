@@ -1,7 +1,7 @@
 <template>
   <div class="background-main">
 
-    <div class="col-sm-10 mx-auto mt-5">
+    <div class="col-sm-11 mx-auto mt-5">
       <VLoading :loading="loading"/>
       <TableInList :header-columns="columns"
                    :page-size="pageSize"
@@ -26,7 +26,7 @@
         <template slot="body">
           <tbody v-if="!tasks || tasks.length === 0">
           <tr>
-            <td colspan="9" class="text-center">Không có dữ liệu</td>
+            <td colspan="9" class="text-center">No data available :)</td>
           </tr>
           </tbody>
           <tbody v-if="tasks && tasks.length > 0">

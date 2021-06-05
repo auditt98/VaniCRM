@@ -16,7 +16,7 @@
         </template>
         <template slot="body">
           <tbody v-if="!users || users.length === 0">
-          <tr><td colspan="7" class="text-center">Không có dữ liệu</td></tr>
+          <tr><td colspan="7" class="text-center">No data available :)</td></tr>
           </tbody>
           <tbody v-if="users && users.length > 0">
           <tr v-for="(user,index) in users" :key="index">

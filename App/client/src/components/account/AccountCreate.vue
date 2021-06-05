@@ -146,11 +146,18 @@
                   <tbody>
                   <tr class="row">
                     <td class="col-sm-2">Country</td>
-                    <td class="col-sm-3"><input class="form-control " type="text" v-model.trim="account.country"></td>
+                    <td class="col-sm-3">
+                      <country-select class="form-control" v-model="account.country" :country="account.country" :countryName="true" :disablePlaceholder="true" :regionName="true" :placeholder="'Select a country'" :removePlaceholder="true"/>
+                      
+                      <!-- <input class="form-control " type="text" v-model.trim="account.country"> -->
+                    </td>
                   </tr>
                   <tr class="row">
                     <td class="col-sm-2">City</td>
-                    <td class="col-sm-3"><input class="form-control " type="text" v-model.trim="account.city"></td>
+                    <td class="col-sm-3">
+                      <region-select class="form-control"  v-model="account.city" :country="account.country" :region="account.city" :countryName="true" :placeholder="'Select a city'" :defaultRegion="'VN'" :removePlaceholder="true" />
+                      <!-- <input class="form-control " type="text" v-model.trim="account.city"> -->
+                    </td>
                   </tr>
                   <tr class="row">
                     <td class="col-sm-2">Address Detail</td>
@@ -232,7 +239,9 @@ export default {
       accountService.getById(this.account.id)
           .then(res => {
             if (res && res.data) {
+              console.log("Res.data", res.data)
               this.account = res.data;
+              console.log(this.account)
             }
           }).finally(() => {
         this.loading = false;

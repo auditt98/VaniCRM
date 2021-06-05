@@ -10,7 +10,9 @@ import Popover from 'vue-js-popover'
 import VPopover from 'vue-js-popover'
 import InfiniteLoading from 'vue-infinite-loading';
 import VueApexCharts from 'vue-apexcharts'
+import vueCountryRegionSelect from 'vue-country-region-select'
 
+Vue.use(vueCountryRegionSelect)
 Vue.use(VueApexCharts)
 Vue.use(InfiniteLoading, { /* options */ });
 Vue.use(Popover)
@@ -69,6 +71,7 @@ Vue.use(VueScrollTo, {
   y: true
 })
 Vue.config.productionTip = false
+
 
 new Vue({
   router,

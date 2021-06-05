@@ -109,6 +109,8 @@ Sugar.extend();
 
 var connection = hubConnection("https://localhost:44375/signalr", { useDefaultPath: false});
 var proxy = connection.createHubProxy('notificationHub');
+import notiSfx from "@/assets/notification.mp3"
+
 
 const api = "https://localhost:44375/notifications";
 
@@ -122,9 +124,16 @@ export default {
       pageSize: 10,
       unreadCount: 0,
       isDashboard: false,
+      sound: notiSfx,
     }
   },
   methods: {
+    playNotiSound(){
+      let s = new Audio(this.sound)
+      s.addEventListener("canplaythrough", () =>{
+        s.play();
+      })
+    },
     goToNotification(notification){
       //mark as read
       if(notification.isRead == false){
@@ -181,7 +190,7 @@ export default {
         this.unreadCount = count;
       });
       proxy.on('pushNotification', (notification) =>{
-          
+          this.playNotiSound()
           this.$notify({
             group: 'custom-template',
             title: notification.title,
@@ -212,11 +221,18 @@ export default {
     userRoleId() {
       return JSON.parse(window.localStorage.getItem('currentUser')).group;
     }
-  }
+  },
+
+
 }
 </script>
 
 <style scoped>
+
+.nav-link{
+  padding-left: 0 !important;
+}
+
 .header {
   height: 80px;
   backdrop-filter: blur(10px);

@@ -901,25 +901,34 @@ namespace Backend.Repository
                         var calendarId = dbMeeting.HostUser.CalendarId;
                         var eventId = dbMeeting.TASK_TEMPLATE.EventId;
                         var htmlLink = _googleCalendar.GetHtmlLinkAsync(calendarId, eventId);
+                        var publishLink = "";
                         htmlLink.ContinueWith((result) =>
                         {
-                            var publishLink = _googleCalendar.Publish(calendarId, result.Result.HtmlLink);
-                            _emailManager.Recipients.Clear();
-                            _emailManager.Recipients.Add(contactAdded.Email);
-                            _emailManager.Title = StaticStrings.INVITED_MEETING;
-                            _emailManager.Content =
-                                $"<p>Our representative {owner.FirstName + " " + owner.LastName} has invited you to a meeting.</p>" +
-                                $"<h3>Meeting details:</h3>" +
-                                $"<ul>" +
-                                    $"<li>Meeting: {dbMeeting.TASK_TEMPLATE.Title}</li>" +
-                                    $"<li>From: {dbMeeting.TASK_TEMPLATE.StartDate.Value.ToUniversalTime()}</li>" +
-                                    $"<li>To: {dbMeeting.TASK_TEMPLATE.DueDate.Value.ToUniversalTime()}</li>" +
-                                    $"<li>Location: {dbMeeting.Location}</li>" +
-                                    $"<li>Host: {dbMeeting.HostUser.FirstName + " " + dbMeeting.HostUser.LastName}</li></ul>" +
+                            publishLink = _googleCalendar.Publish(calendarId, result.Result.HtmlLink);
+                           
 
-                                $"<div style='margin-top: 40px;'><a style='-webkit-appearance:button; -moz-appearance:button; appearance:button; text-decoration:none; background-color: white; color: #D93915; border: 1px solid #D93915; border-radius: 5px; padding: 1em 1.5em; text-transform: uppercase;' href='{publishLink}'>Add event to calendar</a></div>";
-                            _emailManager.SendEmail();
+                                
                         });
+
+                        _emailManager.Recipients.Clear();
+                        _emailManager.Recipients.Add(contactAdded.Email);
+                        _emailManager.Title = StaticStrings.INVITED_MEETING;
+                        _emailManager.Content =
+                            $"<p>Our representative {owner.FirstName + " " + owner.LastName} has invited you to a meeting.</p>" +
+                            $"<h3>Meeting details:</h3>" +
+                            $"<ul>" +
+                                $"<li>Meeting: {dbMeeting.TASK_TEMPLATE.Title}</li>" +
+                                $"<li>From: {dbMeeting.TASK_TEMPLATE.StartDate.Value.ToUniversalTime()}</li>" +
+                                $"<li>To: {dbMeeting.TASK_TEMPLATE.DueDate.Value.ToUniversalTime()}</li>" +
+                                $"<li>Location: {dbMeeting.Location}</li>" +
+                                $"<li>Host: {dbMeeting.HostUser.FirstName + " " + dbMeeting.HostUser.LastName}</li></ul>";
+
+                        if (!string.IsNullOrEmpty(publishLink))
+                        {
+                            _emailManager.Content += $"<div style='margin-top: 40px;'><a style='-webkit-appearance:button; -moz-appearance:button; appearance:button; text-decoration:none; background-color: white; color: #D93915; border: 1px solid #D93915; border-radius: 5px; padding: 1em 1.5em; text-transform: uppercase;' href='{publishLink}'>Add event to calendar</a></div>";
+                        }
+                        _emailManager.SendEmail();
+
                     }
                     catch
                     {

@@ -2,7 +2,7 @@
   <div class="background-main">
 
     <VLoading :loading="loading"/>
-    <div class="col-sm-10 mx-auto mt-5">
+    <div class="col-sm-11 mx-auto mt-5">
       <TableInList :header-columns="columns"
                    :page-size="pageSize"
                    :total-page="totalPage"
@@ -15,7 +15,7 @@
         </template>
         <template slot="body">
           <tbody v-if="!contacts || contacts.length === 0">
-          <tr><td colspan="6" class="text-center">Không có dữ liệu</td></tr>
+          <tr><td colspan="6" class="text-center">No data available :)</td></tr>
           </tbody>
           <tbody v-if="contacts && contacts.length > 0">
           <tr v-for="(item,index) in contacts" :key="index">
