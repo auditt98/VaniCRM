@@ -1008,6 +1008,11 @@ namespace Backend.Controllers
                                     t.priority = task.PRIORITY.Name;
 
                                 }
+                                if (task.StartDate.HasValue)
+                                {
+                                    t.startDate = task.StartDate.Value;
+                                }
+                                
                                 if (task.DueDate.HasValue)
                                 {
                                     t.endDate = task.DueDate.Value;
@@ -1020,16 +1025,6 @@ namespace Backend.Controllers
                                     if(task.TASK_STATUS != null)
                                     {
                                         t.status = task.TASK_STATUS.Name;
-                                    }
-                                    if (call.TASK_TEMPLATE.CreatedAt.HasValue)
-                                    {
-                                        t.startDate = call.TASK_TEMPLATE.CreatedAt.Value;
-
-                                    }
-                                    if (call.TASK_TEMPLATE.DueDate.HasValue)
-                                    {
-                                        t.endDate = call.TASK_TEMPLATE.DueDate.Value;
-
                                     }
 
                                     if(call.CONTACT != null)
@@ -1062,16 +1057,6 @@ namespace Backend.Controllers
                                     {
                                         t.status = task.TASK_STATUS.Name;
                                     }
-                                    if (meeting.TASK_TEMPLATE.CreatedAt.HasValue)
-                                    {
-                                        t.startDate = meeting.TASK_TEMPLATE.CreatedAt.Value;
-
-                                    }
-                                    if (meeting.TASK_TEMPLATE.DueDate.HasValue)
-                                    {
-                                        t.endDate = meeting.TASK_TEMPLATE.DueDate.Value;
-
-                                    }
                                 } else if(task.TASKs.Count > 0)
                                 {
                                     t.type = "tasks";
@@ -1081,17 +1066,6 @@ namespace Backend.Controllers
                                     if (task.TASK_STATUS != null)
                                     {
                                         t.status = task.TASK_STATUS.Name;
-                                    }
-
-                                    if (taskT.TASK_TEMPLATE.CreatedAt.HasValue)
-                                    {
-                                        t.startDate = taskT.TASK_TEMPLATE.CreatedAt.Value;
-
-                                    }
-                                    if (taskT.TASK_TEMPLATE.DueDate.HasValue)
-                                    {
-                                        t.endDate = taskT.TASK_TEMPLATE.DueDate.Value;
-
                                     }
 
                                     if (taskT.CONTACT != null)

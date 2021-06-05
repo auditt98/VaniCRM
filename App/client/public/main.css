@@ -471,3 +471,28 @@ i {
   .expandable-image img{
       height: inherit !important;
   }
+
+  .ds-add-event-today.v-btn{
+    display: none;
+  }
+
+  .v-toolbar--fixed{
+      position: inherit !important;
+      padding-top: 10px;
+  }
+
+  .v-navigation-drawer--fixed{
+      padding-top: 10px;
+  }
+
+  .v-content.ds-expand{
+      margin-top: -64px;
+  }
+
+  #dayspan > div.v-menu__content.menuable__content__active > div > nav > div.v-toolbar__content > span{
+      display: none;
+  }
+
+  #dayspan > div.v-menu__content.menuable__content__active > div > nav > div.v-toolbar__content > button.v-btn.v-btn--absolute.v-btn--bottom.v-btn--floating.v-btn--icon.v-btn--left.v-btn--small.secondary{
+    display: none;
+  }

@@ -72,7 +72,7 @@
               <div class="col-md-1"></div>
               <div class="col-md-10">
                 <div v-for="item in permissions" :key="item.permissionGroupId">
-                  <collapsible :isOpen="true">
+                  <collapsible :isOpen="false">
                     <h5 slot="trigger" style="color: #D93915;">{{item.permissionGroupName}} <i-arrow-down size="15"/></h5>
                     <h5 slot="closedTrigger" style="color: #D93915;">{{item.permissionGroupName}} <i-arrow-up size="15"/></h5>
                     <table>

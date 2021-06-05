@@ -5,18 +5,6 @@
                      :calendar="calendar"
                      :read-only="true">
 
-      <template slot="title">
-        DaySpan
-      </template>
-
-      <template slot="menuRight">
-        <v-btn icon large href="https://github.com/ClickerMonkey/dayspan-vuetify" target="_blank">
-          <v-avatar size="32px" tile>
-            <img src="https://simpleicons.org/icons/github.svg" alt="Github">
-          </v-avatar>
-        </v-btn>
-      </template>
-
       <template slot="eventPopover" slot-scope="slotData">
         <ds-calendar-event-popover
             v-bind="slotData"
@@ -63,7 +51,7 @@ export default {
     defaultEvents: [
     ],
     currentUser: null,
-    tasks: []
+    tasks: [],
   }),
   created() {
     let currentUser = localStorage.getItem('currentUser');
@@ -86,6 +74,7 @@ export default {
             currentPage: 1,
             pageSize: 100
           };
+          var colors = ["#F38A91", "#7EC9F7", "#7A43E6", "#288DA2", "#EF8D1F", "#C55A44", "#408560", "#B60989", "#05271E"]
           userService.getAllTasks(this.currentUser.id, query).then(res => {
             if (res && res.data) {
               this.tasks = res.data.tasks;
@@ -93,14 +82,26 @@ export default {
                 if (task.rrule) {
                   const rrule = RRule.fromString(task.rrule);
                   if (rrule) {
-                    const events = rrule.all();
+                    let now = new Date();
+                    // const events = rrule.all();
+                    //first day of january 20 years before
+                    var leftBoundary = new Date(Date.UTC(now.getFullYear() - 10, 0, 1))
+                    //last day of december 20 years after
+                    var rightBoundary = new Date(Date.UTC(now.getFullYear() + 5, 11, 31))
+
+                    const events = rrule.between(leftBoundary, rightBoundary)
                     if (events && events.length > 0) {
+                      this.defaultEvents = []
                       events.forEach(event => {
                         event = new Date(event);
+                        //get task hour
+                        var taskDate = new Date(task.startDate);
+                        // console.log(new Date(task.startDate).getHours())
+                        event.setHours(taskDate.getHours(), taskDate.getMinutes())
                         this.defaultEvents.push({
                           data: {
                             title: task.title,
-                            color: '#3F51B5'
+                            color: colors[Math.floor(Math.random(0, colors.length) * colors.length)]
                           },
                           schedule: {
                             on: Day.fromDate(event),
@@ -155,7 +156,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @import '~vuetify/dist/vuetify.css';
 @import '~material-design-icons-iconfont/dist/material-design-icons.css';
 @import '~dayspan-vuetify/dist/lib/dayspan-vuetify.min.css';

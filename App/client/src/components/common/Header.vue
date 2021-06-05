@@ -237,7 +237,7 @@ export default {
   height: 80px;
   backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255,0.87);
-  box-shadow: 0px -8px 10px rgba(255, 255, 255, 0.5), 0px 7px 24px rgba(55, 71, 79, 0.2);
+  box-shadow: 0px -8px 10px rgba(255, 255, 255, 0.5), 0px 7px 24px rgba(55, 71, 79, 0.08);
   /* overflow: hidden; */
   margin-bottom: 2px;
   background: white;

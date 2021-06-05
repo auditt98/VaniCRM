@@ -36,6 +36,38 @@ Vue.use(Notifications, { velocity })
 Vue.use(Vuetify);
 
 Vue.use(DaySpanVuetify, {
+  data: {
+    readOnly: true,
+    features: {
+      exclude:        false,
+      include:        false,
+      cancel:         false,
+      move:           false,
+      moveDuplicate:  false,
+      moveInstance:   false,
+      moveAll:        false,
+      drag:           false,
+      forecast:       false,
+      addDay:         false,
+      addTime:        false,
+      hideOnMove:     false
+    },
+    prompt: {
+      actionRemove:       false,
+      actionExclude:      false,
+      actionCancel:       false,
+      actionUncancel:     false,
+      actionMove:         false,
+      actionInclude:      false,
+      actionSetStart:     false,
+      actionSetEnd:       false,
+      move:               false,
+      toggleAllDay:       false,
+      removeExistingTime: false
+    },
+
+
+  },
   methods: {
     getDefaultEventColor: () => '#1976d2'
   }
