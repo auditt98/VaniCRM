@@ -38,6 +38,7 @@ namespace Backend.Models.ApiModel
             public string ownerUsername { get; set; }
             public List<T> tags { get; set; }
             public long expectedRevenue { get; set; }
+            public string priority { get; set; }
             public D()
             {
                 tags = new List<T>();

@@ -130,6 +130,9 @@ namespace Backend.Controllers
                             d.ownerUsername = deal.Owner.Username;
                             d.accountID = deal.ACCOUNT != null ? deal.ACCOUNT.ID : 0;
                             d.accountName = deal.ACCOUNT != null ? deal.ACCOUNT.Name : "";
+                            d.expectedRevenue = deal.ExpectedRevenue.HasValue ? deal.ExpectedRevenue.Value : 0 ;
+                            d.priority = deal.PRIORITY != null ? deal.PRIORITY.Name : "";
+
                             foreach (var tag in deal.TAG_ITEM)
                             {
                                 var t = new DashboardApiModel.T();
