@@ -86,14 +86,16 @@
                   </tr>
                   <tr>
                     <td>Amount</td>
-                    <td>
+                    <td style="position: relative">
                       <input type="number" v-model="deal.amount">
+                      <span style="position: absolute;right: -17px;bottom: 13px;">đ</span>
                     </td>
                   </tr>
                   <tr>
                     <td>Expected Revenue</td>
-                    <td>
+                    <td style="position: relative">
                       <input type="text" v-model="deal.expectedRevenue">
+                      <span style="position: absolute;right: -17px;bottom: 13px;">đ</span>
                     </td>
                   </tr>
                   <tr>
@@ -328,6 +330,16 @@ export default {
     this.onSearchContact(null);
     this.onSearchReasons(null);
   },
+  computed: {
+    expectedRevenue() {
+      return [this.deal.stage, this.deal.ammount]
+    } 
+  },
+  watch: {
+    expectedRevenue: function() {
+
+    }
+  }, 
   data: function () {
     return {
       deal: {

@@ -36,7 +36,7 @@
                   <option value="null" hidden disabled selected>Choose priority</option>
                   <option v-for="(f, i) in priorities" :key="i" :value="f.id">{{ f.name }}</option>
                 </select>
-                <input type="text" class="form-control mb-2" placeholder="Enter expected revenue" v-model.trim="item.deal.expectedRevenue">
+                <input type="text" class="form-control mb-2" placeholder="Enter amount" v-model.trim="item.deal.expectedRevenue">
                 <div class="d-flex justify-content-between">
                   <span @click="save(item, 'DEAL')"><VButton :data="btnEdit"/></span>
                   <span @click="item.isAdd = false"><VButton :data="btnCancel"/></span>
@@ -308,12 +308,39 @@ export default {
     },
     save(item, type) {
       if (type === 'DEAL') {
+        let expectedRevenuePercentage = 0
+        switch (item.id) {
+          case 1:
+            expectedRevenuePercentage = 0.1
+            break;
+          case 2:
+            expectedRevenuePercentage = 0.2
+            break;
+          case 3:
+            expectedRevenuePercentage = 0.4
+            break;
+          case 4:
+            expectedRevenuePercentage = 0.5
+            break;
+          case 5:
+            expectedRevenuePercentage = 0.6
+            break;
+          case 6:
+            expectedRevenuePercentage = 0.8
+            break;
+          case 7:
+            expectedRevenuePercentage = 1
+            break;
+          default:
+            break;
+        }
         const deal = {
           name: item.deal.name,
           account: item.deal.account ? item.deal.account.id : null,
           priority: item.deal.priority,
           stage: item.id,
-          expectedRevenue: item.deal.expectedRevenue
+          amount: item.deal.expectedRevenue,
+          expectedRevenue: item.deal.expectedRevenue * expectedRevenuePercentage
         };
         dealService.create(deal)
             .then(res => {
@@ -399,7 +426,7 @@ export default {
                   s.deals ? s.deals.map(d => {
                     return {
                       id: d.dealID, title: d.dealName, title1: d.accountName,
-                      title2: d.ownerUsername, type: s.stageID, tags: d.tags,
+                      title2: d.ownerUsername, type: s.stageID, tags: d.tags, expectedRevenue: d.expectedRevenue,
                       routeName: 'DealDetail'
                     }
                   }) : []

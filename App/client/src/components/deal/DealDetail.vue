@@ -267,9 +267,9 @@ export default {
 
           ]);
           mapValue(this.dataRightDetail, [
-            this.deal.amount,
+            this.deal.amount +'đ',
             this.deal.probability,
-            this.deal.expectedRevenue,
+            this.deal.expectedRevenue+'đ',
             getValueInArr(this.deal.stages, 'selected', 'name'),
             formatDate(this.deal.CreatedAt, DATE_TIME_FORMAT),
             this.deal.CreatedBy ? this.deal.CreatedBy.username : '',
