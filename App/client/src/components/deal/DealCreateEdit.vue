@@ -87,14 +87,14 @@
                   <tr>
                     <td>Amount</td>
                     <td style="position: relative">
-                      <input type="number" v-model="deal.amount">
+                      <input type="text" v-model="deal.amount">
                       <span style="position: absolute;right: -17px;bottom: 13px;">đ</span>
                     </td>
                   </tr>
                   <tr>
                     <td>Expected Revenue</td>
                     <td style="position: relative">
-                      <input type="text" v-model="deal.expectedRevenue">
+                      <input type="text" disabled v-model="expectedRevenue">
                       <span style="position: absolute;right: -17px;bottom: 13px;">đ</span>
                     </td>
                   </tr>
@@ -152,6 +152,7 @@ import {userService} from "@/service/user.service";
 import {formatDate, getValueInArr} from "@/config/config";
 import VLoading from "@/components/common/VLoading";
 import {required} from "vuelidate/lib/validators";
+import _isArray from 'lodash/isArray'
 
 export default {
   name: "DealCreateEdit",
@@ -332,7 +333,12 @@ export default {
   },
   computed: {
     expectedRevenue() {
-      return [this.deal.stage, this.deal.ammount]
+      if (!_isArray(this.stages)) {
+        return 0
+      }
+      let stage = this.stages.filter(s => s.id === this.deal.stage)
+      let probability = stage[0] ? stage[0].probability : 0
+      return new Intl.NumberFormat().format(this.deal.amount * probability / 100)
     } 
   },
   watch: {
