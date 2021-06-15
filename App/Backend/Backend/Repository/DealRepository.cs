@@ -158,7 +158,7 @@ namespace Backend.Repository
                 newStageHistory.ModifiedAt = DateTime.Now;
                 newStageHistory.STAGE_ID = apiModel.stage;
                 var dbStage = db.STAGEs.Find(apiModel.stage);
-                newDeal.ExpectedRevenue = apiModel.amount * (long)(dbStage.Probability / 100);
+                newDeal.ExpectedRevenue = (long)((apiModel.amount * dbStage.Probability) / 100);
                 if (apiModel.closingDate != null)
                 {
                     newDeal.ClosingDate = DbDateHelper.ToNullIfTooEarlyForDb(apiModel.closingDate.Value);
@@ -293,7 +293,7 @@ namespace Backend.Repository
                 if (apiModel.stage != 0)
                 {
                     var dbStage = db.STAGEs.Find(apiModel.stage);
-                    dbDeal.ExpectedRevenue = apiModel.amount * (long)dbStage.Probability / 100;
+                    dbDeal.ExpectedRevenue = (long)((apiModel.amount * dbStage.Probability) / 100);
                     var newStageHistory = new STAGE_HISTORY();
                     newStageHistory.ModifiedBy = modifiedUser;
                     newStageHistory.ModifiedAt = DateTime.Now;
@@ -571,8 +571,7 @@ namespace Backend.Repository
                         return false;
                     }
                 }
-
-                dbDeal.ExpectedRevenue = dbDeal.Amount * (long)dbStage.Probability / 100;
+                dbDeal.ExpectedRevenue = (long)((dbDeal.Amount * dbStage.Probability) / 100);
 
                 var newStageHistory = new STAGE_HISTORY();
                 newStageHistory.ModifiedBy = modifiedUser;
