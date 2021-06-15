@@ -26,7 +26,7 @@
             <th>{{ item.amount }}</th>
             <th>{{ item.stage }}</th>
             <th>
-              <VTag :data="{text: item.priority, bgColor: getBgColor(item.priority)}"/>
+              <VTag v-if="item.priority" :data="{text: item.priority, bgColor: getBgColor(item.priority)}"/>
             </th>
             <th>{{ item.accountName }}</th>
             <th>{{ item.owner }}</th>
