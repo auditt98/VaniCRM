@@ -60,7 +60,7 @@ export default {
       this.$router.push({path: '/accounts/detail', query : { id: id}});
     },
     deleteItem(id) {
-      if (!alert('Are you sure to delete?')) {
+      if (!confirm('Are you sure to delete?')) {
         return ;
       }
       this.loading = true;

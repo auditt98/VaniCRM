@@ -55,13 +55,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -90,7 +90,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -120,13 +120,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -164,7 +164,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -193,13 +193,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -241,7 +241,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -270,13 +270,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -358,7 +358,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -388,13 +388,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -447,7 +447,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -474,13 +474,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -539,7 +539,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -568,13 +568,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -686,7 +686,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -713,13 +713,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -772,7 +772,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -799,13 +799,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -858,7 +858,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -885,13 +885,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -944,7 +944,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }
@@ -971,13 +971,13 @@ namespace Backend.Controllers
                 {
                     if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_EXPIRED;
                     }
                     if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                     {
-                        response.StatusCode = HttpStatusCode.Forbidden;
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = ErrorMessages.TOKEN_INVALID;
                     }
@@ -1117,7 +1117,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = ErrorMessages.UNAUTHORIZED;
             }

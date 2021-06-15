@@ -102,17 +102,18 @@
 
 <script>
 import {authenticationService} from "@/service/authentication.service";
+import {config} from "@/config/config";
 import { hubConnection } from 'signalr-no-jquery';
 import axios from 'axios';
 import Sugar from 'sugar'
 Sugar.extend();
 
-var connection = hubConnection("https://localhost:44375/signalr", { useDefaultPath: false});
+var connection = hubConnection(`${config.apiUrl + 'signalr'}`, { useDefaultPath: false});
 var proxy = connection.createHubProxy('notificationHub');
 import notiSfx from "@/assets/notification.mp3"
 
 
-const api = "https://localhost:44375/notifications";
+const api = `${config.apiUrl + 'notifications'}`;
 
 export default {
   name: "Header",

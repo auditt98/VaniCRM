@@ -25,7 +25,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Controllers
 {
-    [EnableCors(origins: "http://localhost:8080", headers: "*", methods: "*", SupportsCredentials = true)]
+    [EnableCors(origins: "http://localhost:8080,http://192.168.1.12:8080,http://192.168.1.9:8080", headers: "*", methods: "*", SupportsCredentials = true)]
+    //[EnableCors(origins: "http://192.168.1.12:8080", headers: "*", methods: "*", SupportsCredentials = true)]
     public class AuthController : ApiController
     {
         DatabaseContext db = new DatabaseContext();
@@ -223,12 +224,14 @@ namespace Backend.Controllers
                         }
                         else
                         {
+                            response.StatusCode = HttpStatusCode.Unauthorized;
                             responseData = ResponseFormat.Fail;
                             responseData.message = "Cookie Invalid";
                         }
                     }
                     else
                     {
+                        response.StatusCode = HttpStatusCode.Unauthorized;
                         responseData = ResponseFormat.Fail;
                         responseData.message = "Cookie Invalid";
                     }
@@ -242,7 +245,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = "No cookie found";
             }
@@ -283,7 +286,7 @@ namespace Backend.Controllers
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
+                response.StatusCode = HttpStatusCode.Unauthorized;
                 responseData = ResponseFormat.Fail;
                 responseData.message = "No cookie found";
             }
@@ -369,13 +372,13 @@ namespace Backend.Controllers
                     {
                         if ((string)payload["error"] == ErrorMessages.TOKEN_EXPIRED)
                         {
-                            response.StatusCode = HttpStatusCode.Forbidden;
+                            response.StatusCode = HttpStatusCode.Unauthorized;
                             responseData = ResponseFormat.Fail;
                             responseData.message = ErrorMessages.TOKEN_EXPIRED;
                         }
                         if ((string)payload["error"] == ErrorMessages.TOKEN_INVALID)
                         {
-                            response.StatusCode = HttpStatusCode.Forbidden;
+                            response.StatusCode = HttpStatusCode.Unauthorized;
                             responseData = ResponseFormat.Fail;
                             responseData.message = ErrorMessages.TOKEN_INVALID;
                         }
@@ -400,7 +403,7 @@ namespace Backend.Controllers
                             }
                             else
                             {
-                                response.StatusCode = HttpStatusCode.Forbidden;
+                                response.StatusCode = HttpStatusCode.Unauthorized;
                                 responseData = ResponseFormat.Fail;
                                 responseData.message = ErrorMessages.INVALID_KEY;
                             }

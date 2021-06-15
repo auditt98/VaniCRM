@@ -39,7 +39,13 @@ function create(lead) {
 
 function remove(id) {
     return fetch(`${config.apiUrl}/accounts/${id}`, requestOptions.delete())
-        .then(handleResponse);
+        .then(handleResponse).then(resolve => {
+            return resolve
+        }, reject =>{
+            if(reject == "retry"){
+                return fetchRetry(`${config.apiUrl}/accounts/${id}`, requestOptions.delete(), 2).then(handleResponse)
+            }
+        })
 }
 
 function getById(id) {
