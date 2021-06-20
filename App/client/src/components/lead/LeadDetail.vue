@@ -62,14 +62,12 @@ export default {
       const leadDetail = _get(this.lead, 'status') || []
       let isConverted = false
       leadDetail.forEach(deal => {
-        console.log(deal)
         if(deal.name === "Converted") {
           if( deal.selected == true){
             isConverted = true
           }
         }
       });
-      console.log(isConverted)
       return isConverted
     }
   },
