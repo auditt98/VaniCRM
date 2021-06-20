@@ -293,8 +293,8 @@ router.beforeEach((to, from, next) => {
             } else if (to.name === 'DashboardMarketing' && currentUser.group === 2) {
                 return next({name: 'DashboardSale'});
             } else {
-                alert('Khong co quyen!!');
-                return next({path: '/'});
+                // alert('You are not authorized!!');
+                // return next({path: '/'});
             }
         }
     }
