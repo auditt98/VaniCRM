@@ -338,6 +338,16 @@ namespace Backend.Repository
                 {
                     dbDeal.PRIORITY_ID = apiModel.priority;
                 }
+
+                if (apiModel.campaign != 0)
+                {
+                    dbDeal.CAMPAIGN_ID = apiModel.campaign;
+                }
+                if (apiModel.contact != 0)
+                {
+                    dbDeal.Contact_ID = apiModel.contact;
+                }
+
                 dbDeal.ModifiedAt = DateTime.Now;
                 dbDeal.ModifiedBy = modifiedUser;
                 db.SaveChanges();
