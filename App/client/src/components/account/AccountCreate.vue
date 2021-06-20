@@ -24,7 +24,7 @@
               <div class="user-info-avatar">
                 <div class="user-info-avatar-image">
                   <img v-if="account.avatar" class="w-100" :src="account.avatar" alt="">
-                  <img v-else class="w-100" src="../../assets/avatar-header.jpeg" alt="">
+                  <img v-else class="w-100" src="../../assets/default_avatar.png" alt="">
                 </div>
                 <div class="image-select-background">
                 </div>

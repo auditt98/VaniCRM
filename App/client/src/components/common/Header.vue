@@ -231,7 +231,8 @@ export default {
 <style scoped>
 
 .nav-link{
-  padding-left: 0 !important;
+  padding-left: 5px !important;
+  
 }
 
 .header {
@@ -274,14 +275,14 @@ export default {
   width: 44px;
   height: 44px;
   border: 1.5px solid #DFE0EB;
-  /* background: url("../../assets/avatar-header.jpeg"); */
+  /* background: url("../../assets/default_avatar.png"); */
 }
 
 .header-avatar {
   width: 44px;
   height: 44px;
   border: 1.5px solid #DFE0EB;
-  /* background: url("../../assets/avatar-header.jpeg"); */
+  /* background: url("../../assets/default_avatar.png"); */
 }
 
 .header-avatar-icon {

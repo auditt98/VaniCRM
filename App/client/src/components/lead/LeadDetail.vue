@@ -62,10 +62,14 @@ export default {
       const leadDetail = _get(this.lead, 'status') || []
       let isConverted = false
       leadDetail.forEach(deal => {
-        if(deal.selected) {
-          isConverted = true
+        console.log(deal)
+        if(deal.name === "Converted") {
+          if( deal.selected == true){
+            isConverted = true
+          }
         }
       });
+      console.log(isConverted)
       return isConverted
     }
   },
@@ -230,7 +234,7 @@ export default {
         {key: 'No Call', value: ''},
         {key: 'Lead Source', value: ''},
         {key: 'Company Name', value: ''},
-        {key: 'Number Of Employee', value: ''},
+        // {key: 'Number Of Employee', value: ''},
         {key: 'Create At', value: ''},
         {key: 'Create By', value: ''},
         {key: 'Modified At', value: ''},
