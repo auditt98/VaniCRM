@@ -125,6 +125,11 @@ namespace Backend.Services
                 {
                     apiModel.account = new AccountLinkApiModel() { id = dbDeal.ACCOUNT.ID, name = dbDeal.ACCOUNT.Name, email = dbDeal.ACCOUNT.Email };
                 }
+
+                if(dbDeal.CONTACT != null)
+                {
+                    apiModel.contact = new ContactLinkApiModel() { id = dbDeal.CONTACT.ID, name = dbDeal.CONTACT.Name, email = dbDeal.CONTACT.Email };
+                }
                 
                 if(dbDeal.PRIORITY != null)
                 {
