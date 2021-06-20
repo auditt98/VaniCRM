@@ -119,7 +119,7 @@ export default {
       if (!confirm('Are you sure?')) {
         return ;
       }
-      campaignService.addContact(this.campaignId, {id: contact.id}).then((res) => alert(res.message))
+      campaignService.addContact(this.campaignId, {contactId: contact.id}).then((res) => alert(res.message))
     },
     close() {
       this.$emit('close');
