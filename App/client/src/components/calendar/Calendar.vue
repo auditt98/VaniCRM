@@ -79,9 +79,11 @@ export default {
             if (res && res.data) {
               this.tasks = res.data.tasks;
               this.tasks.forEach(task => {
+                console.log(task)
                 if (task.rrule) {
                   const rrule = RRule.fromString(task.rrule);
                   if (rrule) {
+                    console.log(rrule)
                     let now = new Date();
                     // const events = rrule.all();
                     //first day of january 20 years before
@@ -91,10 +93,12 @@ export default {
 
                     const events = rrule.between(leftBoundary, rightBoundary)
                     if (events && events.length > 0) {
-                      this.defaultEvents = []
+                      console.log(events)
+                      // this.defaultEvents = []
                       events.forEach(event => {
                         event = new Date(event);
                         //get task hour
+                        // console.log(event)
                         var taskDate = new Date(task.startDate);
                         // console.log(new Date(task.startDate).getHours())
                         event.setHours(taskDate.getHours(), taskDate.getMinutes())
