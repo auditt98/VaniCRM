@@ -52,5 +52,14 @@ export default {
  a{
    color: black;
  }
+ .card-text {
+   overflow: hidden;
+   text-overflow: ellipsis;
+ }
+ .card-title{
+   overflow: hidden;
+   text-overflow: ellipsis;
+ }
+ 
 
 </style>
