@@ -7,7 +7,7 @@
         <div class="col-sm-8">
         </div>
         <div class="col-sm-4 d-flex justify-content-end">
-          <router-link :to="{name : 'Users'}">
+          <router-link :to="{ name: 'UserPage', query: {id: user.id}}">
             <VButton :data="btnCancel"/>
           </router-link>
 
