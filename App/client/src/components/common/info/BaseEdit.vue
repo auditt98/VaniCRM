@@ -5,7 +5,7 @@
       <div class="row" v-if="image">
         <div class="user-info-avatar">
           <div class="user-info-avatar-image">
-            <img class="w-100" src="../../../assets/avatar-header.jpeg" alt="">
+            <img class="w-100" src="../../../assets/default_avatar.png" alt="">
           </div>
           <div class="image-select-background">
           </div>

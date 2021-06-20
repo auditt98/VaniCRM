@@ -8,7 +8,7 @@
         <expandable-image style="background-color: rgba(0, 0, 0, 0.9); " :close-on-background-click='true' class="w-100" :src="image" alt="" />
       </div>
       <!-- <div class="user-info-avatar" v-if="isShowAvatar && !image">
-        <img class="w-100" src="../../../assets/avatar-header.jpeg" alt="">
+        <img class="w-100" src="../../../assets/default_avatar.png" alt="">
         <img class="w-100" :src="'https://localhost:44375/avatar?fileName=default.png'" alt="">
         https://localhost:44375/avatar?fileName=default.png
       </div> -->

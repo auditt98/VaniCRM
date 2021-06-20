@@ -23,7 +23,7 @@
           <tr v-for="(item,index) in deals" :key="index">
             <th>{{item.name}}</th>
             <th>{{item.expectedDate | formatDate}}</th>
-            <th>{{ item.amount }}</th>
+            <th>{{new Intl.NumberFormat().format(item.amount)}}</th>
             <th>{{ item.stage }}</th>
             <th>
               <VTag v-if="item.priority" :data="{text: item.priority, bgColor: getBgColor(item.priority)}"/>

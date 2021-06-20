@@ -70,10 +70,10 @@ export default {
       if (data.toUpperCase() === 'HIGH') {
         return '#F12B2C';
       }
-      if (data.toUpperCase() === 'LOW') {
+      if (data.toUpperCase() === 'MEDIUM') {
         return '#FEC400';
       }
-      if (data.toUpperCase() === 'NORMAL') {
+      if (data.toUpperCase() === 'LOW') {
         return '#29CC97';
       }
       return 'red';
